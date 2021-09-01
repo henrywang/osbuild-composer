@@ -27,7 +27,7 @@ require (
 	github.com/jackc/pgx/v4 v4.12.1-0.20210724153913-640aa07df17c
 	github.com/julienschmidt/httprouter v1.3.0
 	github.com/kolo/xmlrpc v0.0.0-20200310150728-e0350524596b
-	github.com/labstack/echo/v4 v4.1.11
+	github.com/labstack/echo/v4 v4.5.0
 	github.com/prometheus/client_golang v1.10.0
 	github.com/stretchr/testify v1.7.0
 	github.com/ubccr/kerby v0.0.0-20170626144437-201a958fc453

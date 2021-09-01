@@ -219,13 +219,13 @@ github.com/kolo/xmlrpc
 github.com/kr/pretty
 # github.com/kr/text v0.1.0
 github.com/kr/text
-# github.com/labstack/echo/v4 v4.1.11
+# github.com/labstack/echo/v4 v4.5.0
 ## explicit
 github.com/labstack/echo/v4
 # github.com/labstack/gommon v0.3.0
 github.com/labstack/gommon/color
 github.com/labstack/gommon/log
-# github.com/mattn/go-colorable v0.1.6
+# github.com/mattn/go-colorable v0.1.8
 github.com/mattn/go-colorable
 # github.com/mattn/go-ieproxy v0.0.1
 github.com/mattn/go-ieproxy
@@ -266,7 +266,7 @@ github.com/ubccr/kerby
 github.com/ubccr/kerby/khttp
 # github.com/valyala/bytebufferpool v1.0.0
 github.com/valyala/bytebufferpool
-# github.com/valyala/fasttemplate v1.1.0
+# github.com/valyala/fasttemplate v1.2.1
 github.com/valyala/fasttemplate
 # github.com/vmware/govmomi v0.23.0
 ## explicit
@@ -342,6 +342,7 @@ golang.org/x/net/context/ctxhttp
 golang.org/x/net/http/httpguts
 golang.org/x/net/http/httpproxy
 golang.org/x/net/http2
+golang.org/x/net/http2/h2c
 golang.org/x/net/http2/hpack
 golang.org/x/net/idna
 golang.org/x/net/internal/timeseries
