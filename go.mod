@@ -22,7 +22,7 @@ require (
 	github.com/coreos/go-semver v0.3.0
 	github.com/coreos/go-systemd v0.0.0-20190719114852-fd7a80b32e1f
 	github.com/deepmap/oapi-codegen v1.3.12
-	github.com/getkin/kin-openapi v0.13.0
+	github.com/getkin/kin-openapi v0.76.0
 	github.com/gobwas/glob v0.2.3
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/golang/glog v1.0.0 // indirect
