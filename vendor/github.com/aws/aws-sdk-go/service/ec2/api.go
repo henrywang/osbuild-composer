@@ -2543,7 +2543,7 @@ func (c *EC2) AuthorizeSecurityGroupEgressRequest(input *AuthorizeSecurityGroupE
 //
 // An outbound rule permits instances to send traffic to the specified IPv4
 // or IPv6 CIDR address ranges, or to the instances that are associated with
-// the specified destination security groups.
+// the specified source security groups.
 //
 // You specify a protocol for each rule (for example, TCP). For the TCP and
 // UDP protocols, you must also specify the destination port or port range.
@@ -2902,6 +2902,89 @@ func (c *EC2) CancelCapacityReservation(input *CancelCapacityReservationInput) (
 // for more information on using Contexts.
 func (c *EC2) CancelCapacityReservationWithContext(ctx aws.Context, input *CancelCapacityReservationInput, opts ...request.Option) (*CancelCapacityReservationOutput, error) {
 	req, out := c.CancelCapacityReservationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opCancelCapacityReservationFleets = "CancelCapacityReservationFleets"
+
+// CancelCapacityReservationFleetsRequest generates a "aws/request.Request" representing the
+// client's request for the CancelCapacityReservationFleets operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CancelCapacityReservationFleets for more information on using the CancelCapacityReservationFleets
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CancelCapacityReservationFleetsRequest method.
+//    req, resp := client.CancelCapacityReservationFleetsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/CancelCapacityReservationFleets
+func (c *EC2) CancelCapacityReservationFleetsRequest(input *CancelCapacityReservationFleetsInput) (req *request.Request, output *CancelCapacityReservationFleetsOutput) {
+	op := &request.Operation{
+		Name:       opCancelCapacityReservationFleets,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &CancelCapacityReservationFleetsInput{}
+	}
+
+	output = &CancelCapacityReservationFleetsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CancelCapacityReservationFleets API operation for Amazon Elastic Compute Cloud.
+//
+// Cancels one or more Capacity Reservation Fleets. When you cancel a Capacity
+// Reservation Fleet, the following happens:
+//
+//    * The Capacity Reservation Fleet's status changes to cancelled.
+//
+//    * The individual Capacity Reservations in the Fleet are cancelled. Instances
+//    running in the Capacity Reservations at the time of cancelling the Fleet
+//    continue to run in shared capacity.
+//
+//    * The Fleet stops creating new Capacity Reservations.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Elastic Compute Cloud's
+// API operation CancelCapacityReservationFleets for usage and error information.
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/CancelCapacityReservationFleets
+func (c *EC2) CancelCapacityReservationFleets(input *CancelCapacityReservationFleetsInput) (*CancelCapacityReservationFleetsOutput, error) {
+	req, out := c.CancelCapacityReservationFleetsRequest(input)
+	return out, req.Send()
+}
+
+// CancelCapacityReservationFleetsWithContext is the same as CancelCapacityReservationFleets with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CancelCapacityReservationFleets for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *EC2) CancelCapacityReservationFleetsWithContext(ctx aws.Context, input *CancelCapacityReservationFleetsInput, opts ...request.Option) (*CancelCapacityReservationFleetsOutput, error) {
+	req, out := c.CancelCapacityReservationFleetsRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -3820,6 +3903,82 @@ func (c *EC2) CreateCapacityReservationWithContext(ctx aws.Context, input *Creat
 	return out, req.Send()
 }
 
+const opCreateCapacityReservationFleet = "CreateCapacityReservationFleet"
+
+// CreateCapacityReservationFleetRequest generates a "aws/request.Request" representing the
+// client's request for the CreateCapacityReservationFleet operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateCapacityReservationFleet for more information on using the CreateCapacityReservationFleet
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CreateCapacityReservationFleetRequest method.
+//    req, resp := client.CreateCapacityReservationFleetRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/CreateCapacityReservationFleet
+func (c *EC2) CreateCapacityReservationFleetRequest(input *CreateCapacityReservationFleetInput) (req *request.Request, output *CreateCapacityReservationFleetOutput) {
+	op := &request.Operation{
+		Name:       opCreateCapacityReservationFleet,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &CreateCapacityReservationFleetInput{}
+	}
+
+	output = &CreateCapacityReservationFleetOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateCapacityReservationFleet API operation for Amazon Elastic Compute Cloud.
+//
+// Creates a Capacity Reservation Fleet. For more information, see Create a
+// Capacity Reservation Fleet (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/work-with-cr-fleets.html#create-crfleet)
+// in the Amazon EC2 User Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Elastic Compute Cloud's
+// API operation CreateCapacityReservationFleet for usage and error information.
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/CreateCapacityReservationFleet
+func (c *EC2) CreateCapacityReservationFleet(input *CreateCapacityReservationFleetInput) (*CreateCapacityReservationFleetOutput, error) {
+	req, out := c.CreateCapacityReservationFleetRequest(input)
+	return out, req.Send()
+}
+
+// CreateCapacityReservationFleetWithContext is the same as CreateCapacityReservationFleet with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateCapacityReservationFleet for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *EC2) CreateCapacityReservationFleetWithContext(ctx aws.Context, input *CreateCapacityReservationFleetInput, opts ...request.Option) (*CreateCapacityReservationFleetOutput, error) {
+	req, out := c.CreateCapacityReservationFleetRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opCreateCarrierGateway = "CreateCarrierGateway"
 
 // CreateCarrierGatewayRequest generates a "aws/request.Request" representing the
@@ -4725,7 +4884,8 @@ func (c *EC2) CreateFpgaImageRequest(input *CreateFpgaImageInput) (req *request.
 //
 // An AFI contains the FPGA bitstream that is ready to download to an FPGA.
 // You can securely deploy an AFI on multiple FPGA-accelerated instances. For
-// more information, see the AWS FPGA Hardware Development Kit (https://github.com/aws/aws-fpga/).
+// more information, see the Amazon Web Services FPGA Hardware Development Kit
+// (https://github.com/aws/aws-fpga/).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -5227,8 +5387,8 @@ func (c *EC2) CreateLaunchTemplateRequest(input *CreateLaunchTemplateInput) (req
 // Creates a launch template. A launch template contains the parameters to launch
 // an instance. When you launch an instance using RunInstances, you can specify
 // a launch template instead of providing the launch parameters in the request.
-// For more information, see Launching an instance from a launch template (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-launch-templates.html)in
-// the Amazon Elastic Compute Cloud User Guide.
+// For more information, see Launching an instance from a launch template (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-launch-templates.html)
+// in the Amazon Elastic Compute Cloud User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -8551,14 +8711,15 @@ func (c *EC2) CreateVpcEndpointRequest(input *CreateVpcEndpointInput) (req *requ
 //
 // Creates a VPC endpoint for a specified service. An endpoint enables you to
 // create a private connection between your VPC and the service. The service
-// may be provided by AWS, an AWS Marketplace Partner, or another AWS account.
-// For more information, see VPC Endpoints (https://docs.aws.amazon.com/vpc/latest/userguide/vpc-endpoints.html)
+// may be provided by Amazon Web Services, an Amazon Web Services Marketplace
+// Partner, or another Amazon Web Services account. For more information, see
+// VPC Endpoints (https://docs.aws.amazon.com/vpc/latest/userguide/vpc-endpoints.html)
 // in the Amazon Virtual Private Cloud User Guide.
 //
 // A gateway endpoint serves as a target for a route in your route table for
-// traffic destined for the AWS service. You can specify an endpoint policy
-// to attach to the endpoint, which will control access to the service from
-// your VPC. You can also specify the VPC route tables that use the endpoint.
+// traffic destined for the Amazon Web Service. You can specify an endpoint
+// policy to attach to the endpoint, which will control access to the service
+// from your VPC. You can also specify the VPC route tables that use the endpoint.
 //
 // An interface endpoint is a network interface in your subnet that serves as
 // an endpoint for communicating with the specified service. You can specify
@@ -8723,8 +8884,8 @@ func (c *EC2) CreateVpcEndpointServiceConfigurationRequest(input *CreateVpcEndpo
 
 // CreateVpcEndpointServiceConfiguration API operation for Amazon Elastic Compute Cloud.
 //
-// Creates a VPC endpoint service configuration to which service consumers (AWS
-// accounts, IAM users, and IAM roles) can connect.
+// Creates a VPC endpoint service configuration to which service consumers (Amazon
+// Web Services accounts, IAM users, and IAM roles) can connect.
 //
 // To create an endpoint service configuration, you must first create one of
 // the following for your service:
@@ -14257,7 +14418,7 @@ func (c *EC2) DescribeAvailabilityZonesRequest(input *DescribeAvailabilityZonesI
 // this request to view the state and any provided messages for that zone.
 //
 // For more information about Availability Zones, Local Zones, and Wavelength
-// Zones, see Regions, Zones and Outposts (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html)
+// Zones, see Regions and zones (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html)
 // in the Amazon Elastic Compute Cloud User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -14495,6 +14656,138 @@ func (c *EC2) DescribeByoipCidrsPagesWithContext(ctx aws.Context, input *Describ
 
 	for p.Next() {
 		if !fn(p.Page().(*DescribeByoipCidrsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
+const opDescribeCapacityReservationFleets = "DescribeCapacityReservationFleets"
+
+// DescribeCapacityReservationFleetsRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeCapacityReservationFleets operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DescribeCapacityReservationFleets for more information on using the DescribeCapacityReservationFleets
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DescribeCapacityReservationFleetsRequest method.
+//    req, resp := client.DescribeCapacityReservationFleetsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/DescribeCapacityReservationFleets
+func (c *EC2) DescribeCapacityReservationFleetsRequest(input *DescribeCapacityReservationFleetsInput) (req *request.Request, output *DescribeCapacityReservationFleetsOutput) {
+	op := &request.Operation{
+		Name:       opDescribeCapacityReservationFleets,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &DescribeCapacityReservationFleetsInput{}
+	}
+
+	output = &DescribeCapacityReservationFleetsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DescribeCapacityReservationFleets API operation for Amazon Elastic Compute Cloud.
+//
+// Describes one or more Capacity Reservation Fleets.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Elastic Compute Cloud's
+// API operation DescribeCapacityReservationFleets for usage and error information.
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/DescribeCapacityReservationFleets
+func (c *EC2) DescribeCapacityReservationFleets(input *DescribeCapacityReservationFleetsInput) (*DescribeCapacityReservationFleetsOutput, error) {
+	req, out := c.DescribeCapacityReservationFleetsRequest(input)
+	return out, req.Send()
+}
+
+// DescribeCapacityReservationFleetsWithContext is the same as DescribeCapacityReservationFleets with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DescribeCapacityReservationFleets for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *EC2) DescribeCapacityReservationFleetsWithContext(ctx aws.Context, input *DescribeCapacityReservationFleetsInput, opts ...request.Option) (*DescribeCapacityReservationFleetsOutput, error) {
+	req, out := c.DescribeCapacityReservationFleetsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// DescribeCapacityReservationFleetsPages iterates over the pages of a DescribeCapacityReservationFleets operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See DescribeCapacityReservationFleets method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a DescribeCapacityReservationFleets operation.
+//    pageNum := 0
+//    err := client.DescribeCapacityReservationFleetsPages(params,
+//        func(page *ec2.DescribeCapacityReservationFleetsOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *EC2) DescribeCapacityReservationFleetsPages(input *DescribeCapacityReservationFleetsInput, fn func(*DescribeCapacityReservationFleetsOutput, bool) bool) error {
+	return c.DescribeCapacityReservationFleetsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// DescribeCapacityReservationFleetsPagesWithContext same as DescribeCapacityReservationFleetsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *EC2) DescribeCapacityReservationFleetsPagesWithContext(ctx aws.Context, input *DescribeCapacityReservationFleetsInput, fn func(*DescribeCapacityReservationFleetsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *DescribeCapacityReservationFleetsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.DescribeCapacityReservationFleetsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*DescribeCapacityReservationFleetsOutput), !p.HasNextPage()) {
 			break
 		}
 	}
@@ -16584,7 +16877,7 @@ func (c *EC2) DescribeFleetHistoryRequest(input *DescribeFleetHistoryInput) (req
 // This ensures that you can query by the last evaluated time and not miss a
 // recorded event. EC2 Fleet events are available for 48 hours.
 //
-// For more information, see Monitoring your EC2 Fleet (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-fleet.html#monitor-ec2-fleet)
+// For more information, see Monitor fleet events using Amazon EventBridge (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/fleet-monitor.html)
 // in the Amazon EC2 User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -17086,8 +17379,8 @@ func (c *EC2) DescribeFpgaImagesRequest(input *DescribeFpgaImagesInput) (req *re
 // DescribeFpgaImages API operation for Amazon Elastic Compute Cloud.
 //
 // Describes the Amazon FPGA Images (AFIs) available to you. These include public
-// AFIs, private AFIs that you own, and AFIs owned by other AWS accounts for
-// which you have load permissions.
+// AFIs, private AFIs that you own, and AFIs owned by other Amazon Web Services
+// accounts for which you have load permissions.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -17767,11 +18060,12 @@ func (c *EC2) DescribeIdFormatRequest(input *DescribeIdFormatInput) (req *reques
 // | vpc-endpoint | vpc-peering-connection | vpn-connection | vpn-gateway.
 //
 // These settings apply to the IAM user who makes the request; they do not apply
-// to the entire AWS account. By default, an IAM user defaults to the same settings
-// as the root user, unless they explicitly override the settings by running
-// the ModifyIdFormat command. Resources created with longer IDs are visible
-// to all IAM users, regardless of these settings and provided that they have
-// permission to use the relevant Describe command for the resource type.
+// to the entire Amazon Web Services account. By default, an IAM user defaults
+// to the same settings as the root user, unless they explicitly override the
+// settings by running the ModifyIdFormat command. Resources created with longer
+// IDs are visible to all IAM users, regardless of these settings and provided
+// that they have permission to use the relevant Describe command for the resource
+// type.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -18824,7 +19118,7 @@ func (c *EC2) DescribeInstanceStatusRequest(input *DescribeInstanceStatusInput) 
 //    * Status checks - Amazon EC2 performs status checks on running EC2 instances
 //    to identify hardware and software issues. For more information, see Status
 //    checks for your instances (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/monitoring-system-instance-status-check.html)
-//    and Troubleshooting instances with failed status checks (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/TroubleshootingInstances.html)
+//    and Troubleshoot instances with failed status checks (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/TroubleshootingInstances.html)
 //    in the Amazon EC2 User Guide.
 //
 //    * Scheduled events - Amazon EC2 can schedule events (such as reboot, stop,
@@ -22415,12 +22709,12 @@ func (c *EC2) DescribeRegionsRequest(input *DescribeRegionsInput) (req *request.
 //
 // Describes the Regions that are enabled for your account, or all Regions.
 //
-// For a list of the Regions supported by Amazon EC2, see Regions and Endpoints
-// (https://docs.aws.amazon.com/general/latest/gr/rande.html#ec2_region).
+// For a list of the Regions supported by Amazon EC2, see Amazon Elastic Compute
+// Cloud endpoints and quotas (https://docs.aws.amazon.com/general/latest/gr/ec2-service.html).
 //
 // For information about enabling and disabling Regions for your account, see
-// Managing AWS Regions (https://docs.aws.amazon.com/general/latest/gr/rande-manage.html)
-// in the AWS General Reference.
+// Managing Amazon Web Services Regions (https://docs.aws.amazon.com/general/latest/gr/rande-manage.html)
+// in the Amazon Web Services General Reference.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -23873,6 +24167,138 @@ func (c *EC2) DescribeSnapshotAttributeWithContext(ctx aws.Context, input *Descr
 	return out, req.Send()
 }
 
+const opDescribeSnapshotTierStatus = "DescribeSnapshotTierStatus"
+
+// DescribeSnapshotTierStatusRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeSnapshotTierStatus operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DescribeSnapshotTierStatus for more information on using the DescribeSnapshotTierStatus
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DescribeSnapshotTierStatusRequest method.
+//    req, resp := client.DescribeSnapshotTierStatusRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/DescribeSnapshotTierStatus
+func (c *EC2) DescribeSnapshotTierStatusRequest(input *DescribeSnapshotTierStatusInput) (req *request.Request, output *DescribeSnapshotTierStatusOutput) {
+	op := &request.Operation{
+		Name:       opDescribeSnapshotTierStatus,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &DescribeSnapshotTierStatusInput{}
+	}
+
+	output = &DescribeSnapshotTierStatusOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DescribeSnapshotTierStatus API operation for Amazon Elastic Compute Cloud.
+//
+// Describes the storage tier status of one or more Amazon EBS snapshots.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Elastic Compute Cloud's
+// API operation DescribeSnapshotTierStatus for usage and error information.
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/DescribeSnapshotTierStatus
+func (c *EC2) DescribeSnapshotTierStatus(input *DescribeSnapshotTierStatusInput) (*DescribeSnapshotTierStatusOutput, error) {
+	req, out := c.DescribeSnapshotTierStatusRequest(input)
+	return out, req.Send()
+}
+
+// DescribeSnapshotTierStatusWithContext is the same as DescribeSnapshotTierStatus with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DescribeSnapshotTierStatus for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *EC2) DescribeSnapshotTierStatusWithContext(ctx aws.Context, input *DescribeSnapshotTierStatusInput, opts ...request.Option) (*DescribeSnapshotTierStatusOutput, error) {
+	req, out := c.DescribeSnapshotTierStatusRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// DescribeSnapshotTierStatusPages iterates over the pages of a DescribeSnapshotTierStatus operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See DescribeSnapshotTierStatus method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a DescribeSnapshotTierStatus operation.
+//    pageNum := 0
+//    err := client.DescribeSnapshotTierStatusPages(params,
+//        func(page *ec2.DescribeSnapshotTierStatusOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *EC2) DescribeSnapshotTierStatusPages(input *DescribeSnapshotTierStatusInput, fn func(*DescribeSnapshotTierStatusOutput, bool) bool) error {
+	return c.DescribeSnapshotTierStatusPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// DescribeSnapshotTierStatusPagesWithContext same as DescribeSnapshotTierStatusPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *EC2) DescribeSnapshotTierStatusPagesWithContext(ctx aws.Context, input *DescribeSnapshotTierStatusInput, fn func(*DescribeSnapshotTierStatusOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *DescribeSnapshotTierStatusInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.DescribeSnapshotTierStatusRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*DescribeSnapshotTierStatusOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opDescribeSnapshots = "DescribeSnapshots"
 
 // DescribeSnapshotsRequest generates a "aws/request.Request" representing the
@@ -24255,6 +24681,9 @@ func (c *EC2) DescribeSpotFleetRequestHistoryRequest(input *DescribeSpotFleetReq
 // Spot Fleet events are delayed by up to 30 seconds before they can be described.
 // This ensures that you can query by the last evaluated time and not miss a
 // recorded event. Spot Fleet events are available for 48 hours.
+//
+// For more information, see Monitor fleet events using Amazon EventBridge (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/fleet-monitor.html)
+// in the Amazon EC2 User Guide for Linux Instances.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -32797,6 +33226,153 @@ func (c *EC2) GetHostReservationPurchasePreviewWithContext(ctx aws.Context, inpu
 	return out, req.Send()
 }
 
+const opGetInstanceTypesFromInstanceRequirements = "GetInstanceTypesFromInstanceRequirements"
+
+// GetInstanceTypesFromInstanceRequirementsRequest generates a "aws/request.Request" representing the
+// client's request for the GetInstanceTypesFromInstanceRequirements operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetInstanceTypesFromInstanceRequirements for more information on using the GetInstanceTypesFromInstanceRequirements
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetInstanceTypesFromInstanceRequirementsRequest method.
+//    req, resp := client.GetInstanceTypesFromInstanceRequirementsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/GetInstanceTypesFromInstanceRequirements
+func (c *EC2) GetInstanceTypesFromInstanceRequirementsRequest(input *GetInstanceTypesFromInstanceRequirementsInput) (req *request.Request, output *GetInstanceTypesFromInstanceRequirementsOutput) {
+	op := &request.Operation{
+		Name:       opGetInstanceTypesFromInstanceRequirements,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &GetInstanceTypesFromInstanceRequirementsInput{}
+	}
+
+	output = &GetInstanceTypesFromInstanceRequirementsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetInstanceTypesFromInstanceRequirements API operation for Amazon Elastic Compute Cloud.
+//
+// Returns a list of instance types with the specified instance attributes.
+// You can use the response to preview the instance types without launching
+// instances. Note that the response does not consider capacity.
+//
+// When you specify multiple parameters, you get instance types that satisfy
+// all of the specified parameters. If you specify multiple values for a parameter,
+// you get instance types that satisfy any of the specified values.
+//
+// For more information, see Preview instance types with specified attributes
+// (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-fleet-attribute-based-instance-type-selection.html#spotfleet-get-instance-types-from-instance-requirements),
+// Attribute-based instance type selection for EC2 Fleet (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-fleet-attribute-based-instance-type-selection.html),
+// Attribute-based instance type selection for Spot Fleet (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-fleet-attribute-based-instance-type-selection.html),
+// and Spot placement score (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-placement-score.html)
+// in the Amazon EC2 User Guide, and Creating an Auto Scaling group using attribute-based
+// instance type selection (https://docs.aws.amazon.com/autoscaling/ec2/userguide/create-asg-instance-type-requirements.html)
+// in the Amazon EC2 Auto Scaling User Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Elastic Compute Cloud's
+// API operation GetInstanceTypesFromInstanceRequirements for usage and error information.
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/GetInstanceTypesFromInstanceRequirements
+func (c *EC2) GetInstanceTypesFromInstanceRequirements(input *GetInstanceTypesFromInstanceRequirementsInput) (*GetInstanceTypesFromInstanceRequirementsOutput, error) {
+	req, out := c.GetInstanceTypesFromInstanceRequirementsRequest(input)
+	return out, req.Send()
+}
+
+// GetInstanceTypesFromInstanceRequirementsWithContext is the same as GetInstanceTypesFromInstanceRequirements with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetInstanceTypesFromInstanceRequirements for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *EC2) GetInstanceTypesFromInstanceRequirementsWithContext(ctx aws.Context, input *GetInstanceTypesFromInstanceRequirementsInput, opts ...request.Option) (*GetInstanceTypesFromInstanceRequirementsOutput, error) {
+	req, out := c.GetInstanceTypesFromInstanceRequirementsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// GetInstanceTypesFromInstanceRequirementsPages iterates over the pages of a GetInstanceTypesFromInstanceRequirements operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See GetInstanceTypesFromInstanceRequirements method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a GetInstanceTypesFromInstanceRequirements operation.
+//    pageNum := 0
+//    err := client.GetInstanceTypesFromInstanceRequirementsPages(params,
+//        func(page *ec2.GetInstanceTypesFromInstanceRequirementsOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *EC2) GetInstanceTypesFromInstanceRequirementsPages(input *GetInstanceTypesFromInstanceRequirementsInput, fn func(*GetInstanceTypesFromInstanceRequirementsOutput, bool) bool) error {
+	return c.GetInstanceTypesFromInstanceRequirementsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// GetInstanceTypesFromInstanceRequirementsPagesWithContext same as GetInstanceTypesFromInstanceRequirementsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *EC2) GetInstanceTypesFromInstanceRequirementsPagesWithContext(ctx aws.Context, input *GetInstanceTypesFromInstanceRequirementsInput, fn func(*GetInstanceTypesFromInstanceRequirementsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *GetInstanceTypesFromInstanceRequirementsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.GetInstanceTypesFromInstanceRequirementsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*GetInstanceTypesFromInstanceRequirementsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opGetLaunchTemplateData = "GetLaunchTemplateData"
 
 // GetLaunchTemplateDataRequest generates a "aws/request.Request" representing the
@@ -33387,6 +33963,146 @@ func (c *EC2) GetSerialConsoleAccessStatusWithContext(ctx aws.Context, input *Ge
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
+}
+
+const opGetSpotPlacementScores = "GetSpotPlacementScores"
+
+// GetSpotPlacementScoresRequest generates a "aws/request.Request" representing the
+// client's request for the GetSpotPlacementScores operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetSpotPlacementScores for more information on using the GetSpotPlacementScores
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetSpotPlacementScoresRequest method.
+//    req, resp := client.GetSpotPlacementScoresRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/GetSpotPlacementScores
+func (c *EC2) GetSpotPlacementScoresRequest(input *GetSpotPlacementScoresInput) (req *request.Request, output *GetSpotPlacementScoresOutput) {
+	op := &request.Operation{
+		Name:       opGetSpotPlacementScores,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &GetSpotPlacementScoresInput{}
+	}
+
+	output = &GetSpotPlacementScoresOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetSpotPlacementScores API operation for Amazon Elastic Compute Cloud.
+//
+// Calculates the Spot placement score for a Region or Availability Zone based
+// on the specified target capacity and compute requirements.
+//
+// You can specify your compute requirements either by using InstanceRequirementsWithMetadata
+// and letting Amazon EC2 choose the optimal instance types to fulfill your
+// Spot request, or you can specify the instance types by using InstanceTypes.
+//
+// For more information, see Spot placement score (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-placement-score.html)
+// in the Amazon EC2 User Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Elastic Compute Cloud's
+// API operation GetSpotPlacementScores for usage and error information.
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/GetSpotPlacementScores
+func (c *EC2) GetSpotPlacementScores(input *GetSpotPlacementScoresInput) (*GetSpotPlacementScoresOutput, error) {
+	req, out := c.GetSpotPlacementScoresRequest(input)
+	return out, req.Send()
+}
+
+// GetSpotPlacementScoresWithContext is the same as GetSpotPlacementScores with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetSpotPlacementScores for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *EC2) GetSpotPlacementScoresWithContext(ctx aws.Context, input *GetSpotPlacementScoresInput, opts ...request.Option) (*GetSpotPlacementScoresOutput, error) {
+	req, out := c.GetSpotPlacementScoresRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// GetSpotPlacementScoresPages iterates over the pages of a GetSpotPlacementScores operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See GetSpotPlacementScores method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a GetSpotPlacementScores operation.
+//    pageNum := 0
+//    err := client.GetSpotPlacementScoresPages(params,
+//        func(page *ec2.GetSpotPlacementScoresOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *EC2) GetSpotPlacementScoresPages(input *GetSpotPlacementScoresInput, fn func(*GetSpotPlacementScoresOutput, bool) bool) error {
+	return c.GetSpotPlacementScoresPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// GetSpotPlacementScoresPagesWithContext same as GetSpotPlacementScoresPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *EC2) GetSpotPlacementScoresPagesWithContext(ctx aws.Context, input *GetSpotPlacementScoresInput, fn func(*GetSpotPlacementScoresOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *GetSpotPlacementScoresInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.GetSpotPlacementScoresRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*GetSpotPlacementScoresOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
 }
 
 const opGetSubnetCidrReservations = "GetSubnetCidrReservations"
@@ -34172,8 +34888,9 @@ func (c *EC2) GetVpnConnectionDeviceSampleConfigurationRequest(input *GetVpnConn
 
 // GetVpnConnectionDeviceSampleConfiguration API operation for Amazon Elastic Compute Cloud.
 //
-// Download an AWS-provided sample configuration file to be used with the customer
-// gateway device specified for your Site-to-Site VPN connection.
+// Download an Amazon Web Services-provided sample configuration file to be
+// used with the customer gateway device specified for your Site-to-Site VPN
+// connection.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -34827,6 +35544,138 @@ func (c *EC2) ImportVolumeWithContext(ctx aws.Context, input *ImportVolumeInput,
 	return out, req.Send()
 }
 
+const opListSnapshotsInRecycleBin = "ListSnapshotsInRecycleBin"
+
+// ListSnapshotsInRecycleBinRequest generates a "aws/request.Request" representing the
+// client's request for the ListSnapshotsInRecycleBin operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListSnapshotsInRecycleBin for more information on using the ListSnapshotsInRecycleBin
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListSnapshotsInRecycleBinRequest method.
+//    req, resp := client.ListSnapshotsInRecycleBinRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/ListSnapshotsInRecycleBin
+func (c *EC2) ListSnapshotsInRecycleBinRequest(input *ListSnapshotsInRecycleBinInput) (req *request.Request, output *ListSnapshotsInRecycleBinOutput) {
+	op := &request.Operation{
+		Name:       opListSnapshotsInRecycleBin,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListSnapshotsInRecycleBinInput{}
+	}
+
+	output = &ListSnapshotsInRecycleBinOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListSnapshotsInRecycleBin API operation for Amazon Elastic Compute Cloud.
+//
+// Lists one or more snapshots that are currently in the Recycle Bin.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Elastic Compute Cloud's
+// API operation ListSnapshotsInRecycleBin for usage and error information.
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/ListSnapshotsInRecycleBin
+func (c *EC2) ListSnapshotsInRecycleBin(input *ListSnapshotsInRecycleBinInput) (*ListSnapshotsInRecycleBinOutput, error) {
+	req, out := c.ListSnapshotsInRecycleBinRequest(input)
+	return out, req.Send()
+}
+
+// ListSnapshotsInRecycleBinWithContext is the same as ListSnapshotsInRecycleBin with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListSnapshotsInRecycleBin for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *EC2) ListSnapshotsInRecycleBinWithContext(ctx aws.Context, input *ListSnapshotsInRecycleBinInput, opts ...request.Option) (*ListSnapshotsInRecycleBinOutput, error) {
+	req, out := c.ListSnapshotsInRecycleBinRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListSnapshotsInRecycleBinPages iterates over the pages of a ListSnapshotsInRecycleBin operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListSnapshotsInRecycleBin method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListSnapshotsInRecycleBin operation.
+//    pageNum := 0
+//    err := client.ListSnapshotsInRecycleBinPages(params,
+//        func(page *ec2.ListSnapshotsInRecycleBinOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *EC2) ListSnapshotsInRecycleBinPages(input *ListSnapshotsInRecycleBinInput, fn func(*ListSnapshotsInRecycleBinOutput, bool) bool) error {
+	return c.ListSnapshotsInRecycleBinPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListSnapshotsInRecycleBinPagesWithContext same as ListSnapshotsInRecycleBinPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *EC2) ListSnapshotsInRecycleBinPagesWithContext(ctx aws.Context, input *ListSnapshotsInRecycleBinInput, fn func(*ListSnapshotsInRecycleBinOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListSnapshotsInRecycleBinInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListSnapshotsInRecycleBinRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListSnapshotsInRecycleBinOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opModifyAddressAttribute = "ModifyAddressAttribute"
 
 // ModifyAddressAttributeRequest generates a "aws/request.Request" representing the
@@ -35054,6 +35903,87 @@ func (c *EC2) ModifyCapacityReservation(input *ModifyCapacityReservationInput) (
 // for more information on using Contexts.
 func (c *EC2) ModifyCapacityReservationWithContext(ctx aws.Context, input *ModifyCapacityReservationInput, opts ...request.Option) (*ModifyCapacityReservationOutput, error) {
 	req, out := c.ModifyCapacityReservationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opModifyCapacityReservationFleet = "ModifyCapacityReservationFleet"
+
+// ModifyCapacityReservationFleetRequest generates a "aws/request.Request" representing the
+// client's request for the ModifyCapacityReservationFleet operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ModifyCapacityReservationFleet for more information on using the ModifyCapacityReservationFleet
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ModifyCapacityReservationFleetRequest method.
+//    req, resp := client.ModifyCapacityReservationFleetRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/ModifyCapacityReservationFleet
+func (c *EC2) ModifyCapacityReservationFleetRequest(input *ModifyCapacityReservationFleetInput) (req *request.Request, output *ModifyCapacityReservationFleetOutput) {
+	op := &request.Operation{
+		Name:       opModifyCapacityReservationFleet,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &ModifyCapacityReservationFleetInput{}
+	}
+
+	output = &ModifyCapacityReservationFleetOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ModifyCapacityReservationFleet API operation for Amazon Elastic Compute Cloud.
+//
+// Modifies a Capacity Reservation Fleet.
+//
+// When you modify the total target capacity of a Capacity Reservation Fleet,
+// the Fleet automatically creates new Capacity Reservations, or modifies or
+// cancels existing Capacity Reservations in the Fleet to meet the new total
+// target capacity. When you modify the end date for the Fleet, the end dates
+// for all of the individual Capacity Reservations in the Fleet are updated
+// accordingly.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Elastic Compute Cloud's
+// API operation ModifyCapacityReservationFleet for usage and error information.
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/ModifyCapacityReservationFleet
+func (c *EC2) ModifyCapacityReservationFleet(input *ModifyCapacityReservationFleetInput) (*ModifyCapacityReservationFleetOutput, error) {
+	req, out := c.ModifyCapacityReservationFleetRequest(input)
+	return out, req.Send()
+}
+
+// ModifyCapacityReservationFleetWithContext is the same as ModifyCapacityReservationFleet with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ModifyCapacityReservationFleet for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *EC2) ModifyCapacityReservationFleetWithContext(ctx aws.Context, input *ModifyCapacityReservationFleetInput, opts ...request.Option) (*ModifyCapacityReservationFleetOutput, error) {
+	req, out := c.ModifyCapacityReservationFleetRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -35630,10 +36560,11 @@ func (c *EC2) ModifyIdFormatRequest(input *ModifyIdFormatInput) (req *request.Re
 // | vpc-endpoint | vpc-peering-connection | vpn-connection | vpn-gateway.
 //
 // This setting applies to the IAM user who makes the request; it does not apply
-// to the entire AWS account. By default, an IAM user defaults to the same settings
-// as the root user. If you're using this action as the root user, then these
-// settings apply to the entire account, unless an IAM user explicitly overrides
-// these settings for themselves. For more information, see Resource IDs (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/resource-ids.html)
+// to the entire Amazon Web Services account. By default, an IAM user defaults
+// to the same settings as the root user. If you're using this action as the
+// root user, then these settings apply to the entire account, unless an IAM
+// user explicitly overrides these settings for themselves. For more information,
+// see Resource IDs (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/resource-ids.html)
 // in the Amazon Elastic Compute Cloud User Guide.
 //
 // Resources created with longer IDs are visible to all IAM roles and users,
@@ -35903,7 +36834,7 @@ func (c *EC2) ModifyInstanceAttributeRequest(input *ModifyInstanceAttributeInput
 // we recommend that you use the ModifyNetworkInterfaceAttribute action.
 //
 // To modify some attributes, the instance must be stopped. For more information,
-// see Modifying attributes of a stopped instance (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_ChangingAttributesWhileInstanceStopped.html)
+// see Modify a stopped instance (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_ChangingAttributesWhileInstanceStopped.html)
 // in the Amazon EC2 User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -36657,6 +37588,80 @@ func (c *EC2) ModifyNetworkInterfaceAttributeWithContext(ctx aws.Context, input 
 	return out, req.Send()
 }
 
+const opModifyPrivateDnsNameOptions = "ModifyPrivateDnsNameOptions"
+
+// ModifyPrivateDnsNameOptionsRequest generates a "aws/request.Request" representing the
+// client's request for the ModifyPrivateDnsNameOptions operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ModifyPrivateDnsNameOptions for more information on using the ModifyPrivateDnsNameOptions
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ModifyPrivateDnsNameOptionsRequest method.
+//    req, resp := client.ModifyPrivateDnsNameOptionsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/ModifyPrivateDnsNameOptions
+func (c *EC2) ModifyPrivateDnsNameOptionsRequest(input *ModifyPrivateDnsNameOptionsInput) (req *request.Request, output *ModifyPrivateDnsNameOptionsOutput) {
+	op := &request.Operation{
+		Name:       opModifyPrivateDnsNameOptions,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &ModifyPrivateDnsNameOptionsInput{}
+	}
+
+	output = &ModifyPrivateDnsNameOptionsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ModifyPrivateDnsNameOptions API operation for Amazon Elastic Compute Cloud.
+//
+// Modifies the options for instance hostnames for the specified instance.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Elastic Compute Cloud's
+// API operation ModifyPrivateDnsNameOptions for usage and error information.
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/ModifyPrivateDnsNameOptions
+func (c *EC2) ModifyPrivateDnsNameOptions(input *ModifyPrivateDnsNameOptionsInput) (*ModifyPrivateDnsNameOptionsOutput, error) {
+	req, out := c.ModifyPrivateDnsNameOptionsRequest(input)
+	return out, req.Send()
+}
+
+// ModifyPrivateDnsNameOptionsWithContext is the same as ModifyPrivateDnsNameOptions with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ModifyPrivateDnsNameOptions for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *EC2) ModifyPrivateDnsNameOptionsWithContext(ctx aws.Context, input *ModifyPrivateDnsNameOptionsInput, opts ...request.Option) (*ModifyPrivateDnsNameOptionsOutput, error) {
+	req, out := c.ModifyPrivateDnsNameOptionsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opModifyReservedInstances = "ModifyReservedInstances"
 
 // ModifyReservedInstancesRequest generates a "aws/request.Request" representing the
@@ -36899,6 +37904,85 @@ func (c *EC2) ModifySnapshotAttributeWithContext(ctx aws.Context, input *ModifyS
 	return out, req.Send()
 }
 
+const opModifySnapshotTier = "ModifySnapshotTier"
+
+// ModifySnapshotTierRequest generates a "aws/request.Request" representing the
+// client's request for the ModifySnapshotTier operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ModifySnapshotTier for more information on using the ModifySnapshotTier
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ModifySnapshotTierRequest method.
+//    req, resp := client.ModifySnapshotTierRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/ModifySnapshotTier
+func (c *EC2) ModifySnapshotTierRequest(input *ModifySnapshotTierInput) (req *request.Request, output *ModifySnapshotTierOutput) {
+	op := &request.Operation{
+		Name:       opModifySnapshotTier,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &ModifySnapshotTierInput{}
+	}
+
+	output = &ModifySnapshotTierOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ModifySnapshotTier API operation for Amazon Elastic Compute Cloud.
+//
+// Archives an Amazon EBS snapshot. When you archive a snapshot, it is converted
+// to a full snapshot that includes all of the blocks of data that were written
+// to the volume at the time the snapshot was created, and moved from the standard
+// tier to the archive tier. For more information, see Archive Amazon EBS snapshots
+// (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/snapshot-archive.html)
+// in the Amazon Elastic Compute Cloud User Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Elastic Compute Cloud's
+// API operation ModifySnapshotTier for usage and error information.
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/ModifySnapshotTier
+func (c *EC2) ModifySnapshotTier(input *ModifySnapshotTierInput) (*ModifySnapshotTierOutput, error) {
+	req, out := c.ModifySnapshotTierRequest(input)
+	return out, req.Send()
+}
+
+// ModifySnapshotTierWithContext is the same as ModifySnapshotTier with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ModifySnapshotTier for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *EC2) ModifySnapshotTierWithContext(ctx aws.Context, input *ModifySnapshotTierInput, opts ...request.Option) (*ModifySnapshotTierOutput, error) {
+	req, out := c.ModifySnapshotTierRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opModifySpotFleetRequest = "ModifySpotFleetRequest"
 
 // ModifySpotFleetRequestRequest generates a "aws/request.Request" representing the
@@ -37129,9 +38213,6 @@ func (c *EC2) ModifyTrafficMirrorFilterNetworkServicesRequest(input *ModifyTraff
 // related to that network service will be mirrored. When you no longer want
 // to mirror network services, use RemoveNetworkServices to remove the network
 // services from the Traffic Mirror filter.
-//
-// For information about filter rule properties, see Network Services (https://docs.aws.amazon.com/vpc/latest/mirroring/traffic-mirroring-considerations.html)
-// in the Traffic Mirroring User Guide .
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -38076,7 +39157,7 @@ func (c *EC2) ModifyVpcEndpointServicePermissionsRequest(input *ModifyVpcEndpoin
 //
 // Modifies the permissions for your VPC endpoint service (https://docs.aws.amazon.com/vpc/latest/userguide/endpoint-service.html).
 // You can add or remove permissions for service consumers (IAM users, IAM roles,
-// and AWS accounts) to connect to your endpoint service.
+// and Amazon Web Services accounts) to connect to your endpoint service.
 //
 // If you grant permissions to all principals, the service is public. Any users
 // who know the name of a public service can send a request to attach an endpoint.
@@ -38683,7 +39764,7 @@ func (c *EC2) MonitorInstancesRequest(input *MonitorInstancesInput) (req *reques
 // MonitorInstances API operation for Amazon Elastic Compute Cloud.
 //
 // Enables detailed monitoring for a running instance. Otherwise, basic monitoring
-// is enabled. For more information, see Monitoring your instances and volumes
+// is enabled. For more information, see Monitor your instances using CloudWatch
 // (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-cloudwatch.html)
 // in the Amazon EC2 User Guide.
 //
@@ -39187,8 +40268,8 @@ func (c *EC2) RebootInstancesRequest(input *RebootInstancesInput) (req *request.
 // If an instance does not cleanly shut down within a few minutes, Amazon EC2
 // performs a hard reboot.
 //
-// For more information about troubleshooting, see Getting console output and
-// rebooting instances (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-console.html)
+// For more information about troubleshooting, see Troubleshoot an unreachable
+// instance (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-console.html)
 // in the Amazon EC2 User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -41564,6 +42645,163 @@ func (c *EC2) RestoreManagedPrefixListVersionWithContext(ctx aws.Context, input 
 	return out, req.Send()
 }
 
+const opRestoreSnapshotFromRecycleBin = "RestoreSnapshotFromRecycleBin"
+
+// RestoreSnapshotFromRecycleBinRequest generates a "aws/request.Request" representing the
+// client's request for the RestoreSnapshotFromRecycleBin operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See RestoreSnapshotFromRecycleBin for more information on using the RestoreSnapshotFromRecycleBin
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the RestoreSnapshotFromRecycleBinRequest method.
+//    req, resp := client.RestoreSnapshotFromRecycleBinRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/RestoreSnapshotFromRecycleBin
+func (c *EC2) RestoreSnapshotFromRecycleBinRequest(input *RestoreSnapshotFromRecycleBinInput) (req *request.Request, output *RestoreSnapshotFromRecycleBinOutput) {
+	op := &request.Operation{
+		Name:       opRestoreSnapshotFromRecycleBin,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &RestoreSnapshotFromRecycleBinInput{}
+	}
+
+	output = &RestoreSnapshotFromRecycleBinOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// RestoreSnapshotFromRecycleBin API operation for Amazon Elastic Compute Cloud.
+//
+// Restores a snapshot from the Recycle Bin. For more information, see Restore
+// snapshots from the Recycle Bin (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/recycle-bin-working-with-snaps.html#recycle-bin-restore-snaps)
+// in the Amazon Elastic Compute Cloud User Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Elastic Compute Cloud's
+// API operation RestoreSnapshotFromRecycleBin for usage and error information.
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/RestoreSnapshotFromRecycleBin
+func (c *EC2) RestoreSnapshotFromRecycleBin(input *RestoreSnapshotFromRecycleBinInput) (*RestoreSnapshotFromRecycleBinOutput, error) {
+	req, out := c.RestoreSnapshotFromRecycleBinRequest(input)
+	return out, req.Send()
+}
+
+// RestoreSnapshotFromRecycleBinWithContext is the same as RestoreSnapshotFromRecycleBin with the addition of
+// the ability to pass a context and additional request options.
+//
+// See RestoreSnapshotFromRecycleBin for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *EC2) RestoreSnapshotFromRecycleBinWithContext(ctx aws.Context, input *RestoreSnapshotFromRecycleBinInput, opts ...request.Option) (*RestoreSnapshotFromRecycleBinOutput, error) {
+	req, out := c.RestoreSnapshotFromRecycleBinRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opRestoreSnapshotTier = "RestoreSnapshotTier"
+
+// RestoreSnapshotTierRequest generates a "aws/request.Request" representing the
+// client's request for the RestoreSnapshotTier operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See RestoreSnapshotTier for more information on using the RestoreSnapshotTier
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the RestoreSnapshotTierRequest method.
+//    req, resp := client.RestoreSnapshotTierRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/RestoreSnapshotTier
+func (c *EC2) RestoreSnapshotTierRequest(input *RestoreSnapshotTierInput) (req *request.Request, output *RestoreSnapshotTierOutput) {
+	op := &request.Operation{
+		Name:       opRestoreSnapshotTier,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &RestoreSnapshotTierInput{}
+	}
+
+	output = &RestoreSnapshotTierOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// RestoreSnapshotTier API operation for Amazon Elastic Compute Cloud.
+//
+// Restores an archived Amazon EBS snapshot for use temporarily or permanently,
+// or modifies the restore period or restore type for a snapshot that was previously
+// temporarily restored.
+//
+// For more information see Restore an archived snapshot (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/working-with-snapshot-archiving.html#restore-archived-snapshot)
+// and modify the restore period or restore type for a temporarily restored
+// snapshot (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/working-with-snapshot-archiving.html#modify-temp-restore-period)
+// in the Amazon Elastic Compute Cloud User Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Elastic Compute Cloud's
+// API operation RestoreSnapshotTier for usage and error information.
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/RestoreSnapshotTier
+func (c *EC2) RestoreSnapshotTier(input *RestoreSnapshotTierInput) (*RestoreSnapshotTierOutput, error) {
+	req, out := c.RestoreSnapshotTierRequest(input)
+	return out, req.Send()
+}
+
+// RestoreSnapshotTierWithContext is the same as RestoreSnapshotTier with the addition of
+// the ability to pass a context and additional request options.
+//
+// See RestoreSnapshotTier for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *EC2) RestoreSnapshotTierWithContext(ctx aws.Context, input *RestoreSnapshotTierInput, opts ...request.Option) (*RestoreSnapshotTierOutput, error) {
+	req, out := c.RestoreSnapshotTierRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opRevokeClientVpnIngress = "RevokeClientVpnIngress"
 
 // RevokeClientVpnIngressRequest generates a "aws/request.Request" representing the
@@ -42434,8 +43672,8 @@ func (c *EC2) SendDiagnosticInterruptRequest(input *SendDiagnosticInterruptInput
 //
 // For more information about configuring your operating system to generate
 // a crash dump when a kernel panic or stop error occurs, see Send a diagnostic
-// interrupt (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/diagnostic-interrupt.html)
-// (Linux instances) or Send a Diagnostic Interrupt (https://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/diagnostic-interrupt.html)
+// interrupt (for advanced users) (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/diagnostic-interrupt.html)
+// (Linux instances) or Send a diagnostic interrupt (for advanced users) (https://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/diagnostic-interrupt.html)
 // (Windows instances).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -42532,7 +43770,7 @@ func (c *EC2) StartInstancesRequest(input *StartInstancesInput) (req *request.Re
 // not supported on Dedicated Hosts. Before you start the instance, either change
 // its CPU credit option to standard, or change its tenancy to default or dedicated.
 //
-// For more information, see Stopping instances (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Stop_Start.html)
+// For more information, see Stop and start your instance (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Stop_Start.html)
 // in the Amazon EC2 User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -42804,7 +44042,7 @@ func (c *EC2) StopInstancesRequest(input *StopInstancesInput) (req *request.Requ
 // When you stop an instance, we attempt to shut it down forcibly after a short
 // while. If your instance appears stuck in the stopping state after a period
 // of time, there may be an issue with the underlying host computer. For more
-// information, see Troubleshooting stopping your instance (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/TroubleshootingInstancesStopping.html)
+// information, see Troubleshoot stopping your instance (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/TroubleshootingInstancesStopping.html)
 // in the Amazon EC2 User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -43498,6 +44736,181 @@ func (c *EC2) WithdrawByoipCidrWithContext(ctx aws.Context, input *WithdrawByoip
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
+}
+
+// The minimum and maximum number of accelerators (GPUs, FPGAs, or Amazon Web
+// Services Inferentia chips) on an instance.
+type AcceleratorCount struct {
+	_ struct{} `type:"structure"`
+
+	// The maximum number of accelerators. If this parameter is not specified, there
+	// is no maximum limit.
+	Max *int64 `locationName:"max" type:"integer"`
+
+	// The minimum number of accelerators. If this parameter is not specified, there
+	// is no minimum limit.
+	Min *int64 `locationName:"min" type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AcceleratorCount) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AcceleratorCount) GoString() string {
+	return s.String()
+}
+
+// SetMax sets the Max field's value.
+func (s *AcceleratorCount) SetMax(v int64) *AcceleratorCount {
+	s.Max = &v
+	return s
+}
+
+// SetMin sets the Min field's value.
+func (s *AcceleratorCount) SetMin(v int64) *AcceleratorCount {
+	s.Min = &v
+	return s
+}
+
+// The minimum and maximum number of accelerators (GPUs, FPGAs, or Amazon Web
+// Services Inferentia chips) on an instance. To exclude accelerator-enabled
+// instance types, set Max to 0.
+type AcceleratorCountRequest struct {
+	_ struct{} `type:"structure"`
+
+	// The maximum number of accelerators. To specify no maximum limit, omit this
+	// parameter. To exclude accelerator-enabled instance types, set Max to 0.
+	Max *int64 `type:"integer"`
+
+	// The minimum number of accelerators. To specify no minimum limit, omit this
+	// parameter.
+	Min *int64 `type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AcceleratorCountRequest) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AcceleratorCountRequest) GoString() string {
+	return s.String()
+}
+
+// SetMax sets the Max field's value.
+func (s *AcceleratorCountRequest) SetMax(v int64) *AcceleratorCountRequest {
+	s.Max = &v
+	return s
+}
+
+// SetMin sets the Min field's value.
+func (s *AcceleratorCountRequest) SetMin(v int64) *AcceleratorCountRequest {
+	s.Min = &v
+	return s
+}
+
+// The minimum and maximum amount of total accelerator memory, in MiB.
+type AcceleratorTotalMemoryMiB struct {
+	_ struct{} `type:"structure"`
+
+	// The maximum amount of accelerator memory, in MiB. If this parameter is not
+	// specified, there is no maximum limit.
+	Max *int64 `locationName:"max" type:"integer"`
+
+	// The minimum amount of accelerator memory, in MiB. If this parameter is not
+	// specified, there is no minimum limit.
+	Min *int64 `locationName:"min" type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AcceleratorTotalMemoryMiB) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AcceleratorTotalMemoryMiB) GoString() string {
+	return s.String()
+}
+
+// SetMax sets the Max field's value.
+func (s *AcceleratorTotalMemoryMiB) SetMax(v int64) *AcceleratorTotalMemoryMiB {
+	s.Max = &v
+	return s
+}
+
+// SetMin sets the Min field's value.
+func (s *AcceleratorTotalMemoryMiB) SetMin(v int64) *AcceleratorTotalMemoryMiB {
+	s.Min = &v
+	return s
+}
+
+// The minimum and maximum amount of total accelerator memory, in MiB.
+type AcceleratorTotalMemoryMiBRequest struct {
+	_ struct{} `type:"structure"`
+
+	// The maximum amount of accelerator memory, in MiB. To specify no maximum limit,
+	// omit this parameter.
+	Max *int64 `type:"integer"`
+
+	// The minimum amount of accelerator memory, in MiB. To specify no minimum limit,
+	// omit this parameter.
+	Min *int64 `type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AcceleratorTotalMemoryMiBRequest) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s AcceleratorTotalMemoryMiBRequest) GoString() string {
+	return s.String()
+}
+
+// SetMax sets the Max field's value.
+func (s *AcceleratorTotalMemoryMiBRequest) SetMax(v int64) *AcceleratorTotalMemoryMiBRequest {
+	s.Max = &v
+	return s
+}
+
+// SetMin sets the Min field's value.
+func (s *AcceleratorTotalMemoryMiBRequest) SetMin(v int64) *AcceleratorTotalMemoryMiBRequest {
+	s.Min = &v
+	return s
 }
 
 // Contains the parameters for accepting the quote.
@@ -44282,7 +45695,7 @@ type Address struct {
 	InstanceId *string `locationName:"instanceId" type:"string"`
 
 	// The name of the unique set of Availability Zones, Local Zones, or Wavelength
-	// Zones from which AWS advertises IP addresses.
+	// Zones from which Amazon Web Services advertises IP addresses.
 	NetworkBorderGroup *string `locationName:"networkBorderGroup" type:"string"`
 
 	// The ID of the network interface.
@@ -44581,15 +45994,15 @@ type AllocateAddressInput struct {
 	DryRun *bool `locationName:"dryRun" type:"boolean"`
 
 	// A unique set of Availability Zones, Local Zones, or Wavelength Zones from
-	// which AWS advertises IP addresses. Use this parameter to limit the IP address
-	// to this location. IP addresses cannot move between network border groups.
+	// which Amazon Web Services advertises IP addresses. Use this parameter to
+	// limit the IP address to this location. IP addresses cannot move between network
+	// border groups.
 	//
 	// Use DescribeAvailabilityZones (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeAvailabilityZones.html)
 	// to view the network border groups.
 	//
 	// You cannot use a network border group with EC2 Classic. If you attempt this
-	// operation on EC2 classic, you will receive an InvalidParameterCombination
-	// error. For more information, see Error Codes (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/errors-overview.html).
+	// operation on EC2 Classic, you receive an InvalidParameterCombination error.
 	NetworkBorderGroup *string `type:"string"`
 
 	// The ID of an address pool that you own. Use this parameter to let Amazon
@@ -44683,7 +46096,7 @@ type AllocateAddressOutput struct {
 	Domain *string `locationName:"domain" type:"string" enum:"DomainType"`
 
 	// The set of Availability Zones, Local Zones, or Wavelength Zones from which
-	// AWS advertises IP addresses.
+	// Amazon Web Services advertises IP addresses.
 	NetworkBorderGroup *string `locationName:"networkBorderGroup" type:"string"`
 
 	// The Elastic IP address.
@@ -46787,7 +48200,7 @@ func (s *AssociateSubnetCidrBlockInput) SetSubnetId(v string) *AssociateSubnetCi
 type AssociateSubnetCidrBlockOutput struct {
 	_ struct{} `type:"structure"`
 
-	// Information about the IPv6 CIDR block association.
+	// Information about the IPv6 association.
 	Ipv6CidrBlockAssociation *SubnetIpv6CidrBlockAssociation `locationName:"ipv6CidrBlockAssociation" type:"structure"`
 
 	// The ID of the subnet.
@@ -48953,6 +50366,96 @@ func (s *AvailableCapacity) SetAvailableVCpus(v int64) *AvailableCapacity {
 	return s
 }
 
+// The minimum and maximum baseline bandwidth to Amazon EBS, in Mbps. For more
+// information, see Amazon EBS–optimized instances (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-optimized.html)
+// in the Amazon EC2 User Guide.
+type BaselineEbsBandwidthMbps struct {
+	_ struct{} `type:"structure"`
+
+	// The maximum baseline bandwidth, in Mbps. If this parameter is not specified,
+	// there is no maximum limit.
+	Max *int64 `locationName:"max" type:"integer"`
+
+	// The minimum baseline bandwidth, in Mbps. If this parameter is not specified,
+	// there is no minimum limit.
+	Min *int64 `locationName:"min" type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BaselineEbsBandwidthMbps) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BaselineEbsBandwidthMbps) GoString() string {
+	return s.String()
+}
+
+// SetMax sets the Max field's value.
+func (s *BaselineEbsBandwidthMbps) SetMax(v int64) *BaselineEbsBandwidthMbps {
+	s.Max = &v
+	return s
+}
+
+// SetMin sets the Min field's value.
+func (s *BaselineEbsBandwidthMbps) SetMin(v int64) *BaselineEbsBandwidthMbps {
+	s.Min = &v
+	return s
+}
+
+// The minimum and maximum baseline bandwidth to Amazon EBS, in Mbps. For more
+// information, see Amazon EBS–optimized instances (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-optimized.html)
+// in the Amazon EC2 User Guide.
+type BaselineEbsBandwidthMbpsRequest struct {
+	_ struct{} `type:"structure"`
+
+	// The maximum baseline bandwidth, in Mbps. To specify no maximum limit, omit
+	// this parameter.
+	Max *int64 `type:"integer"`
+
+	// The minimum baseline bandwidth, in Mbps. To specify no minimum limit, omit
+	// this parameter.
+	Min *int64 `type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BaselineEbsBandwidthMbpsRequest) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s BaselineEbsBandwidthMbpsRequest) GoString() string {
+	return s.String()
+}
+
+// SetMax sets the Max field's value.
+func (s *BaselineEbsBandwidthMbpsRequest) SetMax(v int64) *BaselineEbsBandwidthMbpsRequest {
+	s.Max = &v
+	return s
+}
+
+// SetMin sets the Min field's value.
+func (s *BaselineEbsBandwidthMbpsRequest) SetMin(v int64) *BaselineEbsBandwidthMbpsRequest {
+	s.Min = &v
+	return s
+}
+
 type BlobAttributeValue struct {
 	_ struct{} `type:"structure"`
 
@@ -49457,6 +50960,146 @@ func (s CancelBundleTaskOutput) GoString() string {
 // SetBundleTask sets the BundleTask field's value.
 func (s *CancelBundleTaskOutput) SetBundleTask(v *BundleTask) *CancelBundleTaskOutput {
 	s.BundleTask = v
+	return s
+}
+
+// Describes a Capacity Reservation Fleet cancellation error.
+type CancelCapacityReservationFleetError struct {
+	_ struct{} `type:"structure"`
+
+	// The error code.
+	Code *string `locationName:"code" type:"string"`
+
+	// The error message.
+	Message *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CancelCapacityReservationFleetError) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CancelCapacityReservationFleetError) GoString() string {
+	return s.String()
+}
+
+// SetCode sets the Code field's value.
+func (s *CancelCapacityReservationFleetError) SetCode(v string) *CancelCapacityReservationFleetError {
+	s.Code = &v
+	return s
+}
+
+// SetMessage sets the Message field's value.
+func (s *CancelCapacityReservationFleetError) SetMessage(v string) *CancelCapacityReservationFleetError {
+	s.Message = &v
+	return s
+}
+
+type CancelCapacityReservationFleetsInput struct {
+	_ struct{} `type:"structure"`
+
+	// The IDs of the Capacity Reservation Fleets to cancel.
+	//
+	// CapacityReservationFleetIds is a required field
+	CapacityReservationFleetIds []*string `locationName:"CapacityReservationFleetId" locationNameList:"item" type:"list" required:"true"`
+
+	// Checks whether you have the required permissions for the action, without
+	// actually making the request, and provides an error response. If you have
+	// the required permissions, the error response is DryRunOperation. Otherwise,
+	// it is UnauthorizedOperation.
+	DryRun *bool `type:"boolean"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CancelCapacityReservationFleetsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CancelCapacityReservationFleetsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CancelCapacityReservationFleetsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CancelCapacityReservationFleetsInput"}
+	if s.CapacityReservationFleetIds == nil {
+		invalidParams.Add(request.NewErrParamRequired("CapacityReservationFleetIds"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetCapacityReservationFleetIds sets the CapacityReservationFleetIds field's value.
+func (s *CancelCapacityReservationFleetsInput) SetCapacityReservationFleetIds(v []*string) *CancelCapacityReservationFleetsInput {
+	s.CapacityReservationFleetIds = v
+	return s
+}
+
+// SetDryRun sets the DryRun field's value.
+func (s *CancelCapacityReservationFleetsInput) SetDryRun(v bool) *CancelCapacityReservationFleetsInput {
+	s.DryRun = &v
+	return s
+}
+
+type CancelCapacityReservationFleetsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Information about the Capacity Reservation Fleets that could not be cancelled.
+	FailedFleetCancellations []*FailedCapacityReservationFleetCancellationResult `locationName:"failedFleetCancellationSet" locationNameList:"item" type:"list"`
+
+	// Information about the Capacity Reservation Fleets that were successfully
+	// cancelled.
+	SuccessfulFleetCancellations []*CapacityReservationFleetCancellationState `locationName:"successfulFleetCancellationSet" locationNameList:"item" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CancelCapacityReservationFleetsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CancelCapacityReservationFleetsOutput) GoString() string {
+	return s.String()
+}
+
+// SetFailedFleetCancellations sets the FailedFleetCancellations field's value.
+func (s *CancelCapacityReservationFleetsOutput) SetFailedFleetCancellations(v []*FailedCapacityReservationFleetCancellationResult) *CancelCapacityReservationFleetsOutput {
+	s.FailedFleetCancellations = v
+	return s
+}
+
+// SetSuccessfulFleetCancellations sets the SuccessfulFleetCancellations field's value.
+func (s *CancelCapacityReservationFleetsOutput) SetSuccessfulFleetCancellations(v []*CapacityReservationFleetCancellationState) *CancelCapacityReservationFleetsOutput {
+	s.SuccessfulFleetCancellations = v
 	return s
 }
 
@@ -50282,6 +51925,11 @@ type CapacityReservation struct {
 	// The Amazon Resource Name (ARN) of the Capacity Reservation.
 	CapacityReservationArn *string `locationName:"capacityReservationArn" type:"string"`
 
+	// The ID of the Capacity Reservation Fleet to which the Capacity Reservation
+	// belongs. Only valid for Capacity Reservations that were created by a Capacity
+	// Reservation Fleet.
+	CapacityReservationFleetId *string `locationName:"capacityReservationFleetId" type:"string"`
+
 	// The ID of the Capacity Reservation.
 	CapacityReservationId *string `locationName:"capacityReservationId" type:"string"`
 
@@ -50427,6 +52075,12 @@ func (s *CapacityReservation) SetCapacityReservationArn(v string) *CapacityReser
 	return s
 }
 
+// SetCapacityReservationFleetId sets the CapacityReservationFleetId field's value.
+func (s *CapacityReservation) SetCapacityReservationFleetId(v string) *CapacityReservation {
+	s.CapacityReservationFleetId = &v
+	return s
+}
+
 // SetCapacityReservationId sets the CapacityReservationId field's value.
 func (s *CapacityReservation) SetCapacityReservationId(v string) *CapacityReservation {
 	s.CapacityReservationId = &v
@@ -50520,6 +52174,239 @@ func (s *CapacityReservation) SetTenancy(v string) *CapacityReservation {
 // SetTotalInstanceCount sets the TotalInstanceCount field's value.
 func (s *CapacityReservation) SetTotalInstanceCount(v int64) *CapacityReservation {
 	s.TotalInstanceCount = &v
+	return s
+}
+
+// Information about a Capacity Reservation Fleet.
+type CapacityReservationFleet struct {
+	_ struct{} `type:"structure"`
+
+	// The strategy used by the Capacity Reservation Fleet to determine which of
+	// the specified instance types to use. For more information, see For more information,
+	// see Allocation strategy (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/crfleet-concepts.html#allocation-strategy)
+	// in the Amazon EC2 User Guide.
+	AllocationStrategy *string `locationName:"allocationStrategy" type:"string"`
+
+	// The ARN of the Capacity Reservation Fleet.
+	CapacityReservationFleetArn *string `locationName:"capacityReservationFleetArn" type:"string"`
+
+	// The ID of the Capacity Reservation Fleet.
+	CapacityReservationFleetId *string `locationName:"capacityReservationFleetId" type:"string"`
+
+	// The date and time at which the Capacity Reservation Fleet was created.
+	CreateTime *time.Time `locationName:"createTime" type:"timestamp"`
+
+	// The date and time at which the Capacity Reservation Fleet expires.
+	EndDate *time.Time `locationName:"endDate" type:"timestamp"`
+
+	// Indicates the type of instance launches that the Capacity Reservation Fleet
+	// accepts. All Capacity Reservations in the Fleet inherit this instance matching
+	// criteria.
+	//
+	// Currently, Capacity Reservation Fleets support open instance matching criteria
+	// only. This means that instances that have matching attributes (instance type,
+	// platform, and Availability Zone) run in the Capacity Reservations automatically.
+	// Instances do not need to explicitly target a Capacity Reservation Fleet to
+	// use its reserved capacity.
+	InstanceMatchCriteria *string `locationName:"instanceMatchCriteria" type:"string" enum:"FleetInstanceMatchCriteria"`
+
+	// Information about the instance types for which to reserve the capacity.
+	InstanceTypeSpecifications []*FleetCapacityReservation `locationName:"instanceTypeSpecificationSet" locationNameList:"item" type:"list"`
+
+	// The state of the Capacity Reservation Fleet. Possible states include:
+	//
+	//    * submitted - The Capacity Reservation Fleet request has been submitted
+	//    and Amazon Elastic Compute Cloud is preparing to create the Capacity Reservations.
+	//
+	//    * modifying - The Capacity Reservation Fleet is being modified. The Fleet
+	//    remains in this state until the modification is complete.
+	//
+	//    * active - The Capacity Reservation Fleet has fulfilled its total target
+	//    capacity and it is attempting to maintain this capacity. The Fleet remains
+	//    in this state until it is modified or deleted.
+	//
+	//    * partially_fulfilled - The Capacity Reservation Fleet has partially fulfilled
+	//    its total target capacity. There is insufficient Amazon EC2 to fulfill
+	//    the total target capacity. The Fleet is attempting to asynchronously fulfill
+	//    its total target capacity.
+	//
+	//    * expiring - The Capacity Reservation Fleet has reach its end date and
+	//    it is in the process of expiring. One or more of its Capacity reservations
+	//    might still be active.
+	//
+	//    * expired - The Capacity Reservation Fleet has reach its end date. The
+	//    Fleet and its Capacity Reservations are expired. The Fleet can't create
+	//    new Capacity Reservations.
+	//
+	//    * cancelling - The Capacity Reservation Fleet is in the process of being
+	//    cancelled. One or more of its Capacity reservations might still be active.
+	//
+	//    * cancelled - The Capacity Reservation Fleet has been manually cancelled.
+	//    The Fleet and its Capacity Reservations are cancelled and the Fleet can't
+	//    create new Capacity Reservations.
+	//
+	//    * failed - The Capacity Reservation Fleet failed to reserve capacity for
+	//    the specified instance types.
+	State *string `locationName:"state" type:"string" enum:"CapacityReservationFleetState"`
+
+	// The tags assigned to the Capacity Reservation Fleet.
+	Tags []*Tag `locationName:"tagSet" locationNameList:"item" type:"list"`
+
+	// The tenancy of the Capacity Reservation Fleet. Tenancies include:
+	//
+	//    * default - The Capacity Reservation Fleet is created on hardware that
+	//    is shared with other Amazon Web Services accounts.
+	//
+	//    * dedicated - The Capacity Reservation Fleet is created on single-tenant
+	//    hardware that is dedicated to a single Amazon Web Services account.
+	Tenancy *string `locationName:"tenancy" type:"string" enum:"FleetCapacityReservationTenancy"`
+
+	// The capacity units that have been fulfilled.
+	TotalFulfilledCapacity *float64 `locationName:"totalFulfilledCapacity" type:"double"`
+
+	// The total number of capacity units for which the Capacity Reservation Fleet
+	// reserves capacity. For more information, see Total target capacity (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/crfleet-concepts.html#target-capacity)
+	// in the Amazon EC2 User Guide.
+	TotalTargetCapacity *int64 `locationName:"totalTargetCapacity" type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CapacityReservationFleet) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CapacityReservationFleet) GoString() string {
+	return s.String()
+}
+
+// SetAllocationStrategy sets the AllocationStrategy field's value.
+func (s *CapacityReservationFleet) SetAllocationStrategy(v string) *CapacityReservationFleet {
+	s.AllocationStrategy = &v
+	return s
+}
+
+// SetCapacityReservationFleetArn sets the CapacityReservationFleetArn field's value.
+func (s *CapacityReservationFleet) SetCapacityReservationFleetArn(v string) *CapacityReservationFleet {
+	s.CapacityReservationFleetArn = &v
+	return s
+}
+
+// SetCapacityReservationFleetId sets the CapacityReservationFleetId field's value.
+func (s *CapacityReservationFleet) SetCapacityReservationFleetId(v string) *CapacityReservationFleet {
+	s.CapacityReservationFleetId = &v
+	return s
+}
+
+// SetCreateTime sets the CreateTime field's value.
+func (s *CapacityReservationFleet) SetCreateTime(v time.Time) *CapacityReservationFleet {
+	s.CreateTime = &v
+	return s
+}
+
+// SetEndDate sets the EndDate field's value.
+func (s *CapacityReservationFleet) SetEndDate(v time.Time) *CapacityReservationFleet {
+	s.EndDate = &v
+	return s
+}
+
+// SetInstanceMatchCriteria sets the InstanceMatchCriteria field's value.
+func (s *CapacityReservationFleet) SetInstanceMatchCriteria(v string) *CapacityReservationFleet {
+	s.InstanceMatchCriteria = &v
+	return s
+}
+
+// SetInstanceTypeSpecifications sets the InstanceTypeSpecifications field's value.
+func (s *CapacityReservationFleet) SetInstanceTypeSpecifications(v []*FleetCapacityReservation) *CapacityReservationFleet {
+	s.InstanceTypeSpecifications = v
+	return s
+}
+
+// SetState sets the State field's value.
+func (s *CapacityReservationFleet) SetState(v string) *CapacityReservationFleet {
+	s.State = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CapacityReservationFleet) SetTags(v []*Tag) *CapacityReservationFleet {
+	s.Tags = v
+	return s
+}
+
+// SetTenancy sets the Tenancy field's value.
+func (s *CapacityReservationFleet) SetTenancy(v string) *CapacityReservationFleet {
+	s.Tenancy = &v
+	return s
+}
+
+// SetTotalFulfilledCapacity sets the TotalFulfilledCapacity field's value.
+func (s *CapacityReservationFleet) SetTotalFulfilledCapacity(v float64) *CapacityReservationFleet {
+	s.TotalFulfilledCapacity = &v
+	return s
+}
+
+// SetTotalTargetCapacity sets the TotalTargetCapacity field's value.
+func (s *CapacityReservationFleet) SetTotalTargetCapacity(v int64) *CapacityReservationFleet {
+	s.TotalTargetCapacity = &v
+	return s
+}
+
+// Describes a Capacity Reservation Fleet that was successfully cancelled.
+type CapacityReservationFleetCancellationState struct {
+	_ struct{} `type:"structure"`
+
+	// The ID of the Capacity Reservation Fleet that was successfully cancelled.
+	CapacityReservationFleetId *string `locationName:"capacityReservationFleetId" type:"string"`
+
+	// The current state of the Capacity Reservation Fleet.
+	CurrentFleetState *string `locationName:"currentFleetState" type:"string" enum:"CapacityReservationFleetState"`
+
+	// The previous state of the Capacity Reservation Fleet.
+	PreviousFleetState *string `locationName:"previousFleetState" type:"string" enum:"CapacityReservationFleetState"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CapacityReservationFleetCancellationState) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CapacityReservationFleetCancellationState) GoString() string {
+	return s.String()
+}
+
+// SetCapacityReservationFleetId sets the CapacityReservationFleetId field's value.
+func (s *CapacityReservationFleetCancellationState) SetCapacityReservationFleetId(v string) *CapacityReservationFleetCancellationState {
+	s.CapacityReservationFleetId = &v
+	return s
+}
+
+// SetCurrentFleetState sets the CurrentFleetState field's value.
+func (s *CapacityReservationFleetCancellationState) SetCurrentFleetState(v string) *CapacityReservationFleetCancellationState {
+	s.CurrentFleetState = &v
+	return s
+}
+
+// SetPreviousFleetState sets the PreviousFleetState field's value.
+func (s *CapacityReservationFleetCancellationState) SetPreviousFleetState(v string) *CapacityReservationFleetCancellationState {
+	s.PreviousFleetState = &v
 	return s
 }
 
@@ -52278,10 +54165,10 @@ type CoipAddressUsage struct {
 	// The allocation ID of the address.
 	AllocationId *string `locationName:"allocationId" type:"string"`
 
-	// The AWS account ID.
+	// The Amazon Web Services account ID.
 	AwsAccountId *string `locationName:"awsAccountId" type:"string"`
 
-	// The AWS service.
+	// The Amazon Web Services service.
 	AwsService *string `locationName:"awsService" type:"string"`
 
 	// The customer-owned IP address.
@@ -52798,7 +54685,7 @@ type CopyFpgaImageInput struct {
 	_ struct{} `type:"structure"`
 
 	// Unique, case-sensitive identifier that you provide to ensure the idempotency
-	// of the request. For more information, see Ensuring Idempotency (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Run_Instance_Idempotency.html).
+	// of the request. For more information, see Ensuring idempotency (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Run_Instance_Idempotency.html).
 	ClientToken *string `type:"string"`
 
 	// The description for the new AFI.
@@ -53431,6 +55318,300 @@ func (s *CpuOptionsRequest) SetCoreCount(v int64) *CpuOptionsRequest {
 // SetThreadsPerCore sets the ThreadsPerCore field's value.
 func (s *CpuOptionsRequest) SetThreadsPerCore(v int64) *CpuOptionsRequest {
 	s.ThreadsPerCore = &v
+	return s
+}
+
+type CreateCapacityReservationFleetInput struct {
+	_ struct{} `type:"structure"`
+
+	// The strategy used by the Capacity Reservation Fleet to determine which of
+	// the specified instance types to use. Currently, only the prioritized allocation
+	// strategy is supported. For more information, see Allocation strategy (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/crfleet-concepts.html#allocation-strategy)
+	// in the Amazon EC2 User Guide.
+	//
+	// Valid values: prioritized
+	AllocationStrategy *string `type:"string"`
+
+	// Unique, case-sensitive identifier that you provide to ensure the idempotency
+	// of the request. For more information, see Ensure Idempotency (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html).
+	ClientToken *string `type:"string" idempotencyToken:"true"`
+
+	// Checks whether you have the required permissions for the action, without
+	// actually making the request, and provides an error response. If you have
+	// the required permissions, the error response is DryRunOperation. Otherwise,
+	// it is UnauthorizedOperation.
+	DryRun *bool `type:"boolean"`
+
+	// The date and time at which the Capacity Reservation Fleet expires. When the
+	// Capacity Reservation Fleet expires, its state changes to expired and all
+	// of the Capacity Reservations in the Fleet expire.
+	//
+	// The Capacity Reservation Fleet expires within an hour after the specified
+	// time. For example, if you specify 5/31/2019, 13:30:55, the Capacity Reservation
+	// Fleet is guaranteed to expire between 13:30:55 and 14:30:55 on 5/31/2019.
+	EndDate *time.Time `type:"timestamp"`
+
+	// Indicates the type of instance launches that the Capacity Reservation Fleet
+	// accepts. All Capacity Reservations in the Fleet inherit this instance matching
+	// criteria.
+	//
+	// Currently, Capacity Reservation Fleets support open instance matching criteria
+	// only. This means that instances that have matching attributes (instance type,
+	// platform, and Availability Zone) run in the Capacity Reservations automatically.
+	// Instances do not need to explicitly target a Capacity Reservation Fleet to
+	// use its reserved capacity.
+	InstanceMatchCriteria *string `type:"string" enum:"FleetInstanceMatchCriteria"`
+
+	// Information about the instance types for which to reserve the capacity.
+	//
+	// InstanceTypeSpecifications is a required field
+	InstanceTypeSpecifications []*ReservationFleetInstanceSpecification `locationName:"InstanceTypeSpecification" type:"list" required:"true"`
+
+	// The tags to assign to the Capacity Reservation Fleet. The tags are automatically
+	// assigned to the Capacity Reservations in the Fleet.
+	TagSpecifications []*TagSpecification `locationName:"TagSpecification" locationNameList:"item" type:"list"`
+
+	// Indicates the tenancy of the Capacity Reservation Fleet. All Capacity Reservations
+	// in the Fleet inherit this tenancy. The Capacity Reservation Fleet can have
+	// one of the following tenancy settings:
+	//
+	//    * default - The Capacity Reservation Fleet is created on hardware that
+	//    is shared with other Amazon Web Services accounts.
+	//
+	//    * dedicated - The Capacity Reservations are created on single-tenant hardware
+	//    that is dedicated to a single Amazon Web Services account.
+	Tenancy *string `type:"string" enum:"FleetCapacityReservationTenancy"`
+
+	// The total number of capacity units to be reserved by the Capacity Reservation
+	// Fleet. This value, together with the instance type weights that you assign
+	// to each instance type used by the Fleet determine the number of instances
+	// for which the Fleet reserves capacity. Both values are based on units that
+	// make sense for your workload. For more information, see Total target capacity
+	// (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/crfleet-concepts.html#target-capacity)
+	// in the Amazon EC2 User Guide.
+	//
+	// TotalTargetCapacity is a required field
+	TotalTargetCapacity *int64 `type:"integer" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateCapacityReservationFleetInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateCapacityReservationFleetInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateCapacityReservationFleetInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateCapacityReservationFleetInput"}
+	if s.InstanceTypeSpecifications == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceTypeSpecifications"))
+	}
+	if s.TotalTargetCapacity == nil {
+		invalidParams.Add(request.NewErrParamRequired("TotalTargetCapacity"))
+	}
+	if s.InstanceTypeSpecifications != nil {
+		for i, v := range s.InstanceTypeSpecifications {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "InstanceTypeSpecifications", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAllocationStrategy sets the AllocationStrategy field's value.
+func (s *CreateCapacityReservationFleetInput) SetAllocationStrategy(v string) *CreateCapacityReservationFleetInput {
+	s.AllocationStrategy = &v
+	return s
+}
+
+// SetClientToken sets the ClientToken field's value.
+func (s *CreateCapacityReservationFleetInput) SetClientToken(v string) *CreateCapacityReservationFleetInput {
+	s.ClientToken = &v
+	return s
+}
+
+// SetDryRun sets the DryRun field's value.
+func (s *CreateCapacityReservationFleetInput) SetDryRun(v bool) *CreateCapacityReservationFleetInput {
+	s.DryRun = &v
+	return s
+}
+
+// SetEndDate sets the EndDate field's value.
+func (s *CreateCapacityReservationFleetInput) SetEndDate(v time.Time) *CreateCapacityReservationFleetInput {
+	s.EndDate = &v
+	return s
+}
+
+// SetInstanceMatchCriteria sets the InstanceMatchCriteria field's value.
+func (s *CreateCapacityReservationFleetInput) SetInstanceMatchCriteria(v string) *CreateCapacityReservationFleetInput {
+	s.InstanceMatchCriteria = &v
+	return s
+}
+
+// SetInstanceTypeSpecifications sets the InstanceTypeSpecifications field's value.
+func (s *CreateCapacityReservationFleetInput) SetInstanceTypeSpecifications(v []*ReservationFleetInstanceSpecification) *CreateCapacityReservationFleetInput {
+	s.InstanceTypeSpecifications = v
+	return s
+}
+
+// SetTagSpecifications sets the TagSpecifications field's value.
+func (s *CreateCapacityReservationFleetInput) SetTagSpecifications(v []*TagSpecification) *CreateCapacityReservationFleetInput {
+	s.TagSpecifications = v
+	return s
+}
+
+// SetTenancy sets the Tenancy field's value.
+func (s *CreateCapacityReservationFleetInput) SetTenancy(v string) *CreateCapacityReservationFleetInput {
+	s.Tenancy = &v
+	return s
+}
+
+// SetTotalTargetCapacity sets the TotalTargetCapacity field's value.
+func (s *CreateCapacityReservationFleetInput) SetTotalTargetCapacity(v int64) *CreateCapacityReservationFleetInput {
+	s.TotalTargetCapacity = &v
+	return s
+}
+
+type CreateCapacityReservationFleetOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The allocation strategy used by the Capacity Reservation Fleet.
+	AllocationStrategy *string `locationName:"allocationStrategy" type:"string"`
+
+	// The ID of the Capacity Reservation Fleet.
+	CapacityReservationFleetId *string `locationName:"capacityReservationFleetId" type:"string"`
+
+	// The date and time at which the Capacity Reservation Fleet was created.
+	CreateTime *time.Time `locationName:"createTime" type:"timestamp"`
+
+	// The date and time at which the Capacity Reservation Fleet expires.
+	EndDate *time.Time `locationName:"endDate" type:"timestamp"`
+
+	// Information about the individual Capacity Reservations in the Capacity Reservation
+	// Fleet.
+	FleetCapacityReservations []*FleetCapacityReservation `locationName:"fleetCapacityReservationSet" locationNameList:"item" type:"list"`
+
+	// The instance matching criteria for the Capacity Reservation Fleet.
+	InstanceMatchCriteria *string `locationName:"instanceMatchCriteria" type:"string" enum:"FleetInstanceMatchCriteria"`
+
+	// The status of the Capacity Reservation Fleet.
+	State *string `locationName:"state" type:"string" enum:"CapacityReservationFleetState"`
+
+	// The tags assigned to the Capacity Reservation Fleet.
+	Tags []*Tag `locationName:"tagSet" locationNameList:"item" type:"list"`
+
+	// Indicates the tenancy of Capacity Reservation Fleet.
+	Tenancy *string `locationName:"tenancy" type:"string" enum:"FleetCapacityReservationTenancy"`
+
+	// The requested capacity units that have been successfully reserved.
+	TotalFulfilledCapacity *float64 `locationName:"totalFulfilledCapacity" type:"double"`
+
+	// The total number of capacity units for which the Capacity Reservation Fleet
+	// reserves capacity.
+	TotalTargetCapacity *int64 `locationName:"totalTargetCapacity" type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateCapacityReservationFleetOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CreateCapacityReservationFleetOutput) GoString() string {
+	return s.String()
+}
+
+// SetAllocationStrategy sets the AllocationStrategy field's value.
+func (s *CreateCapacityReservationFleetOutput) SetAllocationStrategy(v string) *CreateCapacityReservationFleetOutput {
+	s.AllocationStrategy = &v
+	return s
+}
+
+// SetCapacityReservationFleetId sets the CapacityReservationFleetId field's value.
+func (s *CreateCapacityReservationFleetOutput) SetCapacityReservationFleetId(v string) *CreateCapacityReservationFleetOutput {
+	s.CapacityReservationFleetId = &v
+	return s
+}
+
+// SetCreateTime sets the CreateTime field's value.
+func (s *CreateCapacityReservationFleetOutput) SetCreateTime(v time.Time) *CreateCapacityReservationFleetOutput {
+	s.CreateTime = &v
+	return s
+}
+
+// SetEndDate sets the EndDate field's value.
+func (s *CreateCapacityReservationFleetOutput) SetEndDate(v time.Time) *CreateCapacityReservationFleetOutput {
+	s.EndDate = &v
+	return s
+}
+
+// SetFleetCapacityReservations sets the FleetCapacityReservations field's value.
+func (s *CreateCapacityReservationFleetOutput) SetFleetCapacityReservations(v []*FleetCapacityReservation) *CreateCapacityReservationFleetOutput {
+	s.FleetCapacityReservations = v
+	return s
+}
+
+// SetInstanceMatchCriteria sets the InstanceMatchCriteria field's value.
+func (s *CreateCapacityReservationFleetOutput) SetInstanceMatchCriteria(v string) *CreateCapacityReservationFleetOutput {
+	s.InstanceMatchCriteria = &v
+	return s
+}
+
+// SetState sets the State field's value.
+func (s *CreateCapacityReservationFleetOutput) SetState(v string) *CreateCapacityReservationFleetOutput {
+	s.State = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateCapacityReservationFleetOutput) SetTags(v []*Tag) *CreateCapacityReservationFleetOutput {
+	s.Tags = v
+	return s
+}
+
+// SetTenancy sets the Tenancy field's value.
+func (s *CreateCapacityReservationFleetOutput) SetTenancy(v string) *CreateCapacityReservationFleetOutput {
+	s.Tenancy = &v
+	return s
+}
+
+// SetTotalFulfilledCapacity sets the TotalFulfilledCapacity field's value.
+func (s *CreateCapacityReservationFleetOutput) SetTotalFulfilledCapacity(v float64) *CreateCapacityReservationFleetOutput {
+	s.TotalFulfilledCapacity = &v
+	return s
+}
+
+// SetTotalTargetCapacity sets the TotalTargetCapacity field's value.
+func (s *CreateCapacityReservationFleetOutput) SetTotalTargetCapacity(v int64) *CreateCapacityReservationFleetOutput {
+	s.TotalTargetCapacity = &v
 	return s
 }
 
@@ -54399,6 +56580,11 @@ type CreateDefaultSubnetInput struct {
 	// the required permissions, the error response is DryRunOperation. Otherwise,
 	// it is UnauthorizedOperation.
 	DryRun *bool `type:"boolean"`
+
+	// Indicates whether to create an IPv6 only subnet. If you already have a default
+	// subnet for this Availability Zone, you must delete it before you can create
+	// an IPv6 only subnet.
+	Ipv6Native *bool `type:"boolean"`
 }
 
 // String returns the string representation.
@@ -54441,6 +56627,12 @@ func (s *CreateDefaultSubnetInput) SetAvailabilityZone(v string) *CreateDefaultS
 // SetDryRun sets the DryRun field's value.
 func (s *CreateDefaultSubnetInput) SetDryRun(v bool) *CreateDefaultSubnetInput {
 	s.DryRun = &v
+	return s
+}
+
+// SetIpv6Native sets the Ipv6Native field's value.
+func (s *CreateDefaultSubnetInput) SetIpv6Native(v bool) *CreateDefaultSubnetInput {
+	s.Ipv6Native = &v
 	return s
 }
 
@@ -55176,16 +57368,18 @@ type CreateFlowLogsInput struct {
 	// or LogGroupName.
 	DeliverLogsPermissionArn *string `type:"string"`
 
+	// The destination options.
+	DestinationOptions *DestinationOptionsRequest `type:"structure"`
+
 	// Checks whether you have the required permissions for the action, without
 	// actually making the request, and provides an error response. If you have
 	// the required permissions, the error response is DryRunOperation. Otherwise,
 	// it is UnauthorizedOperation.
 	DryRun *bool `type:"boolean"`
 
-	// Specifies the destination to which the flow log data is to be published.
-	// Flow log data can be published to a CloudWatch Logs log group or an Amazon
-	// S3 bucket. The value specified for this parameter depends on the value specified
-	// for LogDestinationType.
+	// The destination to which the flow log data is to be published. Flow log data
+	// can be published to a CloudWatch Logs log group or an Amazon S3 bucket. The
+	// value specified for this parameter depends on the value specified for LogDestinationType.
 	//
 	// If LogDestinationType is not specified or cloud-watch-logs, specify the Amazon
 	// Resource Name (ARN) of the CloudWatch Logs log group. For example, to publish
@@ -55200,10 +57394,10 @@ type CreateFlowLogsInput struct {
 	// a subfolder name. This is a reserved term.
 	LogDestination *string `type:"string"`
 
-	// Specifies the type of destination to which the flow log data is to be published.
-	// Flow log data can be published to CloudWatch Logs or Amazon S3. To publish
-	// flow log data to CloudWatch Logs, specify cloud-watch-logs. To publish flow
-	// log data to Amazon S3, specify s3.
+	// The type of destination to which the flow log data is to be published. Flow
+	// log data can be published to CloudWatch Logs or Amazon S3. To publish flow
+	// log data to CloudWatch Logs, specify cloud-watch-logs. To publish flow log
+	// data to Amazon S3, specify s3.
 	//
 	// If you specify LogDestinationType as s3, do not specify DeliverLogsPermissionArn
 	// or LogGroupName.
@@ -55217,7 +57411,8 @@ type CreateFlowLogsInput struct {
 	// If you specify this parameter, you must specify at least one field.
 	//
 	// Specify the fields using the ${field-id} format, separated by spaces. For
-	// the CLI, use single quotation marks (' ') to surround the parameter value.
+	// the CLI, surround this parameter value with single quotes on Linux or double
+	// quotes on Windows.
 	LogFormat *string `type:"string"`
 
 	// The name of a new or existing CloudWatch Logs log group where Amazon EC2
@@ -55308,6 +57503,12 @@ func (s *CreateFlowLogsInput) SetClientToken(v string) *CreateFlowLogsInput {
 // SetDeliverLogsPermissionArn sets the DeliverLogsPermissionArn field's value.
 func (s *CreateFlowLogsInput) SetDeliverLogsPermissionArn(v string) *CreateFlowLogsInput {
 	s.DeliverLogsPermissionArn = &v
+	return s
+}
+
+// SetDestinationOptions sets the DestinationOptions field's value.
+func (s *CreateFlowLogsInput) SetDestinationOptions(v *DestinationOptionsRequest) *CreateFlowLogsInput {
+	s.DestinationOptions = v
 	return s
 }
 
@@ -58371,6 +60572,9 @@ type CreateRouteInput struct {
 	// with a Wavelength Zone.
 	CarrierGatewayId *string `type:"string"`
 
+	// The Amazon Resource Name (ARN) of the core network.
+	CoreNetworkArn *string `type:"string"`
+
 	// The IPv4 CIDR address block used for the destination match. Routing decisions
 	// are based on the most specific match. We modify the specified CIDR block
 	// to its canonical form; for example, if you specify 100.68.0.18/18, we modify
@@ -58459,6 +60663,12 @@ func (s *CreateRouteInput) Validate() error {
 // SetCarrierGatewayId sets the CarrierGatewayId field's value.
 func (s *CreateRouteInput) SetCarrierGatewayId(v string) *CreateRouteInput {
 	s.CarrierGatewayId = &v
+	return s
+}
+
+// SetCoreNetworkArn sets the CoreNetworkArn field's value.
+func (s *CreateRouteInput) SetCoreNetworkArn(v string) *CreateRouteInput {
+	s.CoreNetworkArn = &v
 	return s
 }
 
@@ -59448,8 +61658,8 @@ type CreateSubnetInput struct {
 	// We modify the specified CIDR block to its canonical form; for example, if
 	// you specify 100.68.0.18/18, we modify it to 100.68.0.0/18.
 	//
-	// CidrBlock is a required field
-	CidrBlock *string `type:"string" required:"true"`
+	// This parameter is not supported for an IPv6 only subnet.
+	CidrBlock *string `type:"string"`
 
 	// Checks whether you have the required permissions for the action, without
 	// actually making the request, and provides an error response. If you have
@@ -59459,7 +61669,12 @@ type CreateSubnetInput struct {
 
 	// The IPv6 network range for the subnet, in CIDR notation. The subnet size
 	// must use a /64 prefix length.
+	//
+	// This parameter is required for an IPv6 only subnet.
 	Ipv6CidrBlock *string `type:"string"`
+
+	// Indicates whether to create an IPv6 only subnet.
+	Ipv6Native *bool `type:"boolean"`
 
 	// The Amazon Resource Name (ARN) of the Outpost. If you specify an Outpost
 	// ARN, you must also specify the Availability Zone of the Outpost subnet.
@@ -59495,9 +61710,6 @@ func (s CreateSubnetInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *CreateSubnetInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "CreateSubnetInput"}
-	if s.CidrBlock == nil {
-		invalidParams.Add(request.NewErrParamRequired("CidrBlock"))
-	}
 	if s.VpcId == nil {
 		invalidParams.Add(request.NewErrParamRequired("VpcId"))
 	}
@@ -59535,6 +61747,12 @@ func (s *CreateSubnetInput) SetDryRun(v bool) *CreateSubnetInput {
 // SetIpv6CidrBlock sets the Ipv6CidrBlock field's value.
 func (s *CreateSubnetInput) SetIpv6CidrBlock(v string) *CreateSubnetInput {
 	s.Ipv6CidrBlock = &v
+	return s
+}
+
+// SetIpv6Native sets the Ipv6Native field's value.
+func (s *CreateSubnetInput) SetIpv6Native(v bool) *CreateSubnetInput {
+	s.Ipv6Native = &v
 	return s
 }
 
@@ -59690,7 +61908,7 @@ type CreateTrafficMirrorFilterInput struct {
 	_ struct{} `type:"structure"`
 
 	// Unique, case-sensitive identifier that you provide to ensure the idempotency
-	// of the request. For more information, see How to Ensure Idempotency (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html).
+	// of the request. For more information, see How to ensure idempotency (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html).
 	ClientToken *string `type:"string" idempotencyToken:"true"`
 
 	// The description of the Traffic Mirror filter.
@@ -59752,7 +61970,7 @@ type CreateTrafficMirrorFilterOutput struct {
 	_ struct{} `type:"structure"`
 
 	// Unique, case-sensitive identifier that you provide to ensure the idempotency
-	// of the request. For more information, see How to Ensure Idempotency (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html).
+	// of the request. For more information, see How to ensure idempotency (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html).
 	ClientToken *string `locationName:"clientToken" type:"string"`
 
 	// Information about the Traffic Mirror filter.
@@ -59793,7 +62011,7 @@ type CreateTrafficMirrorFilterRuleInput struct {
 	_ struct{} `type:"structure"`
 
 	// Unique, case-sensitive identifier that you provide to ensure the idempotency
-	// of the request. For more information, see How to Ensure Idempotency (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html).
+	// of the request. For more information, see How to ensure idempotency (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html).
 	ClientToken *string `type:"string" idempotencyToken:"true"`
 
 	// The description of the Traffic Mirror rule.
@@ -59819,7 +62037,7 @@ type CreateTrafficMirrorFilterRuleInput struct {
 	// on the Internet Assigned Numbers Authority (IANA) website.
 	Protocol *int64 `type:"integer"`
 
-	// The action to take (accept | reject) on the filtered traffic.
+	// The action to take on the filtered traffic.
 	//
 	// RuleAction is a required field
 	RuleAction *string `type:"string" required:"true" enum:"TrafficMirrorRuleAction"`
@@ -59839,7 +62057,7 @@ type CreateTrafficMirrorFilterRuleInput struct {
 	// The source port range.
 	SourcePortRange *TrafficMirrorPortRangeRequest `type:"structure"`
 
-	// The type of traffic (ingress | egress).
+	// The type of traffic.
 	//
 	// TrafficDirection is a required field
 	TrafficDirection *string `type:"string" required:"true" enum:"TrafficDirection"`
@@ -59972,7 +62190,7 @@ type CreateTrafficMirrorFilterRuleOutput struct {
 	_ struct{} `type:"structure"`
 
 	// Unique, case-sensitive identifier that you provide to ensure the idempotency
-	// of the request. For more information, see How to Ensure Idempotency (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html).
+	// of the request. For more information, see How to ensure idempotency (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html).
 	ClientToken *string `locationName:"clientToken" type:"string"`
 
 	// The Traffic Mirror rule.
@@ -60013,7 +62231,7 @@ type CreateTrafficMirrorSessionInput struct {
 	_ struct{} `type:"structure"`
 
 	// Unique, case-sensitive identifier that you provide to ensure the idempotency
-	// of the request. For more information, see How to Ensure Idempotency (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html).
+	// of the request. For more information, see How to ensure idempotency (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html).
 	ClientToken *string `type:"string" idempotencyToken:"true"`
 
 	// The description of the Traffic Mirror session.
@@ -60173,7 +62391,7 @@ type CreateTrafficMirrorSessionOutput struct {
 	_ struct{} `type:"structure"`
 
 	// Unique, case-sensitive identifier that you provide to ensure the idempotency
-	// of the request. For more information, see How to Ensure Idempotency (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html).
+	// of the request. For more information, see How to ensure idempotency (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html).
 	ClientToken *string `locationName:"clientToken" type:"string"`
 
 	// Information about the Traffic Mirror session.
@@ -60214,7 +62432,7 @@ type CreateTrafficMirrorTargetInput struct {
 	_ struct{} `type:"structure"`
 
 	// Unique, case-sensitive identifier that you provide to ensure the idempotency
-	// of the request. For more information, see How to Ensure Idempotency (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html).
+	// of the request. For more information, see How to ensure idempotency (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html).
 	ClientToken *string `type:"string" idempotencyToken:"true"`
 
 	// The description of the Traffic Mirror target.
@@ -60295,7 +62513,7 @@ type CreateTrafficMirrorTargetOutput struct {
 	_ struct{} `type:"structure"`
 
 	// Unique, case-sensitive identifier that you provide to ensure the idempotency
-	// of the request. For more information, see How to Ensure Idempotency (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html).
+	// of the request. For more information, see How to ensure idempotency (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html).
 	ClientToken *string `locationName:"clientToken" type:"string"`
 
 	// Information about the Traffic Mirror target.
@@ -61897,7 +64115,7 @@ type CreateVpcEndpointConnectionNotificationInput struct {
 	_ struct{} `type:"structure"`
 
 	// Unique, case-sensitive identifier that you provide to ensure the idempotency
-	// of the request. For more information, see How to Ensure Idempotency (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html).
+	// of the request. For more information, see How to ensure idempotency (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html).
 	ClientToken *string `type:"string"`
 
 	// One or more endpoint events for which to receive notifications. Valid values
@@ -62040,7 +64258,7 @@ type CreateVpcEndpointInput struct {
 	_ struct{} `type:"structure"`
 
 	// Unique, case-sensitive identifier that you provide to ensure the idempotency
-	// of the request. For more information, see How to Ensure Idempotency (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html).
+	// of the request. For more information, see How to ensure idempotency (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html).
 	ClientToken *string `type:"string"`
 
 	// Checks whether you have the required permissions for the action, without
@@ -62252,7 +64470,7 @@ type CreateVpcEndpointServiceConfigurationInput struct {
 	AcceptanceRequired *bool `type:"boolean"`
 
 	// Unique, case-sensitive identifier that you provide to ensure the idempotency
-	// of the request. For more information, see How to Ensure Idempotency (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Run_Instance_Idempotency.html).
+	// of the request. For more information, see How to ensure idempotency (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Run_Instance_Idempotency.html).
 	ClientToken *string `type:"string"`
 
 	// Checks whether you have the required permissions for the action, without
@@ -66470,6 +68688,8 @@ type DeleteTagsInput struct {
 	// If you omit this parameter, we delete all user-defined tags for the specified
 	// resources. We do not delete Amazon Web Services-generated tags (tags that
 	// have the aws: prefix).
+	//
+	// Constraints: Up to 1000 tags.
 	Tags []*Tag `locationName:"tag" locationNameList:"item" type:"list"`
 }
 
@@ -69725,6 +71945,144 @@ func (s *DescribeByoipCidrsOutput) SetNextToken(v string) *DescribeByoipCidrsOut
 	return s
 }
 
+type DescribeCapacityReservationFleetsInput struct {
+	_ struct{} `type:"structure"`
+
+	// The IDs of the Capacity Reservation Fleets to describe.
+	CapacityReservationFleetIds []*string `locationName:"CapacityReservationFleetId" locationNameList:"item" type:"list"`
+
+	// Checks whether you have the required permissions for the action, without
+	// actually making the request, and provides an error response. If you have
+	// the required permissions, the error response is DryRunOperation. Otherwise,
+	// it is UnauthorizedOperation.
+	DryRun *bool `type:"boolean"`
+
+	// One or more filters.
+	//
+	//    * state - The state of the Fleet (submitted | modifying | active | partially_fulfilled
+	//    | expiring | expired | cancelling | cancelled | failed).
+	//
+	//    * instance-match-criteria - The instance matching criteria for the Fleet.
+	//    Only open is supported.
+	//
+	//    * tenancy - The tenancy of the Fleet (default | dedicated).
+	//
+	//    * allocation-strategy - The allocation strategy used by the Fleet. Only
+	//    prioritized is supported.
+	Filters []*Filter `locationName:"Filter" locationNameList:"Filter" type:"list"`
+
+	// The maximum number of results to return for the request in a single page.
+	// The remaining results can be seen by sending another request with the returned
+	// nextToken value. This value can be between 5 and 500. If maxResults is given
+	// a larger value than 500, you receive an error.
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	// The token to use to retrieve the next page of results.
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeCapacityReservationFleetsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeCapacityReservationFleetsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeCapacityReservationFleetsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeCapacityReservationFleetsInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetCapacityReservationFleetIds sets the CapacityReservationFleetIds field's value.
+func (s *DescribeCapacityReservationFleetsInput) SetCapacityReservationFleetIds(v []*string) *DescribeCapacityReservationFleetsInput {
+	s.CapacityReservationFleetIds = v
+	return s
+}
+
+// SetDryRun sets the DryRun field's value.
+func (s *DescribeCapacityReservationFleetsInput) SetDryRun(v bool) *DescribeCapacityReservationFleetsInput {
+	s.DryRun = &v
+	return s
+}
+
+// SetFilters sets the Filters field's value.
+func (s *DescribeCapacityReservationFleetsInput) SetFilters(v []*Filter) *DescribeCapacityReservationFleetsInput {
+	s.Filters = v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *DescribeCapacityReservationFleetsInput) SetMaxResults(v int64) *DescribeCapacityReservationFleetsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *DescribeCapacityReservationFleetsInput) SetNextToken(v string) *DescribeCapacityReservationFleetsInput {
+	s.NextToken = &v
+	return s
+}
+
+type DescribeCapacityReservationFleetsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Information about the Capacity Reservation Fleets.
+	CapacityReservationFleets []*CapacityReservationFleet `locationName:"capacityReservationFleetSet" locationNameList:"item" type:"list"`
+
+	// The token to use to retrieve the next page of results. This value is null
+	// when there are no more results to return.
+	NextToken *string `locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeCapacityReservationFleetsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeCapacityReservationFleetsOutput) GoString() string {
+	return s.String()
+}
+
+// SetCapacityReservationFleets sets the CapacityReservationFleets field's value.
+func (s *DescribeCapacityReservationFleetsOutput) SetCapacityReservationFleets(v []*CapacityReservationFleet) *DescribeCapacityReservationFleetsOutput {
+	s.CapacityReservationFleets = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *DescribeCapacityReservationFleetsOutput) SetNextToken(v string) *DescribeCapacityReservationFleetsOutput {
+	s.NextToken = &v
+	return s
+}
+
 type DescribeCapacityReservationsInput struct {
 	_ struct{} `type:"structure"`
 
@@ -72907,12 +75265,12 @@ type DescribeFpgaImagesInput struct {
 	//
 	//    * name - The name of the AFI.
 	//
-	//    * owner-id - The AWS account ID of the AFI owner.
+	//    * owner-id - The Amazon Web Services account ID of the AFI owner.
 	//
 	//    * product-code - The product code.
 	//
-	//    * shell-version - The version of the AWS Shell that was used to create
-	//    the bitstream.
+	//    * shell-version - The version of the Amazon Web Services Shell that was
+	//    used to create the bitstream.
 	//
 	//    * state - The state of the AFI (pending | failed | available | unavailable).
 	//
@@ -72938,8 +75296,9 @@ type DescribeFpgaImagesInput struct {
 	// The token to retrieve the next page of results.
 	NextToken *string `type:"string"`
 
-	// Filters the AFI by owner. Specify an AWS account ID, self (owner is the sender
-	// of the request), or an AWS owner alias (valid values are amazon | aws-marketplace).
+	// Filters the AFI by owner. Specify an Amazon Web Services account ID, self
+	// (owner is the sender of the request), or an Amazon Web Services owner alias
+	// (valid values are amazon | aws-marketplace).
 	Owners []*string `locationName:"Owner" locationNameList:"Owner" type:"list"`
 }
 
@@ -73913,6 +76272,17 @@ type DescribeImagesInput struct {
 	// Scopes the images by users with explicit launch permissions. Specify an Amazon
 	// Web Services account ID, self (the sender of the request), or all (public
 	// AMIs).
+	//
+	//    * If you specify an Amazon Web Services account ID that is not your own,
+	//    only AMIs shared with that specific Amazon Web Services account ID are
+	//    returned. However, AMIs that are shared with the account’s organization
+	//    or organizational unit (OU) are not returned.
+	//
+	//    * If you specify self or your own Amazon Web Services account ID, AMIs
+	//    shared with your account are returned. In addition, AMIs that are shared
+	//    with the organization or OU of which you are member are also returned.
+	//
+	//    * If you specify all, all public AMIs are returned.
 	ExecutableUsers []*string `locationName:"ExecutableBy" locationNameList:"ExecutableBy" type:"list"`
 
 	// The filters.
@@ -75306,8 +77676,11 @@ type DescribeInstanceTypesInput struct {
 	//    * instance-storage-info.disk.type - The storage technology for the local
 	//    instance storage disks (hdd | ssd).
 	//
+	//    * instance-storage-info.encryption-supported - Indicates whether data
+	//    is encrypted at rest (required | unsupported).
+	//
 	//    * instance-storage-info.nvme-support - Indicates whether non-volatile
-	//    memory express (NVMe) is supported for instance store (required | supported)
+	//    memory express (NVMe) is supported for instance store (required | supported
 	//    | unsupported).
 	//
 	//    * instance-storage-info.total-size-in-gb - The total amount of storage
@@ -75581,7 +77954,10 @@ type DescribeInstancesInput struct {
 	//    * launch-index - When launching multiple instances, this is the index
 	//    for the instance in the launch group (for example, 0, 1, 2, and so on).
 	//
-	//    * launch-time - The time when the instance was launched.
+	//    * launch-time - The time when the instance was launched, in the ISO 8601
+	//    format in the UTC time zone (YYYY-MM-DDThh:mm:ss.sssZ), for example, 2021-09-29T11:04:43.305Z.
+	//    You can use a wildcard (*), for example, 2021-09-29T*, which matches an
+	//    entire day.
 	//
 	//    * metadata-options.http-tokens - The metadata request authorization state
 	//    (optional | required)
@@ -81176,6 +83552,117 @@ func (s *DescribeSnapshotAttributeOutput) SetSnapshotId(v string) *DescribeSnaps
 	return s
 }
 
+type DescribeSnapshotTierStatusInput struct {
+	_ struct{} `type:"structure"`
+
+	// Checks whether you have the required permissions for the action, without
+	// actually making the request, and provides an error response. If you have
+	// the required permissions, the error response is DryRunOperation. Otherwise,
+	// it is UnauthorizedOperation.
+	DryRun *bool `type:"boolean"`
+
+	// The filters.
+	//
+	//    * snapshot-id - The snapshot ID.
+	//
+	//    * volume-id - The ID of the volume the snapshot is for.
+	//
+	//    * last-tiering-operation - The state of the last archive or restore action.
+	//    (archiving | archival_error | archival_complete | restoring | restore_error
+	//    | restore_complete)
+	Filters []*Filter `locationName:"Filter" locationNameList:"Filter" type:"list"`
+
+	// The maximum number of results to return with a single call. To retrieve the
+	// remaining results, make another call with the returned nextToken value.
+	MaxResults *int64 `type:"integer"`
+
+	// The token for the next page of results.
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeSnapshotTierStatusInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeSnapshotTierStatusInput) GoString() string {
+	return s.String()
+}
+
+// SetDryRun sets the DryRun field's value.
+func (s *DescribeSnapshotTierStatusInput) SetDryRun(v bool) *DescribeSnapshotTierStatusInput {
+	s.DryRun = &v
+	return s
+}
+
+// SetFilters sets the Filters field's value.
+func (s *DescribeSnapshotTierStatusInput) SetFilters(v []*Filter) *DescribeSnapshotTierStatusInput {
+	s.Filters = v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *DescribeSnapshotTierStatusInput) SetMaxResults(v int64) *DescribeSnapshotTierStatusInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *DescribeSnapshotTierStatusInput) SetNextToken(v string) *DescribeSnapshotTierStatusInput {
+	s.NextToken = &v
+	return s
+}
+
+type DescribeSnapshotTierStatusOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The token to use to retrieve the next page of results. This value is null
+	// when there are no more results to return.
+	NextToken *string `locationName:"nextToken" type:"string"`
+
+	// Information about the snapshot's storage tier.
+	SnapshotTierStatuses []*SnapshotTierStatus `locationName:"snapshotTierStatusSet" locationNameList:"item" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeSnapshotTierStatusOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeSnapshotTierStatusOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *DescribeSnapshotTierStatusOutput) SetNextToken(v string) *DescribeSnapshotTierStatusOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetSnapshotTierStatuses sets the SnapshotTierStatuses field's value.
+func (s *DescribeSnapshotTierStatusOutput) SetSnapshotTierStatuses(v []*SnapshotTierStatus) *DescribeSnapshotTierStatusOutput {
+	s.SnapshotTierStatuses = v
+	return s
+}
+
 type DescribeSnapshotsInput struct {
 	_ struct{} `type:"structure"`
 
@@ -81207,6 +83694,8 @@ type DescribeSnapshotsInput struct {
 	//    * start-time - The time stamp when the snapshot was initiated.
 	//
 	//    * status - The status of the snapshot (pending | completed | error).
+	//
+	//    * storage-tier - The storage tier of the snapshot (archive | standard).
 	//
 	//    * tag:<key> - The key/value combination of a tag assigned to the resource.
 	//    Use the tag key in the filter name and the tag value as the filter value.
@@ -82518,7 +85007,8 @@ type DescribeSubnetsInput struct {
 	//    for the subnet. You can also use cidr or cidrBlock as the filter names.
 	//
 	//    * default-for-az - Indicates whether this is the default subnet for the
-	//    Availability Zone. You can also use defaultForAz as the filter name.
+	//    Availability Zone (true | false). You can also use defaultForAz as the
+	//    filter name.
 	//
 	//    * ipv6-cidr-block-association.ipv6-cidr-block - An IPv6 CIDR block associated
 	//    with the subnet.
@@ -82528,6 +85018,9 @@ type DescribeSubnetsInput struct {
 	//
 	//    * ipv6-cidr-block-association.state - The state of an IPv6 CIDR block
 	//    associated with the subnet.
+	//
+	//    * ipv6-native - Indicates whether this is an IPv6 only subnet (true |
+	//    false).
 	//
 	//    * outpost-arn - The Amazon Resource Name (ARN) of the Outpost.
 	//
@@ -85511,7 +88004,8 @@ type DescribeVpcEndpointConnectionsInput struct {
 	//
 	//    * service-id - The ID of the service.
 	//
-	//    * vpc-endpoint-owner - The AWS account number of the owner of the endpoint.
+	//    * vpc-endpoint-owner - The ID of the Amazon Web Services account ID that
+	//    owns the endpoint.
 	//
 	//    * vpc-endpoint-state - The state of the endpoint (pendingAcceptance |
 	//    pending | available | deleting | deleted | rejected | failed).
@@ -86736,6 +89230,109 @@ func (s DescribeVpnGatewaysOutput) GoString() string {
 // SetVpnGateways sets the VpnGateways field's value.
 func (s *DescribeVpnGatewaysOutput) SetVpnGateways(v []*VpnGateway) *DescribeVpnGatewaysOutput {
 	s.VpnGateways = v
+	return s
+}
+
+// Describes the destination options for a flow log.
+type DestinationOptionsRequest struct {
+	_ struct{} `type:"structure"`
+
+	// The format for the flow log. The default is plain-text.
+	FileFormat *string `type:"string" enum:"DestinationFileFormat"`
+
+	// Indicates whether to use Hive-compatible prefixes for flow logs stored in
+	// Amazon S3. The default is false.
+	HiveCompatiblePartitions *bool `type:"boolean"`
+
+	// Indicates whether to partition the flow log per hour. This reduces the cost
+	// and response time for queries. The default is false.
+	PerHourPartition *bool `type:"boolean"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DestinationOptionsRequest) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DestinationOptionsRequest) GoString() string {
+	return s.String()
+}
+
+// SetFileFormat sets the FileFormat field's value.
+func (s *DestinationOptionsRequest) SetFileFormat(v string) *DestinationOptionsRequest {
+	s.FileFormat = &v
+	return s
+}
+
+// SetHiveCompatiblePartitions sets the HiveCompatiblePartitions field's value.
+func (s *DestinationOptionsRequest) SetHiveCompatiblePartitions(v bool) *DestinationOptionsRequest {
+	s.HiveCompatiblePartitions = &v
+	return s
+}
+
+// SetPerHourPartition sets the PerHourPartition field's value.
+func (s *DestinationOptionsRequest) SetPerHourPartition(v bool) *DestinationOptionsRequest {
+	s.PerHourPartition = &v
+	return s
+}
+
+// Describes the destination options for a flow log.
+type DestinationOptionsResponse struct {
+	_ struct{} `type:"structure"`
+
+	// The format for the flow log.
+	FileFormat *string `locationName:"fileFormat" type:"string" enum:"DestinationFileFormat"`
+
+	// Indicates whether to use Hive-compatible prefixes for flow logs stored in
+	// Amazon S3.
+	HiveCompatiblePartitions *bool `locationName:"hiveCompatiblePartitions" type:"boolean"`
+
+	// Indicates whether to partition the flow log per hour.
+	PerHourPartition *bool `locationName:"perHourPartition" type:"boolean"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DestinationOptionsResponse) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DestinationOptionsResponse) GoString() string {
+	return s.String()
+}
+
+// SetFileFormat sets the FileFormat field's value.
+func (s *DestinationOptionsResponse) SetFileFormat(v string) *DestinationOptionsResponse {
+	s.FileFormat = &v
+	return s
+}
+
+// SetHiveCompatiblePartitions sets the HiveCompatiblePartitions field's value.
+func (s *DestinationOptionsResponse) SetHiveCompatiblePartitions(v bool) *DestinationOptionsResponse {
+	s.HiveCompatiblePartitions = &v
+	return s
+}
+
+// SetPerHourPartition sets the PerHourPartition field's value.
+func (s *DestinationOptionsResponse) SetPerHourPartition(v bool) *DestinationOptionsResponse {
+	s.PerHourPartition = &v
 	return s
 }
 
@@ -89619,7 +92216,7 @@ func (s *DiskImageVolumeDescription) SetSize(v int64) *DiskImageVolumeDescriptio
 	return s
 }
 
-// Describes the disk.
+// Describes a disk.
 type DiskInfo struct {
 	_ struct{} `type:"structure"`
 
@@ -91747,64 +94344,82 @@ type EventInformation struct {
 
 	// The event.
 	//
-	// The following are the error events:
+	// error events:
 	//
-	//    * iamFleetRoleInvalid - The EC2 Fleet or Spot Fleet did not have the required
-	//    permissions either to launch or terminate an instance.
+	//    * iamFleetRoleInvalid - The EC2 Fleet or Spot Fleet does not have the
+	//    required permissions either to launch or terminate an instance.
 	//
-	//    * spotFleetRequestConfigurationInvalid - The configuration is not valid.
-	//    For more information, see the description of the event.
+	//    * allLaunchSpecsTemporarilyBlacklisted - None of the configurations are
+	//    valid, and several attempts to launch instances have failed. For more
+	//    information, see the description of the event.
 	//
 	//    * spotInstanceCountLimitExceeded - You've reached the limit on the number
 	//    of Spot Instances that you can launch.
 	//
-	// The following are the fleetRequestChange events:
+	//    * spotFleetRequestConfigurationInvalid - The configuration is not valid.
+	//    For more information, see the description of the event.
+	//
+	// fleetRequestChange events:
 	//
 	//    * active - The EC2 Fleet or Spot Fleet request has been validated and
-	//    Amazon EC2 is attempting to maintain the target number of running Spot
-	//    Instances.
+	//    Amazon EC2 is attempting to maintain the target number of running instances.
 	//
 	//    * cancelled - The EC2 Fleet or Spot Fleet request is canceled and has
-	//    no running Spot Instances. The EC2 Fleet or Spot Fleet will be deleted
-	//    two days after its instances were terminated.
+	//    no running instances. The EC2 Fleet or Spot Fleet will be deleted two
+	//    days after its instances are terminated.
 	//
 	//    * cancelled_running - The EC2 Fleet or Spot Fleet request is canceled
-	//    and does not launch additional Spot Instances. Existing Spot Instances
-	//    continue to run until they are interrupted or terminated.
+	//    and does not launch additional instances. Its existing instances continue
+	//    to run until they are interrupted or terminated. The request remains in
+	//    this state until all instances are interrupted or terminated.
 	//
 	//    * cancelled_terminating - The EC2 Fleet or Spot Fleet request is canceled
-	//    and its Spot Instances are terminating.
+	//    and its instances are terminating. The request remains in this state until
+	//    all instances are terminated.
 	//
-	//    * expired - The EC2 Fleet or Spot Fleet request has expired. A subsequent
-	//    event indicates that the instances were terminated, if the request was
-	//    created with TerminateInstancesWithExpiration set.
+	//    * expired - The EC2 Fleet or Spot Fleet request has expired. If the request
+	//    was created with TerminateInstancesWithExpiration set, a subsequent terminated
+	//    event indicates that the instances are terminated.
 	//
-	//    * modify_in_progress - A request to modify the EC2 Fleet or Spot Fleet
-	//    request was accepted and is in progress.
+	//    * modify_in_progress - The EC2 Fleet or Spot Fleet request is being modified.
+	//    The request remains in this state until the modification is fully processed.
 	//
 	//    * modify_succeeded - The EC2 Fleet or Spot Fleet request was modified.
 	//
 	//    * submitted - The EC2 Fleet or Spot Fleet request is being evaluated and
-	//    Amazon EC2 is preparing to launch the target number of Spot Instances.
+	//    Amazon EC2 is preparing to launch the target number of instances.
 	//
-	// The following are the instanceChange events:
+	//    * progress - The EC2 Fleet or Spot Fleet request is in the process of
+	//    being fulfilled.
 	//
-	//    * launched - A request was fulfilled and a new instance was launched.
+	// instanceChange events:
+	//
+	//    * launched - A new instance was launched.
 	//
 	//    * terminated - An instance was terminated by the user.
 	//
-	// The following are the Information events:
+	//    * termination_notified - An instance termination notification was sent
+	//    when a Spot Instance was terminated by Amazon EC2 during scale-down, when
+	//    the target capacity of the fleet was modified down, for example, from
+	//    a target capacity of 4 to a target capacity of 3.
+	//
+	// Information events:
+	//
+	//    * fleetProgressHalted - The price in every launch specification is not
+	//    valid because it is below the Spot price (all the launch specifications
+	//    have produced launchSpecUnusable events). A launch specification might
+	//    become valid if the Spot price changes.
 	//
 	//    * launchSpecTemporarilyBlacklisted - The configuration is not valid and
 	//    several attempts to launch instances have failed. For more information,
 	//    see the description of the event.
 	//
 	//    * launchSpecUnusable - The price in a launch specification is not valid
-	//    because it is below the Spot price or the Spot price is above the On-Demand
-	//    price.
+	//    because it is below the Spot price.
 	//
-	//    * fleetProgressHalted - The price in every launch specification is not
-	//    valid. A launch specification might become valid if the Spot price changes.
+	//    * registerWithLoadBalancersFailed - An attempt to register instances with
+	//    load balancers failed. For more information, see the description of the
+	//    event.
 	EventSubType *string `locationName:"eventSubType" type:"string"`
 
 	// The ID of the instance. This information is available only for instanceChange
@@ -93253,6 +95868,47 @@ func (s *ExportTransitGatewayRoutesOutput) SetS3Location(v string) *ExportTransi
 	return s
 }
 
+// Describes a Capacity Reservation Fleet that could not be cancelled.
+type FailedCapacityReservationFleetCancellationResult struct {
+	_ struct{} `type:"structure"`
+
+	// Information about the Capacity Reservation Fleet cancellation error.
+	CancelCapacityReservationFleetError *CancelCapacityReservationFleetError `locationName:"cancelCapacityReservationFleetError" type:"structure"`
+
+	// The ID of the Capacity Reservation Fleet that could not be cancelled.
+	CapacityReservationFleetId *string `locationName:"capacityReservationFleetId" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FailedCapacityReservationFleetCancellationResult) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FailedCapacityReservationFleetCancellationResult) GoString() string {
+	return s.String()
+}
+
+// SetCancelCapacityReservationFleetError sets the CancelCapacityReservationFleetError field's value.
+func (s *FailedCapacityReservationFleetCancellationResult) SetCancelCapacityReservationFleetError(v *CancelCapacityReservationFleetError) *FailedCapacityReservationFleetCancellationResult {
+	s.CancelCapacityReservationFleetError = v
+	return s
+}
+
+// SetCapacityReservationFleetId sets the CapacityReservationFleetId field's value.
+func (s *FailedCapacityReservationFleetCancellationResult) SetCapacityReservationFleetId(v string) *FailedCapacityReservationFleetCancellationResult {
+	s.CapacityReservationFleetId = &v
+	return s
+}
+
 // Describes a Reserved Instance whose queued purchase was not deleted.
 type FailedQueuedPurchaseDeletion struct {
 	_ struct{} `type:"structure"`
@@ -93418,6 +96074,138 @@ func (s *Filter) SetName(v string) *Filter {
 // SetValues sets the Values field's value.
 func (s *Filter) SetValues(v []*string) *Filter {
 	s.Values = v
+	return s
+}
+
+// Information about a Capacity Reservation in a Capacity Reservation Fleet.
+type FleetCapacityReservation struct {
+	_ struct{} `type:"structure"`
+
+	// The Availability Zone in which the Capacity Reservation reserves capacity.
+	AvailabilityZone *string `locationName:"availabilityZone" type:"string"`
+
+	// The ID of the Availability Zone in which the Capacity Reservation reserves
+	// capacity.
+	AvailabilityZoneId *string `locationName:"availabilityZoneId" type:"string"`
+
+	// The ID of the Capacity Reservation.
+	CapacityReservationId *string `locationName:"capacityReservationId" type:"string"`
+
+	// The date and time at which the Capacity Reservation was created.
+	CreateDate *time.Time `locationName:"createDate" type:"timestamp"`
+
+	// Indicates whether the Capacity Reservation reserves capacity for EBS-optimized
+	// instance types.
+	EbsOptimized *bool `locationName:"ebsOptimized" type:"boolean"`
+
+	// The number of capacity units fulfilled by the Capacity Reservation. For more
+	// information, see Total target capacity (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/crfleet-concepts.html#target-capacity)
+	// in the Amazon EC2 User Guide.
+	FulfilledCapacity *float64 `locationName:"fulfilledCapacity" type:"double"`
+
+	// The type of operating system for which the Capacity Reservation reserves
+	// capacity.
+	InstancePlatform *string `locationName:"instancePlatform" type:"string" enum:"CapacityReservationInstancePlatform"`
+
+	// The instance type for which the Capacity Reservation reserves capacity.
+	InstanceType *string `locationName:"instanceType" type:"string" enum:"InstanceType"`
+
+	// The priority of the instance type in the Capacity Reservation Fleet. For
+	// more information, see Instance type priority (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/crfleet-concepts.html#instance-priority)
+	// in the Amazon EC2 User Guide.
+	Priority *int64 `locationName:"priority" type:"integer"`
+
+	// The total number of instances for which the Capacity Reservation reserves
+	// capacity.
+	TotalInstanceCount *int64 `locationName:"totalInstanceCount" type:"integer"`
+
+	// The weight of the instance type in the Capacity Reservation Fleet. For more
+	// information, see Instance type weight (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/crfleet-concepts.html#instance-weight)
+	// in the Amazon EC2 User Guide.
+	Weight *float64 `locationName:"weight" min:"0.001" type:"double"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FleetCapacityReservation) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s FleetCapacityReservation) GoString() string {
+	return s.String()
+}
+
+// SetAvailabilityZone sets the AvailabilityZone field's value.
+func (s *FleetCapacityReservation) SetAvailabilityZone(v string) *FleetCapacityReservation {
+	s.AvailabilityZone = &v
+	return s
+}
+
+// SetAvailabilityZoneId sets the AvailabilityZoneId field's value.
+func (s *FleetCapacityReservation) SetAvailabilityZoneId(v string) *FleetCapacityReservation {
+	s.AvailabilityZoneId = &v
+	return s
+}
+
+// SetCapacityReservationId sets the CapacityReservationId field's value.
+func (s *FleetCapacityReservation) SetCapacityReservationId(v string) *FleetCapacityReservation {
+	s.CapacityReservationId = &v
+	return s
+}
+
+// SetCreateDate sets the CreateDate field's value.
+func (s *FleetCapacityReservation) SetCreateDate(v time.Time) *FleetCapacityReservation {
+	s.CreateDate = &v
+	return s
+}
+
+// SetEbsOptimized sets the EbsOptimized field's value.
+func (s *FleetCapacityReservation) SetEbsOptimized(v bool) *FleetCapacityReservation {
+	s.EbsOptimized = &v
+	return s
+}
+
+// SetFulfilledCapacity sets the FulfilledCapacity field's value.
+func (s *FleetCapacityReservation) SetFulfilledCapacity(v float64) *FleetCapacityReservation {
+	s.FulfilledCapacity = &v
+	return s
+}
+
+// SetInstancePlatform sets the InstancePlatform field's value.
+func (s *FleetCapacityReservation) SetInstancePlatform(v string) *FleetCapacityReservation {
+	s.InstancePlatform = &v
+	return s
+}
+
+// SetInstanceType sets the InstanceType field's value.
+func (s *FleetCapacityReservation) SetInstanceType(v string) *FleetCapacityReservation {
+	s.InstanceType = &v
+	return s
+}
+
+// SetPriority sets the Priority field's value.
+func (s *FleetCapacityReservation) SetPriority(v int64) *FleetCapacityReservation {
+	s.Priority = &v
+	return s
+}
+
+// SetTotalInstanceCount sets the TotalInstanceCount field's value.
+func (s *FleetCapacityReservation) SetTotalInstanceCount(v int64) *FleetCapacityReservation {
+	s.TotalInstanceCount = &v
+	return s
+}
+
+// SetWeight sets the Weight field's value.
+func (s *FleetCapacityReservation) SetWeight(v float64) *FleetCapacityReservation {
+	s.Weight = &v
 	return s
 }
 
@@ -93747,6 +96535,16 @@ func (s *FleetLaunchTemplateConfigRequest) Validate() error {
 			invalidParams.AddNested("LaunchTemplateSpecification", err.(request.ErrInvalidParams))
 		}
 	}
+	if s.Overrides != nil {
+		for i, v := range s.Overrides {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Overrides", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -93773,7 +96571,15 @@ type FleetLaunchTemplateOverrides struct {
 	// The Availability Zone in which to launch the instances.
 	AvailabilityZone *string `locationName:"availabilityZone" type:"string"`
 
+	// The attributes for the instance types. When you specify instance attributes,
+	// Amazon EC2 will identify instance types with those attributes.
+	//
+	// If you specify InstanceRequirements, you can't specify InstanceTypes.
+	InstanceRequirements *InstanceRequirements `locationName:"instanceRequirements" type:"structure"`
+
 	// The instance type.
+	//
+	// If you specify InstanceTypes, you can't specify InstanceRequirements.
 	InstanceType *string `locationName:"instanceType" type:"string" enum:"InstanceType"`
 
 	// The maximum price per unit hour that you are willing to pay for a Spot Instance.
@@ -93830,6 +96636,12 @@ func (s *FleetLaunchTemplateOverrides) SetAvailabilityZone(v string) *FleetLaunc
 	return s
 }
 
+// SetInstanceRequirements sets the InstanceRequirements field's value.
+func (s *FleetLaunchTemplateOverrides) SetInstanceRequirements(v *InstanceRequirements) *FleetLaunchTemplateOverrides {
+	s.InstanceRequirements = v
+	return s
+}
+
 // SetInstanceType sets the InstanceType field's value.
 func (s *FleetLaunchTemplateOverrides) SetInstanceType(v string) *FleetLaunchTemplateOverrides {
 	s.InstanceType = &v
@@ -93873,7 +96685,15 @@ type FleetLaunchTemplateOverridesRequest struct {
 	// The Availability Zone in which to launch the instances.
 	AvailabilityZone *string `type:"string"`
 
+	// The attributes for the instance types. When you specify instance attributes,
+	// Amazon EC2 will identify instance types with those attributes.
+	//
+	// If you specify InstanceRequirements, you can't specify InstanceTypes.
+	InstanceRequirements *InstanceRequirementsRequest `type:"structure"`
+
 	// The instance type.
+	//
+	// If you specify InstanceTypes, you can't specify InstanceRequirements.
 	InstanceType *string `type:"string" enum:"InstanceType"`
 
 	// The maximum price per unit hour that you are willing to pay for a Spot Instance.
@@ -93926,9 +96746,30 @@ func (s FleetLaunchTemplateOverridesRequest) GoString() string {
 	return s.String()
 }
 
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *FleetLaunchTemplateOverridesRequest) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "FleetLaunchTemplateOverridesRequest"}
+	if s.InstanceRequirements != nil {
+		if err := s.InstanceRequirements.Validate(); err != nil {
+			invalidParams.AddNested("InstanceRequirements", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
 // SetAvailabilityZone sets the AvailabilityZone field's value.
 func (s *FleetLaunchTemplateOverridesRequest) SetAvailabilityZone(v string) *FleetLaunchTemplateOverridesRequest {
 	s.AvailabilityZone = &v
+	return s
+}
+
+// SetInstanceRequirements sets the InstanceRequirements field's value.
+func (s *FleetLaunchTemplateOverridesRequest) SetInstanceRequirements(v *InstanceRequirementsRequest) *FleetLaunchTemplateOverridesRequest {
+	s.InstanceRequirements = v
 	return s
 }
 
@@ -94125,14 +96966,27 @@ func (s *FleetLaunchTemplateSpecificationRequest) SetVersion(v string) *FleetLau
 type FleetSpotCapacityRebalance struct {
 	_ struct{} `type:"structure"`
 
-	// To allow EC2 Fleet to launch a replacement Spot Instance when an instance
-	// rebalance notification is emitted for an existing Spot Instance in the fleet,
-	// specify launch. Only available for fleets of type maintain.
+	// The replacement strategy to use. Only available for fleets of type maintain.
 	//
-	// When a replacement instance is launched, the instance marked for rebalance
-	// is not automatically terminated. You can terminate it, or you can leave it
-	// running. You are charged for both instances while they are running.
+	// launch - EC2 Fleet launches a new replacement Spot Instance when a rebalance
+	// notification is emitted for an existing Spot Instance in the fleet. EC2 Fleet
+	// does not terminate the instances that receive a rebalance notification. You
+	// can terminate the old instances, or you can leave them running. You are charged
+	// for all instances while they are running.
+	//
+	// launch-before-terminate - EC2 Fleet launches a new replacement Spot Instance
+	// when a rebalance notification is emitted for an existing Spot Instance in
+	// the fleet, and then, after a delay that you specify (in TerminationDelay),
+	// terminates the instances that received a rebalance notification.
 	ReplacementStrategy *string `locationName:"replacementStrategy" type:"string" enum:"FleetReplacementStrategy"`
+
+	// The amount of time (in seconds) that Amazon EC2 waits before terminating
+	// the old Spot Instance after launching a new replacement Spot Instance.
+	//
+	// Valid only when replacementStrategy is set to launch-before-terminate.
+	//
+	// Valid values: Minimum value of 120 seconds. Maximum value of 7200 seconds.
+	TerminationDelay *int64 `locationName:"terminationDelay" type:"integer"`
 }
 
 // String returns the string representation.
@@ -94159,23 +97013,40 @@ func (s *FleetSpotCapacityRebalance) SetReplacementStrategy(v string) *FleetSpot
 	return s
 }
 
-// The Spot Instance replacement strategy to use when Amazon EC2 emits a signal
-// that your Spot Instance is at an elevated risk of being interrupted. For
-// more information, see Capacity rebalancing (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-fleet-configuration-strategies.html#ec2-fleet-capacity-rebalance)
+// SetTerminationDelay sets the TerminationDelay field's value.
+func (s *FleetSpotCapacityRebalance) SetTerminationDelay(v int64) *FleetSpotCapacityRebalance {
+	s.TerminationDelay = &v
+	return s
+}
+
+// The Spot Instance replacement strategy to use when Amazon EC2 emits a rebalance
+// notification signal that your Spot Instance is at an elevated risk of being
+// interrupted. For more information, see Capacity rebalancing (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-fleet-configuration-strategies.html#ec2-fleet-capacity-rebalance)
 // in the Amazon EC2 User Guide.
 type FleetSpotCapacityRebalanceRequest struct {
 	_ struct{} `type:"structure"`
 
 	// The replacement strategy to use. Only available for fleets of type maintain.
 	//
-	// To allow EC2 Fleet to launch a replacement Spot Instance when an instance
-	// rebalance notification is emitted for an existing Spot Instance in the fleet,
-	// specify launch. You must specify a value, otherwise you get an error.
+	// launch - EC2 Fleet launches a replacement Spot Instance when a rebalance
+	// notification is emitted for an existing Spot Instance in the fleet. EC2 Fleet
+	// does not terminate the instances that receive a rebalance notification. You
+	// can terminate the old instances, or you can leave them running. You are charged
+	// for all instances while they are running.
 	//
-	// When a replacement instance is launched, the instance marked for rebalance
-	// is not automatically terminated. You can terminate it, or you can leave it
-	// running. You are charged for all instances while they are running.
+	// launch-before-terminate - EC2 Fleet launches a replacement Spot Instance
+	// when a rebalance notification is emitted for an existing Spot Instance in
+	// the fleet, and then, after a delay that you specify (in TerminationDelay),
+	// terminates the instances that received a rebalance notification.
 	ReplacementStrategy *string `type:"string" enum:"FleetReplacementStrategy"`
+
+	// The amount of time (in seconds) that Amazon EC2 waits before terminating
+	// the old Spot Instance after launching a new replacement Spot Instance.
+	//
+	// Valid only when ReplacementStrategy is set to launch-before-terminate.
+	//
+	// Valid values: Minimum value of 120 seconds. Maximum value of 7200 seconds.
+	TerminationDelay *int64 `type:"integer"`
 }
 
 // String returns the string representation.
@@ -94199,6 +97070,12 @@ func (s FleetSpotCapacityRebalanceRequest) GoString() string {
 // SetReplacementStrategy sets the ReplacementStrategy field's value.
 func (s *FleetSpotCapacityRebalanceRequest) SetReplacementStrategy(v string) *FleetSpotCapacityRebalanceRequest {
 	s.ReplacementStrategy = &v
+	return s
+}
+
+// SetTerminationDelay sets the TerminationDelay field's value.
+func (s *FleetSpotCapacityRebalanceRequest) SetTerminationDelay(v int64) *FleetSpotCapacityRebalanceRequest {
+	s.TerminationDelay = &v
 	return s
 }
 
@@ -94291,22 +97168,25 @@ type FlowLog struct {
 	// The status of the logs delivery (SUCCESS | FAILED).
 	DeliverLogsStatus *string `locationName:"deliverLogsStatus" type:"string"`
 
+	// The destination options.
+	DestinationOptions *DestinationOptionsResponse `locationName:"destinationOptions" type:"structure"`
+
 	// The flow log ID.
 	FlowLogId *string `locationName:"flowLogId" type:"string"`
 
 	// The status of the flow log (ACTIVE).
 	FlowLogStatus *string `locationName:"flowLogStatus" type:"string"`
 
-	// Specifies the destination to which the flow log data is published. Flow log
-	// data can be published to an CloudWatch Logs log group or an Amazon S3 bucket.
-	// If the flow log publishes to CloudWatch Logs, this element indicates the
-	// Amazon Resource Name (ARN) of the CloudWatch Logs log group to which the
-	// data is published. If the flow log publishes to Amazon S3, this element indicates
+	// The destination to which the flow log data is published. Flow log data can
+	// be published to an CloudWatch Logs log group or an Amazon S3 bucket. If the
+	// flow log publishes to CloudWatch Logs, this element indicates the Amazon
+	// Resource Name (ARN) of the CloudWatch Logs log group to which the data is
+	// published. If the flow log publishes to Amazon S3, this element indicates
 	// the ARN of the Amazon S3 bucket to which the data is published.
 	LogDestination *string `locationName:"logDestination" type:"string"`
 
-	// Specifies the type of destination to which the flow log data is published.
-	// Flow log data can be published to CloudWatch Logs or Amazon S3.
+	// The type of destination to which the flow log data is published. Flow log
+	// data can be published to CloudWatch Logs or Amazon S3.
 	LogDestinationType *string `locationName:"logDestinationType" type:"string" enum:"LogDestinationType"`
 
 	// The format of the flow log record.
@@ -94374,6 +97254,12 @@ func (s *FlowLog) SetDeliverLogsPermissionArn(v string) *FlowLog {
 // SetDeliverLogsStatus sets the DeliverLogsStatus field's value.
 func (s *FlowLog) SetDeliverLogsStatus(v string) *FlowLog {
 	s.DeliverLogsStatus = &v
+	return s
+}
+
+// SetDestinationOptions sets the DestinationOptions field's value.
+func (s *FlowLog) SetDestinationOptions(v *DestinationOptionsResponse) *FlowLog {
+	s.DestinationOptions = v
 	return s
 }
 
@@ -94553,7 +97439,7 @@ type FpgaImage struct {
 	// The alias of the AFI owner. Possible values include self, amazon, and aws-marketplace.
 	OwnerAlias *string `locationName:"ownerAlias" type:"string"`
 
-	// The AWS account ID of the AFI owner.
+	// The ID of the Amazon Web Services account that owns the AFI.
 	OwnerId *string `locationName:"ownerId" type:"string"`
 
 	// Information about the PCI bus.
@@ -94565,7 +97451,8 @@ type FpgaImage struct {
 	// Indicates whether the AFI is public.
 	Public *bool `locationName:"public" type:"boolean"`
 
-	// The version of the AWS Shell that was used to create the bitstream.
+	// The version of the Amazon Web Services Shell that was used to create the
+	// bitstream.
 	ShellVersion *string `locationName:"shellVersion" type:"string"`
 
 	// Information about the state of the AFI.
@@ -96202,6 +99089,157 @@ func (s *GetHostReservationPurchasePreviewOutput) SetTotalUpfrontPrice(v string)
 	return s
 }
 
+type GetInstanceTypesFromInstanceRequirementsInput struct {
+	_ struct{} `type:"structure"`
+
+	// The processor architecture type.
+	//
+	// ArchitectureTypes is a required field
+	ArchitectureTypes []*string `locationName:"ArchitectureType" locationNameList:"item" type:"list" required:"true"`
+
+	// Checks whether you have the required permissions for the action, without
+	// actually making the request, and provides an error response. If you have
+	// the required permissions, the error response is DryRunOperation. Otherwise,
+	// it is UnauthorizedOperation.
+	DryRun *bool `type:"boolean"`
+
+	// The attributes required for the instance types.
+	//
+	// InstanceRequirements is a required field
+	InstanceRequirements *InstanceRequirementsRequest `type:"structure" required:"true"`
+
+	// The maximum number of results to return in a single call. Specify a value
+	// between 1 and 1000. The default value is 1000. To retrieve the remaining
+	// results, make another call with the returned NextToken value.
+	MaxResults *int64 `type:"integer"`
+
+	// The token for the next set of results.
+	NextToken *string `type:"string"`
+
+	// The virtualization type.
+	//
+	// VirtualizationTypes is a required field
+	VirtualizationTypes []*string `locationName:"VirtualizationType" locationNameList:"item" type:"list" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetInstanceTypesFromInstanceRequirementsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetInstanceTypesFromInstanceRequirementsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetInstanceTypesFromInstanceRequirementsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetInstanceTypesFromInstanceRequirementsInput"}
+	if s.ArchitectureTypes == nil {
+		invalidParams.Add(request.NewErrParamRequired("ArchitectureTypes"))
+	}
+	if s.InstanceRequirements == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceRequirements"))
+	}
+	if s.VirtualizationTypes == nil {
+		invalidParams.Add(request.NewErrParamRequired("VirtualizationTypes"))
+	}
+	if s.InstanceRequirements != nil {
+		if err := s.InstanceRequirements.Validate(); err != nil {
+			invalidParams.AddNested("InstanceRequirements", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetArchitectureTypes sets the ArchitectureTypes field's value.
+func (s *GetInstanceTypesFromInstanceRequirementsInput) SetArchitectureTypes(v []*string) *GetInstanceTypesFromInstanceRequirementsInput {
+	s.ArchitectureTypes = v
+	return s
+}
+
+// SetDryRun sets the DryRun field's value.
+func (s *GetInstanceTypesFromInstanceRequirementsInput) SetDryRun(v bool) *GetInstanceTypesFromInstanceRequirementsInput {
+	s.DryRun = &v
+	return s
+}
+
+// SetInstanceRequirements sets the InstanceRequirements field's value.
+func (s *GetInstanceTypesFromInstanceRequirementsInput) SetInstanceRequirements(v *InstanceRequirementsRequest) *GetInstanceTypesFromInstanceRequirementsInput {
+	s.InstanceRequirements = v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *GetInstanceTypesFromInstanceRequirementsInput) SetMaxResults(v int64) *GetInstanceTypesFromInstanceRequirementsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *GetInstanceTypesFromInstanceRequirementsInput) SetNextToken(v string) *GetInstanceTypesFromInstanceRequirementsInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetVirtualizationTypes sets the VirtualizationTypes field's value.
+func (s *GetInstanceTypesFromInstanceRequirementsInput) SetVirtualizationTypes(v []*string) *GetInstanceTypesFromInstanceRequirementsInput {
+	s.VirtualizationTypes = v
+	return s
+}
+
+type GetInstanceTypesFromInstanceRequirementsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The instance types with the specified instance attributes.
+	InstanceTypes []*InstanceTypeInfoFromInstanceRequirements `locationName:"instanceTypeSet" locationNameList:"item" type:"list"`
+
+	// The token for the next set of results.
+	NextToken *string `locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetInstanceTypesFromInstanceRequirementsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetInstanceTypesFromInstanceRequirementsOutput) GoString() string {
+	return s.String()
+}
+
+// SetInstanceTypes sets the InstanceTypes field's value.
+func (s *GetInstanceTypesFromInstanceRequirementsOutput) SetInstanceTypes(v []*InstanceTypeInfoFromInstanceRequirements) *GetInstanceTypesFromInstanceRequirementsOutput {
+	s.InstanceTypes = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *GetInstanceTypesFromInstanceRequirementsOutput) SetNextToken(v string) *GetInstanceTypesFromInstanceRequirementsOutput {
+	s.NextToken = &v
+	return s
+}
+
 type GetLaunchTemplateDataInput struct {
 	_ struct{} `type:"structure"`
 
@@ -96898,6 +99936,212 @@ func (s GetSerialConsoleAccessStatusOutput) GoString() string {
 // SetSerialConsoleAccessEnabled sets the SerialConsoleAccessEnabled field's value.
 func (s *GetSerialConsoleAccessStatusOutput) SetSerialConsoleAccessEnabled(v bool) *GetSerialConsoleAccessStatusOutput {
 	s.SerialConsoleAccessEnabled = &v
+	return s
+}
+
+type GetSpotPlacementScoresInput struct {
+	_ struct{} `type:"structure"`
+
+	// Checks whether you have the required permissions for the action, without
+	// actually making the request, and provides an error response. If you have
+	// the required permissions, the error response is DryRunOperation. Otherwise,
+	// it is UnauthorizedOperation.
+	DryRun *bool `type:"boolean"`
+
+	// The attributes for the instance types. When you specify instance attributes,
+	// Amazon EC2 will identify instance types with those attributes.
+	//
+	// If you specify InstanceRequirementsWithMetadata, you can't specify InstanceTypes.
+	InstanceRequirementsWithMetadata *InstanceRequirementsWithMetadataRequest `type:"structure"`
+
+	// The instance types. We recommend that you specify at least three instance
+	// types. If you specify one or two instance types, or specify variations of
+	// a single instance type (for example, an m3.xlarge with and without instance
+	// storage), the returned placement score will always be low.
+	//
+	// If you specify InstanceTypes, you can't specify InstanceRequirementsWithMetadata.
+	InstanceTypes []*string `locationName:"InstanceType" type:"list"`
+
+	// The maximum number of results to return in a single call. Specify a value
+	// between 1 and 1000. The default value is 1000. To retrieve the remaining
+	// results, make another call with the returned NextToken value.
+	MaxResults *int64 `min:"10" type:"integer"`
+
+	// The token for the next set of results.
+	NextToken *string `type:"string"`
+
+	// The Regions used to narrow down the list of Regions to be scored. Enter the
+	// Region code, for example, us-east-1.
+	RegionNames []*string `locationName:"RegionName" type:"list"`
+
+	// Specify true so that the response returns a list of scored Availability Zones.
+	// Otherwise, the response returns a list of scored Regions.
+	//
+	// A list of scored Availability Zones is useful if you want to launch all of
+	// your Spot capacity into a single Availability Zone.
+	SingleAvailabilityZone *bool `type:"boolean"`
+
+	// The target capacity.
+	//
+	// TargetCapacity is a required field
+	TargetCapacity *int64 `min:"1" type:"integer" required:"true"`
+
+	// The unit for the target capacity.
+	//
+	// Default: units (translates to number of instances)
+	TargetCapacityUnitType *string `type:"string" enum:"TargetCapacityUnitType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetSpotPlacementScoresInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetSpotPlacementScoresInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetSpotPlacementScoresInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetSpotPlacementScoresInput"}
+	if s.MaxResults != nil && *s.MaxResults < 10 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 10))
+	}
+	if s.TargetCapacity == nil {
+		invalidParams.Add(request.NewErrParamRequired("TargetCapacity"))
+	}
+	if s.TargetCapacity != nil && *s.TargetCapacity < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("TargetCapacity", 1))
+	}
+	if s.InstanceRequirementsWithMetadata != nil {
+		if err := s.InstanceRequirementsWithMetadata.Validate(); err != nil {
+			invalidParams.AddNested("InstanceRequirementsWithMetadata", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDryRun sets the DryRun field's value.
+func (s *GetSpotPlacementScoresInput) SetDryRun(v bool) *GetSpotPlacementScoresInput {
+	s.DryRun = &v
+	return s
+}
+
+// SetInstanceRequirementsWithMetadata sets the InstanceRequirementsWithMetadata field's value.
+func (s *GetSpotPlacementScoresInput) SetInstanceRequirementsWithMetadata(v *InstanceRequirementsWithMetadataRequest) *GetSpotPlacementScoresInput {
+	s.InstanceRequirementsWithMetadata = v
+	return s
+}
+
+// SetInstanceTypes sets the InstanceTypes field's value.
+func (s *GetSpotPlacementScoresInput) SetInstanceTypes(v []*string) *GetSpotPlacementScoresInput {
+	s.InstanceTypes = v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *GetSpotPlacementScoresInput) SetMaxResults(v int64) *GetSpotPlacementScoresInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *GetSpotPlacementScoresInput) SetNextToken(v string) *GetSpotPlacementScoresInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetRegionNames sets the RegionNames field's value.
+func (s *GetSpotPlacementScoresInput) SetRegionNames(v []*string) *GetSpotPlacementScoresInput {
+	s.RegionNames = v
+	return s
+}
+
+// SetSingleAvailabilityZone sets the SingleAvailabilityZone field's value.
+func (s *GetSpotPlacementScoresInput) SetSingleAvailabilityZone(v bool) *GetSpotPlacementScoresInput {
+	s.SingleAvailabilityZone = &v
+	return s
+}
+
+// SetTargetCapacity sets the TargetCapacity field's value.
+func (s *GetSpotPlacementScoresInput) SetTargetCapacity(v int64) *GetSpotPlacementScoresInput {
+	s.TargetCapacity = &v
+	return s
+}
+
+// SetTargetCapacityUnitType sets the TargetCapacityUnitType field's value.
+func (s *GetSpotPlacementScoresInput) SetTargetCapacityUnitType(v string) *GetSpotPlacementScoresInput {
+	s.TargetCapacityUnitType = &v
+	return s
+}
+
+type GetSpotPlacementScoresOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The token for the next set of results.
+	NextToken *string `locationName:"nextToken" type:"string"`
+
+	// The Spot placement score for the top 10 Regions or Availability Zones, scored
+	// on a scale from 1 to 10. Each score reflects how likely it is that each Region
+	// or Availability Zone will succeed at fulfilling the specified target capacity
+	// at the time of the Spot placement score request. A score of 10 means that
+	// your Spot capacity request is highly likely to succeed in that Region or
+	// Availability Zone.
+	//
+	// If you request a Spot placement score for Regions, a high score assumes that
+	// your fleet request will be configured to use all Availability Zones and the
+	// capacity-optimized allocation strategy. If you request a Spot placement score
+	// for Availability Zones, a high score assumes that your fleet request will
+	// be configured to use a single Availability Zone and the capacity-optimized
+	// allocation strategy.
+	//
+	// Different Regions or Availability Zones might return the same score.
+	//
+	// The Spot placement score serves as a recommendation only. No score guarantees
+	// that your Spot request will be fully or partially fulfilled.
+	SpotPlacementScores []*SpotPlacementScore `locationName:"spotPlacementScoreSet" locationNameList:"item" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetSpotPlacementScoresOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetSpotPlacementScoresOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *GetSpotPlacementScoresOutput) SetNextToken(v string) *GetSpotPlacementScoresOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetSpotPlacementScores sets the SpotPlacementScores field's value.
+func (s *GetSpotPlacementScoresOutput) SetSpotPlacementScores(v []*SpotPlacementScore) *GetSpotPlacementScoresOutput {
+	s.SpotPlacementScores = v
 	return s
 }
 
@@ -99766,9 +103010,8 @@ type ImportImageInput struct {
 	// The tags to apply to the import image task during creation.
 	TagSpecifications []*TagSpecification `locationName:"TagSpecification" locationNameList:"item" type:"list"`
 
-	// The usage operation value. For more information, see AMI billing information
-	// fields (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/billing-info-fields.html)
-	// in the Amazon Elastic Compute Cloud User Guide.
+	// The usage operation value. For more information, see Licensing options (https://docs.aws.amazon.com/vm-import/latest/userguide/vmie_prereqs.html#prerequisites)
+	// in the VM Import/Export User Guide.
 	UsageOperation *string `type:"string"`
 }
 
@@ -101451,6 +104694,9 @@ type Instance struct {
 	// The instance type.
 	InstanceType *string `locationName:"instanceType" type:"string" enum:"InstanceType"`
 
+	// The IPv6 address assigned to the instance.
+	Ipv6Address *string `locationName:"ipv6Address" type:"string"`
+
 	// The kernel associated with this instance, if applicable.
 	KernelId *string `locationName:"kernelId" type:"string"`
 
@@ -101496,6 +104742,9 @@ type Instance struct {
 	// VPC. If you are not using the Amazon-provided DNS server in your VPC, your
 	// custom domain name servers must resolve the hostname as appropriate.
 	PrivateDnsName *string `locationName:"privateDnsName" type:"string"`
+
+	// The options for the instance hostname.
+	PrivateDnsNameOptions *PrivateDnsNameOptionsResponse `locationName:"privateDnsNameOptions" type:"structure"`
 
 	// The private IPv4 address assigned to the instance.
 	PrivateIpAddress *string `locationName:"privateIpAddress" type:"string"`
@@ -101706,6 +104955,12 @@ func (s *Instance) SetInstanceType(v string) *Instance {
 	return s
 }
 
+// SetIpv6Address sets the Ipv6Address field's value.
+func (s *Instance) SetIpv6Address(v string) *Instance {
+	s.Ipv6Address = &v
+	return s
+}
+
 // SetKernelId sets the KernelId field's value.
 func (s *Instance) SetKernelId(v string) *Instance {
 	s.KernelId = &v
@@ -101775,6 +105030,12 @@ func (s *Instance) SetPlatformDetails(v string) *Instance {
 // SetPrivateDnsName sets the PrivateDnsName field's value.
 func (s *Instance) SetPrivateDnsName(v string) *Instance {
 	s.PrivateDnsName = &v
+	return s
+}
+
+// SetPrivateDnsNameOptions sets the PrivateDnsNameOptions field's value.
+func (s *Instance) SetPrivateDnsNameOptions(v *PrivateDnsNameOptionsResponse) *Instance {
+	s.PrivateDnsNameOptions = v
 	return s
 }
 
@@ -102839,8 +106100,8 @@ func (s *InstanceMarketOptionsRequest) SetSpotOptions(v *SpotMarketOptions) *Ins
 type InstanceMetadataOptionsRequest struct {
 	_ struct{} `type:"structure"`
 
-	// This parameter enables or disables the HTTP metadata endpoint on your instances.
-	// If the parameter is not specified, the default state is enabled.
+	// Enables or disables the HTTP metadata endpoint on your instances. If the
+	// parameter is not specified, the default state is enabled.
 	//
 	// If you specify a value of disabled, you will not be able to access your instance
 	// metadata.
@@ -102919,15 +106180,12 @@ func (s *InstanceMetadataOptionsRequest) SetHttpTokens(v string) *InstanceMetada
 type InstanceMetadataOptionsResponse struct {
 	_ struct{} `type:"structure"`
 
-	// This parameter enables or disables the HTTP metadata endpoint on your instances.
-	// If the parameter is not specified, the default state is enabled.
-	//
-	// If you specify a value of disabled, you will not be able to access your instance
-	// metadata.
+	// Indicates whether the HTTP metadata endpoint on your instances is enabled
+	// or disabled.
 	HttpEndpoint *string `locationName:"httpEndpoint" type:"string" enum:"InstanceMetadataEndpointState"`
 
-	// Whether or not the IPv6 endpoint for the instance metadata service is enabled
-	// or disabled.
+	// Indicates whether the IPv6 endpoint for the instance metadata service is
+	// enabled or disabled.
 	HttpProtocolIpv6 *string `locationName:"httpProtocolIpv6" type:"string" enum:"InstanceMetadataProtocolState"`
 
 	// The desired HTTP PUT response hop limit for instance metadata requests. The
@@ -103246,6 +106504,9 @@ type InstanceNetworkInterfaceAssociation struct {
 	// The carrier IP address associated with the network interface.
 	CarrierIp *string `locationName:"carrierIp" type:"string"`
 
+	// The customer-owned IP address associated with the network interface.
+	CustomerOwnedIp *string `locationName:"customerOwnedIp" type:"string"`
+
 	// The ID of the owner of the Elastic IP address.
 	IpOwnerId *string `locationName:"ipOwnerId" type:"string"`
 
@@ -103277,6 +106538,12 @@ func (s InstanceNetworkInterfaceAssociation) GoString() string {
 // SetCarrierIp sets the CarrierIp field's value.
 func (s *InstanceNetworkInterfaceAssociation) SetCarrierIp(v string) *InstanceNetworkInterfaceAssociation {
 	s.CarrierIp = &v
+	return s
+}
+
+// SetCustomerOwnedIp sets the CustomerOwnedIp field's value.
+func (s *InstanceNetworkInterfaceAssociation) SetCustomerOwnedIp(v string) *InstanceNetworkInterfaceAssociation {
+	s.CustomerOwnedIp = &v
 	return s
 }
 
@@ -103682,6 +106949,855 @@ func (s *InstancePrivateIpAddress) SetPrivateDnsName(v string) *InstancePrivateI
 // SetPrivateIpAddress sets the PrivateIpAddress field's value.
 func (s *InstancePrivateIpAddress) SetPrivateIpAddress(v string) *InstancePrivateIpAddress {
 	s.PrivateIpAddress = &v
+	return s
+}
+
+// The attributes for the instance types. When you specify instance attributes,
+// Amazon EC2 will identify instance types with these attributes.
+//
+// When you specify multiple parameters, you get instance types that satisfy
+// all of the specified parameters. If you specify multiple values for a parameter,
+// you get instance types that satisfy any of the specified values.
+//
+// You must specify VCpuCount and MemoryMiB. All other parameters are optional.
+// Any unspecified optional parameter is set to its default.
+//
+// For more information, see Attribute-based instance type selection for EC2
+// Fleet (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-fleet-attribute-based-instance-type-selection.html),
+// Attribute-based instance type selection for Spot Fleet (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-fleet-attribute-based-instance-type-selection.html),
+// and Spot placement score (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-placement-score.html)
+// in the Amazon EC2 User Guide.
+type InstanceRequirements struct {
+	_ struct{} `type:"structure"`
+
+	// The minimum and maximum number of accelerators (GPUs, FPGAs, or Amazon Web
+	// Services Inferentia chips) on an instance.
+	//
+	// To exclude accelerator-enabled instance types, set Max to 0.
+	//
+	// Default: No minimum or maximum limits
+	AcceleratorCount *AcceleratorCount `locationName:"acceleratorCount" type:"structure"`
+
+	// Indicates whether instance types must have accelerators by specific manufacturers.
+	//
+	//    * For instance types with NVIDIA devices, specify nvidia.
+	//
+	//    * For instance types with AMD devices, specify amd.
+	//
+	//    * For instance types with Amazon Web Services devices, specify amazon-web-services.
+	//
+	//    * For instance types with Xilinx devices, specify xilinx.
+	//
+	// Default: Any manufacturer
+	AcceleratorManufacturers []*string `locationName:"acceleratorManufacturerSet" locationNameList:"item" type:"list"`
+
+	// The accelerators that must be on the instance type.
+	//
+	//    * For instance types with NVIDIA A100 GPUs, specify a100.
+	//
+	//    * For instance types with NVIDIA V100 GPUs, specify v100.
+	//
+	//    * For instance types with NVIDIA K80 GPUs, specify k80.
+	//
+	//    * For instance types with NVIDIA T4 GPUs, specify t4.
+	//
+	//    * For instance types with NVIDIA M60 GPUs, specify m60.
+	//
+	//    * For instance types with AMD Radeon Pro V520 GPUs, specify radeon-pro-v520.
+	//
+	//    * For instance types with Xilinx VU9P FPGAs, specify vu9p.
+	//
+	// Default: Any accelerator
+	AcceleratorNames []*string `locationName:"acceleratorNameSet" locationNameList:"item" type:"list"`
+
+	// The minimum and maximum amount of total accelerator memory, in MiB.
+	//
+	// Default: No minimum or maximum limits
+	AcceleratorTotalMemoryMiB *AcceleratorTotalMemoryMiB `locationName:"acceleratorTotalMemoryMiB" type:"structure"`
+
+	// The accelerator types that must be on the instance type.
+	//
+	//    * For instance types with GPU accelerators, specify gpu.
+	//
+	//    * For instance types with FPGA accelerators, specify fpga.
+	//
+	//    * For instance types with inference accelerators, specify inference.
+	//
+	// Default: Any accelerator type
+	AcceleratorTypes []*string `locationName:"acceleratorTypeSet" locationNameList:"item" type:"list"`
+
+	// Indicates whether bare metal instance types must be included, excluded, or
+	// required.
+	//
+	//    * To include bare metal instance types, specify included.
+	//
+	//    * To require only bare metal instance types, specify required.
+	//
+	//    * To exclude bare metal instance types, specify excluded.
+	//
+	// Default: excluded
+	BareMetal *string `locationName:"bareMetal" type:"string" enum:"BareMetal"`
+
+	// The minimum and maximum baseline bandwidth to Amazon EBS, in Mbps. For more
+	// information, see Amazon EBS–optimized instances (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-optimized.html)
+	// in the Amazon EC2 User Guide.
+	//
+	// Default: No minimum or maximum limits
+	BaselineEbsBandwidthMbps *BaselineEbsBandwidthMbps `locationName:"baselineEbsBandwidthMbps" type:"structure"`
+
+	// Indicates whether burstable performance T instance types are included, excluded,
+	// or required. For more information, see Burstable performance instances (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/burstable-performance-instances.html).
+	//
+	//    * To include burstable performance instance types, specify included.
+	//
+	//    * To require only burstable performance instance types, specify required.
+	//
+	//    * To exclude burstable performance instance types, specify excluded.
+	//
+	// Default: excluded
+	BurstablePerformance *string `locationName:"burstablePerformance" type:"string" enum:"BurstablePerformance"`
+
+	// The CPU manufacturers to include.
+	//
+	//    * For instance types with Intel CPUs, specify intel.
+	//
+	//    * For instance types with AMD CPUs, specify amd.
+	//
+	//    * For instance types with Amazon Web Services CPUs, specify amazon-web-services.
+	//
+	// Don't confuse the CPU manufacturer with the CPU architecture. Instances will
+	// be launched with a compatible CPU architecture based on the Amazon Machine
+	// Image (AMI) that you specify in your launch template.
+	//
+	// Default: Any manufacturer
+	CpuManufacturers []*string `locationName:"cpuManufacturerSet" locationNameList:"item" type:"list"`
+
+	// The instance types to exclude. You can use strings with one or more wild
+	// cards, represented by an asterisk (*), to exclude an instance type, size,
+	// or generation. The following are examples: m5.8xlarge, c5*.*, m5a.*, r*,
+	// *3*.
+	//
+	// For example, if you specify c5*,Amazon EC2 will exclude the entire C5 instance
+	// family, which includes all C5a and C5n instance types. If you specify m5a.*,
+	// Amazon EC2 will exclude all the M5a instance types, but not the M5n instance
+	// types.
+	//
+	// Default: No excluded instance types
+	ExcludedInstanceTypes []*string `locationName:"excludedInstanceTypeSet" locationNameList:"item" type:"list"`
+
+	// Indicates whether current or previous generation instance types are included.
+	// The current generation instance types are recommended for use. Current generation
+	// instance types are typically the latest two to three generations in each
+	// instance family. For more information, see Instance types (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html)
+	// in the Amazon EC2 User Guide.
+	//
+	// For current generation instance types, specify current.
+	//
+	// For previous generation instance types, specify previous.
+	//
+	// Default: Current and previous generation instance types
+	InstanceGenerations []*string `locationName:"instanceGenerationSet" locationNameList:"item" type:"list"`
+
+	// Indicates whether instance types with instance store volumes are included,
+	// excluded, or required. For more information, Amazon EC2 instance store (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/InstanceStorage.html)
+	// in the Amazon EC2 User Guide.
+	//
+	//    * To include instance types with instance store volumes, specify included.
+	//
+	//    * To require only instance types with instance store volumes, specify
+	//    required.
+	//
+	//    * To exclude instance types with instance store volumes, specify excluded.
+	//
+	// Default: included
+	LocalStorage *string `locationName:"localStorage" type:"string" enum:"LocalStorage"`
+
+	// The type of local storage that is required.
+	//
+	//    * For instance types with hard disk drive (HDD) storage, specify hdd.
+	//
+	//    * For instance types with solid state drive (SDD) storage, specify sdd.
+	//
+	// Default: hdd and sdd
+	LocalStorageTypes []*string `locationName:"localStorageTypeSet" locationNameList:"item" type:"list"`
+
+	// The minimum and maximum amount of memory per vCPU, in GiB.
+	//
+	// Default: No minimum or maximum limits
+	MemoryGiBPerVCpu *MemoryGiBPerVCpu `locationName:"memoryGiBPerVCpu" type:"structure"`
+
+	// The minimum and maximum amount of memory, in MiB.
+	MemoryMiB *MemoryMiB `locationName:"memoryMiB" type:"structure"`
+
+	// The minimum and maximum number of network interfaces.
+	//
+	// Default: No minimum or maximum limits
+	NetworkInterfaceCount *NetworkInterfaceCount `locationName:"networkInterfaceCount" type:"structure"`
+
+	// The price protection threshold for On-Demand Instances. This is the maximum
+	// you’ll pay for an On-Demand Instance, expressed as a percentage above the
+	// cheapest M, C, or R instance type with your specified attributes. When Amazon
+	// EC2 selects instance types with your attributes, it excludes instance types
+	// priced above your threshold.
+	//
+	// The parameter accepts an integer, which Amazon EC2 interprets as a percentage.
+	//
+	// To turn off price protection, specify a high value, such as 999999.
+	//
+	// This parameter is not supported for GetSpotPlacementScores (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_GetSpotPlacementScores.html)
+	// and GetInstanceTypesFromInstanceRequirements (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_GetInstanceTypesFromInstanceRequirements.html).
+	//
+	// Default: 20
+	OnDemandMaxPricePercentageOverLowestPrice *int64 `locationName:"onDemandMaxPricePercentageOverLowestPrice" type:"integer"`
+
+	// Indicates whether instance types must support hibernation for On-Demand Instances.
+	//
+	// This parameter is not supported for GetSpotPlacementScores (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_GetSpotPlacementScores.html).
+	//
+	// Default: false
+	RequireHibernateSupport *bool `locationName:"requireHibernateSupport" type:"boolean"`
+
+	// The price protection threshold for Spot Instances. This is the maximum you’ll
+	// pay for a Spot Instance, expressed as a percentage above the cheapest M,
+	// C, or R instance type with your specified attributes. When Amazon EC2 selects
+	// instance types with your attributes, it excludes instance types priced above
+	// your threshold.
+	//
+	// The parameter accepts an integer, which Amazon EC2 interprets as a percentage.
+	//
+	// To turn off price protection, specify a high value, such as 999999.
+	//
+	// This parameter is not supported for GetSpotPlacementScores (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_GetSpotPlacementScores.html)
+	// and GetInstanceTypesFromInstanceRequirements (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_GetInstanceTypesFromInstanceRequirements.html).
+	//
+	// Default: 100
+	SpotMaxPricePercentageOverLowestPrice *int64 `locationName:"spotMaxPricePercentageOverLowestPrice" type:"integer"`
+
+	// The minimum and maximum amount of total local storage, in GB.
+	//
+	// Default: No minimum or maximum limits
+	TotalLocalStorageGB *TotalLocalStorageGB `locationName:"totalLocalStorageGB" type:"structure"`
+
+	// The minimum and maximum number of vCPUs.
+	VCpuCount *VCpuCountRange `locationName:"vCpuCount" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s InstanceRequirements) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s InstanceRequirements) GoString() string {
+	return s.String()
+}
+
+// SetAcceleratorCount sets the AcceleratorCount field's value.
+func (s *InstanceRequirements) SetAcceleratorCount(v *AcceleratorCount) *InstanceRequirements {
+	s.AcceleratorCount = v
+	return s
+}
+
+// SetAcceleratorManufacturers sets the AcceleratorManufacturers field's value.
+func (s *InstanceRequirements) SetAcceleratorManufacturers(v []*string) *InstanceRequirements {
+	s.AcceleratorManufacturers = v
+	return s
+}
+
+// SetAcceleratorNames sets the AcceleratorNames field's value.
+func (s *InstanceRequirements) SetAcceleratorNames(v []*string) *InstanceRequirements {
+	s.AcceleratorNames = v
+	return s
+}
+
+// SetAcceleratorTotalMemoryMiB sets the AcceleratorTotalMemoryMiB field's value.
+func (s *InstanceRequirements) SetAcceleratorTotalMemoryMiB(v *AcceleratorTotalMemoryMiB) *InstanceRequirements {
+	s.AcceleratorTotalMemoryMiB = v
+	return s
+}
+
+// SetAcceleratorTypes sets the AcceleratorTypes field's value.
+func (s *InstanceRequirements) SetAcceleratorTypes(v []*string) *InstanceRequirements {
+	s.AcceleratorTypes = v
+	return s
+}
+
+// SetBareMetal sets the BareMetal field's value.
+func (s *InstanceRequirements) SetBareMetal(v string) *InstanceRequirements {
+	s.BareMetal = &v
+	return s
+}
+
+// SetBaselineEbsBandwidthMbps sets the BaselineEbsBandwidthMbps field's value.
+func (s *InstanceRequirements) SetBaselineEbsBandwidthMbps(v *BaselineEbsBandwidthMbps) *InstanceRequirements {
+	s.BaselineEbsBandwidthMbps = v
+	return s
+}
+
+// SetBurstablePerformance sets the BurstablePerformance field's value.
+func (s *InstanceRequirements) SetBurstablePerformance(v string) *InstanceRequirements {
+	s.BurstablePerformance = &v
+	return s
+}
+
+// SetCpuManufacturers sets the CpuManufacturers field's value.
+func (s *InstanceRequirements) SetCpuManufacturers(v []*string) *InstanceRequirements {
+	s.CpuManufacturers = v
+	return s
+}
+
+// SetExcludedInstanceTypes sets the ExcludedInstanceTypes field's value.
+func (s *InstanceRequirements) SetExcludedInstanceTypes(v []*string) *InstanceRequirements {
+	s.ExcludedInstanceTypes = v
+	return s
+}
+
+// SetInstanceGenerations sets the InstanceGenerations field's value.
+func (s *InstanceRequirements) SetInstanceGenerations(v []*string) *InstanceRequirements {
+	s.InstanceGenerations = v
+	return s
+}
+
+// SetLocalStorage sets the LocalStorage field's value.
+func (s *InstanceRequirements) SetLocalStorage(v string) *InstanceRequirements {
+	s.LocalStorage = &v
+	return s
+}
+
+// SetLocalStorageTypes sets the LocalStorageTypes field's value.
+func (s *InstanceRequirements) SetLocalStorageTypes(v []*string) *InstanceRequirements {
+	s.LocalStorageTypes = v
+	return s
+}
+
+// SetMemoryGiBPerVCpu sets the MemoryGiBPerVCpu field's value.
+func (s *InstanceRequirements) SetMemoryGiBPerVCpu(v *MemoryGiBPerVCpu) *InstanceRequirements {
+	s.MemoryGiBPerVCpu = v
+	return s
+}
+
+// SetMemoryMiB sets the MemoryMiB field's value.
+func (s *InstanceRequirements) SetMemoryMiB(v *MemoryMiB) *InstanceRequirements {
+	s.MemoryMiB = v
+	return s
+}
+
+// SetNetworkInterfaceCount sets the NetworkInterfaceCount field's value.
+func (s *InstanceRequirements) SetNetworkInterfaceCount(v *NetworkInterfaceCount) *InstanceRequirements {
+	s.NetworkInterfaceCount = v
+	return s
+}
+
+// SetOnDemandMaxPricePercentageOverLowestPrice sets the OnDemandMaxPricePercentageOverLowestPrice field's value.
+func (s *InstanceRequirements) SetOnDemandMaxPricePercentageOverLowestPrice(v int64) *InstanceRequirements {
+	s.OnDemandMaxPricePercentageOverLowestPrice = &v
+	return s
+}
+
+// SetRequireHibernateSupport sets the RequireHibernateSupport field's value.
+func (s *InstanceRequirements) SetRequireHibernateSupport(v bool) *InstanceRequirements {
+	s.RequireHibernateSupport = &v
+	return s
+}
+
+// SetSpotMaxPricePercentageOverLowestPrice sets the SpotMaxPricePercentageOverLowestPrice field's value.
+func (s *InstanceRequirements) SetSpotMaxPricePercentageOverLowestPrice(v int64) *InstanceRequirements {
+	s.SpotMaxPricePercentageOverLowestPrice = &v
+	return s
+}
+
+// SetTotalLocalStorageGB sets the TotalLocalStorageGB field's value.
+func (s *InstanceRequirements) SetTotalLocalStorageGB(v *TotalLocalStorageGB) *InstanceRequirements {
+	s.TotalLocalStorageGB = v
+	return s
+}
+
+// SetVCpuCount sets the VCpuCount field's value.
+func (s *InstanceRequirements) SetVCpuCount(v *VCpuCountRange) *InstanceRequirements {
+	s.VCpuCount = v
+	return s
+}
+
+// The attributes for the instance types. When you specify instance attributes,
+// Amazon EC2 will identify instance types with these attributes.
+//
+// When you specify multiple parameters, you get instance types that satisfy
+// all of the specified parameters. If you specify multiple values for a parameter,
+// you get instance types that satisfy any of the specified values.
+//
+// You must specify VCpuCount and MemoryMiB. All other parameters are optional.
+// Any unspecified optional parameter is set to its default.
+//
+// For more information, see Attribute-based instance type selection for EC2
+// Fleet (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-fleet-attribute-based-instance-type-selection.html),
+// Attribute-based instance type selection for Spot Fleet (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-fleet-attribute-based-instance-type-selection.html),
+// and Spot placement score (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-placement-score.html)
+// in the Amazon EC2 User Guide.
+type InstanceRequirementsRequest struct {
+	_ struct{} `type:"structure"`
+
+	// The minimum and maximum number of accelerators (GPUs, FPGAs, or Amazon Web
+	// Services Inferentia chips) on an instance.
+	//
+	// To exclude accelerator-enabled instance types, set Max to 0.
+	//
+	// Default: No minimum or maximum limits
+	AcceleratorCount *AcceleratorCountRequest `type:"structure"`
+
+	// Indicates whether instance types must have accelerators by specific manufacturers.
+	//
+	//    * For instance types with NVIDIA devices, specify nvidia.
+	//
+	//    * For instance types with AMD devices, specify amd.
+	//
+	//    * For instance types with Amazon Web Services devices, specify amazon-web-services.
+	//
+	//    * For instance types with Xilinx devices, specify xilinx.
+	//
+	// Default: Any manufacturer
+	AcceleratorManufacturers []*string `locationName:"AcceleratorManufacturer" locationNameList:"item" type:"list"`
+
+	// The accelerators that must be on the instance type.
+	//
+	//    * For instance types with NVIDIA A100 GPUs, specify a100.
+	//
+	//    * For instance types with NVIDIA V100 GPUs, specify v100.
+	//
+	//    * For instance types with NVIDIA K80 GPUs, specify k80.
+	//
+	//    * For instance types with NVIDIA T4 GPUs, specify t4.
+	//
+	//    * For instance types with NVIDIA M60 GPUs, specify m60.
+	//
+	//    * For instance types with AMD Radeon Pro V520 GPUs, specify radeon-pro-v520.
+	//
+	//    * For instance types with Xilinx VU9P FPGAs, specify vu9p.
+	//
+	// Default: Any accelerator
+	AcceleratorNames []*string `locationName:"AcceleratorName" locationNameList:"item" type:"list"`
+
+	// The minimum and maximum amount of total accelerator memory, in MiB.
+	//
+	// Default: No minimum or maximum limits
+	AcceleratorTotalMemoryMiB *AcceleratorTotalMemoryMiBRequest `type:"structure"`
+
+	// The accelerator types that must be on the instance type.
+	//
+	//    * To include instance types with GPU hardware, specify gpu.
+	//
+	//    * To include instance types with FPGA hardware, specify fpga.
+	//
+	//    * To include instance types with inference hardware, specify inference.
+	//
+	// Default: Any accelerator type
+	AcceleratorTypes []*string `locationName:"AcceleratorType" locationNameList:"item" type:"list"`
+
+	// Indicates whether bare metal instance types must be included, excluded, or
+	// required.
+	//
+	//    * To include bare metal instance types, specify included.
+	//
+	//    * To require only bare metal instance types, specify required.
+	//
+	//    * To exclude bare metal instance types, specify excluded.
+	//
+	// Default: excluded
+	BareMetal *string `type:"string" enum:"BareMetal"`
+
+	// The minimum and maximum baseline bandwidth to Amazon EBS, in Mbps. For more
+	// information, see Amazon EBS–optimized instances (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-optimized.html)
+	// in the Amazon EC2 User Guide.
+	//
+	// Default: No minimum or maximum limits
+	BaselineEbsBandwidthMbps *BaselineEbsBandwidthMbpsRequest `type:"structure"`
+
+	// Indicates whether burstable performance T instance types are included, excluded,
+	// or required. For more information, see Burstable performance instances (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/burstable-performance-instances.html).
+	//
+	//    * To include burstable performance instance types, specify included.
+	//
+	//    * To require only burstable performance instance types, specify required.
+	//
+	//    * To exclude burstable performance instance types, specify excluded.
+	//
+	// Default: excluded
+	BurstablePerformance *string `type:"string" enum:"BurstablePerformance"`
+
+	// The CPU manufacturers to include.
+	//
+	//    * For instance types with Intel CPUs, specify intel.
+	//
+	//    * For instance types with AMD CPUs, specify amd.
+	//
+	//    * For instance types with Amazon Web Services CPUs, specify amazon-web-services.
+	//
+	// Don't confuse the CPU manufacturer with the CPU architecture. Instances will
+	// be launched with a compatible CPU architecture based on the Amazon Machine
+	// Image (AMI) that you specify in your launch template.
+	//
+	// Default: Any manufacturer
+	CpuManufacturers []*string `locationName:"CpuManufacturer" locationNameList:"item" type:"list"`
+
+	// The instance types to exclude. You can use strings with one or more wild
+	// cards, represented by an asterisk (*), to exclude an instance family, type,
+	// size, or generation. The following are examples: m5.8xlarge, c5*.*, m5a.*,
+	// r*, *3*.
+	//
+	// For example, if you specify c5*,Amazon EC2 will exclude the entire C5 instance
+	// family, which includes all C5a and C5n instance types. If you specify m5a.*,
+	// Amazon EC2 will exclude all the M5a instance types, but not the M5n instance
+	// types.
+	//
+	// Default: No excluded instance types
+	ExcludedInstanceTypes []*string `locationName:"ExcludedInstanceType" locationNameList:"item" type:"list"`
+
+	// Indicates whether current or previous generation instance types are included.
+	// The current generation instance types are recommended for use. Current generation
+	// instance types are typically the latest two to three generations in each
+	// instance family. For more information, see Instance types (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html)
+	// in the Amazon EC2 User Guide.
+	//
+	// For current generation instance types, specify current.
+	//
+	// For previous generation instance types, specify previous.
+	//
+	// Default: Current and previous generation instance types
+	InstanceGenerations []*string `locationName:"InstanceGeneration" locationNameList:"item" type:"list"`
+
+	// Indicates whether instance types with instance store volumes are included,
+	// excluded, or required. For more information, Amazon EC2 instance store (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/InstanceStorage.html)
+	// in the Amazon EC2 User Guide.
+	//
+	//    * To include instance types with instance store volumes, specify included.
+	//
+	//    * To require only instance types with instance store volumes, specify
+	//    required.
+	//
+	//    * To exclude instance types with instance store volumes, specify excluded.
+	//
+	// Default: included
+	LocalStorage *string `type:"string" enum:"LocalStorage"`
+
+	// The type of local storage that is required.
+	//
+	//    * For instance types with hard disk drive (HDD) storage, specify hdd.
+	//
+	//    * For instance types with solid state drive (SDD) storage, specify sdd.
+	//
+	// Default: hdd and sdd
+	LocalStorageTypes []*string `locationName:"LocalStorageType" locationNameList:"item" type:"list"`
+
+	// The minimum and maximum amount of memory per vCPU, in GiB.
+	//
+	// Default: No minimum or maximum limits
+	MemoryGiBPerVCpu *MemoryGiBPerVCpuRequest `type:"structure"`
+
+	// The minimum and maximum amount of memory, in MiB.
+	//
+	// MemoryMiB is a required field
+	MemoryMiB *MemoryMiBRequest `type:"structure" required:"true"`
+
+	// The minimum and maximum number of network interfaces.
+	//
+	// Default: No minimum or maximum limits
+	NetworkInterfaceCount *NetworkInterfaceCountRequest `type:"structure"`
+
+	// The price protection threshold for On-Demand Instances. This is the maximum
+	// you’ll pay for an On-Demand Instance, expressed as a percentage above the
+	// cheapest M, C, or R instance type with your specified attributes. When Amazon
+	// EC2 selects instance types with your attributes, it excludes instance types
+	// priced above your threshold.
+	//
+	// The parameter accepts an integer, which Amazon EC2 interprets as a percentage.
+	//
+	// To turn off price protection, specify a high value, such as 999999.
+	//
+	// This parameter is not supported for GetSpotPlacementScores (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_GetSpotPlacementScores.html)
+	// and GetInstanceTypesFromInstanceRequirements (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_GetInstanceTypesFromInstanceRequirements.html).
+	//
+	// Default: 20
+	OnDemandMaxPricePercentageOverLowestPrice *int64 `type:"integer"`
+
+	// Indicates whether instance types must support hibernation for On-Demand Instances.
+	//
+	// This parameter is not supported for GetSpotPlacementScores (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_GetSpotPlacementScores.html).
+	//
+	// Default: false
+	RequireHibernateSupport *bool `type:"boolean"`
+
+	// The price protection threshold for Spot Instance. This is the maximum you’ll
+	// pay for an Spot Instance, expressed as a percentage above the cheapest M,
+	// C, or R instance type with your specified attributes. When Amazon EC2 selects
+	// instance types with your attributes, it excludes instance types priced above
+	// your threshold.
+	//
+	// The parameter accepts an integer, which Amazon EC2 interprets as a percentage.
+	//
+	// To turn off price protection, specify a high value, such as 999999.
+	//
+	// This parameter is not supported for GetSpotPlacementScores (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_GetSpotPlacementScores.html)
+	// and GetInstanceTypesFromInstanceRequirements (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_GetInstanceTypesFromInstanceRequirements.html).
+	//
+	// Default: 100
+	SpotMaxPricePercentageOverLowestPrice *int64 `type:"integer"`
+
+	// The minimum and maximum amount of total local storage, in GB.
+	//
+	// Default: No minimum or maximum limits
+	TotalLocalStorageGB *TotalLocalStorageGBRequest `type:"structure"`
+
+	// The minimum and maximum number of vCPUs.
+	//
+	// VCpuCount is a required field
+	VCpuCount *VCpuCountRangeRequest `type:"structure" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s InstanceRequirementsRequest) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s InstanceRequirementsRequest) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *InstanceRequirementsRequest) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "InstanceRequirementsRequest"}
+	if s.MemoryMiB == nil {
+		invalidParams.Add(request.NewErrParamRequired("MemoryMiB"))
+	}
+	if s.VCpuCount == nil {
+		invalidParams.Add(request.NewErrParamRequired("VCpuCount"))
+	}
+	if s.MemoryMiB != nil {
+		if err := s.MemoryMiB.Validate(); err != nil {
+			invalidParams.AddNested("MemoryMiB", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.VCpuCount != nil {
+		if err := s.VCpuCount.Validate(); err != nil {
+			invalidParams.AddNested("VCpuCount", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAcceleratorCount sets the AcceleratorCount field's value.
+func (s *InstanceRequirementsRequest) SetAcceleratorCount(v *AcceleratorCountRequest) *InstanceRequirementsRequest {
+	s.AcceleratorCount = v
+	return s
+}
+
+// SetAcceleratorManufacturers sets the AcceleratorManufacturers field's value.
+func (s *InstanceRequirementsRequest) SetAcceleratorManufacturers(v []*string) *InstanceRequirementsRequest {
+	s.AcceleratorManufacturers = v
+	return s
+}
+
+// SetAcceleratorNames sets the AcceleratorNames field's value.
+func (s *InstanceRequirementsRequest) SetAcceleratorNames(v []*string) *InstanceRequirementsRequest {
+	s.AcceleratorNames = v
+	return s
+}
+
+// SetAcceleratorTotalMemoryMiB sets the AcceleratorTotalMemoryMiB field's value.
+func (s *InstanceRequirementsRequest) SetAcceleratorTotalMemoryMiB(v *AcceleratorTotalMemoryMiBRequest) *InstanceRequirementsRequest {
+	s.AcceleratorTotalMemoryMiB = v
+	return s
+}
+
+// SetAcceleratorTypes sets the AcceleratorTypes field's value.
+func (s *InstanceRequirementsRequest) SetAcceleratorTypes(v []*string) *InstanceRequirementsRequest {
+	s.AcceleratorTypes = v
+	return s
+}
+
+// SetBareMetal sets the BareMetal field's value.
+func (s *InstanceRequirementsRequest) SetBareMetal(v string) *InstanceRequirementsRequest {
+	s.BareMetal = &v
+	return s
+}
+
+// SetBaselineEbsBandwidthMbps sets the BaselineEbsBandwidthMbps field's value.
+func (s *InstanceRequirementsRequest) SetBaselineEbsBandwidthMbps(v *BaselineEbsBandwidthMbpsRequest) *InstanceRequirementsRequest {
+	s.BaselineEbsBandwidthMbps = v
+	return s
+}
+
+// SetBurstablePerformance sets the BurstablePerformance field's value.
+func (s *InstanceRequirementsRequest) SetBurstablePerformance(v string) *InstanceRequirementsRequest {
+	s.BurstablePerformance = &v
+	return s
+}
+
+// SetCpuManufacturers sets the CpuManufacturers field's value.
+func (s *InstanceRequirementsRequest) SetCpuManufacturers(v []*string) *InstanceRequirementsRequest {
+	s.CpuManufacturers = v
+	return s
+}
+
+// SetExcludedInstanceTypes sets the ExcludedInstanceTypes field's value.
+func (s *InstanceRequirementsRequest) SetExcludedInstanceTypes(v []*string) *InstanceRequirementsRequest {
+	s.ExcludedInstanceTypes = v
+	return s
+}
+
+// SetInstanceGenerations sets the InstanceGenerations field's value.
+func (s *InstanceRequirementsRequest) SetInstanceGenerations(v []*string) *InstanceRequirementsRequest {
+	s.InstanceGenerations = v
+	return s
+}
+
+// SetLocalStorage sets the LocalStorage field's value.
+func (s *InstanceRequirementsRequest) SetLocalStorage(v string) *InstanceRequirementsRequest {
+	s.LocalStorage = &v
+	return s
+}
+
+// SetLocalStorageTypes sets the LocalStorageTypes field's value.
+func (s *InstanceRequirementsRequest) SetLocalStorageTypes(v []*string) *InstanceRequirementsRequest {
+	s.LocalStorageTypes = v
+	return s
+}
+
+// SetMemoryGiBPerVCpu sets the MemoryGiBPerVCpu field's value.
+func (s *InstanceRequirementsRequest) SetMemoryGiBPerVCpu(v *MemoryGiBPerVCpuRequest) *InstanceRequirementsRequest {
+	s.MemoryGiBPerVCpu = v
+	return s
+}
+
+// SetMemoryMiB sets the MemoryMiB field's value.
+func (s *InstanceRequirementsRequest) SetMemoryMiB(v *MemoryMiBRequest) *InstanceRequirementsRequest {
+	s.MemoryMiB = v
+	return s
+}
+
+// SetNetworkInterfaceCount sets the NetworkInterfaceCount field's value.
+func (s *InstanceRequirementsRequest) SetNetworkInterfaceCount(v *NetworkInterfaceCountRequest) *InstanceRequirementsRequest {
+	s.NetworkInterfaceCount = v
+	return s
+}
+
+// SetOnDemandMaxPricePercentageOverLowestPrice sets the OnDemandMaxPricePercentageOverLowestPrice field's value.
+func (s *InstanceRequirementsRequest) SetOnDemandMaxPricePercentageOverLowestPrice(v int64) *InstanceRequirementsRequest {
+	s.OnDemandMaxPricePercentageOverLowestPrice = &v
+	return s
+}
+
+// SetRequireHibernateSupport sets the RequireHibernateSupport field's value.
+func (s *InstanceRequirementsRequest) SetRequireHibernateSupport(v bool) *InstanceRequirementsRequest {
+	s.RequireHibernateSupport = &v
+	return s
+}
+
+// SetSpotMaxPricePercentageOverLowestPrice sets the SpotMaxPricePercentageOverLowestPrice field's value.
+func (s *InstanceRequirementsRequest) SetSpotMaxPricePercentageOverLowestPrice(v int64) *InstanceRequirementsRequest {
+	s.SpotMaxPricePercentageOverLowestPrice = &v
+	return s
+}
+
+// SetTotalLocalStorageGB sets the TotalLocalStorageGB field's value.
+func (s *InstanceRequirementsRequest) SetTotalLocalStorageGB(v *TotalLocalStorageGBRequest) *InstanceRequirementsRequest {
+	s.TotalLocalStorageGB = v
+	return s
+}
+
+// SetVCpuCount sets the VCpuCount field's value.
+func (s *InstanceRequirementsRequest) SetVCpuCount(v *VCpuCountRangeRequest) *InstanceRequirementsRequest {
+	s.VCpuCount = v
+	return s
+}
+
+// The architecture type, virtualization type, and other attributes for the
+// instance types. When you specify instance attributes, Amazon EC2 will identify
+// instance types with those attributes.
+//
+// If you specify InstanceRequirementsWithMetadataRequest, you can't specify
+// InstanceTypes.
+type InstanceRequirementsWithMetadataRequest struct {
+	_ struct{} `type:"structure"`
+
+	// The architecture type.
+	ArchitectureTypes []*string `locationName:"ArchitectureType" locationNameList:"item" type:"list"`
+
+	// The attributes for the instance types. When you specify instance attributes,
+	// Amazon EC2 will identify instance types with those attributes.
+	InstanceRequirements *InstanceRequirementsRequest `type:"structure"`
+
+	// The virtualization type.
+	VirtualizationTypes []*string `locationName:"VirtualizationType" locationNameList:"item" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s InstanceRequirementsWithMetadataRequest) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s InstanceRequirementsWithMetadataRequest) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *InstanceRequirementsWithMetadataRequest) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "InstanceRequirementsWithMetadataRequest"}
+	if s.InstanceRequirements != nil {
+		if err := s.InstanceRequirements.Validate(); err != nil {
+			invalidParams.AddNested("InstanceRequirements", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetArchitectureTypes sets the ArchitectureTypes field's value.
+func (s *InstanceRequirementsWithMetadataRequest) SetArchitectureTypes(v []*string) *InstanceRequirementsWithMetadataRequest {
+	s.ArchitectureTypes = v
+	return s
+}
+
+// SetInstanceRequirements sets the InstanceRequirements field's value.
+func (s *InstanceRequirementsWithMetadataRequest) SetInstanceRequirements(v *InstanceRequirementsRequest) *InstanceRequirementsWithMetadataRequest {
+	s.InstanceRequirements = v
+	return s
+}
+
+// SetVirtualizationTypes sets the VirtualizationTypes field's value.
+func (s *InstanceRequirementsWithMetadataRequest) SetVirtualizationTypes(v []*string) *InstanceRequirementsWithMetadataRequest {
+	s.VirtualizationTypes = v
 	return s
 }
 
@@ -104105,15 +108221,18 @@ func (s *InstanceStatusSummary) SetStatus(v string) *InstanceStatusSummary {
 	return s
 }
 
-// Describes the disks that are available for the instance type.
+// Describes the instance store features that are supported by the instance
+// type.
 type InstanceStorageInfo struct {
 	_ struct{} `type:"structure"`
 
 	// Describes the disks that are available for the instance type.
 	Disks []*DiskInfo `locationName:"disks" locationNameList:"item" type:"list"`
 
-	// Indicates whether non-volatile memory express (NVMe) is supported for instance
-	// store.
+	// Indicates whether data is encrypted at rest.
+	EncryptionSupport *string `locationName:"encryptionSupport" type:"string" enum:"InstanceStorageEncryptionSupport"`
+
+	// Indicates whether non-volatile memory express (NVMe) is supported.
 	NvmeSupport *string `locationName:"nvmeSupport" type:"string" enum:"EphemeralNvmeSupport"`
 
 	// The total size of the disks, in GB.
@@ -104141,6 +108260,12 @@ func (s InstanceStorageInfo) GoString() string {
 // SetDisks sets the Disks field's value.
 func (s *InstanceStorageInfo) SetDisks(v []*DiskInfo) *InstanceStorageInfo {
 	s.Disks = v
+	return s
+}
+
+// SetEncryptionSupport sets the EncryptionSupport field's value.
+func (s *InstanceStorageInfo) SetEncryptionSupport(v string) *InstanceStorageInfo {
+	s.EncryptionSupport = &v
 	return s
 }
 
@@ -104437,6 +108562,38 @@ func (s *InstanceTypeInfo) SetSupportedVirtualizationTypes(v []*string) *Instanc
 // SetVCpuInfo sets the VCpuInfo field's value.
 func (s *InstanceTypeInfo) SetVCpuInfo(v *VCpuInfo) *InstanceTypeInfo {
 	s.VCpuInfo = v
+	return s
+}
+
+// The list of instance types with the specified instance attributes.
+type InstanceTypeInfoFromInstanceRequirements struct {
+	_ struct{} `type:"structure"`
+
+	// The matching instance type.
+	InstanceType *string `locationName:"instanceType" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s InstanceTypeInfoFromInstanceRequirements) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s InstanceTypeInfoFromInstanceRequirements) GoString() string {
+	return s.String()
+}
+
+// SetInstanceType sets the InstanceType field's value.
+func (s *InstanceTypeInfoFromInstanceRequirements) SetInstanceType(v string) *InstanceTypeInfoFromInstanceRequirements {
+	s.InstanceType = &v
 	return s
 }
 
@@ -105341,6 +109498,12 @@ type LaunchPermission struct {
 	// The name of the group.
 	Group *string `locationName:"group" type:"string" enum:"PermissionGroup"`
 
+	// The Amazon Resource Name (ARN) of an organization.
+	OrganizationArn *string `locationName:"organizationArn" type:"string"`
+
+	// The Amazon Resource Name (ARN) of an organizational unit (OU).
+	OrganizationalUnitArn *string `locationName:"organizationalUnitArn" type:"string"`
+
 	// The Amazon Web Services account ID.
 	//
 	// Constraints: Up to 10 000 account IDs can be specified in a single request.
@@ -105368,6 +109531,18 @@ func (s LaunchPermission) GoString() string {
 // SetGroup sets the Group field's value.
 func (s *LaunchPermission) SetGroup(v string) *LaunchPermission {
 	s.Group = &v
+	return s
+}
+
+// SetOrganizationArn sets the OrganizationArn field's value.
+func (s *LaunchPermission) SetOrganizationArn(v string) *LaunchPermission {
+	s.OrganizationArn = &v
+	return s
+}
+
+// SetOrganizationalUnitArn sets the OrganizationalUnitArn field's value.
+func (s *LaunchPermission) SetOrganizationalUnitArn(v string) *LaunchPermission {
+	s.OrganizationalUnitArn = &v
 	return s
 }
 
@@ -107382,6 +111557,15 @@ type LaunchTemplateOverrides struct {
 	// The Availability Zone in which to launch the instances.
 	AvailabilityZone *string `locationName:"availabilityZone" type:"string"`
 
+	// The instance requirements. When you specify instance requirements, Amazon
+	// EC2 will identify instance types with the provided requirements, and then
+	// use your On-Demand and Spot allocation strategies to launch instances from
+	// these instance types, in the same way as when you specify a list of instance
+	// types.
+	//
+	// If you specify InstanceRequirements, you can't specify InstanceTypes.
+	InstanceRequirements *InstanceRequirements `locationName:"instanceRequirements" type:"structure"`
+
 	// The instance type.
 	InstanceType *string `locationName:"instanceType" type:"string" enum:"InstanceType"`
 
@@ -107432,6 +111616,12 @@ func (s LaunchTemplateOverrides) GoString() string {
 // SetAvailabilityZone sets the AvailabilityZone field's value.
 func (s *LaunchTemplateOverrides) SetAvailabilityZone(v string) *LaunchTemplateOverrides {
 	s.AvailabilityZone = &v
+	return s
+}
+
+// SetInstanceRequirements sets the InstanceRequirements field's value.
+func (s *LaunchTemplateOverrides) SetInstanceRequirements(v *InstanceRequirements) *LaunchTemplateOverrides {
+	s.InstanceRequirements = v
 	return s
 }
 
@@ -107658,6 +111848,114 @@ func (s *LaunchTemplatePlacementRequest) SetSpreadDomain(v string) *LaunchTempla
 // SetTenancy sets the Tenancy field's value.
 func (s *LaunchTemplatePlacementRequest) SetTenancy(v string) *LaunchTemplatePlacementRequest {
 	s.Tenancy = &v
+	return s
+}
+
+// Describes the options for instance hostnames.
+type LaunchTemplatePrivateDnsNameOptions struct {
+	_ struct{} `type:"structure"`
+
+	// Indicates whether to respond to DNS queries for instance hostnames with DNS
+	// AAAA records.
+	EnableResourceNameDnsAAAARecord *bool `locationName:"enableResourceNameDnsAAAARecord" type:"boolean"`
+
+	// Indicates whether to respond to DNS queries for instance hostnames with DNS
+	// A records.
+	EnableResourceNameDnsARecord *bool `locationName:"enableResourceNameDnsARecord" type:"boolean"`
+
+	// The type of hostname to assign to an instance.
+	HostnameType *string `locationName:"hostnameType" type:"string" enum:"HostnameType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s LaunchTemplatePrivateDnsNameOptions) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s LaunchTemplatePrivateDnsNameOptions) GoString() string {
+	return s.String()
+}
+
+// SetEnableResourceNameDnsAAAARecord sets the EnableResourceNameDnsAAAARecord field's value.
+func (s *LaunchTemplatePrivateDnsNameOptions) SetEnableResourceNameDnsAAAARecord(v bool) *LaunchTemplatePrivateDnsNameOptions {
+	s.EnableResourceNameDnsAAAARecord = &v
+	return s
+}
+
+// SetEnableResourceNameDnsARecord sets the EnableResourceNameDnsARecord field's value.
+func (s *LaunchTemplatePrivateDnsNameOptions) SetEnableResourceNameDnsARecord(v bool) *LaunchTemplatePrivateDnsNameOptions {
+	s.EnableResourceNameDnsARecord = &v
+	return s
+}
+
+// SetHostnameType sets the HostnameType field's value.
+func (s *LaunchTemplatePrivateDnsNameOptions) SetHostnameType(v string) *LaunchTemplatePrivateDnsNameOptions {
+	s.HostnameType = &v
+	return s
+}
+
+// Describes the options for instance hostnames.
+type LaunchTemplatePrivateDnsNameOptionsRequest struct {
+	_ struct{} `type:"structure"`
+
+	// Indicates whether to respond to DNS queries for instance hostnames with DNS
+	// AAAA records.
+	EnableResourceNameDnsAAAARecord *bool `type:"boolean"`
+
+	// Indicates whether to respond to DNS queries for instance hostnames with DNS
+	// A records.
+	EnableResourceNameDnsARecord *bool `type:"boolean"`
+
+	// The type of hostname for Amazon EC2 instances. For IPv4 only subnets, an
+	// instance DNS name must be based on the instance IPv4 address. For IPv6 native
+	// subnets, an instance DNS name must be based on the instance ID. For dual-stack
+	// subnets, you can specify whether DNS names use the instance IPv4 address
+	// or the instance ID.
+	HostnameType *string `type:"string" enum:"HostnameType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s LaunchTemplatePrivateDnsNameOptionsRequest) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s LaunchTemplatePrivateDnsNameOptionsRequest) GoString() string {
+	return s.String()
+}
+
+// SetEnableResourceNameDnsAAAARecord sets the EnableResourceNameDnsAAAARecord field's value.
+func (s *LaunchTemplatePrivateDnsNameOptionsRequest) SetEnableResourceNameDnsAAAARecord(v bool) *LaunchTemplatePrivateDnsNameOptionsRequest {
+	s.EnableResourceNameDnsAAAARecord = &v
+	return s
+}
+
+// SetEnableResourceNameDnsARecord sets the EnableResourceNameDnsARecord field's value.
+func (s *LaunchTemplatePrivateDnsNameOptionsRequest) SetEnableResourceNameDnsARecord(v bool) *LaunchTemplatePrivateDnsNameOptionsRequest {
+	s.EnableResourceNameDnsARecord = &v
+	return s
+}
+
+// SetHostnameType sets the HostnameType field's value.
+func (s *LaunchTemplatePrivateDnsNameOptionsRequest) SetHostnameType(v string) *LaunchTemplatePrivateDnsNameOptionsRequest {
+	s.HostnameType = &v
 	return s
 }
 
@@ -108170,6 +112468,123 @@ func (s *LicenseConfigurationRequest) SetLicenseConfigurationArn(v string) *Lice
 	return s
 }
 
+type ListSnapshotsInRecycleBinInput struct {
+	_ struct{} `type:"structure"`
+
+	// Checks whether you have the required permissions for the action, without
+	// actually making the request, and provides an error response. If you have
+	// the required permissions, the error response is DryRunOperation. Otherwise,
+	// it is UnauthorizedOperation.
+	DryRun *bool `type:"boolean"`
+
+	// The maximum number of results to return with a single call. To retrieve the
+	// remaining results, make another call with the returned nextToken value.
+	MaxResults *int64 `min:"5" type:"integer"`
+
+	// The token for the next page of results.
+	NextToken *string `type:"string"`
+
+	// The IDs of the snapshots to list. Omit this parameter to list all of the
+	// snapshots that are in the Recycle Bin.
+	SnapshotIds []*string `locationName:"SnapshotId" locationNameList:"SnapshotId" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListSnapshotsInRecycleBinInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListSnapshotsInRecycleBinInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListSnapshotsInRecycleBinInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListSnapshotsInRecycleBinInput"}
+	if s.MaxResults != nil && *s.MaxResults < 5 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 5))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDryRun sets the DryRun field's value.
+func (s *ListSnapshotsInRecycleBinInput) SetDryRun(v bool) *ListSnapshotsInRecycleBinInput {
+	s.DryRun = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListSnapshotsInRecycleBinInput) SetMaxResults(v int64) *ListSnapshotsInRecycleBinInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListSnapshotsInRecycleBinInput) SetNextToken(v string) *ListSnapshotsInRecycleBinInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetSnapshotIds sets the SnapshotIds field's value.
+func (s *ListSnapshotsInRecycleBinInput) SetSnapshotIds(v []*string) *ListSnapshotsInRecycleBinInput {
+	s.SnapshotIds = v
+	return s
+}
+
+type ListSnapshotsInRecycleBinOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The token to use to retrieve the next page of results. This value is null
+	// when there are no more results to return.
+	NextToken *string `locationName:"nextToken" type:"string"`
+
+	// Information about the snapshots.
+	Snapshots []*SnapshotRecycleBinInfo `locationName:"snapshotSet" locationNameList:"item" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListSnapshotsInRecycleBinOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ListSnapshotsInRecycleBinOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListSnapshotsInRecycleBinOutput) SetNextToken(v string) *ListSnapshotsInRecycleBinOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetSnapshots sets the Snapshots field's value.
+func (s *ListSnapshotsInRecycleBinOutput) SetSnapshots(v []*SnapshotRecycleBinInfo) *ListSnapshotsInRecycleBinOutput {
+	s.Snapshots = v
+	return s
+}
+
 // Describes the Classic Load Balancers and target groups to attach to a Spot
 // Fleet request.
 type LoadBalancersConfig struct {
@@ -108239,7 +112654,7 @@ type LoadPermission struct {
 	// The name of the group.
 	Group *string `locationName:"group" type:"string" enum:"PermissionGroup"`
 
-	// The AWS account ID.
+	// The Amazon Web Services account ID.
 	UserId *string `locationName:"userId" type:"string"`
 }
 
@@ -108321,7 +112736,7 @@ type LoadPermissionRequest struct {
 	// The name of the group.
 	Group *string `type:"string" enum:"PermissionGroup"`
 
-	// The AWS account ID.
+	// The Amazon Web Services account ID.
 	UserId *string `type:"string"`
 }
 
@@ -108365,7 +112780,7 @@ type LocalGateway struct {
 	// The Amazon Resource Name (ARN) of the Outpost.
 	OutpostArn *string `locationName:"outpostArn" type:"string"`
 
-	// The AWS account ID that owns the local gateway.
+	// The ID of the Amazon Web Services account that owns the local gateway.
 	OwnerId *string `locationName:"ownerId" type:"string"`
 
 	// The state of the local gateway.
@@ -108439,7 +112854,7 @@ type LocalGatewayRoute struct {
 	// The ID of the virtual interface group.
 	LocalGatewayVirtualInterfaceGroupId *string `locationName:"localGatewayVirtualInterfaceGroupId" type:"string"`
 
-	// The AWS account ID that owns the local gateway route.
+	// The ID of the Amazon Web Services account that owns the local gateway route.
 	OwnerId *string `locationName:"ownerId" type:"string"`
 
 	// The state of the route.
@@ -108525,7 +112940,8 @@ type LocalGatewayRouteTable struct {
 	// The Amazon Resource Name (ARN) of the Outpost.
 	OutpostArn *string `locationName:"outpostArn" type:"string"`
 
-	// The AWS account ID that owns the local gateway route table.
+	// The ID of the Amazon Web Services account that owns the local gateway route
+	// table.
 	OwnerId *string `locationName:"ownerId" type:"string"`
 
 	// The state of the local gateway route table.
@@ -108616,7 +113032,8 @@ type LocalGatewayRouteTableVirtualInterfaceGroupAssociation struct {
 	// The ID of the virtual interface group.
 	LocalGatewayVirtualInterfaceGroupId *string `locationName:"localGatewayVirtualInterfaceGroupId" type:"string"`
 
-	// The AWS account ID that owns the local gateway virtual interface group association.
+	// The ID of the Amazon Web Services account that owns the local gateway virtual
+	// interface group association.
 	OwnerId *string `locationName:"ownerId" type:"string"`
 
 	// The state of the association.
@@ -108708,7 +113125,8 @@ type LocalGatewayRouteTableVpcAssociation struct {
 	// The ID of the association.
 	LocalGatewayRouteTableVpcAssociationId *string `locationName:"localGatewayRouteTableVpcAssociationId" type:"string"`
 
-	// The AWS account ID that owns the local gateway route table for the association.
+	// The ID of the Amazon Web Services account that owns the local gateway route
+	// table for the association.
 	OwnerId *string `locationName:"ownerId" type:"string"`
 
 	// The state of the association.
@@ -108804,7 +113222,8 @@ type LocalGatewayVirtualInterface struct {
 	// The ID of the virtual interface.
 	LocalGatewayVirtualInterfaceId *string `locationName:"localGatewayVirtualInterfaceId" type:"string"`
 
-	// The AWS account ID that owns the local gateway virtual interface.
+	// The ID of the Amazon Web Services account that owns the local gateway virtual
+	// interface.
 	OwnerId *string `locationName:"ownerId" type:"string"`
 
 	// The peer address.
@@ -108905,7 +113324,8 @@ type LocalGatewayVirtualInterfaceGroup struct {
 	// The IDs of the virtual interfaces.
 	LocalGatewayVirtualInterfaceIds []*string `locationName:"localGatewayVirtualInterfaceIdSet" locationNameList:"item" type:"list"`
 
-	// The AWS account ID that owns the local gateway virtual interface group.
+	// The ID of the Amazon Web Services account that owns the local gateway virtual
+	// interface group.
 	OwnerId *string `locationName:"ownerId" type:"string"`
 
 	// The tags assigned to the virtual interface group.
@@ -109073,6 +113493,92 @@ func (s *ManagedPrefixList) SetVersion(v int64) *ManagedPrefixList {
 	return s
 }
 
+// The minimum and maximum amount of memory per vCPU, in GiB.
+type MemoryGiBPerVCpu struct {
+	_ struct{} `type:"structure"`
+
+	// The maximum amount of memory per vCPU, in GiB. If this parameter is not specified,
+	// there is no maximum limit.
+	Max *float64 `locationName:"max" type:"double"`
+
+	// The minimum amount of memory per vCPU, in GiB. If this parameter is not specified,
+	// there is no minimum limit.
+	Min *float64 `locationName:"min" type:"double"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MemoryGiBPerVCpu) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MemoryGiBPerVCpu) GoString() string {
+	return s.String()
+}
+
+// SetMax sets the Max field's value.
+func (s *MemoryGiBPerVCpu) SetMax(v float64) *MemoryGiBPerVCpu {
+	s.Max = &v
+	return s
+}
+
+// SetMin sets the Min field's value.
+func (s *MemoryGiBPerVCpu) SetMin(v float64) *MemoryGiBPerVCpu {
+	s.Min = &v
+	return s
+}
+
+// The minimum and maximum amount of memory per vCPU, in GiB.
+type MemoryGiBPerVCpuRequest struct {
+	_ struct{} `type:"structure"`
+
+	// The maximum amount of memory per vCPU, in GiB. To specify no maximum limit,
+	// omit this parameter.
+	Max *float64 `type:"double"`
+
+	// The minimum amount of memory per vCPU, in GiB. To specify no minimum limit,
+	// omit this parameter.
+	Min *float64 `type:"double"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MemoryGiBPerVCpuRequest) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MemoryGiBPerVCpuRequest) GoString() string {
+	return s.String()
+}
+
+// SetMax sets the Max field's value.
+func (s *MemoryGiBPerVCpuRequest) SetMax(v float64) *MemoryGiBPerVCpuRequest {
+	s.Max = &v
+	return s
+}
+
+// SetMin sets the Min field's value.
+func (s *MemoryGiBPerVCpuRequest) SetMin(v float64) *MemoryGiBPerVCpuRequest {
+	s.Min = &v
+	return s
+}
+
 // Describes the memory for the instance type.
 type MemoryInfo struct {
 	_ struct{} `type:"structure"`
@@ -109102,6 +113608,107 @@ func (s MemoryInfo) GoString() string {
 // SetSizeInMiB sets the SizeInMiB field's value.
 func (s *MemoryInfo) SetSizeInMiB(v int64) *MemoryInfo {
 	s.SizeInMiB = &v
+	return s
+}
+
+// The minimum and maximum amount of memory, in MiB.
+type MemoryMiB struct {
+	_ struct{} `type:"structure"`
+
+	// The maximum amount of memory, in MiB. If this parameter is not specified,
+	// there is no maximum limit.
+	Max *int64 `locationName:"max" type:"integer"`
+
+	// The minimum amount of memory, in MiB. If this parameter is not specified,
+	// there is no minimum limit.
+	Min *int64 `locationName:"min" type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MemoryMiB) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MemoryMiB) GoString() string {
+	return s.String()
+}
+
+// SetMax sets the Max field's value.
+func (s *MemoryMiB) SetMax(v int64) *MemoryMiB {
+	s.Max = &v
+	return s
+}
+
+// SetMin sets the Min field's value.
+func (s *MemoryMiB) SetMin(v int64) *MemoryMiB {
+	s.Min = &v
+	return s
+}
+
+// The minimum and maximum amount of memory, in MiB.
+type MemoryMiBRequest struct {
+	_ struct{} `type:"structure"`
+
+	// The maximum amount of memory, in MiB. To specify no maximum limit, omit this
+	// parameter.
+	Max *int64 `type:"integer"`
+
+	// The minimum amount of memory, in MiB. To specify no minimum limit, specify
+	// 0.
+	//
+	// Min is a required field
+	Min *int64 `type:"integer" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MemoryMiBRequest) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MemoryMiBRequest) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *MemoryMiBRequest) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "MemoryMiBRequest"}
+	if s.Min == nil {
+		invalidParams.Add(request.NewErrParamRequired("Min"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMax sets the Max field's value.
+func (s *MemoryMiBRequest) SetMax(v int64) *MemoryMiBRequest {
+	s.Max = &v
+	return s
+}
+
+// SetMin sets the Min field's value.
+func (s *MemoryMiBRequest) SetMin(v int64) *MemoryMiBRequest {
+	s.Min = &v
 	return s
 }
 
@@ -109219,9 +113826,9 @@ type ModifyAvailabilityZoneGroupInput struct {
 	GroupName *string `type:"string" required:"true"`
 
 	// Indicates whether you are opted in to the Local Zone group or Wavelength
-	// Zone group. The only valid value is opted-in. You must contact AWS Support
-	// (https://console.aws.amazon.com/support/home#/case/create%3FissueType=customer-service%26serviceCode=general-info%26getting-started%26categoryCode=using-aws%26services)
-	// to opt out of a Local Zone group, or Wavelength Zone group.
+	// Zone group. The only valid value is opted-in. You must contact Amazon Web
+	// Services Support (https://console.aws.amazon.com/support/home#/case/create%3FissueType=customer-service%26serviceCode=general-info%26getting-started%26categoryCode=using-aws%26services)
+	// to opt out of a Local Zone or Wavelength Zone group.
 	//
 	// OptInStatus is a required field
 	OptInStatus *string `type:"string" required:"true" enum:"ModifyAvailabilityZoneOptInStatus"`
@@ -109310,11 +113917,149 @@ func (s *ModifyAvailabilityZoneGroupOutput) SetReturn(v bool) *ModifyAvailabilit
 	return s
 }
 
+type ModifyCapacityReservationFleetInput struct {
+	_ struct{} `type:"structure"`
+
+	// The ID of the Capacity Reservation Fleet to modify.
+	//
+	// CapacityReservationFleetId is a required field
+	CapacityReservationFleetId *string `type:"string" required:"true"`
+
+	// Checks whether you have the required permissions for the action, without
+	// actually making the request, and provides an error response. If you have
+	// the required permissions, the error response is DryRunOperation. Otherwise,
+	// it is UnauthorizedOperation.
+	DryRun *bool `type:"boolean"`
+
+	// The date and time at which the Capacity Reservation Fleet expires. When the
+	// Capacity Reservation Fleet expires, its state changes to expired and all
+	// of the Capacity Reservations in the Fleet expire.
+	//
+	// The Capacity Reservation Fleet expires within an hour after the specified
+	// time. For example, if you specify 5/31/2019, 13:30:55, the Capacity Reservation
+	// Fleet is guaranteed to expire between 13:30:55 and 14:30:55 on 5/31/2019.
+	//
+	// You can't specify EndDate and RemoveEndDate in the same request.
+	EndDate *time.Time `type:"timestamp"`
+
+	// Indicates whether to remove the end date from the Capacity Reservation Fleet.
+	// If you remove the end date, the Capacity Reservation Fleet does not expire
+	// and it remains active until you explicitly cancel it using the CancelCapacityReservationFleet
+	// action.
+	//
+	// You can't specify RemoveEndDate and EndDate in the same request.
+	RemoveEndDate *bool `type:"boolean"`
+
+	// The total number of capacity units to be reserved by the Capacity Reservation
+	// Fleet. This value, together with the instance type weights that you assign
+	// to each instance type used by the Fleet determine the number of instances
+	// for which the Fleet reserves capacity. Both values are based on units that
+	// make sense for your workload. For more information, see Total target capacity
+	// (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/crfleet-concepts.html#target-capacity)
+	// in the Amazon EC2 User Guide.
+	TotalTargetCapacity *int64 `type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ModifyCapacityReservationFleetInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ModifyCapacityReservationFleetInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ModifyCapacityReservationFleetInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ModifyCapacityReservationFleetInput"}
+	if s.CapacityReservationFleetId == nil {
+		invalidParams.Add(request.NewErrParamRequired("CapacityReservationFleetId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetCapacityReservationFleetId sets the CapacityReservationFleetId field's value.
+func (s *ModifyCapacityReservationFleetInput) SetCapacityReservationFleetId(v string) *ModifyCapacityReservationFleetInput {
+	s.CapacityReservationFleetId = &v
+	return s
+}
+
+// SetDryRun sets the DryRun field's value.
+func (s *ModifyCapacityReservationFleetInput) SetDryRun(v bool) *ModifyCapacityReservationFleetInput {
+	s.DryRun = &v
+	return s
+}
+
+// SetEndDate sets the EndDate field's value.
+func (s *ModifyCapacityReservationFleetInput) SetEndDate(v time.Time) *ModifyCapacityReservationFleetInput {
+	s.EndDate = &v
+	return s
+}
+
+// SetRemoveEndDate sets the RemoveEndDate field's value.
+func (s *ModifyCapacityReservationFleetInput) SetRemoveEndDate(v bool) *ModifyCapacityReservationFleetInput {
+	s.RemoveEndDate = &v
+	return s
+}
+
+// SetTotalTargetCapacity sets the TotalTargetCapacity field's value.
+func (s *ModifyCapacityReservationFleetInput) SetTotalTargetCapacity(v int64) *ModifyCapacityReservationFleetInput {
+	s.TotalTargetCapacity = &v
+	return s
+}
+
+type ModifyCapacityReservationFleetOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Returns true if the request succeeds; otherwise, it returns an error.
+	Return *bool `locationName:"return" type:"boolean"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ModifyCapacityReservationFleetOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ModifyCapacityReservationFleetOutput) GoString() string {
+	return s.String()
+}
+
+// SetReturn sets the Return field's value.
+func (s *ModifyCapacityReservationFleetOutput) SetReturn(v bool) *ModifyCapacityReservationFleetOutput {
+	s.Return = &v
+	return s
+}
+
 type ModifyCapacityReservationInput struct {
 	_ struct{} `type:"structure"`
 
 	// Reserved. Capacity Reservations you have created are accepted by default.
 	Accept *bool `type:"boolean"`
+
+	// Reserved for future use.
+	AdditionalInfo *string `type:"string"`
 
 	// The ID of the Capacity Reservation.
 	//
@@ -109389,6 +114134,12 @@ func (s *ModifyCapacityReservationInput) Validate() error {
 // SetAccept sets the Accept field's value.
 func (s *ModifyCapacityReservationInput) SetAccept(v bool) *ModifyCapacityReservationInput {
 	s.Accept = &v
+	return s
+}
+
+// SetAdditionalInfo sets the AdditionalInfo field's value.
+func (s *ModifyCapacityReservationInput) SetAdditionalInfo(v string) *ModifyCapacityReservationInput {
+	s.AdditionalInfo = &v
 	return s
 }
 
@@ -110044,8 +114795,8 @@ type ModifyFpgaImageAttributeInput struct {
 	// attribute.
 	UserGroups []*string `locationName:"UserGroup" locationNameList:"UserGroup" type:"list"`
 
-	// The AWS account IDs. This parameter is valid only when modifying the loadPermission
-	// attribute.
+	// The Amazon Web Services account IDs. This parameter is valid only when modifying
+	// the loadPermission attribute.
 	UserIds []*string `locationName:"UserId" locationNameList:"UserId" type:"list"`
 }
 
@@ -110510,8 +115261,9 @@ func (s ModifyIdentityIdFormatOutput) GoString() string {
 type ModifyImageAttributeInput struct {
 	_ struct{} `type:"structure"`
 
-	// The name of the attribute to modify. The valid values are description and
-	// launchPermission.
+	// The name of the attribute to modify.
+	//
+	// Valid values: description | launchPermission
 	Attribute *string `type:"string"`
 
 	// A new description for the AMI.
@@ -110534,6 +115286,14 @@ type ModifyImageAttributeInput struct {
 	// The operation type. This parameter can be used only when the Attribute parameter
 	// is launchPermission.
 	OperationType *string `type:"string" enum:"OperationType"`
+
+	// The Amazon Resource Name (ARN) of an organization. This parameter can be
+	// used only when the Attribute parameter is launchPermission.
+	OrganizationArns []*string `locationName:"OrganizationArn" locationNameList:"OrganizationArn" type:"list"`
+
+	// The Amazon Resource Name (ARN) of an organizational unit (OU). This parameter
+	// can be used only when the Attribute parameter is launchPermission.
+	OrganizationalUnitArns []*string `locationName:"OrganizationalUnitArn" locationNameList:"OrganizationalUnitArn" type:"list"`
 
 	// Not supported.
 	ProductCodes []*string `locationName:"ProductCode" locationNameList:"ProductCode" type:"list"`
@@ -110618,6 +115378,18 @@ func (s *ModifyImageAttributeInput) SetOperationType(v string) *ModifyImageAttri
 	return s
 }
 
+// SetOrganizationArns sets the OrganizationArns field's value.
+func (s *ModifyImageAttributeInput) SetOrganizationArns(v []*string) *ModifyImageAttributeInput {
+	s.OrganizationArns = v
+	return s
+}
+
+// SetOrganizationalUnitArns sets the OrganizationalUnitArns field's value.
+func (s *ModifyImageAttributeInput) SetOrganizationalUnitArns(v []*string) *ModifyImageAttributeInput {
+	s.OrganizationalUnitArns = v
+	return s
+}
+
 // SetProductCodes sets the ProductCodes field's value.
 func (s *ModifyImageAttributeInput) SetProductCodes(v []*string) *ModifyImageAttributeInput {
 	s.ProductCodes = v
@@ -110676,8 +115448,8 @@ type ModifyInstanceAttributeInput struct {
 	// the instance is terminated.
 	//
 	// To add instance store volumes to an Amazon EBS-backed instance, you must
-	// add them when you launch the instance. For more information, see Updating
-	// the block device mapping when launching an instance (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/block-device-mapping-concepts.html#Using_OverridingAMIBDM)
+	// add them when you launch the instance. For more information, see Update the
+	// block device mapping when launching an instance (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/block-device-mapping-concepts.html#Using_OverridingAMIBDM)
 	// in the Amazon EC2 User Guide.
 	BlockDeviceMappings []*InstanceBlockDeviceMappingSpecification `locationName:"blockDeviceMapping" locationNameList:"item" type:"list"`
 
@@ -111390,14 +116162,14 @@ type ModifyInstanceMetadataOptionsInput struct {
 	// it is UnauthorizedOperation.
 	DryRun *bool `type:"boolean"`
 
-	// This parameter enables or disables the HTTP metadata endpoint on your instances.
-	// If the parameter is not specified, the existing state is maintained.
+	// Enables or disables the HTTP metadata endpoint on your instances. If the
+	// parameter is not specified, the existing state is maintained.
 	//
-	// If you specify a value of disabled, you will not be able to access your instance
-	// metadata.
+	// If you specify a value of disabled, you cannot access your instance metadata.
 	HttpEndpoint *string `type:"string" enum:"InstanceMetadataEndpointState"`
 
 	// Enables or disables the IPv6 endpoint for the instance metadata service.
+	// This setting applies only if you have enabled the HTTP metadata endpoint.
 	HttpProtocolIpv6 *string `type:"string" enum:"InstanceMetadataProtocolState"`
 
 	// The desired HTTP PUT response hop limit for instance metadata requests. The
@@ -111560,7 +116332,8 @@ type ModifyInstancePlacementInput struct {
 	// InstanceId is a required field
 	InstanceId *string `locationName:"instanceId" type:"string" required:"true"`
 
-	// Reserved for future use.
+	// The number of the partition in which to place the instance. Valid only if
+	// the placement group strategy is set to partition.
 	PartitionNumber *int64 `type:"integer"`
 
 	// The tenancy for the instance.
@@ -112080,6 +116853,113 @@ func (s ModifyNetworkInterfaceAttributeOutput) GoString() string {
 	return s.String()
 }
 
+type ModifyPrivateDnsNameOptionsInput struct {
+	_ struct{} `type:"structure"`
+
+	// Checks whether you have the required permissions for the action, without
+	// actually making the request, and provides an error response. If you have
+	// the required permissions, the error response is DryRunOperation. Otherwise,
+	// it is UnauthorizedOperation.
+	DryRun *bool `type:"boolean"`
+
+	// Indicates whether to respond to DNS queries for instance hostnames with DNS
+	// AAAA records.
+	EnableResourceNameDnsAAAARecord *bool `type:"boolean"`
+
+	// Indicates whether to respond to DNS queries for instance hostnames with DNS
+	// A records.
+	EnableResourceNameDnsARecord *bool `type:"boolean"`
+
+	// The ID of the instance.
+	InstanceId *string `type:"string"`
+
+	// The type of hostname for EC2 instances. For IPv4 only subnets, an instance
+	// DNS name must be based on the instance IPv4 address. For IPv6 only subnets,
+	// an instance DNS name must be based on the instance ID. For dual-stack subnets,
+	// you can specify whether DNS names use the instance IPv4 address or the instance
+	// ID.
+	PrivateDnsHostnameType *string `type:"string" enum:"HostnameType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ModifyPrivateDnsNameOptionsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ModifyPrivateDnsNameOptionsInput) GoString() string {
+	return s.String()
+}
+
+// SetDryRun sets the DryRun field's value.
+func (s *ModifyPrivateDnsNameOptionsInput) SetDryRun(v bool) *ModifyPrivateDnsNameOptionsInput {
+	s.DryRun = &v
+	return s
+}
+
+// SetEnableResourceNameDnsAAAARecord sets the EnableResourceNameDnsAAAARecord field's value.
+func (s *ModifyPrivateDnsNameOptionsInput) SetEnableResourceNameDnsAAAARecord(v bool) *ModifyPrivateDnsNameOptionsInput {
+	s.EnableResourceNameDnsAAAARecord = &v
+	return s
+}
+
+// SetEnableResourceNameDnsARecord sets the EnableResourceNameDnsARecord field's value.
+func (s *ModifyPrivateDnsNameOptionsInput) SetEnableResourceNameDnsARecord(v bool) *ModifyPrivateDnsNameOptionsInput {
+	s.EnableResourceNameDnsARecord = &v
+	return s
+}
+
+// SetInstanceId sets the InstanceId field's value.
+func (s *ModifyPrivateDnsNameOptionsInput) SetInstanceId(v string) *ModifyPrivateDnsNameOptionsInput {
+	s.InstanceId = &v
+	return s
+}
+
+// SetPrivateDnsHostnameType sets the PrivateDnsHostnameType field's value.
+func (s *ModifyPrivateDnsNameOptionsInput) SetPrivateDnsHostnameType(v string) *ModifyPrivateDnsNameOptionsInput {
+	s.PrivateDnsHostnameType = &v
+	return s
+}
+
+type ModifyPrivateDnsNameOptionsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Returns true if the request succeeds; otherwise, it returns an error.
+	Return *bool `locationName:"return" type:"boolean"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ModifyPrivateDnsNameOptionsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ModifyPrivateDnsNameOptionsOutput) GoString() string {
+	return s.String()
+}
+
+// SetReturn sets the Return field's value.
+func (s *ModifyPrivateDnsNameOptionsOutput) SetReturn(v bool) *ModifyPrivateDnsNameOptionsOutput {
+	s.Return = &v
+	return s
+}
+
 // Contains the parameters for ModifyReservedInstances.
 type ModifyReservedInstancesInput struct {
 	_ struct{} `type:"structure"`
@@ -112412,6 +117292,113 @@ func (s ModifySnapshotAttributeOutput) GoString() string {
 	return s.String()
 }
 
+type ModifySnapshotTierInput struct {
+	_ struct{} `type:"structure"`
+
+	// Checks whether you have the required permissions for the action, without
+	// actually making the request, and provides an error response. If you have
+	// the required permissions, the error response is DryRunOperation. Otherwise,
+	// it is UnauthorizedOperation.
+	DryRun *bool `type:"boolean"`
+
+	// The ID of the snapshot.
+	//
+	// SnapshotId is a required field
+	SnapshotId *string `type:"string" required:"true"`
+
+	// The name of the storage tier. You must specify archive.
+	StorageTier *string `type:"string" enum:"TargetStorageTier"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ModifySnapshotTierInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ModifySnapshotTierInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ModifySnapshotTierInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ModifySnapshotTierInput"}
+	if s.SnapshotId == nil {
+		invalidParams.Add(request.NewErrParamRequired("SnapshotId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDryRun sets the DryRun field's value.
+func (s *ModifySnapshotTierInput) SetDryRun(v bool) *ModifySnapshotTierInput {
+	s.DryRun = &v
+	return s
+}
+
+// SetSnapshotId sets the SnapshotId field's value.
+func (s *ModifySnapshotTierInput) SetSnapshotId(v string) *ModifySnapshotTierInput {
+	s.SnapshotId = &v
+	return s
+}
+
+// SetStorageTier sets the StorageTier field's value.
+func (s *ModifySnapshotTierInput) SetStorageTier(v string) *ModifySnapshotTierInput {
+	s.StorageTier = &v
+	return s
+}
+
+type ModifySnapshotTierOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The ID of the snapshot.
+	SnapshotId *string `locationName:"snapshotId" type:"string"`
+
+	// The date and time when the archive process was started.
+	TieringStartTime *time.Time `locationName:"tieringStartTime" type:"timestamp"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ModifySnapshotTierOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ModifySnapshotTierOutput) GoString() string {
+	return s.String()
+}
+
+// SetSnapshotId sets the SnapshotId field's value.
+func (s *ModifySnapshotTierOutput) SetSnapshotId(v string) *ModifySnapshotTierOutput {
+	s.SnapshotId = &v
+	return s
+}
+
+// SetTieringStartTime sets the TieringStartTime field's value.
+func (s *ModifySnapshotTierOutput) SetTieringStartTime(v time.Time) *ModifySnapshotTierOutput {
+	s.TieringStartTime = &v
+	return s
+}
+
 // Contains the parameters for ModifySpotFleetRequest.
 type ModifySpotFleetRequestInput struct {
 	_ struct{} `type:"structure"`
@@ -112569,6 +117556,18 @@ type ModifySubnetAttributeInput struct {
 	// You must set this value when you specify true for MapCustomerOwnedIpOnLaunch.
 	CustomerOwnedIpv4Pool *string `type:"string"`
 
+	// Indicates whether DNS queries made to the Amazon-provided DNS Resolver in
+	// this subnet should return synthetic IPv6 addresses for IPv4-only destinations.
+	EnableDns64 *AttributeBooleanValue `type:"structure"`
+
+	// Indicates whether to respond to DNS queries for instance hostnames with DNS
+	// AAAA records.
+	EnableResourceNameDnsAAAARecordOnLaunch *AttributeBooleanValue `type:"structure"`
+
+	// Indicates whether to respond to DNS queries for instance hostnames with DNS
+	// A records.
+	EnableResourceNameDnsARecordOnLaunch *AttributeBooleanValue `type:"structure"`
+
 	// Specify true to indicate that network interfaces attached to instances created
 	// in the specified subnet should be assigned a customer-owned IPv4 address.
 	//
@@ -112579,6 +117578,13 @@ type ModifySubnetAttributeInput struct {
 	// Specify true to indicate that network interfaces attached to instances created
 	// in the specified subnet should be assigned a public IPv4 address.
 	MapPublicIpOnLaunch *AttributeBooleanValue `type:"structure"`
+
+	// The type of hostnames to assign to instances in the subnet at launch. For
+	// IPv4 only subnets, an instance DNS name must be based on the instance IPv4
+	// address. For IPv6 only subnets, an instance DNS name must be based on the
+	// instance ID. For dual-stack subnets, you can specify whether DNS names use
+	// the instance IPv4 address or the instance ID.
+	PrivateDnsHostnameTypeOnLaunch *string `type:"string" enum:"HostnameType"`
 
 	// The ID of the subnet.
 	//
@@ -112629,6 +117635,24 @@ func (s *ModifySubnetAttributeInput) SetCustomerOwnedIpv4Pool(v string) *ModifyS
 	return s
 }
 
+// SetEnableDns64 sets the EnableDns64 field's value.
+func (s *ModifySubnetAttributeInput) SetEnableDns64(v *AttributeBooleanValue) *ModifySubnetAttributeInput {
+	s.EnableDns64 = v
+	return s
+}
+
+// SetEnableResourceNameDnsAAAARecordOnLaunch sets the EnableResourceNameDnsAAAARecordOnLaunch field's value.
+func (s *ModifySubnetAttributeInput) SetEnableResourceNameDnsAAAARecordOnLaunch(v *AttributeBooleanValue) *ModifySubnetAttributeInput {
+	s.EnableResourceNameDnsAAAARecordOnLaunch = v
+	return s
+}
+
+// SetEnableResourceNameDnsARecordOnLaunch sets the EnableResourceNameDnsARecordOnLaunch field's value.
+func (s *ModifySubnetAttributeInput) SetEnableResourceNameDnsARecordOnLaunch(v *AttributeBooleanValue) *ModifySubnetAttributeInput {
+	s.EnableResourceNameDnsARecordOnLaunch = v
+	return s
+}
+
 // SetMapCustomerOwnedIpOnLaunch sets the MapCustomerOwnedIpOnLaunch field's value.
 func (s *ModifySubnetAttributeInput) SetMapCustomerOwnedIpOnLaunch(v *AttributeBooleanValue) *ModifySubnetAttributeInput {
 	s.MapCustomerOwnedIpOnLaunch = v
@@ -112638,6 +117662,12 @@ func (s *ModifySubnetAttributeInput) SetMapCustomerOwnedIpOnLaunch(v *AttributeB
 // SetMapPublicIpOnLaunch sets the MapPublicIpOnLaunch field's value.
 func (s *ModifySubnetAttributeInput) SetMapPublicIpOnLaunch(v *AttributeBooleanValue) *ModifySubnetAttributeInput {
 	s.MapPublicIpOnLaunch = v
+	return s
+}
+
+// SetPrivateDnsHostnameTypeOnLaunch sets the PrivateDnsHostnameTypeOnLaunch field's value.
+func (s *ModifySubnetAttributeInput) SetPrivateDnsHostnameTypeOnLaunch(v string) *ModifySubnetAttributeInput {
+	s.PrivateDnsHostnameTypeOnLaunch = &v
 	return s
 }
 
@@ -112817,7 +117847,7 @@ type ModifyTrafficMirrorFilterRuleInput struct {
 	// The port range to assign to the Traffic Mirror rule.
 	SourcePortRange *TrafficMirrorPortRangeRequest `type:"structure"`
 
-	// The type of traffic (ingress | egress) to assign to the rule.
+	// The type of traffic to assign to the rule.
 	TrafficDirection *string `type:"string" enum:"TrafficDirection"`
 
 	// The ID of the Traffic Mirror rule.
@@ -116686,6 +121716,13 @@ type NetworkInterface struct {
 	// The Availability Zone.
 	AvailabilityZone *string `locationName:"availabilityZone" type:"string"`
 
+	// Indicates whether a network interface with an IPv6 address is unreachable
+	// from the public internet. If the value is true, inbound traffic from the
+	// internet is dropped and you cannot assign an elastic IP address to the network
+	// interface. The network interface is reachable from peered VPCs and resources
+	// connected through a transit gateway, including on-premises networks.
+	DenyAllIgwTraffic *bool `locationName:"denyAllIgwTraffic" type:"boolean"`
+
 	// A description.
 	Description *string `locationName:"description" type:"string"`
 
@@ -116698,8 +121735,14 @@ type NetworkInterface struct {
 	// The IPv4 prefixes that are assigned to the network interface.
 	Ipv4Prefixes []*Ipv4PrefixSpecification `locationName:"ipv4PrefixSet" locationNameList:"item" type:"list"`
 
+	// The IPv6 globally unique address associated with the network interface.
+	Ipv6Address *string `locationName:"ipv6Address" type:"string"`
+
 	// The IPv6 addresses associated with the network interface.
 	Ipv6Addresses []*NetworkInterfaceIpv6Address `locationName:"ipv6AddressesSet" locationNameList:"item" type:"list"`
+
+	// Indicates whether this is an IPv6 only network interface.
+	Ipv6Native *bool `locationName:"ipv6Native" type:"boolean"`
 
 	// The IPv6 prefixes that are assigned to the network interface.
 	Ipv6Prefixes []*Ipv6PrefixSpecification `locationName:"ipv6PrefixSet" locationNameList:"item" type:"list"`
@@ -116784,6 +121827,12 @@ func (s *NetworkInterface) SetAvailabilityZone(v string) *NetworkInterface {
 	return s
 }
 
+// SetDenyAllIgwTraffic sets the DenyAllIgwTraffic field's value.
+func (s *NetworkInterface) SetDenyAllIgwTraffic(v bool) *NetworkInterface {
+	s.DenyAllIgwTraffic = &v
+	return s
+}
+
 // SetDescription sets the Description field's value.
 func (s *NetworkInterface) SetDescription(v string) *NetworkInterface {
 	s.Description = &v
@@ -116808,9 +121857,21 @@ func (s *NetworkInterface) SetIpv4Prefixes(v []*Ipv4PrefixSpecification) *Networ
 	return s
 }
 
+// SetIpv6Address sets the Ipv6Address field's value.
+func (s *NetworkInterface) SetIpv6Address(v string) *NetworkInterface {
+	s.Ipv6Address = &v
+	return s
+}
+
 // SetIpv6Addresses sets the Ipv6Addresses field's value.
 func (s *NetworkInterface) SetIpv6Addresses(v []*NetworkInterfaceIpv6Address) *NetworkInterface {
 	s.Ipv6Addresses = v
+	return s
+}
+
+// SetIpv6Native sets the Ipv6Native field's value.
+func (s *NetworkInterface) SetIpv6Native(v bool) *NetworkInterface {
+	s.Ipv6Native = &v
 	return s
 }
 
@@ -117131,6 +122192,92 @@ func (s *NetworkInterfaceAttachmentChanges) SetDeleteOnTermination(v bool) *Netw
 	return s
 }
 
+// The minimum and maximum number of network interfaces.
+type NetworkInterfaceCount struct {
+	_ struct{} `type:"structure"`
+
+	// The maximum number of network interfaces. If this parameter is not specified,
+	// there is no maximum limit.
+	Max *int64 `locationName:"max" type:"integer"`
+
+	// The minimum number of network interfaces. If this parameter is not specified,
+	// there is no minimum limit.
+	Min *int64 `locationName:"min" type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s NetworkInterfaceCount) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s NetworkInterfaceCount) GoString() string {
+	return s.String()
+}
+
+// SetMax sets the Max field's value.
+func (s *NetworkInterfaceCount) SetMax(v int64) *NetworkInterfaceCount {
+	s.Max = &v
+	return s
+}
+
+// SetMin sets the Min field's value.
+func (s *NetworkInterfaceCount) SetMin(v int64) *NetworkInterfaceCount {
+	s.Min = &v
+	return s
+}
+
+// The minimum and maximum number of network interfaces.
+type NetworkInterfaceCountRequest struct {
+	_ struct{} `type:"structure"`
+
+	// The maximum number of network interfaces. To specify no maximum limit, omit
+	// this parameter.
+	Max *int64 `type:"integer"`
+
+	// The minimum number of network interfaces. To specify no minimum limit, omit
+	// this parameter.
+	Min *int64 `type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s NetworkInterfaceCountRequest) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s NetworkInterfaceCountRequest) GoString() string {
+	return s.String()
+}
+
+// SetMax sets the Max field's value.
+func (s *NetworkInterfaceCountRequest) SetMax(v int64) *NetworkInterfaceCountRequest {
+	s.Max = &v
+	return s
+}
+
+// SetMin sets the Min field's value.
+func (s *NetworkInterfaceCountRequest) SetMin(v int64) *NetworkInterfaceCountRequest {
+	s.Min = &v
+	return s
+}
+
 // Describes an IPv6 address associated with a network interface.
 type NetworkInterfaceIpv6Address struct {
 	_ struct{} `type:"structure"`
@@ -117384,16 +122531,22 @@ func (s *NewDhcpConfiguration) SetValues(v []*string) *NewDhcpConfiguration {
 type OnDemandOptions struct {
 	_ struct{} `type:"structure"`
 
-	// The order of the launch template overrides to use in fulfilling On-Demand
-	// capacity. If you specify lowest-price, EC2 Fleet uses price to determine
-	// the order, launching the lowest price first. If you specify prioritized,
-	// EC2 Fleet uses the priority that you assigned to each launch template override,
-	// launching the highest priority first. If you do not specify a value, EC2
-	// Fleet defaults to lowest-price.
+	// The strategy that determines the order of the launch template overrides to
+	// use in fulfilling On-Demand capacity.
+	//
+	// lowest-price - EC2 Fleet uses price to determine the order, launching the
+	// lowest price first.
+	//
+	// prioritized - EC2 Fleet uses the priority that you assigned to each launch
+	// template override, launching the highest priority first.
+	//
+	// Default: lowest-price
 	AllocationStrategy *string `locationName:"allocationStrategy" type:"string" enum:"FleetOnDemandAllocationStrategy"`
 
 	// The strategy for using unused Capacity Reservations for fulfilling On-Demand
-	// capacity. Supported only for fleets of type instant.
+	// capacity.
+	//
+	// Supported only for fleets of type instant.
 	CapacityReservationOptions *CapacityReservationOptions `locationName:"capacityReservationOptions" type:"structure"`
 
 	// The maximum amount per hour for On-Demand Instances that you're willing to
@@ -117402,14 +122555,23 @@ type OnDemandOptions struct {
 
 	// The minimum target capacity for On-Demand Instances in the fleet. If the
 	// minimum target capacity is not reached, the fleet launches no instances.
+	//
+	// Supported only for fleets of type instant.
+	//
+	// At least one of the following must be specified: SingleAvailabilityZone |
+	// SingleInstanceType
 	MinTargetCapacity *int64 `locationName:"minTargetCapacity" type:"integer"`
 
 	// Indicates that the fleet launches all On-Demand Instances into a single Availability
-	// Zone. Supported only for fleets of type instant.
+	// Zone.
+	//
+	// Supported only for fleets of type instant.
 	SingleAvailabilityZone *bool `locationName:"singleAvailabilityZone" type:"boolean"`
 
 	// Indicates that the fleet uses a single instance type to launch all On-Demand
-	// Instances in the fleet. Supported only for fleets of type instant.
+	// Instances in the fleet.
+	//
+	// Supported only for fleets of type instant.
 	SingleInstanceType *bool `locationName:"singleInstanceType" type:"boolean"`
 }
 
@@ -117471,16 +122633,22 @@ func (s *OnDemandOptions) SetSingleInstanceType(v bool) *OnDemandOptions {
 type OnDemandOptionsRequest struct {
 	_ struct{} `type:"structure"`
 
-	// The order of the launch template overrides to use in fulfilling On-Demand
-	// capacity. If you specify lowest-price, EC2 Fleet uses price to determine
-	// the order, launching the lowest price first. If you specify prioritized,
-	// EC2 Fleet uses the priority that you assigned to each launch template override,
-	// launching the highest priority first. If you do not specify a value, EC2
-	// Fleet defaults to lowest-price.
+	// The strategy that determines the order of the launch template overrides to
+	// use in fulfilling On-Demand capacity.
+	//
+	// lowest-price - EC2 Fleet uses price to determine the order, launching the
+	// lowest price first.
+	//
+	// prioritized - EC2 Fleet uses the priority that you assigned to each launch
+	// template override, launching the highest priority first.
+	//
+	// Default: lowest-price
 	AllocationStrategy *string `type:"string" enum:"FleetOnDemandAllocationStrategy"`
 
 	// The strategy for using unused Capacity Reservations for fulfilling On-Demand
-	// capacity. Supported only for fleets of type instant.
+	// capacity.
+	//
+	// Supported only for fleets of type instant.
 	CapacityReservationOptions *CapacityReservationOptionsRequest `type:"structure"`
 
 	// The maximum amount per hour for On-Demand Instances that you're willing to
@@ -117489,14 +122657,23 @@ type OnDemandOptionsRequest struct {
 
 	// The minimum target capacity for On-Demand Instances in the fleet. If the
 	// minimum target capacity is not reached, the fleet launches no instances.
+	//
+	// Supported only for fleets of type instant.
+	//
+	// At least one of the following must be specified: SingleAvailabilityZone |
+	// SingleInstanceType
 	MinTargetCapacity *int64 `type:"integer"`
 
 	// Indicates that the fleet launches all On-Demand Instances into a single Availability
-	// Zone. Supported only for fleets of type instant.
+	// Zone.
+	//
+	// Supported only for fleets of type instant.
 	SingleAvailabilityZone *bool `type:"boolean"`
 
 	// Indicates that the fleet uses a single instance type to launch all On-Demand
-	// Instances in the fleet. Supported only for fleets of type instant.
+	// Instances in the fleet.
+	//
+	// Supported only for fleets of type instant.
 	SingleInstanceType *bool `type:"boolean"`
 }
 
@@ -118355,7 +123532,7 @@ type Placement struct {
 	// This parameter is not supported by CreateFleet (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateFleet).
 	HostResourceGroupArn *string `locationName:"hostResourceGroupArn" type:"string"`
 
-	// The number of the partition the instance is in. Valid only if the placement
+	// The number of the partition that the instance is in. Valid only if the placement
 	// group strategy is set to partition.
 	//
 	// This parameter is not supported by CreateFleet (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateFleet).
@@ -119135,6 +124312,170 @@ func (s *PrivateDnsNameConfiguration) SetType(v string) *PrivateDnsNameConfigura
 // SetValue sets the Value field's value.
 func (s *PrivateDnsNameConfiguration) SetValue(v string) *PrivateDnsNameConfiguration {
 	s.Value = &v
+	return s
+}
+
+// Describes the options for instance hostnames.
+type PrivateDnsNameOptionsOnLaunch struct {
+	_ struct{} `type:"structure"`
+
+	// Indicates whether to respond to DNS queries for instance hostname with DNS
+	// AAAA records.
+	EnableResourceNameDnsAAAARecord *bool `locationName:"enableResourceNameDnsAAAARecord" type:"boolean"`
+
+	// Indicates whether to respond to DNS queries for instance hostnames with DNS
+	// A records.
+	EnableResourceNameDnsARecord *bool `locationName:"enableResourceNameDnsARecord" type:"boolean"`
+
+	// The type of hostname for EC2 instances. For IPv4 only subnets, an instance
+	// DNS name must be based on the instance IPv4 address. For IPv6 only subnets,
+	// an instance DNS name must be based on the instance ID. For dual-stack subnets,
+	// you can specify whether DNS names use the instance IPv4 address or the instance
+	// ID.
+	HostnameType *string `locationName:"hostnameType" type:"string" enum:"HostnameType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PrivateDnsNameOptionsOnLaunch) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PrivateDnsNameOptionsOnLaunch) GoString() string {
+	return s.String()
+}
+
+// SetEnableResourceNameDnsAAAARecord sets the EnableResourceNameDnsAAAARecord field's value.
+func (s *PrivateDnsNameOptionsOnLaunch) SetEnableResourceNameDnsAAAARecord(v bool) *PrivateDnsNameOptionsOnLaunch {
+	s.EnableResourceNameDnsAAAARecord = &v
+	return s
+}
+
+// SetEnableResourceNameDnsARecord sets the EnableResourceNameDnsARecord field's value.
+func (s *PrivateDnsNameOptionsOnLaunch) SetEnableResourceNameDnsARecord(v bool) *PrivateDnsNameOptionsOnLaunch {
+	s.EnableResourceNameDnsARecord = &v
+	return s
+}
+
+// SetHostnameType sets the HostnameType field's value.
+func (s *PrivateDnsNameOptionsOnLaunch) SetHostnameType(v string) *PrivateDnsNameOptionsOnLaunch {
+	s.HostnameType = &v
+	return s
+}
+
+// Describes the options for instance hostnames.
+type PrivateDnsNameOptionsRequest struct {
+	_ struct{} `type:"structure"`
+
+	// Indicates whether to respond to DNS queries for instance hostnames with DNS
+	// AAAA records.
+	EnableResourceNameDnsAAAARecord *bool `type:"boolean"`
+
+	// Indicates whether to respond to DNS queries for instance hostnames with DNS
+	// A records.
+	EnableResourceNameDnsARecord *bool `type:"boolean"`
+
+	// The type of hostname for EC2 instances. For IPv4 only subnets, an instance
+	// DNS name must be based on the instance IPv4 address. For IPv6 only subnets,
+	// an instance DNS name must be based on the instance ID. For dual-stack subnets,
+	// you can specify whether DNS names use the instance IPv4 address or the instance
+	// ID.
+	HostnameType *string `type:"string" enum:"HostnameType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PrivateDnsNameOptionsRequest) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PrivateDnsNameOptionsRequest) GoString() string {
+	return s.String()
+}
+
+// SetEnableResourceNameDnsAAAARecord sets the EnableResourceNameDnsAAAARecord field's value.
+func (s *PrivateDnsNameOptionsRequest) SetEnableResourceNameDnsAAAARecord(v bool) *PrivateDnsNameOptionsRequest {
+	s.EnableResourceNameDnsAAAARecord = &v
+	return s
+}
+
+// SetEnableResourceNameDnsARecord sets the EnableResourceNameDnsARecord field's value.
+func (s *PrivateDnsNameOptionsRequest) SetEnableResourceNameDnsARecord(v bool) *PrivateDnsNameOptionsRequest {
+	s.EnableResourceNameDnsARecord = &v
+	return s
+}
+
+// SetHostnameType sets the HostnameType field's value.
+func (s *PrivateDnsNameOptionsRequest) SetHostnameType(v string) *PrivateDnsNameOptionsRequest {
+	s.HostnameType = &v
+	return s
+}
+
+// Describes the options for instance hostnames.
+type PrivateDnsNameOptionsResponse struct {
+	_ struct{} `type:"structure"`
+
+	// Indicates whether to respond to DNS queries for instance hostnames with DNS
+	// AAAA records.
+	EnableResourceNameDnsAAAARecord *bool `locationName:"enableResourceNameDnsAAAARecord" type:"boolean"`
+
+	// Indicates whether to respond to DNS queries for instance hostnames with DNS
+	// A records.
+	EnableResourceNameDnsARecord *bool `locationName:"enableResourceNameDnsARecord" type:"boolean"`
+
+	// The type of hostname to assign to an instance.
+	HostnameType *string `locationName:"hostnameType" type:"string" enum:"HostnameType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PrivateDnsNameOptionsResponse) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PrivateDnsNameOptionsResponse) GoString() string {
+	return s.String()
+}
+
+// SetEnableResourceNameDnsAAAARecord sets the EnableResourceNameDnsAAAARecord field's value.
+func (s *PrivateDnsNameOptionsResponse) SetEnableResourceNameDnsAAAARecord(v bool) *PrivateDnsNameOptionsResponse {
+	s.EnableResourceNameDnsAAAARecord = &v
+	return s
+}
+
+// SetEnableResourceNameDnsARecord sets the EnableResourceNameDnsARecord field's value.
+func (s *PrivateDnsNameOptionsResponse) SetEnableResourceNameDnsARecord(v bool) *PrivateDnsNameOptionsResponse {
+	s.EnableResourceNameDnsARecord = &v
+	return s
+}
+
+// SetHostnameType sets the HostnameType field's value.
+func (s *PrivateDnsNameOptionsResponse) SetHostnameType(v string) *PrivateDnsNameOptionsResponse {
+	s.HostnameType = &v
 	return s
 }
 
@@ -121544,14 +126885,13 @@ type ReleaseAddressInput struct {
 	DryRun *bool `locationName:"dryRun" type:"boolean"`
 
 	// The set of Availability Zones, Local Zones, or Wavelength Zones from which
-	// AWS advertises IP addresses.
+	// Amazon Web Services advertises IP addresses.
 	//
-	// If you provide an incorrect network border group, you will receive an InvalidAddress.NotFound
-	// error. For more information, see Error Codes (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/errors-overview.html).
+	// If you provide an incorrect network border group, you receive an InvalidAddress.NotFound
+	// error.
 	//
 	// You cannot use a network border group with EC2 Classic. If you attempt this
-	// operation on EC2 classic, you will receive an InvalidParameterCombination
-	// error. For more information, see Error Codes (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/errors-overview.html).
+	// operation on EC2 classic, you receive an InvalidParameterCombination error.
 	NetworkBorderGroup *string `type:"string"`
 
 	// [EC2-Classic] The Elastic IP address. Required for EC2-Classic.
@@ -122235,6 +127575,9 @@ type ReplaceRouteInput struct {
 	// [IPv4 traffic only] The ID of a carrier gateway.
 	CarrierGatewayId *string `type:"string"`
 
+	// The Amazon Resource Name (ARN) of the core network.
+	CoreNetworkArn *string `type:"string"`
+
 	// The IPv4 CIDR address block used for the destination match. The value that
 	// you provide must match the CIDR of an existing route in the table.
 	DestinationCidrBlock *string `locationName:"destinationCidrBlock" type:"string"`
@@ -122322,6 +127665,12 @@ func (s *ReplaceRouteInput) Validate() error {
 // SetCarrierGatewayId sets the CarrierGatewayId field's value.
 func (s *ReplaceRouteInput) SetCarrierGatewayId(v string) *ReplaceRouteInput {
 	s.CarrierGatewayId = &v
+	return s
+}
+
+// SetCoreNetworkArn sets the CoreNetworkArn field's value.
+func (s *ReplaceRouteInput) SetCoreNetworkArn(v string) *ReplaceRouteInput {
+	s.CoreNetworkArn = &v
 	return s
 }
 
@@ -122898,8 +128247,16 @@ type RequestLaunchTemplateData struct {
 	// The market (purchasing) option for the instances.
 	InstanceMarketOptions *LaunchTemplateInstanceMarketOptionsRequest `type:"structure"`
 
+	// The attributes for the instance types. When you specify instance attributes,
+	// Amazon EC2 will identify instance types with these attributes.
+	//
+	// If you specify InstanceRequirements, you can't specify InstanceTypes.
+	InstanceRequirements *InstanceRequirementsRequest `type:"structure"`
+
 	// The instance type. For more information, see Instance Types (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html)
 	// in the Amazon Elastic Compute Cloud User Guide.
+	//
+	// If you specify InstanceTypes, you can't specify InstanceRequirements.
 	InstanceType *string `type:"string" enum:"InstanceType"`
 
 	// The ID of the kernel.
@@ -122933,6 +128290,10 @@ type RequestLaunchTemplateData struct {
 
 	// The placement for the instance.
 	Placement *LaunchTemplatePlacementRequest `type:"structure"`
+
+	// The options for the instance hostname. The default values are inherited from
+	// the subnet.
+	PrivateDnsNameOptions *LaunchTemplatePrivateDnsNameOptionsRequest `type:"structure"`
 
 	// The ID of the RAM disk.
 	//
@@ -123015,6 +128376,11 @@ func (s *RequestLaunchTemplateData) Validate() error {
 			if err := v.Validate(); err != nil {
 				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "ElasticInferenceAccelerators", i), err.(request.ErrInvalidParams))
 			}
+		}
+	}
+	if s.InstanceRequirements != nil {
+		if err := s.InstanceRequirements.Validate(); err != nil {
+			invalidParams.AddNested("InstanceRequirements", err.(request.ErrInvalidParams))
 		}
 	}
 
@@ -123108,6 +128474,12 @@ func (s *RequestLaunchTemplateData) SetInstanceMarketOptions(v *LaunchTemplateIn
 	return s
 }
 
+// SetInstanceRequirements sets the InstanceRequirements field's value.
+func (s *RequestLaunchTemplateData) SetInstanceRequirements(v *InstanceRequirementsRequest) *RequestLaunchTemplateData {
+	s.InstanceRequirements = v
+	return s
+}
+
 // SetInstanceType sets the InstanceType field's value.
 func (s *RequestLaunchTemplateData) SetInstanceType(v string) *RequestLaunchTemplateData {
 	s.InstanceType = &v
@@ -123153,6 +128525,12 @@ func (s *RequestLaunchTemplateData) SetNetworkInterfaces(v []*LaunchTemplateInst
 // SetPlacement sets the Placement field's value.
 func (s *RequestLaunchTemplateData) SetPlacement(v *LaunchTemplatePlacementRequest) *RequestLaunchTemplateData {
 	s.Placement = v
+	return s
+}
+
+// SetPrivateDnsNameOptions sets the PrivateDnsNameOptions field's value.
+func (s *RequestLaunchTemplateData) SetPrivateDnsNameOptions(v *LaunchTemplatePrivateDnsNameOptionsRequest) *RequestLaunchTemplateData {
+	s.PrivateDnsNameOptions = v
 	return s
 }
 
@@ -123785,6 +129163,125 @@ func (s *Reservation) SetRequesterId(v string) *Reservation {
 // SetReservationId sets the ReservationId field's value.
 func (s *Reservation) SetReservationId(v string) *Reservation {
 	s.ReservationId = &v
+	return s
+}
+
+// Information about an instance type to use in a Capacity Reservation Fleet.
+type ReservationFleetInstanceSpecification struct {
+	_ struct{} `type:"structure"`
+
+	// The Availability Zone in which the Capacity Reservation Fleet reserves the
+	// capacity. A Capacity Reservation Fleet can't span Availability Zones. All
+	// instance type specifications that you specify for the Fleet must use the
+	// same Availability Zone.
+	AvailabilityZone *string `type:"string"`
+
+	// The ID of the Availability Zone in which the Capacity Reservation Fleet reserves
+	// the capacity. A Capacity Reservation Fleet can't span Availability Zones.
+	// All instance type specifications that you specify for the Fleet must use
+	// the same Availability Zone.
+	AvailabilityZoneId *string `type:"string"`
+
+	// Indicates whether the Capacity Reservation Fleet supports EBS-optimized instances
+	// types. This optimization provides dedicated throughput to Amazon EBS and
+	// an optimized configuration stack to provide optimal I/O performance. This
+	// optimization isn't available with all instance types. Additional usage charges
+	// apply when using EBS-optimized instance types.
+	EbsOptimized *bool `type:"boolean"`
+
+	// The type of operating system for which the Capacity Reservation Fleet reserves
+	// capacity.
+	InstancePlatform *string `type:"string" enum:"CapacityReservationInstancePlatform"`
+
+	// The instance type for which the Capacity Reservation Fleet reserves capacity.
+	InstanceType *string `type:"string" enum:"InstanceType"`
+
+	// The priority to assign to the instance type. This value is used to determine
+	// which of the instance types specified for the Fleet should be prioritized
+	// for use. A lower value indicates a high priority. For more information, see
+	// Instance type priority (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/crfleet-concepts.html#instance-priority)
+	// in the Amazon EC2 User Guide.
+	Priority *int64 `type:"integer"`
+
+	// The number of capacity units provided by the specified instance type. This
+	// value, together with the total target capacity that you specify for the Fleet
+	// determine the number of instances for which the Fleet reserves capacity.
+	// Both values are based on units that make sense for your workload. For more
+	// information, see Total target capacity (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/crfleet-concepts.html#target-capacity)
+	// in the Amazon EC2 User Guide.
+	Weight *float64 `min:"0.001" type:"double"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ReservationFleetInstanceSpecification) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ReservationFleetInstanceSpecification) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ReservationFleetInstanceSpecification) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ReservationFleetInstanceSpecification"}
+	if s.Weight != nil && *s.Weight < 0.001 {
+		invalidParams.Add(request.NewErrParamMinValue("Weight", 0.001))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAvailabilityZone sets the AvailabilityZone field's value.
+func (s *ReservationFleetInstanceSpecification) SetAvailabilityZone(v string) *ReservationFleetInstanceSpecification {
+	s.AvailabilityZone = &v
+	return s
+}
+
+// SetAvailabilityZoneId sets the AvailabilityZoneId field's value.
+func (s *ReservationFleetInstanceSpecification) SetAvailabilityZoneId(v string) *ReservationFleetInstanceSpecification {
+	s.AvailabilityZoneId = &v
+	return s
+}
+
+// SetEbsOptimized sets the EbsOptimized field's value.
+func (s *ReservationFleetInstanceSpecification) SetEbsOptimized(v bool) *ReservationFleetInstanceSpecification {
+	s.EbsOptimized = &v
+	return s
+}
+
+// SetInstancePlatform sets the InstancePlatform field's value.
+func (s *ReservationFleetInstanceSpecification) SetInstancePlatform(v string) *ReservationFleetInstanceSpecification {
+	s.InstancePlatform = &v
+	return s
+}
+
+// SetInstanceType sets the InstanceType field's value.
+func (s *ReservationFleetInstanceSpecification) SetInstanceType(v string) *ReservationFleetInstanceSpecification {
+	s.InstanceType = &v
+	return s
+}
+
+// SetPriority sets the Priority field's value.
+func (s *ReservationFleetInstanceSpecification) SetPriority(v int64) *ReservationFleetInstanceSpecification {
+	s.Priority = &v
+	return s
+}
+
+// SetWeight sets the Weight field's value.
+func (s *ReservationFleetInstanceSpecification) SetWeight(v float64) *ReservationFleetInstanceSpecification {
+	s.Weight = &v
 	return s
 }
 
@@ -125382,6 +130879,12 @@ type ResponseLaunchTemplateData struct {
 	// The market (purchasing) option for the instances.
 	InstanceMarketOptions *LaunchTemplateInstanceMarketOptions `locationName:"instanceMarketOptions" type:"structure"`
 
+	// The attributes for the instance types. When you specify instance attributes,
+	// Amazon EC2 will identify instance types with these attributes.
+	//
+	// If you specify InstanceRequirements, you can't specify InstanceTypes.
+	InstanceRequirements *InstanceRequirements `locationName:"instanceRequirements" type:"structure"`
+
 	// The instance type.
 	InstanceType *string `locationName:"instanceType" type:"string" enum:"InstanceType"`
 
@@ -125407,6 +130910,9 @@ type ResponseLaunchTemplateData struct {
 
 	// The placement of the instance.
 	Placement *LaunchTemplatePlacement `locationName:"placement" type:"structure"`
+
+	// The options for the instance hostname.
+	PrivateDnsNameOptions *LaunchTemplatePrivateDnsNameOptions `locationName:"privateDnsNameOptions" type:"structure"`
 
 	// The ID of the RAM disk, if applicable.
 	RamDiskId *string `locationName:"ramDiskId" type:"string"`
@@ -125526,6 +131032,12 @@ func (s *ResponseLaunchTemplateData) SetInstanceMarketOptions(v *LaunchTemplateI
 	return s
 }
 
+// SetInstanceRequirements sets the InstanceRequirements field's value.
+func (s *ResponseLaunchTemplateData) SetInstanceRequirements(v *InstanceRequirements) *ResponseLaunchTemplateData {
+	s.InstanceRequirements = v
+	return s
+}
+
 // SetInstanceType sets the InstanceType field's value.
 func (s *ResponseLaunchTemplateData) SetInstanceType(v string) *ResponseLaunchTemplateData {
 	s.InstanceType = &v
@@ -125571,6 +131083,12 @@ func (s *ResponseLaunchTemplateData) SetNetworkInterfaces(v []*LaunchTemplateIns
 // SetPlacement sets the Placement field's value.
 func (s *ResponseLaunchTemplateData) SetPlacement(v *LaunchTemplatePlacement) *ResponseLaunchTemplateData {
 	s.Placement = v
+	return s
+}
+
+// SetPrivateDnsNameOptions sets the PrivateDnsNameOptions field's value.
+func (s *ResponseLaunchTemplateData) SetPrivateDnsNameOptions(v *LaunchTemplatePrivateDnsNameOptions) *ResponseLaunchTemplateData {
+	s.PrivateDnsNameOptions = v
 	return s
 }
 
@@ -125816,6 +131334,321 @@ func (s RestoreManagedPrefixListVersionOutput) GoString() string {
 // SetPrefixList sets the PrefixList field's value.
 func (s *RestoreManagedPrefixListVersionOutput) SetPrefixList(v *ManagedPrefixList) *RestoreManagedPrefixListVersionOutput {
 	s.PrefixList = v
+	return s
+}
+
+type RestoreSnapshotFromRecycleBinInput struct {
+	_ struct{} `type:"structure"`
+
+	// Checks whether you have the required permissions for the action, without
+	// actually making the request, and provides an error response. If you have
+	// the required permissions, the error response is DryRunOperation. Otherwise,
+	// it is UnauthorizedOperation.
+	DryRun *bool `type:"boolean"`
+
+	// The ID of the snapshot to restore.
+	//
+	// SnapshotId is a required field
+	SnapshotId *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RestoreSnapshotFromRecycleBinInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RestoreSnapshotFromRecycleBinInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *RestoreSnapshotFromRecycleBinInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "RestoreSnapshotFromRecycleBinInput"}
+	if s.SnapshotId == nil {
+		invalidParams.Add(request.NewErrParamRequired("SnapshotId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDryRun sets the DryRun field's value.
+func (s *RestoreSnapshotFromRecycleBinInput) SetDryRun(v bool) *RestoreSnapshotFromRecycleBinInput {
+	s.DryRun = &v
+	return s
+}
+
+// SetSnapshotId sets the SnapshotId field's value.
+func (s *RestoreSnapshotFromRecycleBinInput) SetSnapshotId(v string) *RestoreSnapshotFromRecycleBinInput {
+	s.SnapshotId = &v
+	return s
+}
+
+type RestoreSnapshotFromRecycleBinOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The description for the snapshot.
+	Description *string `locationName:"description" type:"string"`
+
+	// Indicates whether the snapshot is encrypted.
+	Encrypted *bool `locationName:"encrypted" type:"boolean"`
+
+	// The ARN of the Outpost on which the snapshot is stored. For more information,
+	// see Amazon EBS local snapshots on Outposts (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/snapshots-outposts.html)
+	// in the Amazon Elastic Compute Cloud User Guide.
+	OutpostArn *string `locationName:"outpostArn" type:"string"`
+
+	// The ID of the Amazon Web Services account that owns the EBS snapshot.
+	OwnerId *string `locationName:"ownerId" type:"string"`
+
+	// The progress of the snapshot, as a percentage.
+	Progress *string `locationName:"progress" type:"string"`
+
+	// The ID of the snapshot.
+	SnapshotId *string `locationName:"snapshotId" type:"string"`
+
+	// The time stamp when the snapshot was initiated.
+	StartTime *time.Time `locationName:"startTime" type:"timestamp"`
+
+	// The state of the snapshot.
+	State *string `locationName:"status" type:"string" enum:"SnapshotState"`
+
+	// The ID of the volume that was used to create the snapshot.
+	VolumeId *string `locationName:"volumeId" type:"string"`
+
+	// The size of the volume, in GiB.
+	VolumeSize *int64 `locationName:"volumeSize" type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RestoreSnapshotFromRecycleBinOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RestoreSnapshotFromRecycleBinOutput) GoString() string {
+	return s.String()
+}
+
+// SetDescription sets the Description field's value.
+func (s *RestoreSnapshotFromRecycleBinOutput) SetDescription(v string) *RestoreSnapshotFromRecycleBinOutput {
+	s.Description = &v
+	return s
+}
+
+// SetEncrypted sets the Encrypted field's value.
+func (s *RestoreSnapshotFromRecycleBinOutput) SetEncrypted(v bool) *RestoreSnapshotFromRecycleBinOutput {
+	s.Encrypted = &v
+	return s
+}
+
+// SetOutpostArn sets the OutpostArn field's value.
+func (s *RestoreSnapshotFromRecycleBinOutput) SetOutpostArn(v string) *RestoreSnapshotFromRecycleBinOutput {
+	s.OutpostArn = &v
+	return s
+}
+
+// SetOwnerId sets the OwnerId field's value.
+func (s *RestoreSnapshotFromRecycleBinOutput) SetOwnerId(v string) *RestoreSnapshotFromRecycleBinOutput {
+	s.OwnerId = &v
+	return s
+}
+
+// SetProgress sets the Progress field's value.
+func (s *RestoreSnapshotFromRecycleBinOutput) SetProgress(v string) *RestoreSnapshotFromRecycleBinOutput {
+	s.Progress = &v
+	return s
+}
+
+// SetSnapshotId sets the SnapshotId field's value.
+func (s *RestoreSnapshotFromRecycleBinOutput) SetSnapshotId(v string) *RestoreSnapshotFromRecycleBinOutput {
+	s.SnapshotId = &v
+	return s
+}
+
+// SetStartTime sets the StartTime field's value.
+func (s *RestoreSnapshotFromRecycleBinOutput) SetStartTime(v time.Time) *RestoreSnapshotFromRecycleBinOutput {
+	s.StartTime = &v
+	return s
+}
+
+// SetState sets the State field's value.
+func (s *RestoreSnapshotFromRecycleBinOutput) SetState(v string) *RestoreSnapshotFromRecycleBinOutput {
+	s.State = &v
+	return s
+}
+
+// SetVolumeId sets the VolumeId field's value.
+func (s *RestoreSnapshotFromRecycleBinOutput) SetVolumeId(v string) *RestoreSnapshotFromRecycleBinOutput {
+	s.VolumeId = &v
+	return s
+}
+
+// SetVolumeSize sets the VolumeSize field's value.
+func (s *RestoreSnapshotFromRecycleBinOutput) SetVolumeSize(v int64) *RestoreSnapshotFromRecycleBinOutput {
+	s.VolumeSize = &v
+	return s
+}
+
+type RestoreSnapshotTierInput struct {
+	_ struct{} `type:"structure"`
+
+	// Checks whether you have the required permissions for the action, without
+	// actually making the request, and provides an error response. If you have
+	// the required permissions, the error response is DryRunOperation. Otherwise,
+	// it is UnauthorizedOperation.
+	DryRun *bool `type:"boolean"`
+
+	// Indicates whether to permanently restore an archived snapshot. To permanently
+	// restore an archived snapshot, specify true and omit the RestoreSnapshotTierRequest$TemporaryRestoreDays
+	// parameter.
+	PermanentRestore *bool `type:"boolean"`
+
+	// The ID of the snapshot to restore.
+	//
+	// SnapshotId is a required field
+	SnapshotId *string `type:"string" required:"true"`
+
+	// Specifies the number of days for which to temporarily restore an archived
+	// snapshot. Required for temporary restores only. The snapshot will be automatically
+	// re-archived after this period.
+	//
+	// To temporarily restore an archived snapshot, specify the number of days and
+	// omit the PermanentRestore parameter or set it to false.
+	TemporaryRestoreDays *int64 `type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RestoreSnapshotTierInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RestoreSnapshotTierInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *RestoreSnapshotTierInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "RestoreSnapshotTierInput"}
+	if s.SnapshotId == nil {
+		invalidParams.Add(request.NewErrParamRequired("SnapshotId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDryRun sets the DryRun field's value.
+func (s *RestoreSnapshotTierInput) SetDryRun(v bool) *RestoreSnapshotTierInput {
+	s.DryRun = &v
+	return s
+}
+
+// SetPermanentRestore sets the PermanentRestore field's value.
+func (s *RestoreSnapshotTierInput) SetPermanentRestore(v bool) *RestoreSnapshotTierInput {
+	s.PermanentRestore = &v
+	return s
+}
+
+// SetSnapshotId sets the SnapshotId field's value.
+func (s *RestoreSnapshotTierInput) SetSnapshotId(v string) *RestoreSnapshotTierInput {
+	s.SnapshotId = &v
+	return s
+}
+
+// SetTemporaryRestoreDays sets the TemporaryRestoreDays field's value.
+func (s *RestoreSnapshotTierInput) SetTemporaryRestoreDays(v int64) *RestoreSnapshotTierInput {
+	s.TemporaryRestoreDays = &v
+	return s
+}
+
+type RestoreSnapshotTierOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Indicates whether the snapshot is permanently restored. true indicates a
+	// permanent restore. false indicates a temporary restore.
+	IsPermanentRestore *bool `locationName:"isPermanentRestore" type:"boolean"`
+
+	// For temporary restores only. The number of days for which the archived snapshot
+	// is temporarily restored.
+	RestoreDuration *int64 `locationName:"restoreDuration" type:"integer"`
+
+	// The date and time when the snapshot restore process started.
+	RestoreStartTime *time.Time `locationName:"restoreStartTime" type:"timestamp"`
+
+	// The ID of the snapshot.
+	SnapshotId *string `locationName:"snapshotId" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RestoreSnapshotTierOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s RestoreSnapshotTierOutput) GoString() string {
+	return s.String()
+}
+
+// SetIsPermanentRestore sets the IsPermanentRestore field's value.
+func (s *RestoreSnapshotTierOutput) SetIsPermanentRestore(v bool) *RestoreSnapshotTierOutput {
+	s.IsPermanentRestore = &v
+	return s
+}
+
+// SetRestoreDuration sets the RestoreDuration field's value.
+func (s *RestoreSnapshotTierOutput) SetRestoreDuration(v int64) *RestoreSnapshotTierOutput {
+	s.RestoreDuration = &v
+	return s
+}
+
+// SetRestoreStartTime sets the RestoreStartTime field's value.
+func (s *RestoreSnapshotTierOutput) SetRestoreStartTime(v time.Time) *RestoreSnapshotTierOutput {
+	s.RestoreStartTime = &v
+	return s
+}
+
+// SetSnapshotId sets the SnapshotId field's value.
+func (s *RestoreSnapshotTierOutput) SetSnapshotId(v string) *RestoreSnapshotTierOutput {
+	s.SnapshotId = &v
 	return s
 }
 
@@ -126306,6 +132139,9 @@ type Route struct {
 	// The ID of the carrier gateway.
 	CarrierGatewayId *string `locationName:"carrierGatewayId" type:"string"`
 
+	// The Amazon Resource Name (ARN) of the core network.
+	CoreNetworkArn *string `locationName:"coreNetworkArn" type:"string"`
+
 	// The IPv4 CIDR block used for the destination match.
 	DestinationCidrBlock *string `locationName:"destinationCidrBlock" type:"string"`
 
@@ -126379,6 +132215,12 @@ func (s Route) GoString() string {
 // SetCarrierGatewayId sets the CarrierGatewayId field's value.
 func (s *Route) SetCarrierGatewayId(v string) *Route {
 	s.CarrierGatewayId = &v
+	return s
+}
+
+// SetCoreNetworkArn sets the CoreNetworkArn field's value.
+func (s *Route) SetCoreNetworkArn(v string) *Route {
+	s.CoreNetworkArn = &v
 	return s
 }
 
@@ -126698,7 +132540,7 @@ type RunInstancesInput struct {
 	// Constraints: Maximum 64 ASCII characters
 	ClientToken *string `locationName:"clientToken" type:"string" idempotencyToken:"true"`
 
-	// The CPU options for the instance. For more information, see Optimizing CPU
+	// The CPU options for the instance. For more information, see Optimize CPU
 	// options (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-optimize-cpu.html)
 	// in the Amazon EC2 User Guide.
 	CpuOptions *CpuOptionsRequest `type:"structure"`
@@ -126872,6 +132714,10 @@ type RunInstancesInput struct {
 	// The placement for the instance.
 	Placement *Placement `type:"structure"`
 
+	// The options for the instance hostname. The default values are inherited from
+	// the subnet.
+	PrivateDnsNameOptions *PrivateDnsNameOptionsRequest `type:"structure"`
+
 	// [EC2-VPC] The primary IPv4 address. You must specify a value from the IPv4
 	// address range of the subnet.
 	//
@@ -126923,11 +132769,11 @@ type RunInstancesInput struct {
 	TagSpecifications []*TagSpecification `locationName:"TagSpecification" locationNameList:"item" type:"list"`
 
 	// The user data to make available to the instance. For more information, see
-	// Running commands on your Linux instance at launch (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html)
-	// (Linux) and Adding User Data (https://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ec2-instance-metadata.html#instancedata-add-user-data)
-	// (Windows). If you are using a command line tool, base64-encoding is performed
-	// for you, and you can load the text from a file. Otherwise, you must provide
-	// base64-encoded text. User data is limited to 16 KB.
+	// Run commands on your Linux instance at launch (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html)
+	// and Run commands on your Windows instance at launch (https://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ec2-windows-user-data.html).
+	// If you are using a command line tool, base64-encoding is performed for you,
+	// and you can load the text from a file. Otherwise, you must provide base64-encoded
+	// text. User data is limited to 16 KB.
 	UserData *string `type:"string"`
 }
 
@@ -127172,6 +133018,12 @@ func (s *RunInstancesInput) SetNetworkInterfaces(v []*InstanceNetworkInterfaceSp
 // SetPlacement sets the Placement field's value.
 func (s *RunInstancesInput) SetPlacement(v *Placement) *RunInstancesInput {
 	s.Placement = v
+	return s
+}
+
+// SetPrivateDnsNameOptions sets the PrivateDnsNameOptions field's value.
+func (s *RunInstancesInput) SetPrivateDnsNameOptions(v *PrivateDnsNameOptionsRequest) *RunInstancesInput {
+	s.PrivateDnsNameOptions = v
 	return s
 }
 
@@ -128638,9 +134490,7 @@ type SearchLocalGatewayRoutesInput struct {
 	DryRun *bool `type:"boolean"`
 
 	// One or more filters.
-	//
-	// Filters is a required field
-	Filters []*Filter `locationName:"Filter" locationNameList:"Filter" type:"list" required:"true"`
+	Filters []*Filter `locationName:"Filter" locationNameList:"Filter" type:"list"`
 
 	// The ID of the local gateway route table.
 	//
@@ -128676,9 +134526,6 @@ func (s SearchLocalGatewayRoutesInput) GoString() string {
 // Validate inspects the fields of the type to determine if they are valid.
 func (s *SearchLocalGatewayRoutesInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "SearchLocalGatewayRoutesInput"}
-	if s.Filters == nil {
-		invalidParams.Add(request.NewErrParamRequired("Filters"))
-	}
 	if s.LocalGatewayRouteTableId == nil {
 		invalidParams.Add(request.NewErrParamRequired("LocalGatewayRouteTableId"))
 	}
@@ -129678,8 +135525,8 @@ func (s SendDiagnosticInterruptOutput) GoString() string {
 type ServiceConfiguration struct {
 	_ struct{} `type:"structure"`
 
-	// Indicates whether requests from other AWS accounts to create an endpoint
-	// to the service must first be accepted.
+	// Indicates whether requests from other Amazon Web Services accounts to create
+	// an endpoint to the service must first be accepted.
 	AcceptanceRequired *bool `locationName:"acceptanceRequired" type:"boolean"`
 
 	// The Availability Zones in which the service is available.
@@ -129834,7 +135681,7 @@ type ServiceDetail struct {
 	// service VPC endpoints using the VPC endpoint API is restricted.
 	ManagesVpcEndpoints *bool `locationName:"managesVpcEndpoints" type:"boolean"`
 
-	// The AWS account ID of the service owner.
+	// The Amazon Web Services account ID of the service owner.
 	Owner *string `locationName:"owner" type:"string"`
 
 	// The private DNS name for the service.
@@ -130136,6 +135983,11 @@ type Snapshot struct {
 	// The progress of the snapshot, as a percentage.
 	Progress *string `locationName:"progress" type:"string"`
 
+	// Only for archived snapshots that are temporarily restored. Indicates the
+	// date and time when a temporarily restored snapshot will be automatically
+	// re-archived.
+	RestoreExpiryTime *time.Time `locationName:"restoreExpiryTime" type:"timestamp"`
+
 	// The ID of the snapshot. Each snapshot receives a unique identifier when it
 	// is created.
 	SnapshotId *string `locationName:"snapshotId" type:"string"`
@@ -130152,6 +136004,12 @@ type Snapshot struct {
 	// help you diagnose why the error occurred. This parameter is only returned
 	// by DescribeSnapshots.
 	StateMessage *string `locationName:"statusMessage" type:"string"`
+
+	// The storage tier in which the snapshot is stored. standard indicates that
+	// the snapshot is stored in the standard snapshot storage tier and that it
+	// is ready for use. archive indicates that the snapshot is currently archived
+	// and that it must be restored before it can be used.
+	StorageTier *string `locationName:"storageTier" type:"string" enum:"StorageTier"`
 
 	// Any tags assigned to the snapshot.
 	Tags []*Tag `locationName:"tagSet" locationNameList:"item" type:"list"`
@@ -130231,6 +136089,12 @@ func (s *Snapshot) SetProgress(v string) *Snapshot {
 	return s
 }
 
+// SetRestoreExpiryTime sets the RestoreExpiryTime field's value.
+func (s *Snapshot) SetRestoreExpiryTime(v time.Time) *Snapshot {
+	s.RestoreExpiryTime = &v
+	return s
+}
+
 // SetSnapshotId sets the SnapshotId field's value.
 func (s *Snapshot) SetSnapshotId(v string) *Snapshot {
 	s.SnapshotId = &v
@@ -130252,6 +136116,12 @@ func (s *Snapshot) SetState(v string) *Snapshot {
 // SetStateMessage sets the StateMessage field's value.
 func (s *Snapshot) SetStateMessage(v string) *Snapshot {
 	s.StateMessage = &v
+	return s
+}
+
+// SetStorageTier sets the StorageTier field's value.
+func (s *Snapshot) SetStorageTier(v string) *Snapshot {
+	s.StorageTier = &v
 	return s
 }
 
@@ -130574,6 +136444,75 @@ func (s *SnapshotInfo) SetVolumeSize(v int64) *SnapshotInfo {
 	return s
 }
 
+// Information about a snapshot that is currently in the Recycle Bin.
+type SnapshotRecycleBinInfo struct {
+	_ struct{} `type:"structure"`
+
+	// The description for the snapshot.
+	Description *string `locationName:"description" type:"string"`
+
+	// The date and time when the snaphsot entered the Recycle Bin.
+	RecycleBinEnterTime *time.Time `locationName:"recycleBinEnterTime" type:"timestamp"`
+
+	// The date and time when the snapshot is to be permanently deleted from the
+	// Recycle Bin.
+	RecycleBinExitTime *time.Time `locationName:"recycleBinExitTime" type:"timestamp"`
+
+	// The ID of the snapshot.
+	SnapshotId *string `locationName:"snapshotId" type:"string"`
+
+	// The ID of the volume from which the snapshot was created.
+	VolumeId *string `locationName:"volumeId" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SnapshotRecycleBinInfo) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SnapshotRecycleBinInfo) GoString() string {
+	return s.String()
+}
+
+// SetDescription sets the Description field's value.
+func (s *SnapshotRecycleBinInfo) SetDescription(v string) *SnapshotRecycleBinInfo {
+	s.Description = &v
+	return s
+}
+
+// SetRecycleBinEnterTime sets the RecycleBinEnterTime field's value.
+func (s *SnapshotRecycleBinInfo) SetRecycleBinEnterTime(v time.Time) *SnapshotRecycleBinInfo {
+	s.RecycleBinEnterTime = &v
+	return s
+}
+
+// SetRecycleBinExitTime sets the RecycleBinExitTime field's value.
+func (s *SnapshotRecycleBinInfo) SetRecycleBinExitTime(v time.Time) *SnapshotRecycleBinInfo {
+	s.RecycleBinExitTime = &v
+	return s
+}
+
+// SetSnapshotId sets the SnapshotId field's value.
+func (s *SnapshotRecycleBinInfo) SetSnapshotId(v string) *SnapshotRecycleBinInfo {
+	s.SnapshotId = &v
+	return s
+}
+
+// SetVolumeId sets the VolumeId field's value.
+func (s *SnapshotRecycleBinInfo) SetVolumeId(v string) *SnapshotRecycleBinInfo {
+	s.VolumeId = &v
+	return s
+}
+
 // Details about the import snapshot task.
 type SnapshotTaskDetail struct {
 	_ struct{} `type:"structure"`
@@ -130696,6 +136635,142 @@ func (s *SnapshotTaskDetail) SetUserBucket(v *UserBucketDetails) *SnapshotTaskDe
 	return s
 }
 
+// Provides information about a snapshot's storage tier.
+type SnapshotTierStatus struct {
+	_ struct{} `type:"structure"`
+
+	// The date and time when the last archive process was completed.
+	ArchivalCompleteTime *time.Time `locationName:"archivalCompleteTime" type:"timestamp"`
+
+	// The status of the last archive or restore process.
+	LastTieringOperationStatus *string `locationName:"lastTieringOperationStatus" type:"string" enum:"TieringOperationStatus"`
+
+	// A message describing the status of the last archive or restore process.
+	LastTieringOperationStatusDetail *string `locationName:"lastTieringOperationStatusDetail" type:"string"`
+
+	// The progress of the last archive or restore process, as a percentage.
+	LastTieringProgress *int64 `locationName:"lastTieringProgress" type:"integer"`
+
+	// The date and time when the last archive or restore process was started.
+	LastTieringStartTime *time.Time `locationName:"lastTieringStartTime" type:"timestamp"`
+
+	// The ID of the Amazon Web Services account that owns the snapshot.
+	OwnerId *string `locationName:"ownerId" type:"string"`
+
+	// Only for archived snapshots that are temporarily restored. Indicates the
+	// date and time when a temporarily restored snapshot will be automatically
+	// re-archived.
+	RestoreExpiryTime *time.Time `locationName:"restoreExpiryTime" type:"timestamp"`
+
+	// The ID of the snapshot.
+	SnapshotId *string `locationName:"snapshotId" type:"string"`
+
+	// The state of the snapshot.
+	Status *string `locationName:"status" type:"string" enum:"SnapshotState"`
+
+	// The storage tier in which the snapshot is stored. standard indicates that
+	// the snapshot is stored in the standard snapshot storage tier and that it
+	// is ready for use. archive indicates that the snapshot is currently archived
+	// and that it must be restored before it can be used.
+	StorageTier *string `locationName:"storageTier" type:"string" enum:"StorageTier"`
+
+	// The tags that are assigned to the snapshot.
+	Tags []*Tag `locationName:"tagSet" locationNameList:"item" type:"list"`
+
+	// The ID of the volume from which the snapshot was created.
+	VolumeId *string `locationName:"volumeId" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SnapshotTierStatus) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SnapshotTierStatus) GoString() string {
+	return s.String()
+}
+
+// SetArchivalCompleteTime sets the ArchivalCompleteTime field's value.
+func (s *SnapshotTierStatus) SetArchivalCompleteTime(v time.Time) *SnapshotTierStatus {
+	s.ArchivalCompleteTime = &v
+	return s
+}
+
+// SetLastTieringOperationStatus sets the LastTieringOperationStatus field's value.
+func (s *SnapshotTierStatus) SetLastTieringOperationStatus(v string) *SnapshotTierStatus {
+	s.LastTieringOperationStatus = &v
+	return s
+}
+
+// SetLastTieringOperationStatusDetail sets the LastTieringOperationStatusDetail field's value.
+func (s *SnapshotTierStatus) SetLastTieringOperationStatusDetail(v string) *SnapshotTierStatus {
+	s.LastTieringOperationStatusDetail = &v
+	return s
+}
+
+// SetLastTieringProgress sets the LastTieringProgress field's value.
+func (s *SnapshotTierStatus) SetLastTieringProgress(v int64) *SnapshotTierStatus {
+	s.LastTieringProgress = &v
+	return s
+}
+
+// SetLastTieringStartTime sets the LastTieringStartTime field's value.
+func (s *SnapshotTierStatus) SetLastTieringStartTime(v time.Time) *SnapshotTierStatus {
+	s.LastTieringStartTime = &v
+	return s
+}
+
+// SetOwnerId sets the OwnerId field's value.
+func (s *SnapshotTierStatus) SetOwnerId(v string) *SnapshotTierStatus {
+	s.OwnerId = &v
+	return s
+}
+
+// SetRestoreExpiryTime sets the RestoreExpiryTime field's value.
+func (s *SnapshotTierStatus) SetRestoreExpiryTime(v time.Time) *SnapshotTierStatus {
+	s.RestoreExpiryTime = &v
+	return s
+}
+
+// SetSnapshotId sets the SnapshotId field's value.
+func (s *SnapshotTierStatus) SetSnapshotId(v string) *SnapshotTierStatus {
+	s.SnapshotId = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *SnapshotTierStatus) SetStatus(v string) *SnapshotTierStatus {
+	s.Status = &v
+	return s
+}
+
+// SetStorageTier sets the StorageTier field's value.
+func (s *SnapshotTierStatus) SetStorageTier(v string) *SnapshotTierStatus {
+	s.StorageTier = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *SnapshotTierStatus) SetTags(v []*Tag) *SnapshotTierStatus {
+	s.Tags = v
+	return s
+}
+
+// SetVolumeId sets the VolumeId field's value.
+func (s *SnapshotTierStatus) SetVolumeId(v string) *SnapshotTierStatus {
+	s.VolumeId = &v
+	return s
+}
+
 // The Spot Instance replacement strategy to use when Amazon EC2 emits a signal
 // that your Spot Instance is at an elevated risk of being interrupted. For
 // more information, see Capacity rebalancing (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-fleet-configuration-strategies.html#spot-fleet-capacity-rebalance)
@@ -130704,16 +136779,26 @@ type SpotCapacityRebalance struct {
 	_ struct{} `type:"structure"`
 
 	// The replacement strategy to use. Only available for fleets of type maintain.
-	// You must specify a value, otherwise you get an error.
 	//
-	// To allow Spot Fleet to launch a replacement Spot Instance when an instance
-	// rebalance notification is emitted for a Spot Instance in the fleet, specify
-	// launch.
+	// launch - Spot Fleet launches a new replacement Spot Instance when a rebalance
+	// notification is emitted for an existing Spot Instance in the fleet. Spot
+	// Fleet does not terminate the instances that receive a rebalance notification.
+	// You can terminate the old instances, or you can leave them running. You are
+	// charged for all instances while they are running.
 	//
-	// When a replacement instance is launched, the instance marked for rebalance
-	// is not automatically terminated. You can terminate it, or you can leave it
-	// running. You are charged for all instances while they are running.
+	// launch-before-terminate - Spot Fleet launches a new replacement Spot Instance
+	// when a rebalance notification is emitted for an existing Spot Instance in
+	// the fleet, and then, after a delay that you specify (in TerminationDelay),
+	// terminates the instances that received a rebalance notification.
 	ReplacementStrategy *string `locationName:"replacementStrategy" type:"string" enum:"ReplacementStrategy"`
+
+	// The amount of time (in seconds) that Amazon EC2 waits before terminating
+	// the old Spot Instance after launching a new replacement Spot Instance.
+	//
+	// Valid only when ReplacementStrategy is set to launch-before-terminate.
+	//
+	// Valid values: Minimum value of 120 seconds. Maximum value of 7200 seconds.
+	TerminationDelay *int64 `locationName:"terminationDelay" type:"integer"`
 }
 
 // String returns the string representation.
@@ -130737,6 +136822,12 @@ func (s SpotCapacityRebalance) GoString() string {
 // SetReplacementStrategy sets the ReplacementStrategy field's value.
 func (s *SpotCapacityRebalance) SetReplacementStrategy(v string) *SpotCapacityRebalance {
 	s.ReplacementStrategy = &v
+	return s
+}
+
+// SetTerminationDelay sets the TerminationDelay field's value.
+func (s *SpotCapacityRebalance) SetTerminationDelay(v int64) *SpotCapacityRebalance {
+	s.TerminationDelay = &v
 	return s
 }
 
@@ -130839,6 +136930,12 @@ type SpotFleetLaunchSpecification struct {
 
 	// The ID of the AMI.
 	ImageId *string `locationName:"imageId" type:"string"`
+
+	// The attributes for the instance types. When you specify instance attributes,
+	// Amazon EC2 will identify instance types with those attributes.
+	//
+	// If you specify InstanceRequirements, you can't specify InstanceTypes.
+	InstanceRequirements *InstanceRequirements `locationName:"instanceRequirements" type:"structure"`
 
 	// The instance type.
 	InstanceType *string `locationName:"instanceType" type:"string" enum:"InstanceType"`
@@ -130945,6 +137042,12 @@ func (s *SpotFleetLaunchSpecification) SetIamInstanceProfile(v *IamInstanceProfi
 // SetImageId sets the ImageId field's value.
 func (s *SpotFleetLaunchSpecification) SetImageId(v string) *SpotFleetLaunchSpecification {
 	s.ImageId = &v
+	return s
+}
+
+// SetInstanceRequirements sets the InstanceRequirements field's value.
+func (s *SpotFleetLaunchSpecification) SetInstanceRequirements(v *InstanceRequirements) *SpotFleetLaunchSpecification {
+	s.InstanceRequirements = v
 	return s
 }
 
@@ -131302,6 +137405,11 @@ type SpotFleetRequestConfigData struct {
 	// TargetCapacity is a required field
 	TargetCapacity *int64 `locationName:"targetCapacity" type:"integer" required:"true"`
 
+	// The unit for the target capacity.
+	//
+	// Default: units (translates to number of instances)
+	TargetCapacityUnitType *string `locationName:"targetCapacityUnitType" type:"string" enum:"TargetCapacityUnitType"`
+
 	// Indicates whether running Spot Instances are terminated when the Spot Fleet
 	// request expires.
 	TerminateInstancesWithExpiration *bool `locationName:"terminateInstancesWithExpiration" type:"boolean"`
@@ -131499,6 +137607,12 @@ func (s *SpotFleetRequestConfigData) SetTagSpecifications(v []*TagSpecification)
 // SetTargetCapacity sets the TargetCapacity field's value.
 func (s *SpotFleetRequestConfigData) SetTargetCapacity(v int64) *SpotFleetRequestConfigData {
 	s.TargetCapacity = &v
+	return s
+}
+
+// SetTargetCapacityUnitType sets the TargetCapacityUnitType field's value.
+func (s *SpotFleetRequestConfigData) SetTargetCapacityUnitType(v string) *SpotFleetRequestConfigData {
+	s.TargetCapacityUnitType = &v
 	return s
 }
 
@@ -131990,35 +138104,38 @@ func (s *SpotMarketOptions) SetValidUntil(v time.Time) *SpotMarketOptions {
 type SpotOptions struct {
 	_ struct{} `type:"structure"`
 
-	// Indicates how to allocate the target Spot Instance capacity across the Spot
-	// Instance pools specified by the EC2 Fleet.
+	// The strategy that determines how to allocate the target Spot Instance capacity
+	// across the Spot Instance pools specified by the EC2 Fleet.
 	//
-	// If the allocation strategy is lowest-price, EC2 Fleet launches instances
-	// from the Spot Instance pools with the lowest price. This is the default allocation
-	// strategy.
+	// lowest-price - EC2 Fleet launches instances from the Spot Instance pools
+	// with the lowest price.
 	//
-	// If the allocation strategy is diversified, EC2 Fleet launches instances from
-	// all of the Spot Instance pools that you specify.
+	// diversified - EC2 Fleet launches instances from all of the Spot Instance
+	// pools that you specify.
 	//
-	// If the allocation strategy is capacity-optimized (recommended), EC2 Fleet
-	// launches instances from Spot Instance pools with optimal capacity for the
-	// number of instances that are launching. To give certain instance types a
-	// higher chance of launching first, use capacity-optimized-prioritized. Set
-	// a priority for each instance type by using the Priority parameter for LaunchTemplateOverrides.
-	// You can assign the same priority to different LaunchTemplateOverrides. EC2
-	// implements the priorities on a best-effort basis, but optimizes for capacity
-	// first. capacity-optimized-prioritized is supported only if your fleet uses
-	// a launch template. Note that if the On-Demand AllocationStrategy is set to
-	// prioritized, the same priority is applied when fulfilling On-Demand capacity.
+	// capacity-optimized (recommended) - EC2 Fleet launches instances from Spot
+	// Instance pools with optimal capacity for the number of instances that are
+	// launching. To give certain instance types a higher chance of launching first,
+	// use capacity-optimized-prioritized. Set a priority for each instance type
+	// by using the Priority parameter for LaunchTemplateOverrides. You can assign
+	// the same priority to different LaunchTemplateOverrides. EC2 implements the
+	// priorities on a best-effort basis, but optimizes for capacity first. capacity-optimized-prioritized
+	// is supported only if your fleet uses a launch template. Note that if the
+	// On-Demand AllocationStrategy is set to prioritized, the same priority is
+	// applied when fulfilling On-Demand capacity.
+	//
+	// Default: lowest-price
 	AllocationStrategy *string `locationName:"allocationStrategy" type:"string" enum:"SpotAllocationStrategy"`
 
-	// The behavior when a Spot Instance is interrupted. The default is terminate.
+	// The behavior when a Spot Instance is interrupted.
+	//
+	// Default: terminate
 	InstanceInterruptionBehavior *string `locationName:"instanceInterruptionBehavior" type:"string" enum:"SpotInstanceInterruptionBehavior"`
 
 	// The number of Spot pools across which to allocate your target Spot capacity.
-	// Valid only when AllocationStrategy is set to lowest-price. EC2 Fleet selects
-	// the cheapest Spot pools and evenly allocates your target Spot capacity across
-	// the number of Spot pools that you specify.
+	// Supported only when AllocationStrategy is set to lowest-price. EC2 Fleet
+	// selects the cheapest Spot pools and evenly allocates your target Spot capacity
+	// across the number of Spot pools that you specify.
 	//
 	// Note that EC2 Fleet attempts to draw Spot Instances from the number of pools
 	// that you specify on a best effort basis. If a pool runs out of Spot capacity
@@ -132039,14 +138156,23 @@ type SpotOptions struct {
 
 	// The minimum target capacity for Spot Instances in the fleet. If the minimum
 	// target capacity is not reached, the fleet launches no instances.
+	//
+	// Supported only for fleets of type instant.
+	//
+	// At least one of the following must be specified: SingleAvailabilityZone |
+	// SingleInstanceType
 	MinTargetCapacity *int64 `locationName:"minTargetCapacity" type:"integer"`
 
 	// Indicates that the fleet launches all Spot Instances into a single Availability
-	// Zone. Supported only for fleets of type instant.
+	// Zone.
+	//
+	// Supported only for fleets of type instant.
 	SingleAvailabilityZone *bool `locationName:"singleAvailabilityZone" type:"boolean"`
 
 	// Indicates that the fleet uses a single instance type to launch all Spot Instances
-	// in the fleet. Supported only for fleets of type instant.
+	// in the fleet.
+	//
+	// Supported only for fleets of type instant.
 	SingleInstanceType *bool `locationName:"singleInstanceType" type:"boolean"`
 }
 
@@ -132120,33 +138246,36 @@ func (s *SpotOptions) SetSingleInstanceType(v bool) *SpotOptions {
 type SpotOptionsRequest struct {
 	_ struct{} `type:"structure"`
 
-	// Indicates how to allocate the target Spot Instance capacity across the Spot
-	// Instance pools specified by the EC2 Fleet.
+	// The strategy that determines how to allocate the target Spot Instance capacity
+	// across the Spot Instance pools specified by the EC2 Fleet.
 	//
-	// If the allocation strategy is lowest-price, EC2 Fleet launches instances
-	// from the Spot Instance pools with the lowest price. This is the default allocation
-	// strategy.
+	// lowest-price - EC2 Fleet launches instances from the Spot Instance pools
+	// with the lowest price.
 	//
-	// If the allocation strategy is diversified, EC2 Fleet launches instances from
-	// all of the Spot Instance pools that you specify.
+	// diversified - EC2 Fleet launches instances from all of the Spot Instance
+	// pools that you specify.
 	//
-	// If the allocation strategy is capacity-optimized (recommended), EC2 Fleet
-	// launches instances from Spot Instance pools with optimal capacity for the
-	// number of instances that are launching. To give certain instance types a
-	// higher chance of launching first, use capacity-optimized-prioritized. Set
-	// a priority for each instance type by using the Priority parameter for LaunchTemplateOverrides.
-	// You can assign the same priority to different LaunchTemplateOverrides. EC2
-	// implements the priorities on a best-effort basis, but optimizes for capacity
-	// first. capacity-optimized-prioritized is supported only if your fleet uses
-	// a launch template. Note that if the On-Demand AllocationStrategy is set to
-	// prioritized, the same priority is applied when fulfilling On-Demand capacity.
+	// capacity-optimized (recommended) - EC2 Fleet launches instances from Spot
+	// Instance pools with optimal capacity for the number of instances that are
+	// launching. To give certain instance types a higher chance of launching first,
+	// use capacity-optimized-prioritized. Set a priority for each instance type
+	// by using the Priority parameter for LaunchTemplateOverrides. You can assign
+	// the same priority to different LaunchTemplateOverrides. EC2 implements the
+	// priorities on a best-effort basis, but optimizes for capacity first. capacity-optimized-prioritized
+	// is supported only if your fleet uses a launch template. Note that if the
+	// On-Demand AllocationStrategy is set to prioritized, the same priority is
+	// applied when fulfilling On-Demand capacity.
+	//
+	// Default: lowest-price
 	AllocationStrategy *string `type:"string" enum:"SpotAllocationStrategy"`
 
-	// The behavior when a Spot Instance is interrupted. The default is terminate.
+	// The behavior when a Spot Instance is interrupted.
+	//
+	// Default: terminate
 	InstanceInterruptionBehavior *string `type:"string" enum:"SpotInstanceInterruptionBehavior"`
 
 	// The number of Spot pools across which to allocate your target Spot capacity.
-	// Valid only when Spot AllocationStrategy is set to lowest-price. EC2 Fleet
+	// Supported only when Spot AllocationStrategy is set to lowest-price. EC2 Fleet
 	// selects the cheapest Spot pools and evenly allocates your target Spot capacity
 	// across the number of Spot pools that you specify.
 	//
@@ -132169,14 +138298,23 @@ type SpotOptionsRequest struct {
 
 	// The minimum target capacity for Spot Instances in the fleet. If the minimum
 	// target capacity is not reached, the fleet launches no instances.
+	//
+	// Supported only for fleets of type instant.
+	//
+	// At least one of the following must be specified: SingleAvailabilityZone |
+	// SingleInstanceType
 	MinTargetCapacity *int64 `type:"integer"`
 
 	// Indicates that the fleet launches all Spot Instances into a single Availability
-	// Zone. Supported only for fleets of type instant.
+	// Zone.
+	//
+	// Supported only for fleets of type instant.
 	SingleAvailabilityZone *bool `type:"boolean"`
 
 	// Indicates that the fleet uses a single instance type to launch all Spot Instances
-	// in the fleet. Supported only for fleets of type instant.
+	// in the fleet.
+	//
+	// Supported only for fleets of type instant.
 	SingleInstanceType *bool `type:"boolean"`
 }
 
@@ -132298,6 +138436,61 @@ func (s *SpotPlacement) SetGroupName(v string) *SpotPlacement {
 // SetTenancy sets the Tenancy field's value.
 func (s *SpotPlacement) SetTenancy(v string) *SpotPlacement {
 	s.Tenancy = &v
+	return s
+}
+
+// The Spot placement score for this Region or Availability Zone. The score
+// is calculated based on the assumption that the capacity-optimized allocation
+// strategy is used and that all of the Availability Zones in the Region can
+// be used.
+type SpotPlacementScore struct {
+	_ struct{} `type:"structure"`
+
+	// The Availability Zone.
+	AvailabilityZoneId *string `locationName:"availabilityZoneId" type:"string"`
+
+	// The Region.
+	Region *string `locationName:"region" type:"string"`
+
+	// The placement score, on a scale from 1 to 10. A score of 10 indicates that
+	// your Spot request is highly likely to succeed in this Region or Availability
+	// Zone. A score of 1 indicates that your Spot request is not likely to succeed.
+	Score *int64 `locationName:"score" type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SpotPlacementScore) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SpotPlacementScore) GoString() string {
+	return s.String()
+}
+
+// SetAvailabilityZoneId sets the AvailabilityZoneId field's value.
+func (s *SpotPlacementScore) SetAvailabilityZoneId(v string) *SpotPlacementScore {
+	s.AvailabilityZoneId = &v
+	return s
+}
+
+// SetRegion sets the Region field's value.
+func (s *SpotPlacementScore) SetRegion(v string) *SpotPlacementScore {
+	s.Region = &v
+	return s
+}
+
+// SetScore sets the Score field's value.
+func (s *SpotPlacementScore) SetScore(v int64) *SpotPlacementScore {
+	s.Score = &v
 	return s
 }
 
@@ -133215,8 +139408,15 @@ type Subnet struct {
 	// Indicates whether this is the default subnet for the Availability Zone.
 	DefaultForAz *bool `locationName:"defaultForAz" type:"boolean"`
 
+	// Indicates whether DNS queries made to the Amazon-provided DNS Resolver in
+	// this subnet should return synthetic IPv6 addresses for IPv4-only destinations.
+	EnableDns64 *bool `locationName:"enableDns64" type:"boolean"`
+
 	// Information about the IPv6 CIDR blocks associated with the subnet.
 	Ipv6CidrBlockAssociationSet []*SubnetIpv6CidrBlockAssociation `locationName:"ipv6CidrBlockAssociationSet" locationNameList:"item" type:"list"`
+
+	// Indicates whether this is an IPv6 only subnet.
+	Ipv6Native *bool `locationName:"ipv6Native" type:"boolean"`
 
 	// Indicates whether a network interface created in this subnet (including a
 	// network interface created by RunInstances) receives a customer-owned IPv4
@@ -133232,6 +139432,10 @@ type Subnet struct {
 
 	// The ID of the Amazon Web Services account that owns the subnet.
 	OwnerId *string `locationName:"ownerId" type:"string"`
+
+	// The type of hostnames to assign to instances in the subnet at launch. An
+	// instance hostname is based on the IPv4 address or ID of the instance.
+	PrivateDnsNameOptionsOnLaunch *PrivateDnsNameOptionsOnLaunch `locationName:"privateDnsNameOptionsOnLaunch" type:"structure"`
 
 	// The current state of the subnet.
 	State *string `locationName:"state" type:"string" enum:"SubnetState"`
@@ -133309,9 +139513,21 @@ func (s *Subnet) SetDefaultForAz(v bool) *Subnet {
 	return s
 }
 
+// SetEnableDns64 sets the EnableDns64 field's value.
+func (s *Subnet) SetEnableDns64(v bool) *Subnet {
+	s.EnableDns64 = &v
+	return s
+}
+
 // SetIpv6CidrBlockAssociationSet sets the Ipv6CidrBlockAssociationSet field's value.
 func (s *Subnet) SetIpv6CidrBlockAssociationSet(v []*SubnetIpv6CidrBlockAssociation) *Subnet {
 	s.Ipv6CidrBlockAssociationSet = v
+	return s
+}
+
+// SetIpv6Native sets the Ipv6Native field's value.
+func (s *Subnet) SetIpv6Native(v bool) *Subnet {
+	s.Ipv6Native = &v
 	return s
 }
 
@@ -133336,6 +139552,12 @@ func (s *Subnet) SetOutpostArn(v string) *Subnet {
 // SetOwnerId sets the OwnerId field's value.
 func (s *Subnet) SetOwnerId(v string) *Subnet {
 	s.OwnerId = &v
+	return s
+}
+
+// SetPrivateDnsNameOptionsOnLaunch sets the PrivateDnsNameOptionsOnLaunch field's value.
+func (s *Subnet) SetPrivateDnsNameOptionsOnLaunch(v *PrivateDnsNameOptionsOnLaunch) *Subnet {
+	s.PrivateDnsNameOptionsOnLaunch = v
 	return s
 }
 
@@ -133537,17 +139759,17 @@ func (s *SubnetCidrReservation) SetTags(v []*Tag) *SubnetCidrReservation {
 	return s
 }
 
-// Describes an IPv6 CIDR block associated with a subnet.
+// Describes an association between a subnet and an IPv6 CIDR block.
 type SubnetIpv6CidrBlockAssociation struct {
 	_ struct{} `type:"structure"`
 
-	// The association ID for the CIDR block.
+	// The ID of the association.
 	AssociationId *string `locationName:"associationId" type:"string"`
 
 	// The IPv6 CIDR block.
 	Ipv6CidrBlock *string `locationName:"ipv6CidrBlock" type:"string"`
 
-	// Information about the state of the CIDR block.
+	// The state of the CIDR block.
 	Ipv6CidrBlockState *SubnetCidrBlockState `locationName:"ipv6CidrBlockState" type:"structure"`
 }
 
@@ -133762,22 +139984,7 @@ func (s *TagDescription) SetValue(v string) *TagDescription {
 type TagSpecification struct {
 	_ struct{} `type:"structure"`
 
-	// The type of resource to tag on creation. The possible values are: capacity-reservation
-	// | carrier-gateway | client-vpn-endpoint | customer-gateway | dedicated-host
-	// | dhcp-options | egress-only-internet-gateway | elastic-gpu | elastic-ip
-	// | export-image-task | export-instance-task | fleet | fpga-image | host-reservation
-	// | image | import-image-task | import-snapshot-task | instance | instance-event-window
-	// | internet-gateway | ipv4pool-ec2 | ipv6pool-ec2 | key-pair | launch-template
-	// | local-gateway-route-table-vpc-association | natgateway | network-acl |
-	// network-insights-analysis | network-insights-path | network-interface | placement-group
-	// | prefix-list | reserved-instances | route-table | security-group | security-group-rule
-	// | snapshot | spot-fleet-request | spot-instances-request | subnet | traffic-mirror-filter
-	// | traffic-mirror-session | traffic-mirror-target | transit-gateway | transit-gateway-attachment
-	// | transit-gateway-multicast-domain | transit-gateway-route-table | volume
-	// | vpc | vpc-endpoint | vpc-endpoint-service | vpc-flow-log | vpc-peering-connection
-	// | vpn-connection | vpn-gateway.
-	//
-	// To tag a resource after it has been created, see CreateTags (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateTags.html).
+	// The type of resource to tag on creation.
 	ResourceType *string `locationName:"resourceType" type:"string" enum:"ResourceType"`
 
 	// The tags to apply to the resource.
@@ -133843,6 +140050,11 @@ type TargetCapacitySpecification struct {
 	// for On-Demand units, you cannot specify a target capacity for Spot units.
 	SpotTargetCapacity *int64 `locationName:"spotTargetCapacity" type:"integer"`
 
+	// The unit for the target capacity.
+	//
+	// Default: units (translates to number of instances)
+	TargetCapacityUnitType *string `locationName:"targetCapacityUnitType" type:"string" enum:"TargetCapacityUnitType"`
+
 	// The number of units to request, filled using DefaultTargetCapacityType.
 	TotalTargetCapacity *int64 `locationName:"totalTargetCapacity" type:"integer"`
 }
@@ -133883,6 +140095,12 @@ func (s *TargetCapacitySpecification) SetSpotTargetCapacity(v int64) *TargetCapa
 	return s
 }
 
+// SetTargetCapacityUnitType sets the TargetCapacityUnitType field's value.
+func (s *TargetCapacitySpecification) SetTargetCapacityUnitType(v string) *TargetCapacitySpecification {
+	s.TargetCapacityUnitType = &v
+	return s
+}
+
 // SetTotalTargetCapacity sets the TotalTargetCapacity field's value.
 func (s *TargetCapacitySpecification) SetTotalTargetCapacity(v int64) *TargetCapacitySpecification {
 	s.TotalTargetCapacity = &v
@@ -133915,6 +140133,11 @@ type TargetCapacitySpecificationRequest struct {
 
 	// The number of Spot units to request.
 	SpotTargetCapacity *int64 `type:"integer"`
+
+	// The unit for the target capacity.
+	//
+	// Default: units (translates to number of instances)
+	TargetCapacityUnitType *string `type:"string" enum:"TargetCapacityUnitType"`
 
 	// The number of units to request, filled using DefaultTargetCapacityType.
 	//
@@ -133968,6 +140191,12 @@ func (s *TargetCapacitySpecificationRequest) SetOnDemandTargetCapacity(v int64) 
 // SetSpotTargetCapacity sets the SpotTargetCapacity field's value.
 func (s *TargetCapacitySpecificationRequest) SetSpotTargetCapacity(v int64) *TargetCapacitySpecificationRequest {
 	s.SpotTargetCapacity = &v
+	return s
+}
+
+// SetTargetCapacityUnitType sets the TargetCapacityUnitType field's value.
+func (s *TargetCapacitySpecificationRequest) SetTargetCapacityUnitType(v string) *TargetCapacitySpecificationRequest {
+	s.TargetCapacityUnitType = &v
 	return s
 }
 
@@ -134541,6 +140770,92 @@ func (s TerminateInstancesOutput) GoString() string {
 // SetTerminatingInstances sets the TerminatingInstances field's value.
 func (s *TerminateInstancesOutput) SetTerminatingInstances(v []*InstanceStateChange) *TerminateInstancesOutput {
 	s.TerminatingInstances = v
+	return s
+}
+
+// The minimum and maximum amount of total local storage, in GB.
+type TotalLocalStorageGB struct {
+	_ struct{} `type:"structure"`
+
+	// The maximum amount of total local storage, in GB. If this parameter is not
+	// specified, there is no maximum limit.
+	Max *float64 `locationName:"max" type:"double"`
+
+	// The minimum amount of total local storage, in GB. If this parameter is not
+	// specified, there is no minimum limit.
+	Min *float64 `locationName:"min" type:"double"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TotalLocalStorageGB) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TotalLocalStorageGB) GoString() string {
+	return s.String()
+}
+
+// SetMax sets the Max field's value.
+func (s *TotalLocalStorageGB) SetMax(v float64) *TotalLocalStorageGB {
+	s.Max = &v
+	return s
+}
+
+// SetMin sets the Min field's value.
+func (s *TotalLocalStorageGB) SetMin(v float64) *TotalLocalStorageGB {
+	s.Min = &v
+	return s
+}
+
+// The minimum and maximum amount of total local storage, in GB.
+type TotalLocalStorageGBRequest struct {
+	_ struct{} `type:"structure"`
+
+	// The maximum amount of total local storage, in GB. To specify no maximum limit,
+	// omit this parameter.
+	Max *float64 `type:"double"`
+
+	// The minimum amount of total local storage, in GB. To specify no minimum limit,
+	// omit this parameter.
+	Min *float64 `type:"double"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TotalLocalStorageGBRequest) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s TotalLocalStorageGBRequest) GoString() string {
+	return s.String()
+}
+
+// SetMax sets the Max field's value.
+func (s *TotalLocalStorageGBRequest) SetMax(v float64) *TotalLocalStorageGBRequest {
+	s.Max = &v
+	return s
+}
+
+// SetMin sets the Min field's value.
+func (s *TotalLocalStorageGBRequest) SetMin(v float64) *TotalLocalStorageGBRequest {
+	s.Min = &v
 	return s
 }
 
@@ -138538,6 +144853,104 @@ func (s *UserIdGroupPair) SetVpcPeeringConnectionId(v string) *UserIdGroupPair {
 	return s
 }
 
+// The minimum and maximum number of vCPUs.
+type VCpuCountRange struct {
+	_ struct{} `type:"structure"`
+
+	// The maximum number of vCPUs. If this parameter is not specified, there is
+	// no maximum limit.
+	Max *int64 `locationName:"max" type:"integer"`
+
+	// The minimum number of vCPUs. If the value is 0, there is no minimum limit.
+	Min *int64 `locationName:"min" type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s VCpuCountRange) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s VCpuCountRange) GoString() string {
+	return s.String()
+}
+
+// SetMax sets the Max field's value.
+func (s *VCpuCountRange) SetMax(v int64) *VCpuCountRange {
+	s.Max = &v
+	return s
+}
+
+// SetMin sets the Min field's value.
+func (s *VCpuCountRange) SetMin(v int64) *VCpuCountRange {
+	s.Min = &v
+	return s
+}
+
+// The minimum and maximum number of vCPUs.
+type VCpuCountRangeRequest struct {
+	_ struct{} `type:"structure"`
+
+	// The maximum number of vCPUs. To specify no maximum limit, omit this parameter.
+	Max *int64 `type:"integer"`
+
+	// The minimum number of vCPUs. To specify no minimum limit, specify 0.
+	//
+	// Min is a required field
+	Min *int64 `type:"integer" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s VCpuCountRangeRequest) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s VCpuCountRangeRequest) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *VCpuCountRangeRequest) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "VCpuCountRangeRequest"}
+	if s.Min == nil {
+		invalidParams.Add(request.NewErrParamRequired("Min"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMax sets the Max field's value.
+func (s *VCpuCountRangeRequest) SetMax(v int64) *VCpuCountRangeRequest {
+	s.Max = &v
+	return s
+}
+
+// SetMin sets the Min field's value.
+func (s *VCpuCountRangeRequest) SetMin(v int64) *VCpuCountRangeRequest {
+	s.Min = &v
+	return s
+}
+
 // Describes the vCPU configurations for the instance type.
 type VCpuInfo struct {
 	_ struct{} `type:"structure"`
@@ -139890,7 +146303,7 @@ type VpcEndpoint struct {
 	// (Interface endpoint) One or more network interfaces for the endpoint.
 	NetworkInterfaceIds []*string `locationName:"networkInterfaceIdSet" locationNameList:"item" type:"list"`
 
-	// The ID of the AWS account that owns the VPC endpoint.
+	// The ID of the Amazon Web Services account that owns the VPC endpoint.
 	OwnerId *string `locationName:"ownerId" type:"string"`
 
 	// The policy document associated with the endpoint, if applicable.
@@ -140070,7 +146483,7 @@ type VpcEndpointConnection struct {
 	// The ID of the VPC endpoint.
 	VpcEndpointId *string `locationName:"vpcEndpointId" type:"string"`
 
-	// The AWS account ID of the owner of the VPC endpoint.
+	// The ID of the Amazon Web Services account that owns the VPC endpoint.
 	VpcEndpointOwner *string `locationName:"vpcEndpointOwner" type:"string"`
 
 	// The state of the VPC endpoint.
@@ -140160,7 +146573,8 @@ type VpcIpv6CidrBlockAssociation struct {
 	Ipv6Pool *string `locationName:"ipv6Pool" type:"string"`
 
 	// The name of the unique set of Availability Zones, Local Zones, or Wavelength
-	// Zones from which AWS advertises IP addresses, for example, us-east-1-wl1-bos-wlz-1.
+	// Zones from which Amazon Web Services advertises IP addresses, for example,
+	// us-east-1-wl1-bos-wlz-1.
 	NetworkBorderGroup *string `locationName:"networkBorderGroup" type:"string"`
 }
 
@@ -140481,6 +146895,12 @@ type VpnConnection struct {
 	// Classic VPN connection.
 	Category *string `locationName:"category" type:"string"`
 
+	// The ARN of the core network.
+	CoreNetworkArn *string `locationName:"coreNetworkArn" type:"string"`
+
+	// The ARN of the core network attachment.
+	CoreNetworkAttachmentArn *string `locationName:"coreNetworkAttachmentArn" type:"string"`
+
 	// The configuration information for the VPN connection's customer gateway (in
 	// the native XML format). This element is always present in the CreateVpnConnection
 	// response; however, it's present in the DescribeVpnConnections response only
@@ -140489,6 +146909,9 @@ type VpnConnection struct {
 
 	// The ID of the customer gateway at your end of the VPN connection.
 	CustomerGatewayId *string `locationName:"customerGatewayId" type:"string"`
+
+	// The current state of the gateway association.
+	GatewayAssociationState *string `locationName:"gatewayAssociationState" type:"string" enum:"GatewayAssociationState"`
 
 	// The VPN connection options.
 	Options *VpnConnectionOptions `locationName:"options" type:"structure"`
@@ -140543,6 +146966,18 @@ func (s *VpnConnection) SetCategory(v string) *VpnConnection {
 	return s
 }
 
+// SetCoreNetworkArn sets the CoreNetworkArn field's value.
+func (s *VpnConnection) SetCoreNetworkArn(v string) *VpnConnection {
+	s.CoreNetworkArn = &v
+	return s
+}
+
+// SetCoreNetworkAttachmentArn sets the CoreNetworkAttachmentArn field's value.
+func (s *VpnConnection) SetCoreNetworkAttachmentArn(v string) *VpnConnection {
+	s.CoreNetworkAttachmentArn = &v
+	return s
+}
+
 // SetCustomerGatewayConfiguration sets the CustomerGatewayConfiguration field's value.
 func (s *VpnConnection) SetCustomerGatewayConfiguration(v string) *VpnConnection {
 	s.CustomerGatewayConfiguration = &v
@@ -140552,6 +146987,12 @@ func (s *VpnConnection) SetCustomerGatewayConfiguration(v string) *VpnConnection
 // SetCustomerGatewayId sets the CustomerGatewayId field's value.
 func (s *VpnConnection) SetCustomerGatewayId(v string) *VpnConnection {
 	s.CustomerGatewayId = &v
+	return s
+}
+
+// SetGatewayAssociationState sets the GatewayAssociationState field's value.
+func (s *VpnConnection) SetGatewayAssociationState(v string) *VpnConnection {
+	s.GatewayAssociationState = &v
 	return s
 }
 
@@ -141378,6 +147819,86 @@ func (s *WithdrawByoipCidrOutput) SetByoipCidr(v *ByoipCidr) *WithdrawByoipCidrO
 }
 
 const (
+	// AcceleratorManufacturerNvidia is a AcceleratorManufacturer enum value
+	AcceleratorManufacturerNvidia = "nvidia"
+
+	// AcceleratorManufacturerAmd is a AcceleratorManufacturer enum value
+	AcceleratorManufacturerAmd = "amd"
+
+	// AcceleratorManufacturerAmazonWebServices is a AcceleratorManufacturer enum value
+	AcceleratorManufacturerAmazonWebServices = "amazon-web-services"
+
+	// AcceleratorManufacturerXilinx is a AcceleratorManufacturer enum value
+	AcceleratorManufacturerXilinx = "xilinx"
+)
+
+// AcceleratorManufacturer_Values returns all elements of the AcceleratorManufacturer enum
+func AcceleratorManufacturer_Values() []string {
+	return []string{
+		AcceleratorManufacturerNvidia,
+		AcceleratorManufacturerAmd,
+		AcceleratorManufacturerAmazonWebServices,
+		AcceleratorManufacturerXilinx,
+	}
+}
+
+const (
+	// AcceleratorNameA100 is a AcceleratorName enum value
+	AcceleratorNameA100 = "a100"
+
+	// AcceleratorNameV100 is a AcceleratorName enum value
+	AcceleratorNameV100 = "v100"
+
+	// AcceleratorNameK80 is a AcceleratorName enum value
+	AcceleratorNameK80 = "k80"
+
+	// AcceleratorNameT4 is a AcceleratorName enum value
+	AcceleratorNameT4 = "t4"
+
+	// AcceleratorNameM60 is a AcceleratorName enum value
+	AcceleratorNameM60 = "m60"
+
+	// AcceleratorNameRadeonProV520 is a AcceleratorName enum value
+	AcceleratorNameRadeonProV520 = "radeon-pro-v520"
+
+	// AcceleratorNameVu9p is a AcceleratorName enum value
+	AcceleratorNameVu9p = "vu9p"
+)
+
+// AcceleratorName_Values returns all elements of the AcceleratorName enum
+func AcceleratorName_Values() []string {
+	return []string{
+		AcceleratorNameA100,
+		AcceleratorNameV100,
+		AcceleratorNameK80,
+		AcceleratorNameT4,
+		AcceleratorNameM60,
+		AcceleratorNameRadeonProV520,
+		AcceleratorNameVu9p,
+	}
+}
+
+const (
+	// AcceleratorTypeGpu is a AcceleratorType enum value
+	AcceleratorTypeGpu = "gpu"
+
+	// AcceleratorTypeFpga is a AcceleratorType enum value
+	AcceleratorTypeFpga = "fpga"
+
+	// AcceleratorTypeInference is a AcceleratorType enum value
+	AcceleratorTypeInference = "inference"
+)
+
+// AcceleratorType_Values returns all elements of the AcceleratorType enum
+func AcceleratorType_Values() []string {
+	return []string{
+		AcceleratorTypeGpu,
+		AcceleratorTypeFpga,
+		AcceleratorTypeInference,
+	}
+}
+
+const (
 	// AccountAttributeNameSupportedPlatforms is a AccountAttributeName enum value
 	AccountAttributeNameSupportedPlatforms = "supported-platforms"
 
@@ -141562,6 +148083,9 @@ const (
 
 	// ArchitectureTypeArm64 is a ArchitectureType enum value
 	ArchitectureTypeArm64 = "arm64"
+
+	// ArchitectureTypeX8664Mac is a ArchitectureType enum value
+	ArchitectureTypeX8664Mac = "x86_64_mac"
 )
 
 // ArchitectureType_Values returns all elements of the ArchitectureType enum
@@ -141570,6 +148094,7 @@ func ArchitectureType_Values() []string {
 		ArchitectureTypeI386,
 		ArchitectureTypeX8664,
 		ArchitectureTypeArm64,
+		ArchitectureTypeX8664Mac,
 	}
 }
 
@@ -141754,6 +148279,26 @@ func AvailabilityZoneState_Values() []string {
 }
 
 const (
+	// BareMetalIncluded is a BareMetal enum value
+	BareMetalIncluded = "included"
+
+	// BareMetalRequired is a BareMetal enum value
+	BareMetalRequired = "required"
+
+	// BareMetalExcluded is a BareMetal enum value
+	BareMetalExcluded = "excluded"
+)
+
+// BareMetal_Values returns all elements of the BareMetal enum
+func BareMetal_Values() []string {
+	return []string{
+		BareMetalIncluded,
+		BareMetalRequired,
+		BareMetalExcluded,
+	}
+}
+
+const (
 	// BatchStateSubmitted is a BatchState enum value
 	BatchStateSubmitted = "submitted"
 
@@ -141874,6 +148419,26 @@ func BundleTaskState_Values() []string {
 }
 
 const (
+	// BurstablePerformanceIncluded is a BurstablePerformance enum value
+	BurstablePerformanceIncluded = "included"
+
+	// BurstablePerformanceRequired is a BurstablePerformance enum value
+	BurstablePerformanceRequired = "required"
+
+	// BurstablePerformanceExcluded is a BurstablePerformance enum value
+	BurstablePerformanceExcluded = "excluded"
+)
+
+// BurstablePerformance_Values returns all elements of the BurstablePerformance enum
+func BurstablePerformance_Values() []string {
+	return []string{
+		BurstablePerformanceIncluded,
+		BurstablePerformanceRequired,
+		BurstablePerformanceExcluded,
+	}
+}
+
+const (
 	// ByoipCidrStateAdvertised is a ByoipCidrState enum value
 	ByoipCidrStateAdvertised = "advertised"
 
@@ -141962,6 +148527,50 @@ func CancelSpotInstanceRequestState_Values() []string {
 		CancelSpotInstanceRequestStateClosed,
 		CancelSpotInstanceRequestStateCancelled,
 		CancelSpotInstanceRequestStateCompleted,
+	}
+}
+
+const (
+	// CapacityReservationFleetStateSubmitted is a CapacityReservationFleetState enum value
+	CapacityReservationFleetStateSubmitted = "submitted"
+
+	// CapacityReservationFleetStateModifying is a CapacityReservationFleetState enum value
+	CapacityReservationFleetStateModifying = "modifying"
+
+	// CapacityReservationFleetStateActive is a CapacityReservationFleetState enum value
+	CapacityReservationFleetStateActive = "active"
+
+	// CapacityReservationFleetStatePartiallyFulfilled is a CapacityReservationFleetState enum value
+	CapacityReservationFleetStatePartiallyFulfilled = "partially_fulfilled"
+
+	// CapacityReservationFleetStateExpiring is a CapacityReservationFleetState enum value
+	CapacityReservationFleetStateExpiring = "expiring"
+
+	// CapacityReservationFleetStateExpired is a CapacityReservationFleetState enum value
+	CapacityReservationFleetStateExpired = "expired"
+
+	// CapacityReservationFleetStateCancelling is a CapacityReservationFleetState enum value
+	CapacityReservationFleetStateCancelling = "cancelling"
+
+	// CapacityReservationFleetStateCancelled is a CapacityReservationFleetState enum value
+	CapacityReservationFleetStateCancelled = "cancelled"
+
+	// CapacityReservationFleetStateFailed is a CapacityReservationFleetState enum value
+	CapacityReservationFleetStateFailed = "failed"
+)
+
+// CapacityReservationFleetState_Values returns all elements of the CapacityReservationFleetState enum
+func CapacityReservationFleetState_Values() []string {
+	return []string{
+		CapacityReservationFleetStateSubmitted,
+		CapacityReservationFleetStateModifying,
+		CapacityReservationFleetStateActive,
+		CapacityReservationFleetStatePartiallyFulfilled,
+		CapacityReservationFleetStateExpiring,
+		CapacityReservationFleetStateExpired,
+		CapacityReservationFleetStateCancelling,
+		CapacityReservationFleetStateCancelled,
+		CapacityReservationFleetStateFailed,
 	}
 }
 
@@ -142342,6 +148951,26 @@ func CopyTagsFromSource_Values() []string {
 }
 
 const (
+	// CpuManufacturerIntel is a CpuManufacturer enum value
+	CpuManufacturerIntel = "intel"
+
+	// CpuManufacturerAmd is a CpuManufacturer enum value
+	CpuManufacturerAmd = "amd"
+
+	// CpuManufacturerAmazonWebServices is a CpuManufacturer enum value
+	CpuManufacturerAmazonWebServices = "amazon-web-services"
+)
+
+// CpuManufacturer_Values returns all elements of the CpuManufacturer enum
+func CpuManufacturer_Values() []string {
+	return []string{
+		CpuManufacturerIntel,
+		CpuManufacturerAmd,
+		CpuManufacturerAmazonWebServices,
+	}
+}
+
+const (
 	// CurrencyCodeValuesUsd is a CurrencyCodeValues enum value
 	CurrencyCodeValuesUsd = "USD"
 )
@@ -142458,6 +149087,22 @@ func DeleteQueuedReservedInstancesErrorCode_Values() []string {
 		DeleteQueuedReservedInstancesErrorCodeReservedInstancesIdInvalid,
 		DeleteQueuedReservedInstancesErrorCodeReservedInstancesNotInQueuedState,
 		DeleteQueuedReservedInstancesErrorCodeUnexpectedError,
+	}
+}
+
+const (
+	// DestinationFileFormatPlainText is a DestinationFileFormat enum value
+	DestinationFileFormatPlainText = "plain-text"
+
+	// DestinationFileFormatParquet is a DestinationFileFormat enum value
+	DestinationFileFormatParquet = "parquet"
+)
+
+// DestinationFileFormat_Values returns all elements of the DestinationFileFormat enum
+func DestinationFileFormat_Values() []string {
+	return []string{
+		DestinationFileFormatPlainText,
+		DestinationFileFormatParquet,
 	}
 }
 
@@ -142870,6 +149515,18 @@ func FleetActivityStatus_Values() []string {
 }
 
 const (
+	// FleetCapacityReservationTenancyDefault is a FleetCapacityReservationTenancy enum value
+	FleetCapacityReservationTenancyDefault = "default"
+)
+
+// FleetCapacityReservationTenancy_Values returns all elements of the FleetCapacityReservationTenancy enum
+func FleetCapacityReservationTenancy_Values() []string {
+	return []string{
+		FleetCapacityReservationTenancyDefault,
+	}
+}
+
+const (
 	// FleetCapacityReservationUsageStrategyUseCapacityReservationsFirst is a FleetCapacityReservationUsageStrategy enum value
 	FleetCapacityReservationUsageStrategyUseCapacityReservationsFirst = "use-capacity-reservations-first"
 )
@@ -142918,6 +149575,18 @@ func FleetExcessCapacityTerminationPolicy_Values() []string {
 }
 
 const (
+	// FleetInstanceMatchCriteriaOpen is a FleetInstanceMatchCriteria enum value
+	FleetInstanceMatchCriteriaOpen = "open"
+)
+
+// FleetInstanceMatchCriteria_Values returns all elements of the FleetInstanceMatchCriteria enum
+func FleetInstanceMatchCriteria_Values() []string {
+	return []string{
+		FleetInstanceMatchCriteriaOpen,
+	}
+}
+
+const (
 	// FleetOnDemandAllocationStrategyLowestPrice is a FleetOnDemandAllocationStrategy enum value
 	FleetOnDemandAllocationStrategyLowestPrice = "lowest-price"
 
@@ -142936,12 +149605,16 @@ func FleetOnDemandAllocationStrategy_Values() []string {
 const (
 	// FleetReplacementStrategyLaunch is a FleetReplacementStrategy enum value
 	FleetReplacementStrategyLaunch = "launch"
+
+	// FleetReplacementStrategyLaunchBeforeTerminate is a FleetReplacementStrategy enum value
+	FleetReplacementStrategyLaunchBeforeTerminate = "launch-before-terminate"
 )
 
 // FleetReplacementStrategy_Values returns all elements of the FleetReplacementStrategy enum
 func FleetReplacementStrategy_Values() []string {
 	return []string{
 		FleetReplacementStrategyLaunch,
+		FleetReplacementStrategyLaunchBeforeTerminate,
 	}
 }
 
@@ -143070,6 +149743,30 @@ func FpgaImageStateCode_Values() []string {
 }
 
 const (
+	// GatewayAssociationStateAssociated is a GatewayAssociationState enum value
+	GatewayAssociationStateAssociated = "associated"
+
+	// GatewayAssociationStateNotAssociated is a GatewayAssociationState enum value
+	GatewayAssociationStateNotAssociated = "not-associated"
+
+	// GatewayAssociationStateAssociating is a GatewayAssociationState enum value
+	GatewayAssociationStateAssociating = "associating"
+
+	// GatewayAssociationStateDisassociating is a GatewayAssociationState enum value
+	GatewayAssociationStateDisassociating = "disassociating"
+)
+
+// GatewayAssociationState_Values returns all elements of the GatewayAssociationState enum
+func GatewayAssociationState_Values() []string {
+	return []string{
+		GatewayAssociationStateAssociated,
+		GatewayAssociationStateNotAssociated,
+		GatewayAssociationStateAssociating,
+		GatewayAssociationStateDisassociating,
+	}
+}
+
+const (
 	// GatewayTypeIpsec1 is a GatewayType enum value
 	GatewayTypeIpsec1 = "ipsec.1"
 )
@@ -143110,6 +149807,22 @@ func HostTenancy_Values() []string {
 	return []string{
 		HostTenancyDedicated,
 		HostTenancyHost,
+	}
+}
+
+const (
+	// HostnameTypeIpName is a HostnameType enum value
+	HostnameTypeIpName = "ip-name"
+
+	// HostnameTypeResourceName is a HostnameType enum value
+	HostnameTypeResourceName = "resource-name"
+)
+
+// HostnameType_Values returns all elements of the HostnameType enum
+func HostnameType_Values() []string {
+	return []string{
+		HostnameTypeIpName,
+		HostnameTypeResourceName,
 	}
 }
 
@@ -143374,6 +150087,22 @@ func InstanceEventWindowState_Values() []string {
 }
 
 const (
+	// InstanceGenerationCurrent is a InstanceGeneration enum value
+	InstanceGenerationCurrent = "current"
+
+	// InstanceGenerationPrevious is a InstanceGeneration enum value
+	InstanceGenerationPrevious = "previous"
+)
+
+// InstanceGeneration_Values returns all elements of the InstanceGeneration enum
+func InstanceGeneration_Values() []string {
+	return []string{
+		InstanceGenerationCurrent,
+		InstanceGenerationPrevious,
+	}
+}
+
+const (
 	// InstanceHealthStatusHealthy is a InstanceHealthStatus enum value
 	InstanceHealthStatusHealthy = "healthy"
 
@@ -143534,6 +150263,22 @@ func InstanceStateName_Values() []string {
 		InstanceStateNameTerminated,
 		InstanceStateNameStopping,
 		InstanceStateNameStopped,
+	}
+}
+
+const (
+	// InstanceStorageEncryptionSupportUnsupported is a InstanceStorageEncryptionSupport enum value
+	InstanceStorageEncryptionSupportUnsupported = "unsupported"
+
+	// InstanceStorageEncryptionSupportRequired is a InstanceStorageEncryptionSupport enum value
+	InstanceStorageEncryptionSupportRequired = "required"
+)
+
+// InstanceStorageEncryptionSupport_Values returns all elements of the InstanceStorageEncryptionSupport enum
+func InstanceStorageEncryptionSupport_Values() []string {
+	return []string{
+		InstanceStorageEncryptionSupportUnsupported,
+		InstanceStorageEncryptionSupportRequired,
 	}
 }
 
@@ -144219,6 +150964,33 @@ const (
 	// InstanceTypeC6gn16xlarge is a InstanceType enum value
 	InstanceTypeC6gn16xlarge = "c6gn.16xlarge"
 
+	// InstanceTypeC6iLarge is a InstanceType enum value
+	InstanceTypeC6iLarge = "c6i.large"
+
+	// InstanceTypeC6iXlarge is a InstanceType enum value
+	InstanceTypeC6iXlarge = "c6i.xlarge"
+
+	// InstanceTypeC6i2xlarge is a InstanceType enum value
+	InstanceTypeC6i2xlarge = "c6i.2xlarge"
+
+	// InstanceTypeC6i4xlarge is a InstanceType enum value
+	InstanceTypeC6i4xlarge = "c6i.4xlarge"
+
+	// InstanceTypeC6i8xlarge is a InstanceType enum value
+	InstanceTypeC6i8xlarge = "c6i.8xlarge"
+
+	// InstanceTypeC6i12xlarge is a InstanceType enum value
+	InstanceTypeC6i12xlarge = "c6i.12xlarge"
+
+	// InstanceTypeC6i16xlarge is a InstanceType enum value
+	InstanceTypeC6i16xlarge = "c6i.16xlarge"
+
+	// InstanceTypeC6i24xlarge is a InstanceType enum value
+	InstanceTypeC6i24xlarge = "c6i.24xlarge"
+
+	// InstanceTypeC6i32xlarge is a InstanceType enum value
+	InstanceTypeC6i32xlarge = "c6i.32xlarge"
+
 	// InstanceTypeCc14xlarge is a InstanceType enum value
 	InstanceTypeCc14xlarge = "cc1.4xlarge"
 
@@ -144347,6 +151119,9 @@ const (
 
 	// InstanceTypeD3en12xlarge is a InstanceType enum value
 	InstanceTypeD3en12xlarge = "d3en.12xlarge"
+
+	// InstanceTypeDl124xlarge is a InstanceType enum value
+	InstanceTypeDl124xlarge = "dl1.24xlarge"
 
 	// InstanceTypeF12xlarge is a InstanceType enum value
 	InstanceTypeF12xlarge = "f1.2xlarge"
@@ -144732,6 +151507,36 @@ const (
 	// InstanceTypeM6gd16xlarge is a InstanceType enum value
 	InstanceTypeM6gd16xlarge = "m6gd.16xlarge"
 
+	// InstanceTypeM6aLarge is a InstanceType enum value
+	InstanceTypeM6aLarge = "m6a.large"
+
+	// InstanceTypeM6aXlarge is a InstanceType enum value
+	InstanceTypeM6aXlarge = "m6a.xlarge"
+
+	// InstanceTypeM6a2xlarge is a InstanceType enum value
+	InstanceTypeM6a2xlarge = "m6a.2xlarge"
+
+	// InstanceTypeM6a4xlarge is a InstanceType enum value
+	InstanceTypeM6a4xlarge = "m6a.4xlarge"
+
+	// InstanceTypeM6a8xlarge is a InstanceType enum value
+	InstanceTypeM6a8xlarge = "m6a.8xlarge"
+
+	// InstanceTypeM6a12xlarge is a InstanceType enum value
+	InstanceTypeM6a12xlarge = "m6a.12xlarge"
+
+	// InstanceTypeM6a16xlarge is a InstanceType enum value
+	InstanceTypeM6a16xlarge = "m6a.16xlarge"
+
+	// InstanceTypeM6a24xlarge is a InstanceType enum value
+	InstanceTypeM6a24xlarge = "m6a.24xlarge"
+
+	// InstanceTypeM6a32xlarge is a InstanceType enum value
+	InstanceTypeM6a32xlarge = "m6a.32xlarge"
+
+	// InstanceTypeM6a48xlarge is a InstanceType enum value
+	InstanceTypeM6a48xlarge = "m6a.48xlarge"
+
 	// InstanceTypeM6iLarge is a InstanceType enum value
 	InstanceTypeM6iLarge = "m6i.large"
 
@@ -144797,6 +151602,48 @@ const (
 
 	// InstanceTypeVt124xlarge is a InstanceType enum value
 	InstanceTypeVt124xlarge = "vt1.24xlarge"
+
+	// InstanceTypeG5gXlarge is a InstanceType enum value
+	InstanceTypeG5gXlarge = "g5g.xlarge"
+
+	// InstanceTypeG5g2xlarge is a InstanceType enum value
+	InstanceTypeG5g2xlarge = "g5g.2xlarge"
+
+	// InstanceTypeG5g4xlarge is a InstanceType enum value
+	InstanceTypeG5g4xlarge = "g5g.4xlarge"
+
+	// InstanceTypeG5g8xlarge is a InstanceType enum value
+	InstanceTypeG5g8xlarge = "g5g.8xlarge"
+
+	// InstanceTypeG5g16xlarge is a InstanceType enum value
+	InstanceTypeG5g16xlarge = "g5g.16xlarge"
+
+	// InstanceTypeG5gMetal is a InstanceType enum value
+	InstanceTypeG5gMetal = "g5g.metal"
+
+	// InstanceTypeG5Xlarge is a InstanceType enum value
+	InstanceTypeG5Xlarge = "g5.xlarge"
+
+	// InstanceTypeG52xlarge is a InstanceType enum value
+	InstanceTypeG52xlarge = "g5.2xlarge"
+
+	// InstanceTypeG54xlarge is a InstanceType enum value
+	InstanceTypeG54xlarge = "g5.4xlarge"
+
+	// InstanceTypeG58xlarge is a InstanceType enum value
+	InstanceTypeG58xlarge = "g5.8xlarge"
+
+	// InstanceTypeG512xlarge is a InstanceType enum value
+	InstanceTypeG512xlarge = "g5.12xlarge"
+
+	// InstanceTypeG516xlarge is a InstanceType enum value
+	InstanceTypeG516xlarge = "g5.16xlarge"
+
+	// InstanceTypeG524xlarge is a InstanceType enum value
+	InstanceTypeG524xlarge = "g5.24xlarge"
+
+	// InstanceTypeG548xlarge is a InstanceType enum value
+	InstanceTypeG548xlarge = "g5.48xlarge"
 )
 
 // InstanceType_Values returns all elements of the InstanceType enum
@@ -145029,6 +151876,15 @@ func InstanceType_Values() []string {
 		InstanceTypeC6gn8xlarge,
 		InstanceTypeC6gn12xlarge,
 		InstanceTypeC6gn16xlarge,
+		InstanceTypeC6iLarge,
+		InstanceTypeC6iXlarge,
+		InstanceTypeC6i2xlarge,
+		InstanceTypeC6i4xlarge,
+		InstanceTypeC6i8xlarge,
+		InstanceTypeC6i12xlarge,
+		InstanceTypeC6i16xlarge,
+		InstanceTypeC6i24xlarge,
+		InstanceTypeC6i32xlarge,
 		InstanceTypeCc14xlarge,
 		InstanceTypeCc28xlarge,
 		InstanceTypeG22xlarge,
@@ -145072,6 +151928,7 @@ func InstanceType_Values() []string {
 		InstanceTypeD3en6xlarge,
 		InstanceTypeD3en8xlarge,
 		InstanceTypeD3en12xlarge,
+		InstanceTypeDl124xlarge,
 		InstanceTypeF12xlarge,
 		InstanceTypeF14xlarge,
 		InstanceTypeF116xlarge,
@@ -145200,6 +152057,16 @@ func InstanceType_Values() []string {
 		InstanceTypeM6gd8xlarge,
 		InstanceTypeM6gd12xlarge,
 		InstanceTypeM6gd16xlarge,
+		InstanceTypeM6aLarge,
+		InstanceTypeM6aXlarge,
+		InstanceTypeM6a2xlarge,
+		InstanceTypeM6a4xlarge,
+		InstanceTypeM6a8xlarge,
+		InstanceTypeM6a12xlarge,
+		InstanceTypeM6a16xlarge,
+		InstanceTypeM6a24xlarge,
+		InstanceTypeM6a32xlarge,
+		InstanceTypeM6a48xlarge,
 		InstanceTypeM6iLarge,
 		InstanceTypeM6iXlarge,
 		InstanceTypeM6i2xlarge,
@@ -145222,6 +152089,20 @@ func InstanceType_Values() []string {
 		InstanceTypeVt13xlarge,
 		InstanceTypeVt16xlarge,
 		InstanceTypeVt124xlarge,
+		InstanceTypeG5gXlarge,
+		InstanceTypeG5g2xlarge,
+		InstanceTypeG5g4xlarge,
+		InstanceTypeG5g8xlarge,
+		InstanceTypeG5g16xlarge,
+		InstanceTypeG5gMetal,
+		InstanceTypeG5Xlarge,
+		InstanceTypeG52xlarge,
+		InstanceTypeG54xlarge,
+		InstanceTypeG58xlarge,
+		InstanceTypeG512xlarge,
+		InstanceTypeG516xlarge,
+		InstanceTypeG524xlarge,
+		InstanceTypeG548xlarge,
 	}
 }
 
@@ -145490,6 +152371,42 @@ func LocalGatewayRouteType_Values() []string {
 	return []string{
 		LocalGatewayRouteTypeStatic,
 		LocalGatewayRouteTypePropagated,
+	}
+}
+
+const (
+	// LocalStorageIncluded is a LocalStorage enum value
+	LocalStorageIncluded = "included"
+
+	// LocalStorageRequired is a LocalStorage enum value
+	LocalStorageRequired = "required"
+
+	// LocalStorageExcluded is a LocalStorage enum value
+	LocalStorageExcluded = "excluded"
+)
+
+// LocalStorage_Values returns all elements of the LocalStorage enum
+func LocalStorage_Values() []string {
+	return []string{
+		LocalStorageIncluded,
+		LocalStorageRequired,
+		LocalStorageExcluded,
+	}
+}
+
+const (
+	// LocalStorageTypeHdd is a LocalStorageType enum value
+	LocalStorageTypeHdd = "hdd"
+
+	// LocalStorageTypeSsd is a LocalStorageType enum value
+	LocalStorageTypeSsd = "ssd"
+)
+
+// LocalStorageType_Values returns all elements of the LocalStorageType enum
+func LocalStorageType_Values() []string {
+	return []string{
+		LocalStorageTypeHdd,
+		LocalStorageTypeSsd,
 	}
 }
 
@@ -146192,12 +153109,16 @@ func ReplaceRootVolumeTaskState_Values() []string {
 const (
 	// ReplacementStrategyLaunch is a ReplacementStrategy enum value
 	ReplacementStrategyLaunch = "launch"
+
+	// ReplacementStrategyLaunchBeforeTerminate is a ReplacementStrategy enum value
+	ReplacementStrategyLaunchBeforeTerminate = "launch-before-terminate"
 )
 
 // ReplacementStrategy_Values returns all elements of the ReplacementStrategy enum
 func ReplacementStrategy_Values() []string {
 	return []string{
 		ReplacementStrategyLaunch,
+		ReplacementStrategyLaunchBeforeTerminate,
 	}
 }
 
@@ -146814,6 +153735,12 @@ const (
 
 	// SnapshotStateError is a SnapshotState enum value
 	SnapshotStateError = "error"
+
+	// SnapshotStateRecoverable is a SnapshotState enum value
+	SnapshotStateRecoverable = "recoverable"
+
+	// SnapshotStateRecovering is a SnapshotState enum value
+	SnapshotStateRecovering = "recovering"
 )
 
 // SnapshotState_Values returns all elements of the SnapshotState enum
@@ -146822,6 +153749,8 @@ func SnapshotState_Values() []string {
 		SnapshotStatePending,
 		SnapshotStateCompleted,
 		SnapshotStateError,
+		SnapshotStateRecoverable,
+		SnapshotStateRecovering,
 	}
 }
 
@@ -147026,6 +153955,22 @@ func StatusType_Values() []string {
 }
 
 const (
+	// StorageTierArchive is a StorageTier enum value
+	StorageTierArchive = "archive"
+
+	// StorageTierStandard is a StorageTier enum value
+	StorageTierStandard = "standard"
+)
+
+// StorageTier_Values returns all elements of the StorageTier enum
+func StorageTier_Values() []string {
+	return []string{
+		StorageTierArchive,
+		StorageTierStandard,
+	}
+}
+
+const (
 	// SubnetCidrBlockStateCodeAssociating is a SubnetCidrBlockStateCode enum value
 	SubnetCidrBlockStateCodeAssociating = "associating"
 
@@ -147118,6 +154063,38 @@ func SummaryStatus_Values() []string {
 }
 
 const (
+	// TargetCapacityUnitTypeVcpu is a TargetCapacityUnitType enum value
+	TargetCapacityUnitTypeVcpu = "vcpu"
+
+	// TargetCapacityUnitTypeMemoryMib is a TargetCapacityUnitType enum value
+	TargetCapacityUnitTypeMemoryMib = "memory-mib"
+
+	// TargetCapacityUnitTypeUnits is a TargetCapacityUnitType enum value
+	TargetCapacityUnitTypeUnits = "units"
+)
+
+// TargetCapacityUnitType_Values returns all elements of the TargetCapacityUnitType enum
+func TargetCapacityUnitType_Values() []string {
+	return []string{
+		TargetCapacityUnitTypeVcpu,
+		TargetCapacityUnitTypeMemoryMib,
+		TargetCapacityUnitTypeUnits,
+	}
+}
+
+const (
+	// TargetStorageTierArchive is a TargetStorageTier enum value
+	TargetStorageTierArchive = "archive"
+)
+
+// TargetStorageTier_Values returns all elements of the TargetStorageTier enum
+func TargetStorageTier_Values() []string {
+	return []string{
+		TargetStorageTierArchive,
+	}
+}
+
+const (
 	// TelemetryStatusUp is a TelemetryStatus enum value
 	TelemetryStatusUp = "UP"
 
@@ -147150,6 +154127,50 @@ func Tenancy_Values() []string {
 		TenancyDefault,
 		TenancyDedicated,
 		TenancyHost,
+	}
+}
+
+const (
+	// TieringOperationStatusArchivalInProgress is a TieringOperationStatus enum value
+	TieringOperationStatusArchivalInProgress = "archival-in-progress"
+
+	// TieringOperationStatusArchivalCompleted is a TieringOperationStatus enum value
+	TieringOperationStatusArchivalCompleted = "archival-completed"
+
+	// TieringOperationStatusArchivalFailed is a TieringOperationStatus enum value
+	TieringOperationStatusArchivalFailed = "archival-failed"
+
+	// TieringOperationStatusTemporaryRestoreInProgress is a TieringOperationStatus enum value
+	TieringOperationStatusTemporaryRestoreInProgress = "temporary-restore-in-progress"
+
+	// TieringOperationStatusTemporaryRestoreCompleted is a TieringOperationStatus enum value
+	TieringOperationStatusTemporaryRestoreCompleted = "temporary-restore-completed"
+
+	// TieringOperationStatusTemporaryRestoreFailed is a TieringOperationStatus enum value
+	TieringOperationStatusTemporaryRestoreFailed = "temporary-restore-failed"
+
+	// TieringOperationStatusPermanentRestoreInProgress is a TieringOperationStatus enum value
+	TieringOperationStatusPermanentRestoreInProgress = "permanent-restore-in-progress"
+
+	// TieringOperationStatusPermanentRestoreCompleted is a TieringOperationStatus enum value
+	TieringOperationStatusPermanentRestoreCompleted = "permanent-restore-completed"
+
+	// TieringOperationStatusPermanentRestoreFailed is a TieringOperationStatus enum value
+	TieringOperationStatusPermanentRestoreFailed = "permanent-restore-failed"
+)
+
+// TieringOperationStatus_Values returns all elements of the TieringOperationStatus enum
+func TieringOperationStatus_Values() []string {
+	return []string{
+		TieringOperationStatusArchivalInProgress,
+		TieringOperationStatusArchivalCompleted,
+		TieringOperationStatusArchivalFailed,
+		TieringOperationStatusTemporaryRestoreInProgress,
+		TieringOperationStatusTemporaryRestoreCompleted,
+		TieringOperationStatusTemporaryRestoreFailed,
+		TieringOperationStatusPermanentRestoreInProgress,
+		TieringOperationStatusPermanentRestoreCompleted,
+		TieringOperationStatusPermanentRestoreFailed,
 	}
 }
 
