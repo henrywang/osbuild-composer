@@ -150,11 +150,10 @@ github.com/coreos/go-semver/semver
 github.com/coreos/go-systemd/activation
 # github.com/davecgh/go-spew v1.1.1
 github.com/davecgh/go-spew/spew
-# github.com/deepmap/oapi-codegen v1.8.2
+# github.com/deepmap/oapi-codegen v1.9.1
 ## explicit
 github.com/deepmap/oapi-codegen/cmd/oapi-codegen
 github.com/deepmap/oapi-codegen/pkg/codegen
-github.com/deepmap/oapi-codegen/pkg/codegen/templates
 github.com/deepmap/oapi-codegen/pkg/runtime
 github.com/deepmap/oapi-codegen/pkg/types
 github.com/deepmap/oapi-codegen/pkg/util
@@ -206,7 +205,7 @@ github.com/envoyproxy/go-control-plane/envoy/type/tracing/v3
 github.com/envoyproxy/go-control-plane/envoy/type/v3
 # github.com/envoyproxy/protoc-gen-validate v0.1.0
 github.com/envoyproxy/protoc-gen-validate/validate
-# github.com/getkin/kin-openapi v0.61.0
+# github.com/getkin/kin-openapi v0.87.0
 ## explicit
 github.com/getkin/kin-openapi/jsoninfo
 github.com/getkin/kin-openapi/openapi3
@@ -306,7 +305,7 @@ github.com/jackc/pgx/v4/pgxpool
 github.com/jackc/puddle
 # github.com/jmespath/go-jmespath v0.4.0
 github.com/jmespath/go-jmespath
-# github.com/json-iterator/go v1.1.11
+# github.com/json-iterator/go v1.1.12
 github.com/json-iterator/go
 # github.com/julienschmidt/httprouter v1.3.0
 ## explicit
@@ -314,15 +313,15 @@ github.com/julienschmidt/httprouter
 # github.com/kolo/xmlrpc v0.0.0-20201022064351-38db28db192b
 ## explicit
 github.com/kolo/xmlrpc
-# github.com/kr/pretty v0.2.1
+# github.com/kr/pretty v0.3.0
 github.com/kr/pretty
-# github.com/kr/text v0.1.0
+# github.com/kr/text v0.2.0
 github.com/kr/text
-# github.com/labstack/echo/v4 v4.6.1
+# github.com/labstack/echo/v4 v4.6.3
 ## explicit
 github.com/labstack/echo/v4
 github.com/labstack/echo/v4/middleware
-# github.com/labstack/gommon v0.3.0
+# github.com/labstack/gommon v0.3.1
 ## explicit
 github.com/labstack/gommon/bytes
 github.com/labstack/gommon/color
@@ -332,7 +331,7 @@ github.com/labstack/gommon/random
 github.com/mailru/easyjson/buffer
 github.com/mailru/easyjson/jlexer
 github.com/mailru/easyjson/jwriter
-# github.com/mattn/go-colorable v0.1.8
+# github.com/mattn/go-colorable v0.1.11
 github.com/mattn/go-colorable
 # github.com/mattn/go-ieproxy v0.0.1
 github.com/mattn/go-ieproxy
@@ -347,7 +346,7 @@ github.com/microcosm-cc/bluemonday/css
 github.com/mitchellh/go-homedir
 # github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd
 github.com/modern-go/concurrent
-# github.com/modern-go/reflect2 v1.0.1
+# github.com/modern-go/reflect2 v1.0.2
 github.com/modern-go/reflect2
 # github.com/openshift-online/ocm-sdk-go v0.1.214
 ## explicit
@@ -365,8 +364,6 @@ github.com/oracle/oci-go-sdk/v54/identity
 github.com/oracle/oci-go-sdk/v54/objectstorage
 github.com/oracle/oci-go-sdk/v54/objectstorage/transfer
 github.com/oracle/oci-go-sdk/v54/workrequests
-# github.com/pkg/errors v0.9.1
-github.com/pkg/errors
 # github.com/pmezard/go-difflib v1.0.0
 github.com/pmezard/go-difflib/difflib
 # github.com/prometheus/client_golang v1.11.0
@@ -387,6 +384,8 @@ github.com/prometheus/common/model
 github.com/prometheus/procfs
 github.com/prometheus/procfs/internal/fs
 github.com/prometheus/procfs/internal/util
+# github.com/rogpeppe/go-internal v1.8.0
+github.com/rogpeppe/go-internal/fmtsort
 # github.com/segmentio/ksuid v1.0.4
 ## explicit
 github.com/segmentio/ksuid
@@ -475,7 +474,7 @@ go.opencensus.io/trace
 go.opencensus.io/trace/internal
 go.opencensus.io/trace/propagation
 go.opencensus.io/trace/tracestate
-# golang.org/x/crypto v0.0.0-20210817164053-32db794688a5
+# golang.org/x/crypto v0.0.0-20210921155107-089bfa567519
 golang.org/x/crypto/acme
 golang.org/x/crypto/acme/autocert
 golang.org/x/crypto/pbkdf2
@@ -733,5 +732,4 @@ gopkg.in/ini.v1
 # gopkg.in/yaml.v2 v2.4.0
 gopkg.in/yaml.v2
 # gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b
-## explicit
 gopkg.in/yaml.v3
