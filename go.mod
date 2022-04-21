@@ -3,8 +3,9 @@ module github.com/osbuild/osbuild-composer
 go 1.16
 
 require (
-	cloud.google.com/go v0.100.0
 	cloud.google.com/go/cloudbuild v1.0.0
+	cloud.google.com/go/compute v1.6.0
+	cloud.google.com/go/iam v0.3.0 // indirect
 	cloud.google.com/go/storage v1.18.2
 	github.com/Azure/azure-pipeline-go v0.2.3
 	github.com/Azure/azure-sdk-for-go v57.4.0+incompatible
@@ -27,7 +28,7 @@ require (
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/golang/glog v1.0.0 // indirect
 	github.com/golang/groupcache v0.0.0-20210331224755-41bb18bfe9da // indirect
-	github.com/google/go-cmp v0.5.6
+	github.com/google/go-cmp v0.5.7
 	github.com/google/uuid v1.3.0
 	github.com/gophercloud/gophercloud v0.22.0
 	github.com/hashicorp/go-retryablehttp v0.7.0
@@ -48,12 +49,12 @@ require (
 	github.com/stretchr/testify v1.7.0
 	github.com/ubccr/kerby v0.0.0-20170626144437-201a958fc453
 	github.com/vmware/govmomi v0.26.1
-	golang.org/x/oauth2 v0.0.0-20211104180415-d3ed0bb246c8
+	golang.org/x/oauth2 v0.0.0-20220411215720-9780585627b5
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c
-	golang.org/x/sys v0.0.0-20211210111614-af8b64212486
-	google.golang.org/api v0.63.0
-	google.golang.org/genproto v0.0.0-20211221195035-429b39de9b1c
-	google.golang.org/protobuf v1.27.1
+	golang.org/x/sys v0.0.0-20220412211240-33da011f77ad
+	google.golang.org/api v0.75.0
+	google.golang.org/genproto v0.0.0-20220414192740-2d67ff6cf2b4
+	google.golang.org/protobuf v1.28.0
 	gopkg.in/ini.v1 v1.63.0
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
 )
