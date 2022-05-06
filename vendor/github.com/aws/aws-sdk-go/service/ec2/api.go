@@ -47947,7 +47947,9 @@ func (c *EC2) StopInstancesRequest(input *StopInstancesInput) (req *request.Requ
 
 // StopInstances API operation for Amazon Elastic Compute Cloud.
 //
-// Stops an Amazon EBS-backed instance.
+// Stops an Amazon EBS-backed instance. For more information, see Stop and start
+// your instance (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Stop_Start.html)
+// in the Amazon EC2 User Guide.
 //
 // You can use the Stop action to hibernate an instance if the instance is enabled
 // for hibernation (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Hibernate.html#enabling-hibernation)
@@ -50401,6 +50403,10 @@ type AllocateHostsInput struct {
 	// You cannot specify InstanceType and InstanceFamily in the same request.
 	InstanceType *string `locationName:"instanceType" type:"string"`
 
+	// The Amazon Resource Name (ARN) of the Amazon Web Services Outpost on which
+	// to allocate the Dedicated Host.
+	OutpostArn *string `type:"string"`
+
 	// The number of Dedicated Hosts to allocate to your account with these parameters.
 	//
 	// Quantity is a required field
@@ -50477,6 +50483,12 @@ func (s *AllocateHostsInput) SetInstanceFamily(v string) *AllocateHostsInput {
 // SetInstanceType sets the InstanceType field's value.
 func (s *AllocateHostsInput) SetInstanceType(v string) *AllocateHostsInput {
 	s.InstanceType = &v
+	return s
+}
+
+// SetOutpostArn sets the OutpostArn field's value.
+func (s *AllocateHostsInput) SetOutpostArn(v string) *AllocateHostsInput {
+	s.OutpostArn = &v
 	return s
 }
 
@@ -110325,6 +110337,10 @@ type Host struct {
 	// is true, the host is in a host resource group; otherwise, it is not.
 	MemberOfServiceLinkedResourceGroup *bool `locationName:"memberOfServiceLinkedResourceGroup" type:"boolean"`
 
+	// The Amazon Resource Name (ARN) of the Amazon Web Services Outpost on which
+	// the Dedicated Host is allocated.
+	OutpostArn *string `locationName:"outpostArn" type:"string"`
+
 	// The ID of the Amazon Web Services account that owns the Dedicated Host.
 	OwnerId *string `locationName:"ownerId" type:"string"`
 
@@ -110431,6 +110447,12 @@ func (s *Host) SetInstances(v []*HostInstance) *Host {
 // SetMemberOfServiceLinkedResourceGroup sets the MemberOfServiceLinkedResourceGroup field's value.
 func (s *Host) SetMemberOfServiceLinkedResourceGroup(v bool) *Host {
 	s.MemberOfServiceLinkedResourceGroup = &v
+	return s
+}
+
+// SetOutpostArn sets the OutpostArn field's value.
+func (s *Host) SetOutpostArn(v string) *Host {
+	s.OutpostArn = &v
 	return s
 }
 
@@ -164650,6 +164672,27 @@ const (
 
 	// InstanceTypeM6aMetal is a InstanceType enum value
 	InstanceTypeM6aMetal = "m6a.metal"
+
+	// InstanceTypeI4iLarge is a InstanceType enum value
+	InstanceTypeI4iLarge = "i4i.large"
+
+	// InstanceTypeI4iXlarge is a InstanceType enum value
+	InstanceTypeI4iXlarge = "i4i.xlarge"
+
+	// InstanceTypeI4i2xlarge is a InstanceType enum value
+	InstanceTypeI4i2xlarge = "i4i.2xlarge"
+
+	// InstanceTypeI4i4xlarge is a InstanceType enum value
+	InstanceTypeI4i4xlarge = "i4i.4xlarge"
+
+	// InstanceTypeI4i8xlarge is a InstanceType enum value
+	InstanceTypeI4i8xlarge = "i4i.8xlarge"
+
+	// InstanceTypeI4i16xlarge is a InstanceType enum value
+	InstanceTypeI4i16xlarge = "i4i.16xlarge"
+
+	// InstanceTypeI4i32xlarge is a InstanceType enum value
+	InstanceTypeI4i32xlarge = "i4i.32xlarge"
 )
 
 // InstanceType_Values returns all elements of the InstanceType enum
@@ -165162,6 +165205,13 @@ func InstanceType_Values() []string {
 		InstanceTypeC6a48xlarge,
 		InstanceTypeC6aMetal,
 		InstanceTypeM6aMetal,
+		InstanceTypeI4iLarge,
+		InstanceTypeI4iXlarge,
+		InstanceTypeI4i2xlarge,
+		InstanceTypeI4i4xlarge,
+		InstanceTypeI4i8xlarge,
+		InstanceTypeI4i16xlarge,
+		InstanceTypeI4i32xlarge,
 	}
 }
 
