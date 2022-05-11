@@ -35562,6 +35562,93 @@ func (c *EC2) GetInstanceTypesFromInstanceRequirementsPagesWithContext(ctx aws.C
 	return p.Err()
 }
 
+const opGetInstanceUefiData = "GetInstanceUefiData"
+
+// GetInstanceUefiDataRequest generates a "aws/request.Request" representing the
+// client's request for the GetInstanceUefiData operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetInstanceUefiData for more information on using the GetInstanceUefiData
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetInstanceUefiDataRequest method.
+//    req, resp := client.GetInstanceUefiDataRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/GetInstanceUefiData
+func (c *EC2) GetInstanceUefiDataRequest(input *GetInstanceUefiDataInput) (req *request.Request, output *GetInstanceUefiDataOutput) {
+	op := &request.Operation{
+		Name:       opGetInstanceUefiData,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetInstanceUefiDataInput{}
+	}
+
+	output = &GetInstanceUefiDataOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetInstanceUefiData API operation for Amazon Elastic Compute Cloud.
+//
+// A binary representation of the UEFI variable store. Only non-volatile variables
+// are stored. This is a base64 encoded and zlib compressed binary value that
+// must be properly encoded.
+//
+// When you use register-image (https://docs.aws.amazon.com/cli/latest/reference/ec2/register-image.html)
+// to create an AMI, you can create an exact copy of your variable store by
+// passing the UEFI data in the UefiData parameter. You can modify the UEFI
+// data by using the python-uefivars tool (https://github.com/awslabs/python-uefivars)
+// on GitHub. You can use the tool to convert the UEFI data into a human-readable
+// format (JSON), which you can inspect and modify, and then convert back into
+// the binary format to use with register-image.
+//
+// For more information, see UEFI Secure Boot (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/uefi-secure-boot.html)
+// in the Amazon EC2 User Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Elastic Compute Cloud's
+// API operation GetInstanceUefiData for usage and error information.
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/GetInstanceUefiData
+func (c *EC2) GetInstanceUefiData(input *GetInstanceUefiDataInput) (*GetInstanceUefiDataOutput, error) {
+	req, out := c.GetInstanceUefiDataRequest(input)
+	return out, req.Send()
+}
+
+// GetInstanceUefiDataWithContext is the same as GetInstanceUefiData with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetInstanceUefiData for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *EC2) GetInstanceUefiDataWithContext(ctx aws.Context, input *GetInstanceUefiDataInput, opts ...request.Option) (*GetInstanceUefiDataOutput, error) {
+	req, out := c.GetInstanceUefiDataRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opGetIpamAddressHistory = "GetIpamAddressHistory"
 
 // GetIpamAddressHistoryRequest generates a "aws/request.Request" representing the
@@ -47947,7 +48034,9 @@ func (c *EC2) StopInstancesRequest(input *StopInstancesInput) (req *request.Requ
 
 // StopInstances API operation for Amazon Elastic Compute Cloud.
 //
-// Stops an Amazon EBS-backed instance.
+// Stops an Amazon EBS-backed instance. For more information, see Stop and start
+// your instance (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Stop_Start.html)
+// in the Amazon EC2 User Guide.
 //
 // You can use the Stop action to hibernate an instance if the instance is enabled
 // for hibernation (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Hibernate.html#enabling-hibernation)
@@ -50401,6 +50490,10 @@ type AllocateHostsInput struct {
 	// You cannot specify InstanceType and InstanceFamily in the same request.
 	InstanceType *string `locationName:"instanceType" type:"string"`
 
+	// The Amazon Resource Name (ARN) of the Amazon Web Services Outpost on which
+	// to allocate the Dedicated Host.
+	OutpostArn *string `type:"string"`
+
 	// The number of Dedicated Hosts to allocate to your account with these parameters.
 	//
 	// Quantity is a required field
@@ -50477,6 +50570,12 @@ func (s *AllocateHostsInput) SetInstanceFamily(v string) *AllocateHostsInput {
 // SetInstanceType sets the InstanceType field's value.
 func (s *AllocateHostsInput) SetInstanceType(v string) *AllocateHostsInput {
 	s.InstanceType = &v
+	return s
+}
+
+// SetOutpostArn sets the OutpostArn field's value.
+func (s *AllocateHostsInput) SetOutpostArn(v string) *AllocateHostsInput {
+	s.OutpostArn = &v
 	return s
 }
 
@@ -82490,6 +82589,17 @@ type DescribeImageAttributeOutput struct {
 	// Indicates whether enhanced networking with the Intel 82599 Virtual Function
 	// interface is enabled.
 	SriovNetSupport *AttributeValue `locationName:"sriovNetSupport" type:"structure"`
+
+	// If the image is configured for NitroTPM support, the value is v2.0.
+	TpmSupport *AttributeValue `locationName:"tpmSupport" type:"structure"`
+
+	// Base64 representation of the non-volatile UEFI variable store. To retrieve
+	// the UEFI data, use the GetInstanceUefiData (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_GetInstanceUefiData)
+	// command. You can inspect and modify the UEFI data by using the python-uefivars
+	// tool (https://github.com/awslabs/python-uefivars) on GitHub. For more information,
+	// see UEFI Secure Boot (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/uefi-secure-boot.html)
+	// in the Amazon Elastic Compute Cloud User Guide.
+	UefiData *AttributeValue `locationName:"uefiData" type:"structure"`
 }
 
 // String returns the string representation.
@@ -82567,6 +82677,18 @@ func (s *DescribeImageAttributeOutput) SetRamdiskId(v *AttributeValue) *Describe
 // SetSriovNetSupport sets the SriovNetSupport field's value.
 func (s *DescribeImageAttributeOutput) SetSriovNetSupport(v *AttributeValue) *DescribeImageAttributeOutput {
 	s.SriovNetSupport = v
+	return s
+}
+
+// SetTpmSupport sets the TpmSupport field's value.
+func (s *DescribeImageAttributeOutput) SetTpmSupport(v *AttributeValue) *DescribeImageAttributeOutput {
+	s.TpmSupport = v
+	return s
+}
+
+// SetUefiData sets the UefiData field's value.
+func (s *DescribeImageAttributeOutput) SetUefiData(v *AttributeValue) *DescribeImageAttributeOutput {
+	s.UefiData = v
 	return s
 }
 
@@ -107094,6 +107216,104 @@ func (s *GetInstanceTypesFromInstanceRequirementsOutput) SetNextToken(v string) 
 	return s
 }
 
+type GetInstanceUefiDataInput struct {
+	_ struct{} `type:"structure"`
+
+	// Checks whether you have the required permissions for the action, without
+	// actually making the request, and provides an error response. If you have
+	// the required permissions, the error response is DryRunOperation. Otherwise,
+	// it is UnauthorizedOperation.
+	DryRun *bool `type:"boolean"`
+
+	// The ID of the instance from which to retrieve the UEFI data.
+	//
+	// InstanceId is a required field
+	InstanceId *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetInstanceUefiDataInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetInstanceUefiDataInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetInstanceUefiDataInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetInstanceUefiDataInput"}
+	if s.InstanceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDryRun sets the DryRun field's value.
+func (s *GetInstanceUefiDataInput) SetDryRun(v bool) *GetInstanceUefiDataInput {
+	s.DryRun = &v
+	return s
+}
+
+// SetInstanceId sets the InstanceId field's value.
+func (s *GetInstanceUefiDataInput) SetInstanceId(v string) *GetInstanceUefiDataInput {
+	s.InstanceId = &v
+	return s
+}
+
+type GetInstanceUefiDataOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The ID of the instance from which to retrieve the UEFI data.
+	InstanceId *string `locationName:"instanceId" type:"string"`
+
+	// Base64 representation of the non-volatile UEFI variable store.
+	UefiData *string `locationName:"uefiData" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetInstanceUefiDataOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetInstanceUefiDataOutput) GoString() string {
+	return s.String()
+}
+
+// SetInstanceId sets the InstanceId field's value.
+func (s *GetInstanceUefiDataOutput) SetInstanceId(v string) *GetInstanceUefiDataOutput {
+	s.InstanceId = &v
+	return s
+}
+
+// SetUefiData sets the UefiData field's value.
+func (s *GetInstanceUefiDataOutput) SetUefiData(v string) *GetInstanceUefiDataOutput {
+	s.UefiData = &v
+	return s
+}
+
 type GetIpamAddressHistoryInput struct {
 	_ struct{} `type:"structure"`
 
@@ -110325,6 +110545,10 @@ type Host struct {
 	// is true, the host is in a host resource group; otherwise, it is not.
 	MemberOfServiceLinkedResourceGroup *bool `locationName:"memberOfServiceLinkedResourceGroup" type:"boolean"`
 
+	// The Amazon Resource Name (ARN) of the Amazon Web Services Outpost on which
+	// the Dedicated Host is allocated.
+	OutpostArn *string `locationName:"outpostArn" type:"string"`
+
 	// The ID of the Amazon Web Services account that owns the Dedicated Host.
 	OwnerId *string `locationName:"ownerId" type:"string"`
 
@@ -110431,6 +110655,12 @@ func (s *Host) SetInstances(v []*HostInstance) *Host {
 // SetMemberOfServiceLinkedResourceGroup sets the MemberOfServiceLinkedResourceGroup field's value.
 func (s *Host) SetMemberOfServiceLinkedResourceGroup(v bool) *Host {
 	s.MemberOfServiceLinkedResourceGroup = &v
+	return s
+}
+
+// SetOutpostArn sets the OutpostArn field's value.
+func (s *Host) SetOutpostArn(v string) *Host {
+	s.OutpostArn = &v
 	return s
 }
 
@@ -111219,6 +111449,11 @@ type Image struct {
 	// Any tags assigned to the image.
 	Tags []*Tag `locationName:"tagSet" locationNameList:"item" type:"list"`
 
+	// If the image is configured for NitroTPM support, the value is v2.0. For more
+	// information, see NitroTPM (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/nitrotpm.html)
+	// in the Amazon Elastic Compute Cloud User Guide.
+	TpmSupport *string `locationName:"tpmSupport" type:"string" enum:"TpmSupportValues"`
+
 	// The operation of the Amazon EC2 instance and the billing code that is associated
 	// with the AMI. usageOperation corresponds to the lineitem/Operation (https://docs.aws.amazon.com/cur/latest/userguide/Lineitem-columns.html#Lineitem-details-O-Operation)
 	// column on your Amazon Web Services Cost and Usage Report and in the Amazon
@@ -111404,6 +111639,12 @@ func (s *Image) SetStateReason(v *StateReason) *Image {
 // SetTags sets the Tags field's value.
 func (s *Image) SetTags(v []*Tag) *Image {
 	s.Tags = v
+	return s
+}
+
+// SetTpmSupport sets the TpmSupport field's value.
+func (s *Image) SetTpmSupport(v string) *Image {
+	s.TpmSupport = &v
 	return s
 }
 
@@ -113572,6 +113813,11 @@ type Instance struct {
 	// Any tags assigned to the instance.
 	Tags []*Tag `locationName:"tagSet" locationNameList:"item" type:"list"`
 
+	// If the instance is configured for NitroTPM support, the value is v2.0. For
+	// more information, see NitroTPM (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/nitrotpm.html)
+	// in the Amazon EC2 User Guide.
+	TpmSupport *string `locationName:"tpmSupport" type:"string"`
+
 	// The usage operation value for the instance. For more information, see AMI
 	// billing information fields (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/billing-info-fields.html)
 	// in the Amazon EC2 User Guide.
@@ -113908,6 +114154,12 @@ func (s *Instance) SetSubnetId(v string) *Instance {
 // SetTags sets the Tags field's value.
 func (s *Instance) SetTags(v []*Tag) *Instance {
 	s.Tags = v
+	return s
+}
+
+// SetTpmSupport sets the TpmSupport field's value.
+func (s *Instance) SetTpmSupport(v string) *Instance {
+	s.TpmSupport = &v
 	return s
 }
 
@@ -137945,6 +138197,19 @@ type RegisterImageInput struct {
 	// PV AMI can make instances launched from the AMI unreachable.
 	SriovNetSupport *string `locationName:"sriovNetSupport" type:"string"`
 
+	// Set to v2.0 to enable Trusted Platform Module (TPM) support. For more information,
+	// see NitroTPM (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/nitrotpm.html)
+	// in the Amazon Elastic Compute Cloud User Guide.
+	TpmSupport *string `type:"string" enum:"TpmSupportValues"`
+
+	// Base64 representation of the non-volatile UEFI variable store. To retrieve
+	// the UEFI data, use the GetInstanceUefiData (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_GetInstanceUefiData)
+	// command. You can inspect and modify the UEFI data by using the python-uefivars
+	// tool (https://github.com/awslabs/python-uefivars) on GitHub. For more information,
+	// see UEFI Secure Boot (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/uefi-secure-boot.html)
+	// in the Amazon Elastic Compute Cloud User Guide.
+	UefiData *string `type:"string"`
+
 	// The type of virtualization (hvm | paravirtual).
 	//
 	// Default: paravirtual
@@ -138057,6 +138322,18 @@ func (s *RegisterImageInput) SetRootDeviceName(v string) *RegisterImageInput {
 // SetSriovNetSupport sets the SriovNetSupport field's value.
 func (s *RegisterImageInput) SetSriovNetSupport(v string) *RegisterImageInput {
 	s.SriovNetSupport = &v
+	return s
+}
+
+// SetTpmSupport sets the TpmSupport field's value.
+func (s *RegisterImageInput) SetTpmSupport(v string) *RegisterImageInput {
+	s.TpmSupport = &v
+	return s
+}
+
+// SetUefiData sets the UefiData field's value.
+func (s *RegisterImageInput) SetUefiData(v string) *RegisterImageInput {
+	s.UefiData = &v
 	return s
 }
 
@@ -162734,6 +163011,12 @@ const (
 	// ImageAttributeNameBootMode is a ImageAttributeName enum value
 	ImageAttributeNameBootMode = "bootMode"
 
+	// ImageAttributeNameTpmSupport is a ImageAttributeName enum value
+	ImageAttributeNameTpmSupport = "tpmSupport"
+
+	// ImageAttributeNameUefiData is a ImageAttributeName enum value
+	ImageAttributeNameUefiData = "uefiData"
+
 	// ImageAttributeNameLastLaunchedTime is a ImageAttributeName enum value
 	ImageAttributeNameLastLaunchedTime = "lastLaunchedTime"
 )
@@ -162749,6 +163032,8 @@ func ImageAttributeName_Values() []string {
 		ImageAttributeNameBlockDeviceMapping,
 		ImageAttributeNameSriovNetSupport,
 		ImageAttributeNameBootMode,
+		ImageAttributeNameTpmSupport,
+		ImageAttributeNameUefiData,
 		ImageAttributeNameLastLaunchedTime,
 	}
 }
@@ -164650,6 +164935,27 @@ const (
 
 	// InstanceTypeM6aMetal is a InstanceType enum value
 	InstanceTypeM6aMetal = "m6a.metal"
+
+	// InstanceTypeI4iLarge is a InstanceType enum value
+	InstanceTypeI4iLarge = "i4i.large"
+
+	// InstanceTypeI4iXlarge is a InstanceType enum value
+	InstanceTypeI4iXlarge = "i4i.xlarge"
+
+	// InstanceTypeI4i2xlarge is a InstanceType enum value
+	InstanceTypeI4i2xlarge = "i4i.2xlarge"
+
+	// InstanceTypeI4i4xlarge is a InstanceType enum value
+	InstanceTypeI4i4xlarge = "i4i.4xlarge"
+
+	// InstanceTypeI4i8xlarge is a InstanceType enum value
+	InstanceTypeI4i8xlarge = "i4i.8xlarge"
+
+	// InstanceTypeI4i16xlarge is a InstanceType enum value
+	InstanceTypeI4i16xlarge = "i4i.16xlarge"
+
+	// InstanceTypeI4i32xlarge is a InstanceType enum value
+	InstanceTypeI4i32xlarge = "i4i.32xlarge"
 )
 
 // InstanceType_Values returns all elements of the InstanceType enum
@@ -165162,6 +165468,13 @@ func InstanceType_Values() []string {
 		InstanceTypeC6a48xlarge,
 		InstanceTypeC6aMetal,
 		InstanceTypeM6aMetal,
+		InstanceTypeI4iLarge,
+		InstanceTypeI4iXlarge,
+		InstanceTypeI4i2xlarge,
+		InstanceTypeI4i4xlarge,
+		InstanceTypeI4i8xlarge,
+		InstanceTypeI4i16xlarge,
+		InstanceTypeI4i32xlarge,
 	}
 }
 
@@ -165420,6 +165733,15 @@ const (
 
 	// IpamPoolStateDeleteFailed is a IpamPoolState enum value
 	IpamPoolStateDeleteFailed = "delete-failed"
+
+	// IpamPoolStateIsolateInProgress is a IpamPoolState enum value
+	IpamPoolStateIsolateInProgress = "isolate-in-progress"
+
+	// IpamPoolStateIsolateComplete is a IpamPoolState enum value
+	IpamPoolStateIsolateComplete = "isolate-complete"
+
+	// IpamPoolStateRestoreInProgress is a IpamPoolState enum value
+	IpamPoolStateRestoreInProgress = "restore-in-progress"
 )
 
 // IpamPoolState_Values returns all elements of the IpamPoolState enum
@@ -165434,6 +165756,9 @@ func IpamPoolState_Values() []string {
 		IpamPoolStateDeleteInProgress,
 		IpamPoolStateDeleteComplete,
 		IpamPoolStateDeleteFailed,
+		IpamPoolStateIsolateInProgress,
+		IpamPoolStateIsolateComplete,
+		IpamPoolStateRestoreInProgress,
 	}
 }
 
@@ -165492,6 +165817,15 @@ const (
 
 	// IpamScopeStateDeleteFailed is a IpamScopeState enum value
 	IpamScopeStateDeleteFailed = "delete-failed"
+
+	// IpamScopeStateIsolateInProgress is a IpamScopeState enum value
+	IpamScopeStateIsolateInProgress = "isolate-in-progress"
+
+	// IpamScopeStateIsolateComplete is a IpamScopeState enum value
+	IpamScopeStateIsolateComplete = "isolate-complete"
+
+	// IpamScopeStateRestoreInProgress is a IpamScopeState enum value
+	IpamScopeStateRestoreInProgress = "restore-in-progress"
 )
 
 // IpamScopeState_Values returns all elements of the IpamScopeState enum
@@ -165506,6 +165840,9 @@ func IpamScopeState_Values() []string {
 		IpamScopeStateDeleteInProgress,
 		IpamScopeStateDeleteComplete,
 		IpamScopeStateDeleteFailed,
+		IpamScopeStateIsolateInProgress,
+		IpamScopeStateIsolateComplete,
+		IpamScopeStateRestoreInProgress,
 	}
 }
 
@@ -165552,6 +165889,15 @@ const (
 
 	// IpamStateDeleteFailed is a IpamState enum value
 	IpamStateDeleteFailed = "delete-failed"
+
+	// IpamStateIsolateInProgress is a IpamState enum value
+	IpamStateIsolateInProgress = "isolate-in-progress"
+
+	// IpamStateIsolateComplete is a IpamState enum value
+	IpamStateIsolateComplete = "isolate-complete"
+
+	// IpamStateRestoreInProgress is a IpamState enum value
+	IpamStateRestoreInProgress = "restore-in-progress"
 )
 
 // IpamState_Values returns all elements of the IpamState enum
@@ -165566,6 +165912,9 @@ func IpamState_Values() []string {
 		IpamStateDeleteInProgress,
 		IpamStateDeleteComplete,
 		IpamStateDeleteFailed,
+		IpamStateIsolateInProgress,
+		IpamStateIsolateComplete,
+		IpamStateRestoreInProgress,
 	}
 }
 
@@ -167722,6 +168071,18 @@ func TieringOperationStatus_Values() []string {
 		TieringOperationStatusPermanentRestoreInProgress,
 		TieringOperationStatusPermanentRestoreCompleted,
 		TieringOperationStatusPermanentRestoreFailed,
+	}
+}
+
+const (
+	// TpmSupportValuesV20 is a TpmSupportValues enum value
+	TpmSupportValuesV20 = "v2.0"
+)
+
+// TpmSupportValues_Values returns all elements of the TpmSupportValues enum
+func TpmSupportValues_Values() []string {
+	return []string{
+		TpmSupportValuesV20,
 	}
 }
 
