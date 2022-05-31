@@ -152,7 +152,7 @@ github.com/deepmap/oapi-codegen/pkg/util
 github.com/dimchansky/utfbom
 # github.com/dougm/pretty v0.0.0-20171025230240-2ee9d7453c02
 github.com/dougm/pretty
-# github.com/getkin/kin-openapi v0.93.0
+# github.com/getkin/kin-openapi v0.95.0
 ## explicit
 github.com/getkin/kin-openapi/jsoninfo
 github.com/getkin/kin-openapi/openapi3
