@@ -4329,12 +4329,11 @@ func (c *EC2) CreateCustomerGatewayRequest(input *CreateCustomerGatewayInput) (r
 
 // CreateCustomerGateway API operation for Amazon Elastic Compute Cloud.
 //
-// Provides information to Amazon Web Services about your VPN customer gateway
-// device. The customer gateway is the appliance at your end of the VPN connection.
-// (The device on the Amazon Web Services side of the VPN connection is the
-// virtual private gateway.) You must provide the internet-routable IP address
-// of the customer gateway's external interface. The IP address must be static
-// and can be behind a device performing network address translation (NAT).
+// Provides information to Amazon Web Services about your customer gateway device.
+// The customer gateway device is the appliance at your end of the VPN connection.
+// You must provide the IP address of the customer gateway device’s external
+// interface. The IP address must be static and can be behind a device performing
+// network address translation (NAT).
 //
 // For devices that use Border Gateway Protocol (BGP), you can also provide
 // the device's BGP Autonomous System Number (ASN). You can use an existing
@@ -5708,7 +5707,7 @@ func (c *EC2) CreateLaunchTemplateRequest(input *CreateLaunchTemplateInput) (req
 // A launch template contains the parameters to launch an instance. When you
 // launch an instance using RunInstances, you can specify a launch template
 // instead of providing the launch parameters in the request. For more information,
-// see Launching an instance from a launch template (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-launch-templates.html)
+// see Launch an instance from a launch template (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-launch-templates.html)
 // in the Amazon Elastic Compute Cloud User Guide.
 //
 // If you want to clone an existing launch template as the basis for creating
@@ -5795,7 +5794,12 @@ func (c *EC2) CreateLaunchTemplateVersionRequest(input *CreateLaunchTemplateVers
 // Launch template versions are numbered in the order in which they are created.
 // You cannot specify, change, or replace the numbering of launch template versions.
 //
-// For more information, see Managing launch template versions (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-launch-templates.html#manage-launch-template-versions)in
+// Launch templates are immutable; after you create a launch template, you can't
+// modify it. Instead, you can create a new version of the launch template that
+// includes any changes you require.
+//
+// For more information, see Modify a launch template (manage launch template
+// versions) (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-launch-templates.html#manage-launch-template-versions)in
 // the Amazon Elastic Compute Cloud User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -7087,9 +7091,8 @@ func (c *EC2) CreateRouteRequest(input *CreateRouteInput) (req *request.Request,
 //
 // Creates a route in a route table within a VPC.
 //
-// You must specify one of the following targets: internet gateway or virtual
-// private gateway, NAT instance, NAT gateway, VPC peering connection, network
-// interface, egress-only internet gateway, or transit gateway.
+// You must specify either a destination CIDR block or a prefix list ID. You
+// must also specify exactly one of the resources from the parameter list.
 //
 // When determining how to route traffic, we use the route with the most specific
 // match. For example, traffic is destined for the IPv4 address 192.0.2.3, and
@@ -8216,7 +8219,8 @@ func (c *EC2) CreateTrafficMirrorTargetRequest(input *CreateTrafficMirrorTargetI
 // in the same VPC, or in different VPCs connected via VPC peering or a transit
 // gateway.
 //
-// A Traffic Mirror target can be a network interface, or a Network Load Balancer.
+// A Traffic Mirror target can be a network interface, a Network Load Balancer,
+// or a Gateway Load Balancer endpoint.
 //
 // To use the target in a Traffic Mirror session, use CreateTrafficMirrorSession
 // (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateTrafficMirrorSession.htm).
@@ -8625,9 +8629,8 @@ func (c *EC2) CreateTransitGatewayPeeringAttachmentRequest(input *CreateTransitG
 // CreateTransitGatewayPeeringAttachment API operation for Amazon Elastic Compute Cloud.
 //
 // Requests a transit gateway peering attachment between the specified transit
-// gateway (requester) and a peer transit gateway (accepter). The transit gateways
-// must be in different Regions. The peer transit gateway can be in your account
-// or a different Amazon Web Services account.
+// gateway (requester) and a peer transit gateway (accepter). The peer transit
+// gateway can be in your account or a different Amazon Web Services account.
 //
 // After you create the peering attachment, the owner of the accepter transit
 // gateway must accept the attachment request.
@@ -35562,6 +35565,93 @@ func (c *EC2) GetInstanceTypesFromInstanceRequirementsPagesWithContext(ctx aws.C
 	return p.Err()
 }
 
+const opGetInstanceUefiData = "GetInstanceUefiData"
+
+// GetInstanceUefiDataRequest generates a "aws/request.Request" representing the
+// client's request for the GetInstanceUefiData operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetInstanceUefiData for more information on using the GetInstanceUefiData
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetInstanceUefiDataRequest method.
+//    req, resp := client.GetInstanceUefiDataRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/GetInstanceUefiData
+func (c *EC2) GetInstanceUefiDataRequest(input *GetInstanceUefiDataInput) (req *request.Request, output *GetInstanceUefiDataOutput) {
+	op := &request.Operation{
+		Name:       opGetInstanceUefiData,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetInstanceUefiDataInput{}
+	}
+
+	output = &GetInstanceUefiDataOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetInstanceUefiData API operation for Amazon Elastic Compute Cloud.
+//
+// A binary representation of the UEFI variable store. Only non-volatile variables
+// are stored. This is a base64 encoded and zlib compressed binary value that
+// must be properly encoded.
+//
+// When you use register-image (https://docs.aws.amazon.com/cli/latest/reference/ec2/register-image.html)
+// to create an AMI, you can create an exact copy of your variable store by
+// passing the UEFI data in the UefiData parameter. You can modify the UEFI
+// data by using the python-uefivars tool (https://github.com/awslabs/python-uefivars)
+// on GitHub. You can use the tool to convert the UEFI data into a human-readable
+// format (JSON), which you can inspect and modify, and then convert back into
+// the binary format to use with register-image.
+//
+// For more information, see UEFI Secure Boot (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/uefi-secure-boot.html)
+// in the Amazon EC2 User Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Elastic Compute Cloud's
+// API operation GetInstanceUefiData for usage and error information.
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/GetInstanceUefiData
+func (c *EC2) GetInstanceUefiData(input *GetInstanceUefiDataInput) (*GetInstanceUefiDataOutput, error) {
+	req, out := c.GetInstanceUefiDataRequest(input)
+	return out, req.Send()
+}
+
+// GetInstanceUefiDataWithContext is the same as GetInstanceUefiData with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetInstanceUefiData for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *EC2) GetInstanceUefiDataWithContext(ctx aws.Context, input *GetInstanceUefiDataInput, opts ...request.Option) (*GetInstanceUefiDataOutput, error) {
+	req, out := c.GetInstanceUefiDataRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opGetIpamAddressHistory = "GetIpamAddressHistory"
 
 // GetIpamAddressHistoryRequest generates a "aws/request.Request" representing the
@@ -44816,6 +44906,9 @@ func (c *EC2) ReleaseAddressRequest(input *ReleaseAddressInput) (req *request.Re
 // [EC2-VPC] After you release an Elastic IP address for use in a VPC, you might
 // be able to recover it. For more information, see AllocateAddress.
 //
+// For more information, see Elastic IP Addresses (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html)
+// in the Amazon Elastic Compute Cloud User Guide.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -45287,10 +45380,11 @@ func (c *EC2) ReplaceRouteRequest(input *ReplaceRouteInput) (req *request.Reques
 
 // ReplaceRoute API operation for Amazon Elastic Compute Cloud.
 //
-// Replaces an existing route within a route table in a VPC. You must provide
-// only one of the following: internet gateway, virtual private gateway, NAT
-// instance, NAT gateway, VPC peering connection, network interface, egress-only
-// internet gateway, or transit gateway.
+// Replaces an existing route within a route table in a VPC.
+//
+// You must specify either a destination CIDR block or a prefix list ID. You
+// must also specify exactly one of the resources from the parameter list, or
+// reset the local route to its default target.
 //
 // For more information, see Route tables (https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Route_Tables.html)
 // in the Amazon Virtual Private Cloud User Guide.
@@ -47947,7 +48041,9 @@ func (c *EC2) StopInstancesRequest(input *StopInstancesInput) (req *request.Requ
 
 // StopInstances API operation for Amazon Elastic Compute Cloud.
 //
-// Stops an Amazon EBS-backed instance.
+// Stops an Amazon EBS-backed instance. For more information, see Stop and start
+// your instance (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Stop_Start.html)
+// in the Amazon EC2 User Guide.
 //
 // You can use the Stop action to hibernate an instance if the instance is enabled
 // for hibernation (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Hibernate.html#enabling-hibernation)
@@ -50401,6 +50497,10 @@ type AllocateHostsInput struct {
 	// You cannot specify InstanceType and InstanceFamily in the same request.
 	InstanceType *string `locationName:"instanceType" type:"string"`
 
+	// The Amazon Resource Name (ARN) of the Amazon Web Services Outpost on which
+	// to allocate the Dedicated Host.
+	OutpostArn *string `type:"string"`
+
 	// The number of Dedicated Hosts to allocate to your account with these parameters.
 	//
 	// Quantity is a required field
@@ -50477,6 +50577,12 @@ func (s *AllocateHostsInput) SetInstanceFamily(v string) *AllocateHostsInput {
 // SetInstanceType sets the InstanceType field's value.
 func (s *AllocateHostsInput) SetInstanceType(v string) *AllocateHostsInput {
 	s.InstanceType = &v
+	return s
+}
+
+// SetOutpostArn sets the OutpostArn field's value.
+func (s *AllocateHostsInput) SetOutpostArn(v string) *AllocateHostsInput {
+	s.OutpostArn = &v
 	return s
 }
 
@@ -56361,8 +56467,7 @@ type CapacityReservation struct {
 	//    date and time.
 	EndDateType *string `locationName:"endDateType" type:"string" enum:"EndDateType"`
 
-	// Indicates whether the Capacity Reservation supports instances with temporary,
-	// block-level storage.
+	// Deprecated.
 	EphemeralStorage *bool `locationName:"ephemeralStorage" type:"boolean"`
 
 	// Indicates the type of instance launches that the Capacity Reservation accepts.
@@ -60198,8 +60303,7 @@ type CreateCapacityReservationInput struct {
 	//    is limited.
 	EndDateType *string `type:"string" enum:"EndDateType"`
 
-	// Indicates whether the Capacity Reservation supports instances with temporary,
-	// block-level storage.
+	// Deprecated.
 	EphemeralStorage *bool `type:"boolean"`
 
 	// The number of instances for which to reserve capacity.
@@ -61013,9 +61117,13 @@ type CreateCustomerGatewayInput struct {
 	// it is UnauthorizedOperation.
 	DryRun *bool `locationName:"dryRun" type:"boolean"`
 
-	// The Internet-routable IP address for the customer gateway's outside interface.
-	// The address must be static.
-	PublicIp *string `locationName:"IpAddress" type:"string"`
+	// IPv4 address for the customer gateway device's outside interface. The address
+	// must be static.
+	IpAddress *string `type:"string"`
+
+	// This member has been deprecated. The Internet-routable IP address for the
+	// customer gateway's outside interface. The address must be static.
+	PublicIp *string `type:"string"`
 
 	// The tags to apply to the customer gateway.
 	TagSpecifications []*TagSpecification `locationName:"TagSpecification" locationNameList:"item" type:"list"`
@@ -61081,6 +61189,12 @@ func (s *CreateCustomerGatewayInput) SetDeviceName(v string) *CreateCustomerGate
 // SetDryRun sets the DryRun field's value.
 func (s *CreateCustomerGatewayInput) SetDryRun(v bool) *CreateCustomerGatewayInput {
 	s.DryRun = &v
+	return s
+}
+
+// SetIpAddress sets the IpAddress field's value.
+func (s *CreateCustomerGatewayInput) SetIpAddress(v string) *CreateCustomerGatewayInput {
+	s.IpAddress = &v
 	return s
 }
 
@@ -63476,7 +63590,7 @@ type CreateLaunchTemplateInput struct {
 	_ struct{} `type:"structure"`
 
 	// Unique, case-sensitive identifier you provide to ensure the idempotency of
-	// the request. For more information, see Ensuring Idempotency (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html).
+	// the request. For more information, see Ensuring idempotency (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html).
 	//
 	// Constraint: Maximum 128 ASCII characters.
 	ClientToken *string `type:"string"`
@@ -63497,7 +63611,13 @@ type CreateLaunchTemplateInput struct {
 	// LaunchTemplateName is a required field
 	LaunchTemplateName *string `min:"3" type:"string" required:"true"`
 
-	// The tags to apply to the launch template during creation.
+	// The tags to apply to the launch template on creation. To tag the launch template,
+	// the resource type must be launch-template.
+	//
+	// To specify the tags for the resources that are created when an instance is
+	// launched, you must use the TagSpecifications parameter in the launch template
+	// data (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_RequestLaunchTemplateData.html)
+	// structure.
 	TagSpecifications []*TagSpecification `locationName:"TagSpecification" locationNameList:"item" type:"list"`
 
 	// A description for the first version of the launch template.
@@ -63628,7 +63748,7 @@ type CreateLaunchTemplateVersionInput struct {
 	_ struct{} `type:"structure"`
 
 	// Unique, case-sensitive identifier you provide to ensure the idempotency of
-	// the request. For more information, see Ensuring Idempotency (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html).
+	// the request. For more information, see Ensuring idempotency (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html).
 	//
 	// Constraint: Maximum 128 ASCII characters.
 	ClientToken *string `type:"string"`
@@ -65277,6 +65397,13 @@ type CreatePlacementGroupInput struct {
 	// The number of partitions. Valid only when Strategy is set to partition.
 	PartitionCount *int64 `type:"integer"`
 
+	// Determines how placement groups spread instances.
+	//
+	//    * Host – You can use host only with Outpost placement groups.
+	//
+	//    * Rack – No usage restrictions.
+	SpreadLevel *string `type:"string" enum:"SpreadLevel"`
+
 	// The placement strategy.
 	Strategy *string `locationName:"strategy" type:"string" enum:"PlacementStrategy"`
 
@@ -65317,6 +65444,12 @@ func (s *CreatePlacementGroupInput) SetGroupName(v string) *CreatePlacementGroup
 // SetPartitionCount sets the PartitionCount field's value.
 func (s *CreatePlacementGroupInput) SetPartitionCount(v int64) *CreatePlacementGroupInput {
 	s.PartitionCount = &v
+	return s
+}
+
+// SetSpreadLevel sets the SpreadLevel field's value.
+func (s *CreatePlacementGroupInput) SetSpreadLevel(v string) *CreatePlacementGroupInput {
+	s.SpreadLevel = &v
 	return s
 }
 
@@ -67698,6 +67831,9 @@ type CreateTrafficMirrorTargetInput struct {
 	// it is UnauthorizedOperation.
 	DryRun *bool `type:"boolean"`
 
+	// The ID of the Gateway Load Balancer endpoint.
+	GatewayLoadBalancerEndpointId *string `type:"string"`
+
 	// The network interface ID that is associated with the target.
 	NetworkInterfaceId *string `type:"string"`
 
@@ -67742,6 +67878,12 @@ func (s *CreateTrafficMirrorTargetInput) SetDescription(v string) *CreateTraffic
 // SetDryRun sets the DryRun field's value.
 func (s *CreateTrafficMirrorTargetInput) SetDryRun(v bool) *CreateTrafficMirrorTargetInput {
 	s.DryRun = &v
+	return s
+}
+
+// SetGatewayLoadBalancerEndpointId sets the GatewayLoadBalancerEndpointId field's value.
+func (s *CreateTrafficMirrorTargetInput) SetGatewayLoadBalancerEndpointId(v string) *CreateTrafficMirrorTargetInput {
+	s.GatewayLoadBalancerEndpointId = &v
 	return s
 }
 
@@ -69515,11 +69657,17 @@ type CreateVpcEndpointInput struct {
 	// of the request. For more information, see How to ensure idempotency (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html).
 	ClientToken *string `type:"string"`
 
+	// The DNS options for the endpoint.
+	DnsOptions *DnsOptionsSpecification `type:"structure"`
+
 	// Checks whether you have the required permissions for the action, without
 	// actually making the request, and provides an error response. If you have
 	// the required permissions, the error response is DryRunOperation. Otherwise,
 	// it is UnauthorizedOperation.
 	DryRun *bool `type:"boolean"`
+
+	// The IP address type for the endpoint.
+	IpAddressType *string `type:"string" enum:"IpAddressType"`
 
 	// (Interface and gateway endpoints) A policy to attach to the endpoint that
 	// controls access to the service. The policy must be in valid JSON format.
@@ -69614,9 +69762,21 @@ func (s *CreateVpcEndpointInput) SetClientToken(v string) *CreateVpcEndpointInpu
 	return s
 }
 
+// SetDnsOptions sets the DnsOptions field's value.
+func (s *CreateVpcEndpointInput) SetDnsOptions(v *DnsOptionsSpecification) *CreateVpcEndpointInput {
+	s.DnsOptions = v
+	return s
+}
+
 // SetDryRun sets the DryRun field's value.
 func (s *CreateVpcEndpointInput) SetDryRun(v bool) *CreateVpcEndpointInput {
 	s.DryRun = &v
+	return s
+}
+
+// SetIpAddressType sets the IpAddressType field's value.
+func (s *CreateVpcEndpointInput) SetIpAddressType(v string) *CreateVpcEndpointInput {
+	s.IpAddressType = &v
 	return s
 }
 
@@ -69744,6 +69904,9 @@ type CreateVpcEndpointServiceConfigurationInput struct {
 	// VPC endpoint service.
 	PrivateDnsName *string `type:"string"`
 
+	// The supported IP address types. The possible values are ipv4 and ipv6.
+	SupportedIpAddressTypes []*string `locationName:"SupportedIpAddressType" locationNameList:"item" type:"list"`
+
 	// The tags to associate with the service.
 	TagSpecifications []*TagSpecification `locationName:"TagSpecification" locationNameList:"item" type:"list"`
 }
@@ -69799,6 +69962,12 @@ func (s *CreateVpcEndpointServiceConfigurationInput) SetNetworkLoadBalancerArns(
 // SetPrivateDnsName sets the PrivateDnsName field's value.
 func (s *CreateVpcEndpointServiceConfigurationInput) SetPrivateDnsName(v string) *CreateVpcEndpointServiceConfigurationInput {
 	s.PrivateDnsName = &v
+	return s
+}
+
+// SetSupportedIpAddressTypes sets the SupportedIpAddressTypes field's value.
+func (s *CreateVpcEndpointServiceConfigurationInput) SetSupportedIpAddressTypes(v []*string) *CreateVpcEndpointServiceConfigurationInput {
+	s.SupportedIpAddressTypes = v
 	return s
 }
 
@@ -70608,7 +70777,7 @@ type CustomerGateway struct {
 	// The name of customer gateway device.
 	DeviceName *string `locationName:"deviceName" type:"string"`
 
-	// The Internet-routable IP address of the customer gateway's outside interface.
+	// The IP address of the customer gateway device's outside interface.
 	IpAddress *string `locationName:"ipAddress" type:"string"`
 
 	// The current state of the customer gateway (pending | available | deleting
@@ -79533,8 +79702,8 @@ type DescribeCustomerGatewaysInput struct {
 	//
 	//    * customer-gateway-id - The ID of the customer gateway.
 	//
-	//    * ip-address - The IP address of the customer gateway's Internet-routable
-	//    external interface.
+	//    * ip-address - The IP address of the customer gateway device's external
+	//    interface.
 	//
 	//    * state - The state of the customer gateway (pending | available | deleting
 	//    | deleted).
@@ -82490,6 +82659,17 @@ type DescribeImageAttributeOutput struct {
 	// Indicates whether enhanced networking with the Intel 82599 Virtual Function
 	// interface is enabled.
 	SriovNetSupport *AttributeValue `locationName:"sriovNetSupport" type:"structure"`
+
+	// If the image is configured for NitroTPM support, the value is v2.0.
+	TpmSupport *AttributeValue `locationName:"tpmSupport" type:"structure"`
+
+	// Base64 representation of the non-volatile UEFI variable store. To retrieve
+	// the UEFI data, use the GetInstanceUefiData (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_GetInstanceUefiData)
+	// command. You can inspect and modify the UEFI data by using the python-uefivars
+	// tool (https://github.com/awslabs/python-uefivars) on GitHub. For more information,
+	// see UEFI Secure Boot (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/uefi-secure-boot.html)
+	// in the Amazon Elastic Compute Cloud User Guide.
+	UefiData *AttributeValue `locationName:"uefiData" type:"structure"`
 }
 
 // String returns the string representation.
@@ -82567,6 +82747,18 @@ func (s *DescribeImageAttributeOutput) SetRamdiskId(v *AttributeValue) *Describe
 // SetSriovNetSupport sets the SriovNetSupport field's value.
 func (s *DescribeImageAttributeOutput) SetSriovNetSupport(v *AttributeValue) *DescribeImageAttributeOutput {
 	s.SriovNetSupport = v
+	return s
+}
+
+// SetTpmSupport sets the TpmSupport field's value.
+func (s *DescribeImageAttributeOutput) SetTpmSupport(v *AttributeValue) *DescribeImageAttributeOutput {
+	s.TpmSupport = v
+	return s
+}
+
+// SetUefiData sets the UefiData field's value.
+func (s *DescribeImageAttributeOutput) SetUefiData(v *AttributeValue) *DescribeImageAttributeOutput {
+	s.UefiData = v
 	return s
 }
 
@@ -83096,6 +83288,10 @@ type DescribeInstanceAttributeOutput struct {
 	// The block device mapping of the instance.
 	BlockDeviceMappings []*InstanceBlockDeviceMapping `locationName:"blockDeviceMapping" locationNameList:"item" type:"list"`
 
+	// To enable the instance for Amazon Web Services Stop Protection, set this
+	// parameter to true; otherwise, set it to false.
+	DisableApiStop *AttributeBooleanValue `locationName:"disableApiStop" type:"structure"`
+
 	// If the value is true, you can't terminate the instance through the Amazon
 	// EC2 console, CLI, or API; otherwise, you can.
 	DisableApiTermination *AttributeBooleanValue `locationName:"disableApiTermination" type:"structure"`
@@ -83172,6 +83368,12 @@ func (s DescribeInstanceAttributeOutput) GoString() string {
 // SetBlockDeviceMappings sets the BlockDeviceMappings field's value.
 func (s *DescribeInstanceAttributeOutput) SetBlockDeviceMappings(v []*InstanceBlockDeviceMapping) *DescribeInstanceAttributeOutput {
 	s.BlockDeviceMappings = v
+	return s
+}
+
+// SetDisableApiStop sets the DisableApiStop field's value.
+func (s *DescribeInstanceAttributeOutput) SetDisableApiStop(v *AttributeBooleanValue) *DescribeInstanceAttributeOutput {
+	s.DisableApiStop = v
 	return s
 }
 
@@ -86977,6 +87179,9 @@ type DescribeNetworkAclsInput struct {
 	//
 	//    * entry.rule-action - Allows or denies the matching traffic (allow | deny).
 	//
+	//    * entry.egress - A Boolean that indicates the type of rule. Specify true
+	//    for egress rules, or false for ingress rules.
+	//
 	//    * entry.rule-number - The number of an entry (in other words, rule) in
 	//    the set of ACL entries.
 	//
@@ -88203,6 +88408,8 @@ type DescribePlacementGroupsInput struct {
 	//    * group-name - The name of the placement group.
 	//
 	//    * group-arn - The Amazon Resource Name (ARN) of the placement group.
+	//
+	//    * spread-level - The spread level for the placement group (host | rack).
 	//
 	//    * state - The state of the placement group (pending | available | deleting
 	//    | deleted).
@@ -95047,6 +95254,8 @@ type DescribeVpcEndpointConnectionsInput struct {
 
 	// One or more filters.
 	//
+	//    * ip-address-type - The IP address type (ipv4 | ipv6).
+	//
 	//    * service-id - The ID of the service.
 	//
 	//    * vpc-endpoint-owner - The ID of the Amazon Web Services account ID that
@@ -95169,6 +95378,8 @@ type DescribeVpcEndpointServiceConfigurationsInput struct {
 	//
 	//    * service-state - The state of the service (Pending | Available | Deleting
 	//    | Deleted | Failed).
+	//
+	//    * supported-ip-address-types - The IP address type (ipv4 | ipv6).
 	//
 	//    * tag:<key> - The key/value combination of a tag assigned to the resource.
 	//    Use the tag key in the filter name and the tag value as the filter value.
@@ -95435,6 +95646,8 @@ type DescribeVpcEndpointServicesInput struct {
 	//
 	//    * service-type - The type of service (Interface | Gateway).
 	//
+	//    * supported-ip-address-types - The IP address type (ipv4 | ipv6).
+	//
 	//    * tag:<key> - The key/value combination of a tag assigned to the resource.
 	//    Use the tag key in the filter name and the tag value as the filter value.
 	//    For example, to find all resources that have a tag with the key Owner
@@ -95571,6 +95784,8 @@ type DescribeVpcEndpointsInput struct {
 	DryRun *bool `type:"boolean"`
 
 	// One or more filters.
+	//
+	//    * ip-address-type - The IP address type (ipv4 | ipv6).
 	//
 	//    * service-name - The name of the service.
 	//
@@ -99617,6 +99832,70 @@ func (s *DnsEntry) SetHostedZoneId(v string) *DnsEntry {
 	return s
 }
 
+// Describes the DNS options for an endpoint.
+type DnsOptions struct {
+	_ struct{} `type:"structure"`
+
+	// The DNS records created for the endpoint.
+	DnsRecordIpType *string `locationName:"dnsRecordIpType" type:"string" enum:"DnsRecordIpType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DnsOptions) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DnsOptions) GoString() string {
+	return s.String()
+}
+
+// SetDnsRecordIpType sets the DnsRecordIpType field's value.
+func (s *DnsOptions) SetDnsRecordIpType(v string) *DnsOptions {
+	s.DnsRecordIpType = &v
+	return s
+}
+
+// Describes the DNS options for an endpoint.
+type DnsOptionsSpecification struct {
+	_ struct{} `type:"structure"`
+
+	// The DNS records created for the endpoint.
+	DnsRecordIpType *string `type:"string" enum:"DnsRecordIpType"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DnsOptionsSpecification) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DnsOptionsSpecification) GoString() string {
+	return s.String()
+}
+
+// SetDnsRecordIpType sets the DnsRecordIpType field's value.
+func (s *DnsOptionsSpecification) SetDnsRecordIpType(v string) *DnsOptionsSpecification {
+	s.DnsRecordIpType = &v
+	return s
+}
+
 // Information about the DNS server to be used.
 type DnsServersOptionsModifyStructure struct {
 	_ struct{} `type:"structure"`
@@ -101979,18 +102258,21 @@ type EventInformation struct {
 	//    * active - The EC2 Fleet or Spot Fleet request has been validated and
 	//    Amazon EC2 is attempting to maintain the target number of running instances.
 	//
-	//    * cancelled - The EC2 Fleet or Spot Fleet request is canceled and has
-	//    no running instances. The EC2 Fleet or Spot Fleet will be deleted two
-	//    days after its instances are terminated.
+	//    * deleted (EC2 Fleet) / cancelled (Spot Fleet) - The EC2 Fleet is deleted
+	//    or the Spot Fleet request is canceled and has no running instances. The
+	//    EC2 Fleet or Spot Fleet will be deleted two days after its instances are
+	//    terminated.
 	//
-	//    * cancelled_running - The EC2 Fleet or Spot Fleet request is canceled
-	//    and does not launch additional instances. Its existing instances continue
-	//    to run until they are interrupted or terminated. The request remains in
-	//    this state until all instances are interrupted or terminated.
+	//    * deleted_running (EC2 Fleet) / cancelled_running (Spot Fleet) - The EC2
+	//    Fleet is deleted or the Spot Fleet request is canceled and does not launch
+	//    additional instances. Its existing instances continue to run until they
+	//    are interrupted or terminated. The request remains in this state until
+	//    all instances are interrupted or terminated.
 	//
-	//    * cancelled_terminating - The EC2 Fleet or Spot Fleet request is canceled
-	//    and its instances are terminating. The request remains in this state until
-	//    all instances are terminated.
+	//    * deleted_terminating (EC2 Fleet) / cancelled_terminating (Spot Fleet)
+	//    - The EC2 Fleet is deleted or the Spot Fleet request is canceled and its
+	//    instances are terminating. The request remains in this state until all
+	//    instances are terminated.
 	//
 	//    * expired - The EC2 Fleet or Spot Fleet request has expired. If the request
 	//    was created with TerminateInstancesWithExpiration set, a subsequent terminated
@@ -107094,6 +107376,104 @@ func (s *GetInstanceTypesFromInstanceRequirementsOutput) SetNextToken(v string) 
 	return s
 }
 
+type GetInstanceUefiDataInput struct {
+	_ struct{} `type:"structure"`
+
+	// Checks whether you have the required permissions for the action, without
+	// actually making the request, and provides an error response. If you have
+	// the required permissions, the error response is DryRunOperation. Otherwise,
+	// it is UnauthorizedOperation.
+	DryRun *bool `type:"boolean"`
+
+	// The ID of the instance from which to retrieve the UEFI data.
+	//
+	// InstanceId is a required field
+	InstanceId *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetInstanceUefiDataInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetInstanceUefiDataInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetInstanceUefiDataInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetInstanceUefiDataInput"}
+	if s.InstanceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDryRun sets the DryRun field's value.
+func (s *GetInstanceUefiDataInput) SetDryRun(v bool) *GetInstanceUefiDataInput {
+	s.DryRun = &v
+	return s
+}
+
+// SetInstanceId sets the InstanceId field's value.
+func (s *GetInstanceUefiDataInput) SetInstanceId(v string) *GetInstanceUefiDataInput {
+	s.InstanceId = &v
+	return s
+}
+
+type GetInstanceUefiDataOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The ID of the instance from which to retrieve the UEFI data.
+	InstanceId *string `locationName:"instanceId" type:"string"`
+
+	// Base64 representation of the non-volatile UEFI variable store.
+	UefiData *string `locationName:"uefiData" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetInstanceUefiDataOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetInstanceUefiDataOutput) GoString() string {
+	return s.String()
+}
+
+// SetInstanceId sets the InstanceId field's value.
+func (s *GetInstanceUefiDataOutput) SetInstanceId(v string) *GetInstanceUefiDataOutput {
+	s.InstanceId = &v
+	return s
+}
+
+// SetUefiData sets the UefiData field's value.
+func (s *GetInstanceUefiDataOutput) SetUefiData(v string) *GetInstanceUefiDataOutput {
+	s.UefiData = &v
+	return s
+}
+
 type GetIpamAddressHistoryInput struct {
 	_ struct{} `type:"structure"`
 
@@ -110325,6 +110705,10 @@ type Host struct {
 	// is true, the host is in a host resource group; otherwise, it is not.
 	MemberOfServiceLinkedResourceGroup *bool `locationName:"memberOfServiceLinkedResourceGroup" type:"boolean"`
 
+	// The Amazon Resource Name (ARN) of the Amazon Web Services Outpost on which
+	// the Dedicated Host is allocated.
+	OutpostArn *string `locationName:"outpostArn" type:"string"`
+
 	// The ID of the Amazon Web Services account that owns the Dedicated Host.
 	OwnerId *string `locationName:"ownerId" type:"string"`
 
@@ -110431,6 +110815,12 @@ func (s *Host) SetInstances(v []*HostInstance) *Host {
 // SetMemberOfServiceLinkedResourceGroup sets the MemberOfServiceLinkedResourceGroup field's value.
 func (s *Host) SetMemberOfServiceLinkedResourceGroup(v bool) *Host {
 	s.MemberOfServiceLinkedResourceGroup = &v
+	return s
+}
+
+// SetOutpostArn sets the OutpostArn field's value.
+func (s *Host) SetOutpostArn(v string) *Host {
+	s.OutpostArn = &v
 	return s
 }
 
@@ -111219,6 +111609,11 @@ type Image struct {
 	// Any tags assigned to the image.
 	Tags []*Tag `locationName:"tagSet" locationNameList:"item" type:"list"`
 
+	// If the image is configured for NitroTPM support, the value is v2.0. For more
+	// information, see NitroTPM (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/nitrotpm.html)
+	// in the Amazon Elastic Compute Cloud User Guide.
+	TpmSupport *string `locationName:"tpmSupport" type:"string" enum:"TpmSupportValues"`
+
 	// The operation of the Amazon EC2 instance and the billing code that is associated
 	// with the AMI. usageOperation corresponds to the lineitem/Operation (https://docs.aws.amazon.com/cur/latest/userguide/Lineitem-columns.html#Lineitem-details-O-Operation)
 	// column on your Amazon Web Services Cost and Usage Report and in the Amazon
@@ -111404,6 +111799,12 @@ func (s *Image) SetStateReason(v *StateReason) *Image {
 // SetTags sets the Tags field's value.
 func (s *Image) SetTags(v []*Tag) *Image {
 	s.Tags = v
+	return s
+}
+
+// SetTpmSupport sets the TpmSupport field's value.
+func (s *Image) SetTpmSupport(v string) *Image {
+	s.TpmSupport = &v
 	return s
 }
 
@@ -113572,6 +113973,11 @@ type Instance struct {
 	// Any tags assigned to the instance.
 	Tags []*Tag `locationName:"tagSet" locationNameList:"item" type:"list"`
 
+	// If the instance is configured for NitroTPM support, the value is v2.0. For
+	// more information, see NitroTPM (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/nitrotpm.html)
+	// in the Amazon EC2 User Guide.
+	TpmSupport *string `locationName:"tpmSupport" type:"string"`
+
 	// The usage operation value for the instance. For more information, see AMI
 	// billing information fields (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/billing-info-fields.html)
 	// in the Amazon EC2 User Guide.
@@ -113908,6 +114314,12 @@ func (s *Instance) SetSubnetId(v string) *Instance {
 // SetTags sets the Tags field's value.
 func (s *Instance) SetTags(v []*Tag) *Instance {
 	s.Tags = v
+	return s
+}
+
+// SetTpmSupport sets the TpmSupport field's value.
+func (s *Instance) SetTpmSupport(v string) *Instance {
+	s.TpmSupport = &v
 	return s
 }
 
@@ -115982,9 +116394,9 @@ type InstanceRequirements struct {
 	//
 	//    * For instance types with hard disk drive (HDD) storage, specify hdd.
 	//
-	//    * For instance types with solid state drive (SDD) storage, specify sdd.
+	//    * For instance types with solid state drive (SSD) storage, specify ssd.
 	//
-	// Default: hdd and sdd
+	// Default: hdd and ssd
 	LocalStorageTypes []*string `locationName:"localStorageTypeSet" locationNameList:"item" type:"list" enum:"LocalStorageType"`
 
 	// The minimum and maximum amount of memory per vCPU, in GiB.
@@ -116364,9 +116776,9 @@ type InstanceRequirementsRequest struct {
 	//
 	//    * For instance types with hard disk drive (HDD) storage, specify hdd.
 	//
-	//    * For instance types with solid state drive (SDD) storage, specify sdd.
+	//    * For instance types with solid state drive (SSD) storage, specify ssd.
 	//
-	// Default: hdd and sdd
+	// Default: hdd and ssd
 	LocalStorageTypes []*string `locationName:"LocalStorageType" locationNameList:"item" type:"list" enum:"LocalStorageType"`
 
 	// The minimum and maximum amount of memory per vCPU, in GiB.
@@ -120740,7 +121152,7 @@ func (s *LaunchTemplateHibernationOptions) SetConfigured(v bool) *LaunchTemplate
 }
 
 // Indicates whether the instance is configured for hibernation. This parameter
-// is valid only if the instance meets the hibernation prerequisites (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Hibernate.html#hibernating-prerequisites).
+// is valid only if the instance meets the hibernation prerequisites (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/hibernating-prerequisites.html).
 type LaunchTemplateHibernationOptionsRequest struct {
 	_ struct{} `type:"structure"`
 
@@ -122303,11 +122715,11 @@ func (s *LaunchTemplateSpotMarketOptionsRequest) SetValidUntil(v time.Time) *Lau
 	return s
 }
 
-// The tag specification for the launch template.
+// The tags specification for the launch template.
 type LaunchTemplateTagSpecification struct {
 	_ struct{} `type:"structure"`
 
-	// The type of resource.
+	// The type of resource to tag.
 	ResourceType *string `locationName:"resourceType" type:"string" enum:"ResourceType"`
 
 	// The tags for the resource.
@@ -122344,12 +122756,17 @@ func (s *LaunchTemplateTagSpecification) SetTags(v []*Tag) *LaunchTemplateTagSpe
 	return s
 }
 
-// The tags specification for the launch template.
+// The tags specification for the resources that are created during instance
+// launch.
 type LaunchTemplateTagSpecificationRequest struct {
 	_ struct{} `type:"structure"`
 
-	// The type of resource to tag. Currently, the resource types that support tagging
-	// on creation are instance, volume, elastic-gpu, network-interface, and spot-instances-request.
+	// The type of resource to tag.
+	//
+	// The Valid Values are all the resource types that can be tagged. However,
+	// when creating a launch template, you can specify tags for the following resource
+	// types only: instance | volume | elastic-gpu | network-interface | spot-instances-request
+	//
 	// To tag a resource after it has been created, see CreateTags (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateTags.html).
 	ResourceType *string `type:"string" enum:"ResourceType"`
 
@@ -125741,6 +126158,10 @@ type ModifyInstanceAttributeInput struct {
 	// in the Amazon EC2 User Guide.
 	BlockDeviceMappings []*InstanceBlockDeviceMappingSpecification `locationName:"blockDeviceMapping" locationNameList:"item" type:"list"`
 
+	// Indicates whether an instance is enabled for stop protection. For more information,
+	// see Stop Protection (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Stop_Start.html#Using_StopProtection).
+	DisableApiStop *AttributeBooleanValue `type:"structure"`
+
 	// If the value is true, you can't terminate the instance using the Amazon EC2
 	// console, CLI, or API; otherwise, you can. You cannot use this parameter for
 	// Spot Instances.
@@ -125865,6 +126286,12 @@ func (s *ModifyInstanceAttributeInput) SetAttribute(v string) *ModifyInstanceAtt
 // SetBlockDeviceMappings sets the BlockDeviceMappings field's value.
 func (s *ModifyInstanceAttributeInput) SetBlockDeviceMappings(v []*InstanceBlockDeviceMappingSpecification) *ModifyInstanceAttributeInput {
 	s.BlockDeviceMappings = v
+	return s
+}
+
+// SetDisableApiStop sets the DisableApiStop field's value.
+func (s *ModifyInstanceAttributeInput) SetDisableApiStop(v *AttributeBooleanValue) *ModifyInstanceAttributeInput {
+	s.DisableApiStop = v
 	return s
 }
 
@@ -127418,7 +127845,7 @@ type ModifyLaunchTemplateInput struct {
 	_ struct{} `type:"structure"`
 
 	// Unique, case-sensitive identifier you provide to ensure the idempotency of
-	// the request. For more information, see Ensuring Idempotency (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html).
+	// the request. For more information, see Ensuring idempotency (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html).
 	//
 	// Constraint: Maximum 128 ASCII characters.
 	ClientToken *string `type:"string"`
@@ -130131,11 +130558,17 @@ type ModifyVpcEndpointInput struct {
 	// specify only one subnet.
 	AddSubnetIds []*string `locationName:"AddSubnetId" locationNameList:"item" type:"list"`
 
+	// The DNS options for the endpoint.
+	DnsOptions *DnsOptionsSpecification `type:"structure"`
+
 	// Checks whether you have the required permissions for the action, without
 	// actually making the request, and provides an error response. If you have
 	// the required permissions, the error response is DryRunOperation. Otherwise,
 	// it is UnauthorizedOperation.
 	DryRun *bool `type:"boolean"`
+
+	// The IP address type for the endpoint.
+	IpAddressType *string `type:"string" enum:"IpAddressType"`
 
 	// (Interface and gateway endpoints) A policy to attach to the endpoint that
 	// controls access to the service. The policy must be in valid JSON format.
@@ -130214,9 +130647,21 @@ func (s *ModifyVpcEndpointInput) SetAddSubnetIds(v []*string) *ModifyVpcEndpoint
 	return s
 }
 
+// SetDnsOptions sets the DnsOptions field's value.
+func (s *ModifyVpcEndpointInput) SetDnsOptions(v *DnsOptionsSpecification) *ModifyVpcEndpointInput {
+	s.DnsOptions = v
+	return s
+}
+
 // SetDryRun sets the DryRun field's value.
 func (s *ModifyVpcEndpointInput) SetDryRun(v bool) *ModifyVpcEndpointInput {
 	s.DryRun = &v
+	return s
+}
+
+// SetIpAddressType sets the IpAddressType field's value.
+func (s *ModifyVpcEndpointInput) SetIpAddressType(v string) *ModifyVpcEndpointInput {
+	s.IpAddressType = &v
 	return s
 }
 
@@ -130308,6 +130753,9 @@ type ModifyVpcEndpointServiceConfigurationInput struct {
 	// service configuration.
 	AddNetworkLoadBalancerArns []*string `locationName:"AddNetworkLoadBalancerArn" locationNameList:"item" type:"list"`
 
+	// The IP address types to add to your service configuration.
+	AddSupportedIpAddressTypes []*string `locationName:"AddSupportedIpAddressType" locationNameList:"item" type:"list"`
+
 	// Checks whether you have the required permissions for the action, without
 	// actually making the request, and provides an error response. If you have
 	// the required permissions, the error response is DryRunOperation. Otherwise,
@@ -130329,6 +130777,9 @@ type ModifyVpcEndpointServiceConfigurationInput struct {
 	// (Interface endpoint configuration) Removes the private DNS name of the endpoint
 	// service.
 	RemovePrivateDnsName *bool `type:"boolean"`
+
+	// The IP address types to remove from your service configuration.
+	RemoveSupportedIpAddressTypes []*string `locationName:"RemoveSupportedIpAddressType" locationNameList:"item" type:"list"`
 
 	// The ID of the service.
 	//
@@ -130385,6 +130836,12 @@ func (s *ModifyVpcEndpointServiceConfigurationInput) SetAddNetworkLoadBalancerAr
 	return s
 }
 
+// SetAddSupportedIpAddressTypes sets the AddSupportedIpAddressTypes field's value.
+func (s *ModifyVpcEndpointServiceConfigurationInput) SetAddSupportedIpAddressTypes(v []*string) *ModifyVpcEndpointServiceConfigurationInput {
+	s.AddSupportedIpAddressTypes = v
+	return s
+}
+
 // SetDryRun sets the DryRun field's value.
 func (s *ModifyVpcEndpointServiceConfigurationInput) SetDryRun(v bool) *ModifyVpcEndpointServiceConfigurationInput {
 	s.DryRun = &v
@@ -130412,6 +130869,12 @@ func (s *ModifyVpcEndpointServiceConfigurationInput) SetRemoveNetworkLoadBalance
 // SetRemovePrivateDnsName sets the RemovePrivateDnsName field's value.
 func (s *ModifyVpcEndpointServiceConfigurationInput) SetRemovePrivateDnsName(v bool) *ModifyVpcEndpointServiceConfigurationInput {
 	s.RemovePrivateDnsName = &v
+	return s
+}
+
+// SetRemoveSupportedIpAddressTypes sets the RemoveSupportedIpAddressTypes field's value.
+func (s *ModifyVpcEndpointServiceConfigurationInput) SetRemoveSupportedIpAddressTypes(v []*string) *ModifyVpcEndpointServiceConfigurationInput {
+	s.RemoveSupportedIpAddressTypes = v
 	return s
 }
 
@@ -134404,7 +134867,7 @@ type PathComponent struct {
 	// The subnet.
 	Subnet *AnalysisComponent `locationName:"subnet" type:"structure"`
 
-	// Describes a path component.
+	// The transit gateway.
 	TransitGateway *AnalysisComponent `locationName:"transitGateway" type:"structure"`
 
 	// The route in a transit gateway route table.
@@ -135388,6 +135851,10 @@ type PlacementGroup struct {
 	// The number of partitions. Valid only if strategy is set to partition.
 	PartitionCount *int64 `locationName:"partitionCount" type:"integer"`
 
+	// The spread level for the placement group. Only Outpost placement groups can
+	// be spread across hosts.
+	SpreadLevel *string `locationName:"spreadLevel" type:"string" enum:"SpreadLevel"`
+
 	// The state of the placement group.
 	State *string `locationName:"state" type:"string" enum:"PlacementGroupState"`
 
@@ -135437,6 +135904,12 @@ func (s *PlacementGroup) SetGroupName(v string) *PlacementGroup {
 // SetPartitionCount sets the PartitionCount field's value.
 func (s *PlacementGroup) SetPartitionCount(v int64) *PlacementGroup {
 	s.PartitionCount = &v
+	return s
+}
+
+// SetSpreadLevel sets the SpreadLevel field's value.
+func (s *PlacementGroup) SetSpreadLevel(v string) *PlacementGroup {
+	s.SpreadLevel = &v
 	return s
 }
 
@@ -137945,6 +138418,19 @@ type RegisterImageInput struct {
 	// PV AMI can make instances launched from the AMI unreachable.
 	SriovNetSupport *string `locationName:"sriovNetSupport" type:"string"`
 
+	// Set to v2.0 to enable Trusted Platform Module (TPM) support. For more information,
+	// see NitroTPM (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/nitrotpm.html)
+	// in the Amazon Elastic Compute Cloud User Guide.
+	TpmSupport *string `type:"string" enum:"TpmSupportValues"`
+
+	// Base64 representation of the non-volatile UEFI variable store. To retrieve
+	// the UEFI data, use the GetInstanceUefiData (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_GetInstanceUefiData)
+	// command. You can inspect and modify the UEFI data by using the python-uefivars
+	// tool (https://github.com/awslabs/python-uefivars) on GitHub. For more information,
+	// see UEFI Secure Boot (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/uefi-secure-boot.html)
+	// in the Amazon Elastic Compute Cloud User Guide.
+	UefiData *string `type:"string"`
+
 	// The type of virtualization (hvm | paravirtual).
 	//
 	// Default: paravirtual
@@ -138057,6 +138543,18 @@ func (s *RegisterImageInput) SetRootDeviceName(v string) *RegisterImageInput {
 // SetSriovNetSupport sets the SriovNetSupport field's value.
 func (s *RegisterImageInput) SetSriovNetSupport(v string) *RegisterImageInput {
 	s.SriovNetSupport = &v
+	return s
+}
+
+// SetTpmSupport sets the TpmSupport field's value.
+func (s *RegisterImageInput) SetTpmSupport(v string) *RegisterImageInput {
+	s.TpmSupport = &v
+	return s
+}
+
+// SetUefiData sets the UefiData field's value.
+func (s *RegisterImageInput) SetUefiData(v string) *RegisterImageInput {
+	s.UefiData = &v
 	return s
 }
 
@@ -140386,9 +140884,12 @@ type RequestLaunchTemplateData struct {
 	// in the Amazon Elastic Compute Cloud User Guide.
 	CpuOptions *LaunchTemplateCpuOptionsRequest `type:"structure"`
 
-	// The credit option for CPU usage of the instance. Valid for T2, T3, or T3a
-	// instances only.
+	// The credit option for CPU usage of the instance. Valid only for T instances.
 	CreditSpecification *CreditSpecificationRequest `type:"structure"`
+
+	// Indicates whether to enable the instance for stop protection. For more information,
+	// see Stop Protection (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Stop_Start.html#Using_StopProtection).
+	DisableApiStop *bool `type:"boolean"`
 
 	// If you set this parameter to true, you can't terminate the instance using
 	// the Amazon EC2 console, CLI, or API; otherwise, you can. To change this attribute
@@ -140419,7 +140920,7 @@ type RequestLaunchTemplateData struct {
 	EnclaveOptions *LaunchTemplateEnclaveOptionsRequest `type:"structure"`
 
 	// Indicates whether an instance is enabled for hibernation. This parameter
-	// is valid only if the instance meets the hibernation prerequisites (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Hibernate.html#hibernating-prerequisites).
+	// is valid only if the instance meets the hibernation prerequisites (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/hibernating-prerequisites.html).
 	// For more information, see Hibernate your instance (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Hibernate.html)
 	// in the Amazon Elastic Compute Cloud User Guide.
 	HibernationOptions *LaunchTemplateHibernationOptionsRequest `type:"structure"`
@@ -140445,7 +140946,7 @@ type RequestLaunchTemplateData struct {
 	// If you specify InstanceRequirements, you can't specify InstanceTypes.
 	InstanceRequirements *InstanceRequirementsRequest `type:"structure"`
 
-	// The instance type. For more information, see Instance Types (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html)
+	// The instance type. For more information, see Instance types (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html)
 	// in the Amazon Elastic Compute Cloud User Guide.
 	//
 	// If you specify InstanceTypes, you can't specify InstanceRequirements.
@@ -140454,7 +140955,7 @@ type RequestLaunchTemplateData struct {
 	// The ID of the kernel.
 	//
 	// We recommend that you use PV-GRUB instead of kernels and RAM disks. For more
-	// information, see User Provided Kernels (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/UserProvidedkernels.html)
+	// information, see User provided kernels (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/UserProvidedkernels.html)
 	// in the Amazon Elastic Compute Cloud User Guide.
 	KernelId *string `type:"string"`
 
@@ -140493,7 +140994,7 @@ type RequestLaunchTemplateData struct {
 	// The ID of the RAM disk.
 	//
 	// We recommend that you use PV-GRUB instead of kernels and RAM disks. For more
-	// information, see User Provided Kernels (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/UserProvidedkernels.html)
+	// information, see User provided kernels (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/UserProvidedkernels.html)
 	// in the Amazon Elastic Compute Cloud User Guide.
 	RamDiskId *string `type:"string"`
 
@@ -140508,17 +141009,31 @@ type RequestLaunchTemplateData struct {
 	// group ID and security name in the same request.
 	SecurityGroups []*string `locationName:"SecurityGroup" locationNameList:"SecurityGroup" type:"list"`
 
-	// The tags to apply to the resources during launch. You can only tag instances
-	// and volumes on launch. The specified tags are applied to all instances or
-	// volumes that are created during launch. To tag a resource after it has been
-	// created, see CreateTags (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateTags.html).
+	// The tags to apply to the resources that are created during instance launch.
+	//
+	// You can specify tags for the following resources only:
+	//
+	//    * Instances
+	//
+	//    * Volumes
+	//
+	//    * Elastic graphics
+	//
+	//    * Spot Instance requests
+	//
+	//    * Network interfaces
+	//
+	// To tag a resource after it has been created, see CreateTags (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateTags.html).
+	//
+	// To tag the launch template itself, you must use the TagSpecification (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateLaunchTemplate.html)
+	// parameter.
 	TagSpecifications []*LaunchTemplateTagSpecificationRequest `locationName:"TagSpecification" locationNameList:"LaunchTemplateTagSpecificationRequest" type:"list"`
 
 	// The user data to make available to the instance. You must provide base64-encoded
-	// text. User data is limited to 16 KB. For more information, see Running Commands
-	// on Your Linux Instance at Launch (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html)
-	// (Linux) or Adding User Data (https://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ec2-instance-metadata.html#instancedata-add-user-data)
-	// (Windows).
+	// text. User data is limited to 16 KB. For more information, see Run commands
+	// on your Linux instance at launch (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html)
+	// (Linux) or Work with instance user data (https://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/instancedata-add-user-data.html)
+	// (Windows) in the Amazon Elastic Compute Cloud User Guide.
 	//
 	// If you are creating the launch template for use with Batch, the user data
 	// must be provided in the MIME multi-part archive format (https://cloudinit.readthedocs.io/en/latest/topics/format.html#mime-multi-part-archive).
@@ -140606,6 +141121,12 @@ func (s *RequestLaunchTemplateData) SetCpuOptions(v *LaunchTemplateCpuOptionsReq
 // SetCreditSpecification sets the CreditSpecification field's value.
 func (s *RequestLaunchTemplateData) SetCreditSpecification(v *CreditSpecificationRequest) *RequestLaunchTemplateData {
 	s.CreditSpecification = v
+	return s
+}
+
+// SetDisableApiStop sets the DisableApiStop field's value.
+func (s *RequestLaunchTemplateData) SetDisableApiStop(v bool) *RequestLaunchTemplateData {
+	s.DisableApiStop = &v
 	return s
 }
 
@@ -143127,6 +143648,10 @@ type ResponseLaunchTemplateData struct {
 	// The credit option for CPU usage of the instance.
 	CreditSpecification *CreditSpecification `locationName:"creditSpecification" type:"structure"`
 
+	// Indicates whether the instance is enabled for stop protection. For more information,
+	// see Stop Protection (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Stop_Start.html#Using_StopProtection).
+	DisableApiStop *bool `locationName:"disableApiStop" type:"boolean"`
+
 	// If set to true, indicates that the instance cannot be terminated using the
 	// Amazon EC2 console, command line tool, or API.
 	DisableApiTermination *bool `locationName:"disableApiTermination" type:"boolean"`
@@ -143208,7 +143733,8 @@ type ResponseLaunchTemplateData struct {
 	// The security group names.
 	SecurityGroups []*string `locationName:"securityGroupSet" locationNameList:"item" type:"list"`
 
-	// The tags.
+	// The tags that are applied to the resources that are created during instance
+	// launch.
 	TagSpecifications []*LaunchTemplateTagSpecification `locationName:"tagSpecificationSet" locationNameList:"item" type:"list"`
 
 	// The user data for the instance.
@@ -143254,6 +143780,12 @@ func (s *ResponseLaunchTemplateData) SetCpuOptions(v *LaunchTemplateCpuOptions) 
 // SetCreditSpecification sets the CreditSpecification field's value.
 func (s *ResponseLaunchTemplateData) SetCreditSpecification(v *CreditSpecification) *ResponseLaunchTemplateData {
 	s.CreditSpecification = v
+	return s
+}
+
+// SetDisableApiStop sets the DisableApiStop field's value.
+func (s *ResponseLaunchTemplateData) SetDisableApiStop(v bool) *ResponseLaunchTemplateData {
+	s.DisableApiStop = &v
 	return s
 }
 
@@ -144936,6 +145468,10 @@ type RunInstancesInput struct {
 	// For T3 instances with host tenancy, only standard is supported.
 	CreditSpecification *CreditSpecificationRequest `type:"structure"`
 
+	// Indicates whether an instance is enabled for stop protection. For more information,
+	// see Stop Protection (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Stop_Start.html#Using_StopProtection).
+	DisableApiStop *bool `type:"boolean"`
+
 	// If you set this parameter to true, you can't terminate the instance using
 	// the Amazon EC2 console, CLI, or API; otherwise, you can. To change this attribute
 	// after launch, use ModifyInstanceAttribute (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_ModifyInstanceAttribute.html).
@@ -145261,6 +145797,12 @@ func (s *RunInstancesInput) SetCpuOptions(v *CpuOptionsRequest) *RunInstancesInp
 // SetCreditSpecification sets the CreditSpecification field's value.
 func (s *RunInstancesInput) SetCreditSpecification(v *CreditSpecificationRequest) *RunInstancesInput {
 	s.CreditSpecification = v
+	return s
+}
+
+// SetDisableApiStop sets the DisableApiStop field's value.
+func (s *RunInstancesInput) SetDisableApiStop(v bool) *RunInstancesInput {
+	s.DisableApiStop = &v
 	return s
 }
 
@@ -147976,6 +148518,9 @@ type ServiceConfiguration struct {
 	// The type of service.
 	ServiceType []*ServiceTypeDetail `locationName:"serviceType" locationNameList:"item" type:"list"`
 
+	// The supported IP address types.
+	SupportedIpAddressTypes []*string `locationName:"supportedIpAddressTypeSet" locationNameList:"item" type:"list" enum:"ServiceConnectivityType"`
+
 	// Any tags assigned to the service.
 	Tags []*Tag `locationName:"tagSet" locationNameList:"item" type:"list"`
 }
@@ -148076,6 +148621,12 @@ func (s *ServiceConfiguration) SetServiceType(v []*ServiceTypeDetail) *ServiceCo
 	return s
 }
 
+// SetSupportedIpAddressTypes sets the SupportedIpAddressTypes field's value.
+func (s *ServiceConfiguration) SetSupportedIpAddressTypes(v []*string) *ServiceConfiguration {
+	s.SupportedIpAddressTypes = v
+	return s
+}
+
 // SetTags sets the Tags field's value.
 func (s *ServiceConfiguration) SetTags(v []*Tag) *ServiceConfiguration {
 	s.Tags = v
@@ -148126,6 +148677,9 @@ type ServiceDetail struct {
 
 	// The type of service.
 	ServiceType []*ServiceTypeDetail `locationName:"serviceType" locationNameList:"item" type:"list"`
+
+	// The supported IP address types.
+	SupportedIpAddressTypes []*string `locationName:"supportedIpAddressTypeSet" locationNameList:"item" type:"list" enum:"ServiceConnectivityType"`
 
 	// Any tags assigned to the service.
 	Tags []*Tag `locationName:"tagSet" locationNameList:"item" type:"list"`
@@ -148221,6 +148775,12 @@ func (s *ServiceDetail) SetServiceName(v string) *ServiceDetail {
 // SetServiceType sets the ServiceType field's value.
 func (s *ServiceDetail) SetServiceType(v []*ServiceTypeDetail) *ServiceDetail {
 	s.ServiceType = v
+	return s
+}
+
+// SetSupportedIpAddressTypes sets the SupportedIpAddressTypes field's value.
+func (s *ServiceDetail) SetSupportedIpAddressTypes(v []*string) *ServiceDetail {
+	s.SupportedIpAddressTypes = v
 	return s
 }
 
@@ -153891,6 +154451,9 @@ type TrafficMirrorTarget struct {
 	// Information about the Traffic Mirror target.
 	Description *string `locationName:"description" type:"string"`
 
+	// The ID of the Gateway Load Balancer endpoint.
+	GatewayLoadBalancerEndpointId *string `locationName:"gatewayLoadBalancerEndpointId" type:"string"`
+
 	// The network interface ID that is attached to the target.
 	NetworkInterfaceId *string `locationName:"networkInterfaceId" type:"string"`
 
@@ -153931,6 +154494,12 @@ func (s TrafficMirrorTarget) GoString() string {
 // SetDescription sets the Description field's value.
 func (s *TrafficMirrorTarget) SetDescription(v string) *TrafficMirrorTarget {
 	s.Description = &v
+	return s
+}
+
+// SetGatewayLoadBalancerEndpointId sets the GatewayLoadBalancerEndpointId field's value.
+func (s *TrafficMirrorTarget) SetGatewayLoadBalancerEndpointId(v string) *TrafficMirrorTarget {
+	s.GatewayLoadBalancerEndpointId = &v
 	return s
 }
 
@@ -157734,12 +158303,12 @@ type ValidationError struct {
 	_ struct{} `type:"structure"`
 
 	// The error code that indicates why the parameter or parameter combination
-	// is not valid. For more information about error codes, see Error Codes (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/errors-overview.html.html).
+	// is not valid. For more information about error codes, see Error codes (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/errors-overview.html).
 	Code *string `locationName:"code" type:"string"`
 
 	// The error message that describes why the parameter or parameter combination
-	// is not valid. For more information about error messages, see Error Codes
-	// (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/errors-overview.html.html).
+	// is not valid. For more information about error messages, see Error codes
+	// (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/errors-overview.html).
 	Message *string `locationName:"message" type:"string"`
 }
 
@@ -158994,23 +159563,29 @@ func (s *VpcClassicLink) SetVpcId(v string) *VpcClassicLink {
 type VpcEndpoint struct {
 	_ struct{} `type:"structure"`
 
-	// The date and time that the VPC endpoint was created.
+	// The date and time that the endpoint was created.
 	CreationTimestamp *time.Time `locationName:"creationTimestamp" type:"timestamp"`
 
 	// (Interface endpoint) The DNS entries for the endpoint.
 	DnsEntries []*DnsEntry `locationName:"dnsEntrySet" locationNameList:"item" type:"list"`
 
+	// The DNS options for the endpoint.
+	DnsOptions *DnsOptions `locationName:"dnsOptions" type:"structure"`
+
 	// (Interface endpoint) Information about the security groups that are associated
 	// with the network interface.
 	Groups []*SecurityGroupIdentifier `locationName:"groupSet" locationNameList:"item" type:"list"`
 
-	// The last error that occurred for VPC endpoint.
+	// The IP address type for the endpoint.
+	IpAddressType *string `locationName:"ipAddressType" type:"string" enum:"IpAddressType"`
+
+	// The last error that occurred for endpoint.
 	LastError *LastError `locationName:"lastError" type:"structure"`
 
 	// (Interface endpoint) One or more network interfaces for the endpoint.
 	NetworkInterfaceIds []*string `locationName:"networkInterfaceIdSet" locationNameList:"item" type:"list"`
 
-	// The ID of the Amazon Web Services account that owns the VPC endpoint.
+	// The ID of the Amazon Web Services account that owns the endpoint.
 	OwnerId *string `locationName:"ownerId" type:"string"`
 
 	// The policy document associated with the endpoint, if applicable.
@@ -159020,7 +159595,7 @@ type VpcEndpoint struct {
 	// hosted zone.
 	PrivateDnsEnabled *bool `locationName:"privateDnsEnabled" type:"boolean"`
 
-	// Indicates whether the VPC endpoint is being managed by its service.
+	// Indicates whether the endpoint is being managed by its service.
 	RequesterManaged *bool `locationName:"requesterManaged" type:"boolean"`
 
 	// (Gateway endpoint) One or more route tables associated with the endpoint.
@@ -159029,16 +159604,16 @@ type VpcEndpoint struct {
 	// The name of the service to which the endpoint is associated.
 	ServiceName *string `locationName:"serviceName" type:"string"`
 
-	// The state of the VPC endpoint.
+	// The state of the endpoint.
 	State *string `locationName:"state" type:"string" enum:"State"`
 
-	// (Interface endpoint) One or more subnets in which the endpoint is located.
+	// (Interface endpoint) The subnets for the endpoint.
 	SubnetIds []*string `locationName:"subnetIdSet" locationNameList:"item" type:"list"`
 
-	// Any tags assigned to the VPC endpoint.
+	// Any tags assigned to the endpoint.
 	Tags []*Tag `locationName:"tagSet" locationNameList:"item" type:"list"`
 
-	// The ID of the VPC endpoint.
+	// The ID of the endpoint.
 	VpcEndpointId *string `locationName:"vpcEndpointId" type:"string"`
 
 	// The type of endpoint.
@@ -159078,9 +159653,21 @@ func (s *VpcEndpoint) SetDnsEntries(v []*DnsEntry) *VpcEndpoint {
 	return s
 }
 
+// SetDnsOptions sets the DnsOptions field's value.
+func (s *VpcEndpoint) SetDnsOptions(v *DnsOptions) *VpcEndpoint {
+	s.DnsOptions = v
+	return s
+}
+
 // SetGroups sets the Groups field's value.
 func (s *VpcEndpoint) SetGroups(v []*SecurityGroupIdentifier) *VpcEndpoint {
 	s.Groups = v
+	return s
+}
+
+// SetIpAddressType sets the IpAddressType field's value.
+func (s *VpcEndpoint) SetIpAddressType(v string) *VpcEndpoint {
+	s.IpAddressType = &v
 	return s
 }
 
@@ -159181,6 +159768,9 @@ type VpcEndpointConnection struct {
 	// The Amazon Resource Names (ARNs) of the Gateway Load Balancers for the service.
 	GatewayLoadBalancerArns []*string `locationName:"gatewayLoadBalancerArnSet" locationNameList:"item" type:"list"`
 
+	// The IP address type for the endpoint.
+	IpAddressType *string `locationName:"ipAddressType" type:"string" enum:"IpAddressType"`
+
 	// The Amazon Resource Names (ARNs) of the network load balancers for the service.
 	NetworkLoadBalancerArns []*string `locationName:"networkLoadBalancerArnSet" locationNameList:"item" type:"list"`
 
@@ -159230,6 +159820,12 @@ func (s *VpcEndpointConnection) SetDnsEntries(v []*DnsEntry) *VpcEndpointConnect
 // SetGatewayLoadBalancerArns sets the GatewayLoadBalancerArns field's value.
 func (s *VpcEndpointConnection) SetGatewayLoadBalancerArns(v []*string) *VpcEndpointConnection {
 	s.GatewayLoadBalancerArns = v
+	return s
+}
+
+// SetIpAddressType sets the IpAddressType field's value.
+func (s *VpcEndpointConnection) SetIpAddressType(v string) *VpcEndpointConnection {
+	s.IpAddressType = &v
 	return s
 }
 
@@ -159832,6 +160428,14 @@ type VpnConnectionOptions struct {
 	// The IPv6 CIDR on the customer gateway (on-premises) side of the VPN connection.
 	LocalIpv6NetworkCidr *string `locationName:"localIpv6NetworkCidr" type:"string"`
 
+	// The type of IPv4 address assigned to the outside interface of the customer
+	// gateway.
+	//
+	// Valid values: PrivateIpv4 | PublicIpv4
+	//
+	// Default: PublicIpv4
+	OutsideIpAddressType *string `locationName:"outsideIpAddressType" type:"string"`
+
 	// The IPv4 CIDR on the Amazon Web Services side of the VPN connection.
 	RemoteIpv4NetworkCidr *string `locationName:"remoteIpv4NetworkCidr" type:"string"`
 
@@ -159841,6 +160445,9 @@ type VpnConnectionOptions struct {
 	// Indicates whether the VPN connection uses static routes only. Static routes
 	// must be used for devices that don't support BGP.
 	StaticRoutesOnly *bool `locationName:"staticRoutesOnly" type:"boolean"`
+
+	// The transit gateway attachment ID in use for the VPN tunnel.
+	TransportTransitGatewayAttachmentId *string `locationName:"transportTransitGatewayAttachmentId" type:"string"`
 
 	// Indicates whether the VPN tunnels process IPv4 or IPv6 traffic.
 	TunnelInsideIpVersion *string `locationName:"tunnelInsideIpVersion" type:"string" enum:"TunnelInsideIpVersion"`
@@ -159885,6 +160492,12 @@ func (s *VpnConnectionOptions) SetLocalIpv6NetworkCidr(v string) *VpnConnectionO
 	return s
 }
 
+// SetOutsideIpAddressType sets the OutsideIpAddressType field's value.
+func (s *VpnConnectionOptions) SetOutsideIpAddressType(v string) *VpnConnectionOptions {
+	s.OutsideIpAddressType = &v
+	return s
+}
+
 // SetRemoteIpv4NetworkCidr sets the RemoteIpv4NetworkCidr field's value.
 func (s *VpnConnectionOptions) SetRemoteIpv4NetworkCidr(v string) *VpnConnectionOptions {
 	s.RemoteIpv4NetworkCidr = &v
@@ -159900,6 +160513,12 @@ func (s *VpnConnectionOptions) SetRemoteIpv6NetworkCidr(v string) *VpnConnection
 // SetStaticRoutesOnly sets the StaticRoutesOnly field's value.
 func (s *VpnConnectionOptions) SetStaticRoutesOnly(v bool) *VpnConnectionOptions {
 	s.StaticRoutesOnly = &v
+	return s
+}
+
+// SetTransportTransitGatewayAttachmentId sets the TransportTransitGatewayAttachmentId field's value.
+func (s *VpnConnectionOptions) SetTransportTransitGatewayAttachmentId(v string) *VpnConnectionOptions {
+	s.TransportTransitGatewayAttachmentId = &v
 	return s
 }
 
@@ -159934,6 +160553,14 @@ type VpnConnectionOptionsSpecification struct {
 	// Default: ::/0
 	LocalIpv6NetworkCidr *string `type:"string"`
 
+	// The type of IPv4 address assigned to the outside interface of the customer
+	// gateway device.
+	//
+	// Valid values: PrivateIpv4 | PublicIpv4
+	//
+	// Default: PublicIpv4
+	OutsideIpAddressType *string `type:"string"`
+
 	// The IPv4 CIDR on the Amazon Web Services side of the VPN connection.
 	//
 	// Default: 0.0.0.0/0
@@ -159950,6 +160577,11 @@ type VpnConnectionOptionsSpecification struct {
 	//
 	// Default: false
 	StaticRoutesOnly *bool `locationName:"staticRoutesOnly" type:"boolean"`
+
+	// The transit gateway attachment ID to use for the VPN tunnel.
+	//
+	// Required if OutsideIpAddressType is set to PrivateIpv4.
+	TransportTransitGatewayAttachmentId *string `type:"string"`
 
 	// Indicate whether the VPN tunnels process IPv4 or IPv6 traffic.
 	//
@@ -159996,6 +160628,12 @@ func (s *VpnConnectionOptionsSpecification) SetLocalIpv6NetworkCidr(v string) *V
 	return s
 }
 
+// SetOutsideIpAddressType sets the OutsideIpAddressType field's value.
+func (s *VpnConnectionOptionsSpecification) SetOutsideIpAddressType(v string) *VpnConnectionOptionsSpecification {
+	s.OutsideIpAddressType = &v
+	return s
+}
+
 // SetRemoteIpv4NetworkCidr sets the RemoteIpv4NetworkCidr field's value.
 func (s *VpnConnectionOptionsSpecification) SetRemoteIpv4NetworkCidr(v string) *VpnConnectionOptionsSpecification {
 	s.RemoteIpv4NetworkCidr = &v
@@ -160011,6 +160649,12 @@ func (s *VpnConnectionOptionsSpecification) SetRemoteIpv6NetworkCidr(v string) *
 // SetStaticRoutesOnly sets the StaticRoutesOnly field's value.
 func (s *VpnConnectionOptionsSpecification) SetStaticRoutesOnly(v bool) *VpnConnectionOptionsSpecification {
 	s.StaticRoutesOnly = &v
+	return s
+}
+
+// SetTransportTransitGatewayAttachmentId sets the TransportTransitGatewayAttachmentId field's value.
+func (s *VpnConnectionOptionsSpecification) SetTransportTransitGatewayAttachmentId(v string) *VpnConnectionOptionsSpecification {
+	s.TransportTransitGatewayAttachmentId = &v
 	return s
 }
 
@@ -161926,6 +162570,30 @@ func DnsNameState_Values() []string {
 }
 
 const (
+	// DnsRecordIpTypeIpv4 is a DnsRecordIpType enum value
+	DnsRecordIpTypeIpv4 = "ipv4"
+
+	// DnsRecordIpTypeDualstack is a DnsRecordIpType enum value
+	DnsRecordIpTypeDualstack = "dualstack"
+
+	// DnsRecordIpTypeIpv6 is a DnsRecordIpType enum value
+	DnsRecordIpTypeIpv6 = "ipv6"
+
+	// DnsRecordIpTypeServiceDefined is a DnsRecordIpType enum value
+	DnsRecordIpTypeServiceDefined = "service-defined"
+)
+
+// DnsRecordIpType_Values returns all elements of the DnsRecordIpType enum
+func DnsRecordIpType_Values() []string {
+	return []string{
+		DnsRecordIpTypeIpv4,
+		DnsRecordIpTypeDualstack,
+		DnsRecordIpTypeIpv6,
+		DnsRecordIpTypeServiceDefined,
+	}
+}
+
+const (
 	// DnsSupportValueEnable is a DnsSupportValue enum value
 	DnsSupportValueEnable = "enable"
 
@@ -162734,6 +163402,12 @@ const (
 	// ImageAttributeNameBootMode is a ImageAttributeName enum value
 	ImageAttributeNameBootMode = "bootMode"
 
+	// ImageAttributeNameTpmSupport is a ImageAttributeName enum value
+	ImageAttributeNameTpmSupport = "tpmSupport"
+
+	// ImageAttributeNameUefiData is a ImageAttributeName enum value
+	ImageAttributeNameUefiData = "uefiData"
+
 	// ImageAttributeNameLastLaunchedTime is a ImageAttributeName enum value
 	ImageAttributeNameLastLaunchedTime = "lastLaunchedTime"
 )
@@ -162749,6 +163423,8 @@ func ImageAttributeName_Values() []string {
 		ImageAttributeNameBlockDeviceMapping,
 		ImageAttributeNameSriovNetSupport,
 		ImageAttributeNameBootMode,
+		ImageAttributeNameTpmSupport,
+		ImageAttributeNameUefiData,
 		ImageAttributeNameLastLaunchedTime,
 	}
 }
@@ -162854,6 +163530,9 @@ const (
 
 	// InstanceAttributeNameEnclaveOptions is a InstanceAttributeName enum value
 	InstanceAttributeNameEnclaveOptions = "enclaveOptions"
+
+	// InstanceAttributeNameDisableApiStop is a InstanceAttributeName enum value
+	InstanceAttributeNameDisableApiStop = "disableApiStop"
 )
 
 // InstanceAttributeName_Values returns all elements of the InstanceAttributeName enum
@@ -162874,6 +163553,7 @@ func InstanceAttributeName_Values() []string {
 		InstanceAttributeNameSriovNetSupport,
 		InstanceAttributeNameEnaSupport,
 		InstanceAttributeNameEnclaveOptions,
+		InstanceAttributeNameDisableApiStop,
 	}
 }
 
@@ -164650,6 +165330,60 @@ const (
 
 	// InstanceTypeM6aMetal is a InstanceType enum value
 	InstanceTypeM6aMetal = "m6a.metal"
+
+	// InstanceTypeI4iLarge is a InstanceType enum value
+	InstanceTypeI4iLarge = "i4i.large"
+
+	// InstanceTypeI4iXlarge is a InstanceType enum value
+	InstanceTypeI4iXlarge = "i4i.xlarge"
+
+	// InstanceTypeI4i2xlarge is a InstanceType enum value
+	InstanceTypeI4i2xlarge = "i4i.2xlarge"
+
+	// InstanceTypeI4i4xlarge is a InstanceType enum value
+	InstanceTypeI4i4xlarge = "i4i.4xlarge"
+
+	// InstanceTypeI4i8xlarge is a InstanceType enum value
+	InstanceTypeI4i8xlarge = "i4i.8xlarge"
+
+	// InstanceTypeI4i16xlarge is a InstanceType enum value
+	InstanceTypeI4i16xlarge = "i4i.16xlarge"
+
+	// InstanceTypeI4i32xlarge is a InstanceType enum value
+	InstanceTypeI4i32xlarge = "i4i.32xlarge"
+
+	// InstanceTypeI4iMetal is a InstanceType enum value
+	InstanceTypeI4iMetal = "i4i.metal"
+
+	// InstanceTypeX2idnMetal is a InstanceType enum value
+	InstanceTypeX2idnMetal = "x2idn.metal"
+
+	// InstanceTypeX2iednMetal is a InstanceType enum value
+	InstanceTypeX2iednMetal = "x2iedn.metal"
+
+	// InstanceTypeC7gMedium is a InstanceType enum value
+	InstanceTypeC7gMedium = "c7g.medium"
+
+	// InstanceTypeC7gLarge is a InstanceType enum value
+	InstanceTypeC7gLarge = "c7g.large"
+
+	// InstanceTypeC7gXlarge is a InstanceType enum value
+	InstanceTypeC7gXlarge = "c7g.xlarge"
+
+	// InstanceTypeC7g2xlarge is a InstanceType enum value
+	InstanceTypeC7g2xlarge = "c7g.2xlarge"
+
+	// InstanceTypeC7g4xlarge is a InstanceType enum value
+	InstanceTypeC7g4xlarge = "c7g.4xlarge"
+
+	// InstanceTypeC7g8xlarge is a InstanceType enum value
+	InstanceTypeC7g8xlarge = "c7g.8xlarge"
+
+	// InstanceTypeC7g12xlarge is a InstanceType enum value
+	InstanceTypeC7g12xlarge = "c7g.12xlarge"
+
+	// InstanceTypeC7g16xlarge is a InstanceType enum value
+	InstanceTypeC7g16xlarge = "c7g.16xlarge"
 )
 
 // InstanceType_Values returns all elements of the InstanceType enum
@@ -165162,6 +165896,24 @@ func InstanceType_Values() []string {
 		InstanceTypeC6a48xlarge,
 		InstanceTypeC6aMetal,
 		InstanceTypeM6aMetal,
+		InstanceTypeI4iLarge,
+		InstanceTypeI4iXlarge,
+		InstanceTypeI4i2xlarge,
+		InstanceTypeI4i4xlarge,
+		InstanceTypeI4i8xlarge,
+		InstanceTypeI4i16xlarge,
+		InstanceTypeI4i32xlarge,
+		InstanceTypeI4iMetal,
+		InstanceTypeX2idnMetal,
+		InstanceTypeX2iednMetal,
+		InstanceTypeC7gMedium,
+		InstanceTypeC7gLarge,
+		InstanceTypeC7gXlarge,
+		InstanceTypeC7g2xlarge,
+		InstanceTypeC7g4xlarge,
+		InstanceTypeC7g8xlarge,
+		InstanceTypeC7g12xlarge,
+		InstanceTypeC7g16xlarge,
 	}
 }
 
@@ -165210,6 +165962,26 @@ func InterfaceProtocolType_Values() []string {
 	return []string{
 		InterfaceProtocolTypeVlan,
 		InterfaceProtocolTypeGre,
+	}
+}
+
+const (
+	// IpAddressTypeIpv4 is a IpAddressType enum value
+	IpAddressTypeIpv4 = "ipv4"
+
+	// IpAddressTypeDualstack is a IpAddressType enum value
+	IpAddressTypeDualstack = "dualstack"
+
+	// IpAddressTypeIpv6 is a IpAddressType enum value
+	IpAddressTypeIpv6 = "ipv6"
+)
+
+// IpAddressType_Values returns all elements of the IpAddressType enum
+func IpAddressType_Values() []string {
+	return []string{
+		IpAddressTypeIpv4,
+		IpAddressTypeDualstack,
+		IpAddressTypeIpv6,
 	}
 }
 
@@ -165420,6 +166192,15 @@ const (
 
 	// IpamPoolStateDeleteFailed is a IpamPoolState enum value
 	IpamPoolStateDeleteFailed = "delete-failed"
+
+	// IpamPoolStateIsolateInProgress is a IpamPoolState enum value
+	IpamPoolStateIsolateInProgress = "isolate-in-progress"
+
+	// IpamPoolStateIsolateComplete is a IpamPoolState enum value
+	IpamPoolStateIsolateComplete = "isolate-complete"
+
+	// IpamPoolStateRestoreInProgress is a IpamPoolState enum value
+	IpamPoolStateRestoreInProgress = "restore-in-progress"
 )
 
 // IpamPoolState_Values returns all elements of the IpamPoolState enum
@@ -165434,6 +166215,9 @@ func IpamPoolState_Values() []string {
 		IpamPoolStateDeleteInProgress,
 		IpamPoolStateDeleteComplete,
 		IpamPoolStateDeleteFailed,
+		IpamPoolStateIsolateInProgress,
+		IpamPoolStateIsolateComplete,
+		IpamPoolStateRestoreInProgress,
 	}
 }
 
@@ -165492,6 +166276,15 @@ const (
 
 	// IpamScopeStateDeleteFailed is a IpamScopeState enum value
 	IpamScopeStateDeleteFailed = "delete-failed"
+
+	// IpamScopeStateIsolateInProgress is a IpamScopeState enum value
+	IpamScopeStateIsolateInProgress = "isolate-in-progress"
+
+	// IpamScopeStateIsolateComplete is a IpamScopeState enum value
+	IpamScopeStateIsolateComplete = "isolate-complete"
+
+	// IpamScopeStateRestoreInProgress is a IpamScopeState enum value
+	IpamScopeStateRestoreInProgress = "restore-in-progress"
 )
 
 // IpamScopeState_Values returns all elements of the IpamScopeState enum
@@ -165506,6 +166299,9 @@ func IpamScopeState_Values() []string {
 		IpamScopeStateDeleteInProgress,
 		IpamScopeStateDeleteComplete,
 		IpamScopeStateDeleteFailed,
+		IpamScopeStateIsolateInProgress,
+		IpamScopeStateIsolateComplete,
+		IpamScopeStateRestoreInProgress,
 	}
 }
 
@@ -165552,6 +166348,15 @@ const (
 
 	// IpamStateDeleteFailed is a IpamState enum value
 	IpamStateDeleteFailed = "delete-failed"
+
+	// IpamStateIsolateInProgress is a IpamState enum value
+	IpamStateIsolateInProgress = "isolate-in-progress"
+
+	// IpamStateIsolateComplete is a IpamState enum value
+	IpamStateIsolateComplete = "isolate-complete"
+
+	// IpamStateRestoreInProgress is a IpamState enum value
+	IpamStateRestoreInProgress = "restore-in-progress"
 )
 
 // IpamState_Values returns all elements of the IpamState enum
@@ -165566,6 +166371,9 @@ func IpamState_Values() []string {
 		IpamStateDeleteInProgress,
 		IpamStateDeleteComplete,
 		IpamStateDeleteFailed,
+		IpamStateIsolateInProgress,
+		IpamStateIsolateComplete,
+		IpamStateRestoreInProgress,
 	}
 }
 
@@ -167198,6 +168006,22 @@ func SelfServicePortal_Values() []string {
 }
 
 const (
+	// ServiceConnectivityTypeIpv4 is a ServiceConnectivityType enum value
+	ServiceConnectivityTypeIpv4 = "ipv4"
+
+	// ServiceConnectivityTypeIpv6 is a ServiceConnectivityType enum value
+	ServiceConnectivityTypeIpv6 = "ipv6"
+)
+
+// ServiceConnectivityType_Values returns all elements of the ServiceConnectivityType enum
+func ServiceConnectivityType_Values() []string {
+	return []string{
+		ServiceConnectivityTypeIpv4,
+		ServiceConnectivityTypeIpv6,
+	}
+}
+
+const (
 	// ServiceStatePending is a ServiceState enum value
 	ServiceStatePending = "Pending"
 
@@ -167390,6 +168214,22 @@ func SpotInstanceType_Values() []string {
 	return []string{
 		SpotInstanceTypeOneTime,
 		SpotInstanceTypePersistent,
+	}
+}
+
+const (
+	// SpreadLevelHost is a SpreadLevel enum value
+	SpreadLevelHost = "host"
+
+	// SpreadLevelRack is a SpreadLevel enum value
+	SpreadLevelRack = "rack"
+)
+
+// SpreadLevel_Values returns all elements of the SpreadLevel enum
+func SpreadLevel_Values() []string {
+	return []string{
+		SpreadLevelHost,
+		SpreadLevelRack,
 	}
 }
 
@@ -167726,6 +168566,18 @@ func TieringOperationStatus_Values() []string {
 }
 
 const (
+	// TpmSupportValuesV20 is a TpmSupportValues enum value
+	TpmSupportValuesV20 = "v2.0"
+)
+
+// TpmSupportValues_Values returns all elements of the TpmSupportValues enum
+func TpmSupportValues_Values() []string {
+	return []string{
+		TpmSupportValuesV20,
+	}
+}
+
+const (
 	// TrafficDirectionIngress is a TrafficDirection enum value
 	TrafficDirectionIngress = "ingress"
 
@@ -167819,6 +168671,9 @@ const (
 
 	// TrafficMirrorTargetTypeNetworkLoadBalancer is a TrafficMirrorTargetType enum value
 	TrafficMirrorTargetTypeNetworkLoadBalancer = "network-load-balancer"
+
+	// TrafficMirrorTargetTypeGatewayLoadBalancerEndpoint is a TrafficMirrorTargetType enum value
+	TrafficMirrorTargetTypeGatewayLoadBalancerEndpoint = "gateway-load-balancer-endpoint"
 )
 
 // TrafficMirrorTargetType_Values returns all elements of the TrafficMirrorTargetType enum
@@ -167826,6 +168681,7 @@ func TrafficMirrorTargetType_Values() []string {
 	return []string{
 		TrafficMirrorTargetTypeNetworkInterface,
 		TrafficMirrorTargetTypeNetworkLoadBalancer,
+		TrafficMirrorTargetTypeGatewayLoadBalancerEndpoint,
 	}
 }
 
