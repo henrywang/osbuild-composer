@@ -2182,9 +2182,8 @@ func (c *EC2) AttachClassicLinkVpcRequest(input *AttachClassicLinkVpcInput) (req
 
 // AttachClassicLinkVpc API operation for Amazon Elastic Compute Cloud.
 //
-// We are retiring EC2-Classic on August 15, 2022. We recommend that you migrate
-// from EC2-Classic to a VPC. For more information, see Migrate from EC2-Classic
-// to a VPC (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-migrate.html)
+// We are retiring EC2-Classic. We recommend that you migrate from EC2-Classic
+// to a VPC. For more information, see Migrate from EC2-Classic to a VPC (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-migrate.html)
 // in the Amazon Elastic Compute Cloud User Guide.
 //
 // Links an EC2-Classic instance to a ClassicLink-enabled VPC through one or
@@ -4553,9 +4552,8 @@ func (c *EC2) CreateDefaultVpcRequest(input *CreateDefaultVpcInput) (req *reques
 // VPC in a Region that supports EC2-Classic, see "I really want a default VPC
 // for my existing EC2 account. Is that possible?" in the Default VPCs FAQ (http://aws.amazon.com/vpc/faqs/#Default_VPCs).
 //
-// We are retiring EC2-Classic on August 15, 2022. We recommend that you migrate
-// from EC2-Classic to a VPC. For more information, see Migrate from EC2-Classic
-// to a VPC (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-migrate.html)
+// We are retiring EC2-Classic. We recommend that you migrate from EC2-Classic
+// to a VPC. For more information, see Migrate from EC2-Classic to a VPC (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-migrate.html)
 // in the Amazon Elastic Compute Cloud User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -16412,9 +16410,8 @@ func (c *EC2) DescribeClassicLinkInstancesRequest(input *DescribeClassicLinkInst
 // ClassicLink. You cannot use this request to return information about other
 // instances.
 //
-// We are retiring EC2-Classic on August 15, 2022. We recommend that you migrate
-// from EC2-Classic to a VPC. For more information, see Migrate from EC2-Classic
-// to a VPC (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-migrate.html)
+// We are retiring EC2-Classic. We recommend that you migrate from EC2-Classic
+// to a VPC. For more information, see Migrate from EC2-Classic to a VPC (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-migrate.html)
 // in the Amazon Elastic Compute Cloud User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -18571,9 +18568,11 @@ func (c *EC2) DescribeFlowLogsRequest(input *DescribeFlowLogsInput) (req *reques
 
 // DescribeFlowLogs API operation for Amazon Elastic Compute Cloud.
 //
-// Describes one or more flow logs. To view the information in your flow logs
-// (the log streams for the network interfaces), you must use the CloudWatch
-// Logs console or the CloudWatch Logs API.
+// Describes one or more flow logs.
+//
+// To view the published flow log records, you must view the log destination.
+// For example, the CloudWatch Logs log group, the Amazon S3 bucket, or the
+// Kinesis Data Firehose delivery stream.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -30128,9 +30127,8 @@ func (c *EC2) DescribeVpcClassicLinkRequest(input *DescribeVpcClassicLinkInput) 
 //
 // Describes the ClassicLink status of one or more VPCs.
 //
-// We are retiring EC2-Classic on August 15, 2022. We recommend that you migrate
-// from EC2-Classic to a VPC. For more information, see Migrate from EC2-Classic
-// to a VPC (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-migrate.html)
+// We are retiring EC2-Classic. We recommend that you migrate from EC2-Classic
+// to a VPC. For more information, see Migrate from EC2-Classic to a VPC (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-migrate.html)
 // in the Amazon Elastic Compute Cloud User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -30210,9 +30208,8 @@ func (c *EC2) DescribeVpcClassicLinkDnsSupportRequest(input *DescribeVpcClassicL
 
 // DescribeVpcClassicLinkDnsSupport API operation for Amazon Elastic Compute Cloud.
 //
-// We are retiring EC2-Classic on August 15, 2022. We recommend that you migrate
-// from EC2-Classic to a VPC. For more information, see Migrate from EC2-Classic
-// to a VPC (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-migrate.html)
+// We are retiring EC2-Classic. We recommend that you migrate from EC2-Classic
+// to a VPC. For more information, see Migrate from EC2-Classic to a VPC (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-migrate.html)
 // in the Amazon Elastic Compute Cloud User Guide.
 //
 // Describes the ClassicLink DNS support status of one or more VPCs. If enabled,
@@ -31490,9 +31487,8 @@ func (c *EC2) DetachClassicLinkVpcRequest(input *DetachClassicLinkVpcInput) (req
 
 // DetachClassicLinkVpc API operation for Amazon Elastic Compute Cloud.
 //
-// We are retiring EC2-Classic on August 15, 2022. We recommend that you migrate
-// from EC2-Classic to a VPC. For more information, see Migrate from EC2-Classic
-// to a VPC (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-migrate.html)
+// We are retiring EC2-Classic. We recommend that you migrate from EC2-Classic
+// to a VPC. For more information, see Migrate from EC2-Classic to a VPC (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-migrate.html)
 // in the Amazon Elastic Compute Cloud User Guide.
 //
 // Unlinks (detaches) a linked EC2-Classic instance from a VPC. After the instance
@@ -32501,9 +32497,8 @@ func (c *EC2) DisableVpcClassicLinkRequest(input *DisableVpcClassicLinkInput) (r
 // Disables ClassicLink for a VPC. You cannot disable ClassicLink for a VPC
 // that has EC2-Classic instances linked to it.
 //
-// We are retiring EC2-Classic on August 15, 2022. We recommend that you migrate
-// from EC2-Classic to a VPC. For more information, see Migrate from EC2-Classic
-// to a VPC (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-migrate.html)
+// We are retiring EC2-Classic. We recommend that you migrate from EC2-Classic
+// to a VPC. For more information, see Migrate from EC2-Classic to a VPC (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-migrate.html)
 // in the Amazon Elastic Compute Cloud User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -32585,9 +32580,8 @@ func (c *EC2) DisableVpcClassicLinkDnsSupportRequest(input *DisableVpcClassicLin
 //
 // You must specify a VPC ID in the request.
 //
-// We are retiring EC2-Classic on August 15, 2022. We recommend that you migrate
-// from EC2-Classic to a VPC. For more information, see Migrate from EC2-Classic
-// to a VPC (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-migrate.html)
+// We are retiring EC2-Classic. We recommend that you migrate from EC2-Classic
+// to a VPC. For more information, see Migrate from EC2-Classic to a VPC (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-migrate.html)
 // in the Amazon Elastic Compute Cloud User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -34292,9 +34286,8 @@ func (c *EC2) EnableVpcClassicLinkRequest(input *EnableVpcClassicLinkInput) (req
 
 // EnableVpcClassicLink API operation for Amazon Elastic Compute Cloud.
 //
-// We are retiring EC2-Classic on August 15, 2022. We recommend that you migrate
-// from EC2-Classic to a VPC. For more information, see Migrate from EC2-Classic
-// to a VPC (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-migrate.html)
+// We are retiring EC2-Classic. We recommend that you migrate from EC2-Classic
+// to a VPC. For more information, see Migrate from EC2-Classic to a VPC (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-migrate.html)
 // in the Amazon Elastic Compute Cloud User Guide.
 //
 // Enables a VPC for ClassicLink. You can then link EC2-Classic instances to
@@ -34376,9 +34369,8 @@ func (c *EC2) EnableVpcClassicLinkDnsSupportRequest(input *EnableVpcClassicLinkD
 
 // EnableVpcClassicLinkDnsSupport API operation for Amazon Elastic Compute Cloud.
 //
-// We are retiring EC2-Classic on August 15, 2022. We recommend that you migrate
-// from EC2-Classic to a VPC. For more information, see Migrate from EC2-Classic
-// to a VPC (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-migrate.html)
+// We are retiring EC2-Classic. We recommend that you migrate from EC2-Classic
+// to a VPC. For more information, see Migrate from EC2-Classic to a VPC (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-migrate.html)
 // in the Amazon Elastic Compute Cloud User Guide.
 //
 // Enables a VPC to support DNS hostname resolution for ClassicLink. If enabled,
@@ -43261,9 +43253,8 @@ func (c *EC2) ModifyVpcPeeringConnectionOptionsRequest(input *ModifyVpcPeeringCo
 
 // ModifyVpcPeeringConnectionOptions API operation for Amazon Elastic Compute Cloud.
 //
-// We are retiring EC2-Classic on August 15, 2022. We recommend that you migrate
-// from EC2-Classic to a VPC. For more information, see Migrate from EC2-Classic
-// to a VPC (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-migrate.html)
+// We are retiring EC2-Classic. We recommend that you migrate from EC2-Classic
+// to a VPC. For more information, see Migrate from EC2-Classic to a VPC (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-migrate.html)
 // in the Amazon Elastic Compute Cloud User Guide.
 //
 // Modifies the VPC peering connection options on one side of a VPC peering
@@ -58074,9 +58065,8 @@ func (s *ClassicLinkDnsSupport) SetVpcId(v string) *ClassicLinkDnsSupport {
 	return s
 }
 
-// We are retiring EC2-Classic on August 15, 2022. We recommend that you migrate
-// from EC2-Classic to a VPC. For more information, see Migrate from EC2-Classic
-// to a VPC (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-migrate.html)
+// We are retiring EC2-Classic. We recommend that you migrate from EC2-Classic
+// to a VPC. For more information, see Migrate from EC2-Classic to a VPC (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-migrate.html)
 // in the Amazon Elastic Compute Cloud User Guide.
 //
 // Describes a linked EC2-Classic instance.
@@ -62689,11 +62679,15 @@ type CreateFlowLogsInput struct {
 	// of the request. For more information, see How to ensure idempotency (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Run_Instance_Idempotency.html).
 	ClientToken *string `type:"string"`
 
-	// The ARN for the IAM role that permits Amazon EC2 to publish flow logs to
-	// a CloudWatch Logs log group in your account.
+	// The ARN of the IAM role that allows Amazon EC2 to publish flow logs across
+	// accounts.
+	DeliverCrossAccountRole *string `type:"string"`
+
+	// The ARN of the IAM role that allows Amazon EC2 to publish flow logs to a
+	// CloudWatch Logs log group in your account.
 	//
-	// If you specify LogDestinationType as s3, do not specify DeliverLogsPermissionArn
-	// or LogGroupName.
+	// This parameter is required if the destination type is cloud-watch-logs and
+	// unsupported otherwise.
 	DeliverLogsPermissionArn *string `type:"string"`
 
 	// The destination options.
@@ -62705,38 +62699,31 @@ type CreateFlowLogsInput struct {
 	// it is UnauthorizedOperation.
 	DryRun *bool `type:"boolean"`
 
-	// The destination to which the flow log data is to be published. Flow log data
-	// can be published to a CloudWatch Logs log group or an Amazon S3 bucket. The
-	// value specified for this parameter depends on the value specified for LogDestinationType.
+	// The destination for the flow log data. The meaning of this parameter depends
+	// on the destination type.
 	//
-	// If LogDestinationType is not specified or cloud-watch-logs, specify the Amazon
-	// Resource Name (ARN) of the CloudWatch Logs log group. For example, to publish
-	// to a log group called my-logs, specify arn:aws:logs:us-east-1:123456789012:log-group:my-logs.
-	// Alternatively, use LogGroupName instead.
+	//    * If the destination type is cloud-watch-logs, specify the ARN of a CloudWatch
+	//    Logs log group. For example: arn:aws:logs:region:account_id:log-group:my_group
+	//    Alternatively, use the LogGroupName parameter.
 	//
-	// If LogDestinationType is s3, specify the ARN of the Amazon S3 bucket. You
-	// can also specify a subfolder in the bucket. To specify a subfolder in the
-	// bucket, use the following ARN format: bucket_ARN/subfolder_name/. For example,
-	// to specify a subfolder named my-logs in a bucket named my-bucket, use the
-	// following ARN: arn:aws:s3:::my-bucket/my-logs/. You cannot use AWSLogs as
-	// a subfolder name. This is a reserved term.
+	//    * If the destination type is s3, specify the ARN of an S3 bucket. For
+	//    example: arn:aws:s3:::my_bucket/my_subfolder/ The subfolder is optional.
+	//    Note that you can't use AWSLogs as a subfolder name.
+	//
+	//    * If the destination type is kinesis-data-firehose, specify the ARN of
+	//    a Kinesis Data Firehose delivery stream. For example: arn:aws:firehose:region:account_id:deliverystream:my_stream
 	LogDestination *string `type:"string"`
 
-	// The type of destination to which the flow log data is to be published. Flow
-	// log data can be published to CloudWatch Logs or Amazon S3. To publish flow
-	// log data to CloudWatch Logs, specify cloud-watch-logs. To publish flow log
-	// data to Amazon S3, specify s3.
-	//
-	// If you specify LogDestinationType as s3, do not specify DeliverLogsPermissionArn
-	// or LogGroupName.
+	// The type of destination for the flow log data.
 	//
 	// Default: cloud-watch-logs
 	LogDestinationType *string `type:"string" enum:"LogDestinationType"`
 
-	// The fields to include in the flow log record, in the order in which they
-	// should appear. For a list of available fields, see Flow log records (https://docs.aws.amazon.com/vpc/latest/userguide/flow-logs.html#flow-log-records).
+	// The fields to include in the flow log record. List the fields in the order
+	// in which they should appear. For more information about the available fields,
+	// see Flow log records (https://docs.aws.amazon.com/vpc/latest/userguide/flow-logs.html#flow-log-records).
 	// If you omit this parameter, the flow log is created using the default format.
-	// If you specify this parameter, you must specify at least one field.
+	// If you specify this parameter, you must include at least one field.
 	//
 	// Specify the fields using the ${field-id} format, separated by spaces. For
 	// the CLI, surround this parameter value with single quotes on Linux or double
@@ -62746,8 +62733,7 @@ type CreateFlowLogsInput struct {
 	// The name of a new or existing CloudWatch Logs log group where Amazon EC2
 	// publishes your flow logs.
 	//
-	// If you specify LogDestinationType as s3, do not specify DeliverLogsPermissionArn
-	// or LogGroupName.
+	// This parameter is valid only if the destination type is cloud-watch-logs.
 	LogGroupName *string `type:"string"`
 
 	// The maximum interval of time during which a flow of packets is captured and
@@ -62761,16 +62747,15 @@ type CreateFlowLogsInput struct {
 	// Default: 600
 	MaxAggregationInterval *int64 `type:"integer"`
 
-	// The ID of the subnet, network interface, or VPC for which you want to create
-	// a flow log.
+	// The IDs of the resources to monitor. For example, if the resource type is
+	// VPC, specify the IDs of the VPCs.
 	//
 	// Constraints: Maximum of 1000 resources
 	//
 	// ResourceIds is a required field
 	ResourceIds []*string `locationName:"ResourceId" locationNameList:"item" type:"list" required:"true"`
 
-	// The type of resource for which to create the flow log. For example, if you
-	// specified a VPC ID for the ResourceId property, specify VPC for this property.
+	// The type of resource to monitor.
 	//
 	// ResourceType is a required field
 	ResourceType *string `type:"string" required:"true" enum:"FlowLogsResourceType"`
@@ -62778,8 +62763,8 @@ type CreateFlowLogsInput struct {
 	// The tags to apply to the flow logs.
 	TagSpecifications []*TagSpecification `locationName:"TagSpecification" locationNameList:"item" type:"list"`
 
-	// The type of traffic to log. You can log traffic that the resource accepts
-	// or rejects, or all traffic.
+	// The type of traffic to monitor (accepted traffic, rejected traffic, or all
+	// traffic).
 	TrafficType *string `type:"string" enum:"TrafficType"`
 }
 
@@ -62820,6 +62805,12 @@ func (s *CreateFlowLogsInput) Validate() error {
 // SetClientToken sets the ClientToken field's value.
 func (s *CreateFlowLogsInput) SetClientToken(v string) *CreateFlowLogsInput {
 	s.ClientToken = &v
+	return s
+}
+
+// SetDeliverCrossAccountRole sets the DeliverCrossAccountRole field's value.
+func (s *CreateFlowLogsInput) SetDeliverCrossAccountRole(v string) *CreateFlowLogsInput {
+	s.DeliverCrossAccountRole = &v
 	return s
 }
 
@@ -82579,9 +82570,8 @@ type DescribeFlowLogsInput struct {
 	//
 	//    * deliver-log-status - The status of the logs delivery (SUCCESS | FAILED).
 	//
-	//    * log-destination-type - The type of destination to which the flow log
-	//    publishes data. Possible destination types include cloud-watch-logs and
-	//    s3.
+	//    * log-destination-type - The type of destination for the flow log data
+	//    (cloud-watch-logs | s3 | kinesis-data-firehose).
 	//
 	//    * flow-log-id - The ID of the flow log.
 	//
@@ -106776,6 +106766,10 @@ type FlowLog struct {
 	// The date and time the flow log was created.
 	CreationTime *time.Time `locationName:"creationTime" type:"timestamp"`
 
+	// The ARN of the IAM role that allows the service to publish flow logs across
+	// accounts.
+	DeliverCrossAccountRole *string `locationName:"deliverCrossAccountRole" type:"string"`
+
 	// Information about the error that occurred. Rate limited indicates that CloudWatch
 	// Logs throttling has been applied for one or more network interfaces, or that
 	// you've reached the limit on the number of log groups that you can create.
@@ -106784,7 +106778,8 @@ type FlowLog struct {
 	// indicates an internal error.
 	DeliverLogsErrorMessage *string `locationName:"deliverLogsErrorMessage" type:"string"`
 
-	// The ARN of the IAM role that posts logs to CloudWatch Logs.
+	// The ARN of the IAM role allows the service to publish logs to CloudWatch
+	// Logs.
 	DeliverLogsPermissionArn *string `locationName:"deliverLogsPermissionArn" type:"string"`
 
 	// The status of the logs delivery (SUCCESS | FAILED).
@@ -106793,22 +106788,16 @@ type FlowLog struct {
 	// The destination options.
 	DestinationOptions *DestinationOptionsResponse `locationName:"destinationOptions" type:"structure"`
 
-	// The flow log ID.
+	// The ID of the flow log.
 	FlowLogId *string `locationName:"flowLogId" type:"string"`
 
 	// The status of the flow log (ACTIVE).
 	FlowLogStatus *string `locationName:"flowLogStatus" type:"string"`
 
-	// The destination to which the flow log data is published. Flow log data can
-	// be published to an CloudWatch Logs log group or an Amazon S3 bucket. If the
-	// flow log publishes to CloudWatch Logs, this element indicates the Amazon
-	// Resource Name (ARN) of the CloudWatch Logs log group to which the data is
-	// published. If the flow log publishes to Amazon S3, this element indicates
-	// the ARN of the Amazon S3 bucket to which the data is published.
+	// The Amazon Resource Name (ARN) of the destination for the flow log data.
 	LogDestination *string `locationName:"logDestination" type:"string"`
 
-	// The type of destination to which the flow log data is published. Flow log
-	// data can be published to CloudWatch Logs or Amazon S3.
+	// The type of destination for the flow log data.
 	LogDestinationType *string `locationName:"logDestinationType" type:"string" enum:"LogDestinationType"`
 
 	// The format of the flow log record.
@@ -106827,7 +106816,7 @@ type FlowLog struct {
 	// Valid Values: 60 | 600
 	MaxAggregationInterval *int64 `locationName:"maxAggregationInterval" type:"integer"`
 
-	// The ID of the resource on which the flow log was created.
+	// The ID of the resource being monitored.
 	ResourceId *string `locationName:"resourceId" type:"string"`
 
 	// The tags for the flow log.
@@ -106858,6 +106847,12 @@ func (s FlowLog) GoString() string {
 // SetCreationTime sets the CreationTime field's value.
 func (s *FlowLog) SetCreationTime(v time.Time) *FlowLog {
 	s.CreationTime = &v
+	return s
+}
+
+// SetDeliverCrossAccountRole sets the DeliverCrossAccountRole field's value.
+func (s *FlowLog) SetDeliverCrossAccountRole(v string) *FlowLog {
+	s.DeliverCrossAccountRole = &v
 	return s
 }
 
@@ -136995,9 +136990,8 @@ func (s *PeeringAttachmentStatus) SetMessage(v string) *PeeringAttachmentStatus 
 	return s
 }
 
-// We are retiring EC2-Classic on August 15, 2022. We recommend that you migrate
-// from EC2-Classic to a VPC. For more information, see Migrate from EC2-Classic
-// to a VPC (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-migrate.html)
+// We are retiring EC2-Classic. We recommend that you migrate from EC2-Classic
+// to a VPC. For more information, see Migrate from EC2-Classic to a VPC (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-migrate.html)
 // in the Amazon Elastic Compute Cloud User Guide.
 //
 // Describes the VPC peering connection options.
@@ -137053,9 +137047,8 @@ func (s *PeeringConnectionOptions) SetAllowEgressFromLocalVpcToRemoteClassicLink
 	return s
 }
 
-// We are retiring EC2-Classic on August 15, 2022. We recommend that you migrate
-// from EC2-Classic to a VPC. For more information, see Migrate from EC2-Classic
-// to a VPC (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-migrate.html)
+// We are retiring EC2-Classic. We recommend that you migrate from EC2-Classic
+// to a VPC. For more information, see Migrate from EC2-Classic to a VPC (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-migrate.html)
 // in the Amazon Elastic Compute Cloud User Guide.
 //
 // The VPC peering connection options.
@@ -161962,9 +161955,8 @@ func (s *VpcCidrBlockState) SetStatusMessage(v string) *VpcCidrBlockState {
 	return s
 }
 
-// We are retiring EC2-Classic on August 15, 2022. We recommend that you migrate
-// from EC2-Classic to a VPC. For more information, see Migrate from EC2-Classic
-// to a VPC (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-migrate.html)
+// We are retiring EC2-Classic. We recommend that you migrate from EC2-Classic
+// to a VPC. For more information, see Migrate from EC2-Classic to a VPC (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-migrate.html)
 // in the Amazon Elastic Compute Cloud User Guide.
 //
 // Describes whether a VPC is enabled for ClassicLink.
@@ -162466,9 +162458,8 @@ func (s *VpcPeeringConnection) SetVpcPeeringConnectionId(v string) *VpcPeeringCo
 	return s
 }
 
-// We are retiring EC2-Classic on August 15, 2022. We recommend that you migrate
-// from EC2-Classic to a VPC. For more information, see Migrate from EC2-Classic
-// to a VPC (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-migrate.html)
+// We are retiring EC2-Classic. We recommend that you migrate from EC2-Classic
+// to a VPC. For more information, see Migrate from EC2-Classic to a VPC (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-migrate.html)
 // in the Amazon Elastic Compute Cloud User Guide.
 //
 // Describes the VPC peering connection options.
@@ -169439,6 +169430,9 @@ const (
 
 	// LogDestinationTypeS3 is a LogDestinationType enum value
 	LogDestinationTypeS3 = "s3"
+
+	// LogDestinationTypeKinesisDataFirehose is a LogDestinationType enum value
+	LogDestinationTypeKinesisDataFirehose = "kinesis-data-firehose"
 )
 
 // LogDestinationType_Values returns all elements of the LogDestinationType enum
@@ -169446,6 +169440,7 @@ func LogDestinationType_Values() []string {
 	return []string{
 		LogDestinationTypeCloudWatchLogs,
 		LogDestinationTypeS3,
+		LogDestinationTypeKinesisDataFirehose,
 	}
 }
 
