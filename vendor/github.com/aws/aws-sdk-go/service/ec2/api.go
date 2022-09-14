@@ -2182,9 +2182,8 @@ func (c *EC2) AttachClassicLinkVpcRequest(input *AttachClassicLinkVpcInput) (req
 
 // AttachClassicLinkVpc API operation for Amazon Elastic Compute Cloud.
 //
-// We are retiring EC2-Classic on August 15, 2022. We recommend that you migrate
-// from EC2-Classic to a VPC. For more information, see Migrate from EC2-Classic
-// to a VPC (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-migrate.html)
+// We are retiring EC2-Classic. We recommend that you migrate from EC2-Classic
+// to a VPC. For more information, see Migrate from EC2-Classic to a VPC (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-migrate.html)
 // in the Amazon Elastic Compute Cloud User Guide.
 //
 // Links an EC2-Classic instance to a ClassicLink-enabled VPC through one or
@@ -4553,9 +4552,8 @@ func (c *EC2) CreateDefaultVpcRequest(input *CreateDefaultVpcInput) (req *reques
 // VPC in a Region that supports EC2-Classic, see "I really want a default VPC
 // for my existing EC2 account. Is that possible?" in the Default VPCs FAQ (http://aws.amazon.com/vpc/faqs/#Default_VPCs).
 //
-// We are retiring EC2-Classic on August 15, 2022. We recommend that you migrate
-// from EC2-Classic to a VPC. For more information, see Migrate from EC2-Classic
-// to a VPC (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-migrate.html)
+// We are retiring EC2-Classic. We recommend that you migrate from EC2-Classic
+// to a VPC. For more information, see Migrate from EC2-Classic to a VPC (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-migrate.html)
 // in the Amazon Elastic Compute Cloud User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -5905,7 +5903,12 @@ func (c *EC2) CreateLocalGatewayRouteRequest(input *CreateLocalGatewayRouteInput
 
 // CreateLocalGatewayRoute API operation for Amazon Elastic Compute Cloud.
 //
-// Creates a static route for the specified local gateway route table.
+// Creates a static route for the specified local gateway route table. You must
+// specify one of the following targets:
+//
+//   - LocalGatewayVirtualInterfaceGroupId
+//
+//   - NetworkInterfaceId
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -16412,9 +16415,8 @@ func (c *EC2) DescribeClassicLinkInstancesRequest(input *DescribeClassicLinkInst
 // ClassicLink. You cannot use this request to return information about other
 // instances.
 //
-// We are retiring EC2-Classic on August 15, 2022. We recommend that you migrate
-// from EC2-Classic to a VPC. For more information, see Migrate from EC2-Classic
-// to a VPC (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-migrate.html)
+// We are retiring EC2-Classic. We recommend that you migrate from EC2-Classic
+// to a VPC. For more information, see Migrate from EC2-Classic to a VPC (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-migrate.html)
 // in the Amazon Elastic Compute Cloud User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -18571,9 +18573,11 @@ func (c *EC2) DescribeFlowLogsRequest(input *DescribeFlowLogsInput) (req *reques
 
 // DescribeFlowLogs API operation for Amazon Elastic Compute Cloud.
 //
-// Describes one or more flow logs. To view the information in your flow logs
-// (the log streams for the network interfaces), you must use the CloudWatch
-// Logs console or the CloudWatch Logs API.
+// Describes one or more flow logs.
+//
+// To view the published flow log records, you must view the log destination.
+// For example, the CloudWatch Logs log group, the Amazon S3 bucket, or the
+// Kinesis Data Firehose delivery stream.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -30128,9 +30132,8 @@ func (c *EC2) DescribeVpcClassicLinkRequest(input *DescribeVpcClassicLinkInput) 
 //
 // Describes the ClassicLink status of one or more VPCs.
 //
-// We are retiring EC2-Classic on August 15, 2022. We recommend that you migrate
-// from EC2-Classic to a VPC. For more information, see Migrate from EC2-Classic
-// to a VPC (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-migrate.html)
+// We are retiring EC2-Classic. We recommend that you migrate from EC2-Classic
+// to a VPC. For more information, see Migrate from EC2-Classic to a VPC (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-migrate.html)
 // in the Amazon Elastic Compute Cloud User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -30210,9 +30213,8 @@ func (c *EC2) DescribeVpcClassicLinkDnsSupportRequest(input *DescribeVpcClassicL
 
 // DescribeVpcClassicLinkDnsSupport API operation for Amazon Elastic Compute Cloud.
 //
-// We are retiring EC2-Classic on August 15, 2022. We recommend that you migrate
-// from EC2-Classic to a VPC. For more information, see Migrate from EC2-Classic
-// to a VPC (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-migrate.html)
+// We are retiring EC2-Classic. We recommend that you migrate from EC2-Classic
+// to a VPC. For more information, see Migrate from EC2-Classic to a VPC (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-migrate.html)
 // in the Amazon Elastic Compute Cloud User Guide.
 //
 // Describes the ClassicLink DNS support status of one or more VPCs. If enabled,
@@ -31490,9 +31492,8 @@ func (c *EC2) DetachClassicLinkVpcRequest(input *DetachClassicLinkVpcInput) (req
 
 // DetachClassicLinkVpc API operation for Amazon Elastic Compute Cloud.
 //
-// We are retiring EC2-Classic on August 15, 2022. We recommend that you migrate
-// from EC2-Classic to a VPC. For more information, see Migrate from EC2-Classic
-// to a VPC (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-migrate.html)
+// We are retiring EC2-Classic. We recommend that you migrate from EC2-Classic
+// to a VPC. For more information, see Migrate from EC2-Classic to a VPC (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-migrate.html)
 // in the Amazon Elastic Compute Cloud User Guide.
 //
 // Unlinks (detaches) a linked EC2-Classic instance from a VPC. After the instance
@@ -32501,9 +32502,8 @@ func (c *EC2) DisableVpcClassicLinkRequest(input *DisableVpcClassicLinkInput) (r
 // Disables ClassicLink for a VPC. You cannot disable ClassicLink for a VPC
 // that has EC2-Classic instances linked to it.
 //
-// We are retiring EC2-Classic on August 15, 2022. We recommend that you migrate
-// from EC2-Classic to a VPC. For more information, see Migrate from EC2-Classic
-// to a VPC (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-migrate.html)
+// We are retiring EC2-Classic. We recommend that you migrate from EC2-Classic
+// to a VPC. For more information, see Migrate from EC2-Classic to a VPC (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-migrate.html)
 // in the Amazon Elastic Compute Cloud User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -32585,9 +32585,8 @@ func (c *EC2) DisableVpcClassicLinkDnsSupportRequest(input *DisableVpcClassicLin
 //
 // You must specify a VPC ID in the request.
 //
-// We are retiring EC2-Classic on August 15, 2022. We recommend that you migrate
-// from EC2-Classic to a VPC. For more information, see Migrate from EC2-Classic
-// to a VPC (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-migrate.html)
+// We are retiring EC2-Classic. We recommend that you migrate from EC2-Classic
+// to a VPC. For more information, see Migrate from EC2-Classic to a VPC (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-migrate.html)
 // in the Amazon Elastic Compute Cloud User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -34292,9 +34291,8 @@ func (c *EC2) EnableVpcClassicLinkRequest(input *EnableVpcClassicLinkInput) (req
 
 // EnableVpcClassicLink API operation for Amazon Elastic Compute Cloud.
 //
-// We are retiring EC2-Classic on August 15, 2022. We recommend that you migrate
-// from EC2-Classic to a VPC. For more information, see Migrate from EC2-Classic
-// to a VPC (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-migrate.html)
+// We are retiring EC2-Classic. We recommend that you migrate from EC2-Classic
+// to a VPC. For more information, see Migrate from EC2-Classic to a VPC (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-migrate.html)
 // in the Amazon Elastic Compute Cloud User Guide.
 //
 // Enables a VPC for ClassicLink. You can then link EC2-Classic instances to
@@ -34376,9 +34374,8 @@ func (c *EC2) EnableVpcClassicLinkDnsSupportRequest(input *EnableVpcClassicLinkD
 
 // EnableVpcClassicLinkDnsSupport API operation for Amazon Elastic Compute Cloud.
 //
-// We are retiring EC2-Classic on August 15, 2022. We recommend that you migrate
-// from EC2-Classic to a VPC. For more information, see Migrate from EC2-Classic
-// to a VPC (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-migrate.html)
+// We are retiring EC2-Classic. We recommend that you migrate from EC2-Classic
+// to a VPC. For more information, see Migrate from EC2-Classic to a VPC (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-migrate.html)
 // in the Amazon Elastic Compute Cloud User Guide.
 //
 // Enables a VPC to support DNS hostname resolution for ClassicLink. If enabled,
@@ -41389,6 +41386,79 @@ func (c *EC2) ModifyLaunchTemplateWithContext(ctx aws.Context, input *ModifyLaun
 	return out, req.Send()
 }
 
+const opModifyLocalGatewayRoute = "ModifyLocalGatewayRoute"
+
+// ModifyLocalGatewayRouteRequest generates a "aws/request.Request" representing the
+// client's request for the ModifyLocalGatewayRoute operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ModifyLocalGatewayRoute for more information on using the ModifyLocalGatewayRoute
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the ModifyLocalGatewayRouteRequest method.
+//	req, resp := client.ModifyLocalGatewayRouteRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/ModifyLocalGatewayRoute
+func (c *EC2) ModifyLocalGatewayRouteRequest(input *ModifyLocalGatewayRouteInput) (req *request.Request, output *ModifyLocalGatewayRouteOutput) {
+	op := &request.Operation{
+		Name:       opModifyLocalGatewayRoute,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &ModifyLocalGatewayRouteInput{}
+	}
+
+	output = &ModifyLocalGatewayRouteOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ModifyLocalGatewayRoute API operation for Amazon Elastic Compute Cloud.
+//
+// Modifies the specified local gateway route.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Elastic Compute Cloud's
+// API operation ModifyLocalGatewayRoute for usage and error information.
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/ModifyLocalGatewayRoute
+func (c *EC2) ModifyLocalGatewayRoute(input *ModifyLocalGatewayRouteInput) (*ModifyLocalGatewayRouteOutput, error) {
+	req, out := c.ModifyLocalGatewayRouteRequest(input)
+	return out, req.Send()
+}
+
+// ModifyLocalGatewayRouteWithContext is the same as ModifyLocalGatewayRoute with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ModifyLocalGatewayRoute for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *EC2) ModifyLocalGatewayRouteWithContext(ctx aws.Context, input *ModifyLocalGatewayRouteInput, opts ...request.Option) (*ModifyLocalGatewayRouteOutput, error) {
+	req, out := c.ModifyLocalGatewayRouteRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opModifyManagedPrefixList = "ModifyManagedPrefixList"
 
 // ModifyManagedPrefixListRequest generates a "aws/request.Request" representing the
@@ -43261,9 +43331,8 @@ func (c *EC2) ModifyVpcPeeringConnectionOptionsRequest(input *ModifyVpcPeeringCo
 
 // ModifyVpcPeeringConnectionOptions API operation for Amazon Elastic Compute Cloud.
 //
-// We are retiring EC2-Classic on August 15, 2022. We recommend that you migrate
-// from EC2-Classic to a VPC. For more information, see Migrate from EC2-Classic
-// to a VPC (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-migrate.html)
+// We are retiring EC2-Classic. We recommend that you migrate from EC2-Classic
+// to a VPC. For more information, see Migrate from EC2-Classic to a VPC (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-migrate.html)
 // in the Amazon Elastic Compute Cloud User Guide.
 //
 // Modifies the VPC peering connection options on one side of a VPC peering
@@ -58074,9 +58143,8 @@ func (s *ClassicLinkDnsSupport) SetVpcId(v string) *ClassicLinkDnsSupport {
 	return s
 }
 
-// We are retiring EC2-Classic on August 15, 2022. We recommend that you migrate
-// from EC2-Classic to a VPC. For more information, see Migrate from EC2-Classic
-// to a VPC (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-migrate.html)
+// We are retiring EC2-Classic. We recommend that you migrate from EC2-Classic
+// to a VPC. For more information, see Migrate from EC2-Classic to a VPC (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-migrate.html)
 // in the Amazon Elastic Compute Cloud User Guide.
 //
 // Describes a linked EC2-Classic instance.
@@ -62689,11 +62757,15 @@ type CreateFlowLogsInput struct {
 	// of the request. For more information, see How to ensure idempotency (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Run_Instance_Idempotency.html).
 	ClientToken *string `type:"string"`
 
-	// The ARN for the IAM role that permits Amazon EC2 to publish flow logs to
-	// a CloudWatch Logs log group in your account.
+	// The ARN of the IAM role that allows Amazon EC2 to publish flow logs across
+	// accounts.
+	DeliverCrossAccountRole *string `type:"string"`
+
+	// The ARN of the IAM role that allows Amazon EC2 to publish flow logs to a
+	// CloudWatch Logs log group in your account.
 	//
-	// If you specify LogDestinationType as s3, do not specify DeliverLogsPermissionArn
-	// or LogGroupName.
+	// This parameter is required if the destination type is cloud-watch-logs and
+	// unsupported otherwise.
 	DeliverLogsPermissionArn *string `type:"string"`
 
 	// The destination options.
@@ -62705,38 +62777,31 @@ type CreateFlowLogsInput struct {
 	// it is UnauthorizedOperation.
 	DryRun *bool `type:"boolean"`
 
-	// The destination to which the flow log data is to be published. Flow log data
-	// can be published to a CloudWatch Logs log group or an Amazon S3 bucket. The
-	// value specified for this parameter depends on the value specified for LogDestinationType.
+	// The destination for the flow log data. The meaning of this parameter depends
+	// on the destination type.
 	//
-	// If LogDestinationType is not specified or cloud-watch-logs, specify the Amazon
-	// Resource Name (ARN) of the CloudWatch Logs log group. For example, to publish
-	// to a log group called my-logs, specify arn:aws:logs:us-east-1:123456789012:log-group:my-logs.
-	// Alternatively, use LogGroupName instead.
+	//    * If the destination type is cloud-watch-logs, specify the ARN of a CloudWatch
+	//    Logs log group. For example: arn:aws:logs:region:account_id:log-group:my_group
+	//    Alternatively, use the LogGroupName parameter.
 	//
-	// If LogDestinationType is s3, specify the ARN of the Amazon S3 bucket. You
-	// can also specify a subfolder in the bucket. To specify a subfolder in the
-	// bucket, use the following ARN format: bucket_ARN/subfolder_name/. For example,
-	// to specify a subfolder named my-logs in a bucket named my-bucket, use the
-	// following ARN: arn:aws:s3:::my-bucket/my-logs/. You cannot use AWSLogs as
-	// a subfolder name. This is a reserved term.
+	//    * If the destination type is s3, specify the ARN of an S3 bucket. For
+	//    example: arn:aws:s3:::my_bucket/my_subfolder/ The subfolder is optional.
+	//    Note that you can't use AWSLogs as a subfolder name.
+	//
+	//    * If the destination type is kinesis-data-firehose, specify the ARN of
+	//    a Kinesis Data Firehose delivery stream. For example: arn:aws:firehose:region:account_id:deliverystream:my_stream
 	LogDestination *string `type:"string"`
 
-	// The type of destination to which the flow log data is to be published. Flow
-	// log data can be published to CloudWatch Logs or Amazon S3. To publish flow
-	// log data to CloudWatch Logs, specify cloud-watch-logs. To publish flow log
-	// data to Amazon S3, specify s3.
-	//
-	// If you specify LogDestinationType as s3, do not specify DeliverLogsPermissionArn
-	// or LogGroupName.
+	// The type of destination for the flow log data.
 	//
 	// Default: cloud-watch-logs
 	LogDestinationType *string `type:"string" enum:"LogDestinationType"`
 
-	// The fields to include in the flow log record, in the order in which they
-	// should appear. For a list of available fields, see Flow log records (https://docs.aws.amazon.com/vpc/latest/userguide/flow-logs.html#flow-log-records).
+	// The fields to include in the flow log record. List the fields in the order
+	// in which they should appear. For more information about the available fields,
+	// see Flow log records (https://docs.aws.amazon.com/vpc/latest/userguide/flow-logs.html#flow-log-records).
 	// If you omit this parameter, the flow log is created using the default format.
-	// If you specify this parameter, you must specify at least one field.
+	// If you specify this parameter, you must include at least one field.
 	//
 	// Specify the fields using the ${field-id} format, separated by spaces. For
 	// the CLI, surround this parameter value with single quotes on Linux or double
@@ -62746,8 +62811,7 @@ type CreateFlowLogsInput struct {
 	// The name of a new or existing CloudWatch Logs log group where Amazon EC2
 	// publishes your flow logs.
 	//
-	// If you specify LogDestinationType as s3, do not specify DeliverLogsPermissionArn
-	// or LogGroupName.
+	// This parameter is valid only if the destination type is cloud-watch-logs.
 	LogGroupName *string `type:"string"`
 
 	// The maximum interval of time during which a flow of packets is captured and
@@ -62761,16 +62825,15 @@ type CreateFlowLogsInput struct {
 	// Default: 600
 	MaxAggregationInterval *int64 `type:"integer"`
 
-	// The ID of the subnet, network interface, or VPC for which you want to create
-	// a flow log.
+	// The IDs of the resources to monitor. For example, if the resource type is
+	// VPC, specify the IDs of the VPCs.
 	//
 	// Constraints: Maximum of 1000 resources
 	//
 	// ResourceIds is a required field
 	ResourceIds []*string `locationName:"ResourceId" locationNameList:"item" type:"list" required:"true"`
 
-	// The type of resource for which to create the flow log. For example, if you
-	// specified a VPC ID for the ResourceId property, specify VPC for this property.
+	// The type of resource to monitor.
 	//
 	// ResourceType is a required field
 	ResourceType *string `type:"string" required:"true" enum:"FlowLogsResourceType"`
@@ -62778,8 +62841,8 @@ type CreateFlowLogsInput struct {
 	// The tags to apply to the flow logs.
 	TagSpecifications []*TagSpecification `locationName:"TagSpecification" locationNameList:"item" type:"list"`
 
-	// The type of traffic to log. You can log traffic that the resource accepts
-	// or rejects, or all traffic.
+	// The type of traffic to monitor (accepted traffic, rejected traffic, or all
+	// traffic).
 	TrafficType *string `type:"string" enum:"TrafficType"`
 }
 
@@ -62820,6 +62883,12 @@ func (s *CreateFlowLogsInput) Validate() error {
 // SetClientToken sets the ClientToken field's value.
 func (s *CreateFlowLogsInput) SetClientToken(v string) *CreateFlowLogsInput {
 	s.ClientToken = &v
+	return s
+}
+
+// SetDeliverCrossAccountRole sets the DeliverCrossAccountRole field's value.
+func (s *CreateFlowLogsInput) SetDeliverCrossAccountRole(v string) *CreateFlowLogsInput {
+	s.DeliverCrossAccountRole = &v
 	return s
 }
 
@@ -64581,9 +64650,10 @@ type CreateLocalGatewayRouteInput struct {
 	LocalGatewayRouteTableId *string `type:"string" required:"true"`
 
 	// The ID of the virtual interface group.
-	//
-	// LocalGatewayVirtualInterfaceGroupId is a required field
-	LocalGatewayVirtualInterfaceGroupId *string `type:"string" required:"true"`
+	LocalGatewayVirtualInterfaceGroupId *string `type:"string"`
+
+	// The ID of the network interface.
+	NetworkInterfaceId *string `type:"string"`
 }
 
 // String returns the string representation.
@@ -64613,9 +64683,6 @@ func (s *CreateLocalGatewayRouteInput) Validate() error {
 	if s.LocalGatewayRouteTableId == nil {
 		invalidParams.Add(request.NewErrParamRequired("LocalGatewayRouteTableId"))
 	}
-	if s.LocalGatewayVirtualInterfaceGroupId == nil {
-		invalidParams.Add(request.NewErrParamRequired("LocalGatewayVirtualInterfaceGroupId"))
-	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -64644,6 +64711,12 @@ func (s *CreateLocalGatewayRouteInput) SetLocalGatewayRouteTableId(v string) *Cr
 // SetLocalGatewayVirtualInterfaceGroupId sets the LocalGatewayVirtualInterfaceGroupId field's value.
 func (s *CreateLocalGatewayRouteInput) SetLocalGatewayVirtualInterfaceGroupId(v string) *CreateLocalGatewayRouteInput {
 	s.LocalGatewayVirtualInterfaceGroupId = &v
+	return s
+}
+
+// SetNetworkInterfaceId sets the NetworkInterfaceId field's value.
+func (s *CreateLocalGatewayRouteInput) SetNetworkInterfaceId(v string) *CreateLocalGatewayRouteInput {
+	s.NetworkInterfaceId = &v
 	return s
 }
 
@@ -82579,9 +82652,8 @@ type DescribeFlowLogsInput struct {
 	//
 	//    * deliver-log-status - The status of the logs delivery (SUCCESS | FAILED).
 	//
-	//    * log-destination-type - The type of destination to which the flow log
-	//    publishes data. Possible destination types include cloud-watch-logs and
-	//    s3.
+	//    * log-destination-type - The type of destination for the flow log data
+	//    (cloud-watch-logs | s3 | kinesis-data-firehose).
 	//
 	//    * flow-log-id - The ID of the flow log.
 	//
@@ -106776,6 +106848,10 @@ type FlowLog struct {
 	// The date and time the flow log was created.
 	CreationTime *time.Time `locationName:"creationTime" type:"timestamp"`
 
+	// The ARN of the IAM role that allows the service to publish flow logs across
+	// accounts.
+	DeliverCrossAccountRole *string `locationName:"deliverCrossAccountRole" type:"string"`
+
 	// Information about the error that occurred. Rate limited indicates that CloudWatch
 	// Logs throttling has been applied for one or more network interfaces, or that
 	// you've reached the limit on the number of log groups that you can create.
@@ -106784,7 +106860,8 @@ type FlowLog struct {
 	// indicates an internal error.
 	DeliverLogsErrorMessage *string `locationName:"deliverLogsErrorMessage" type:"string"`
 
-	// The ARN of the IAM role that posts logs to CloudWatch Logs.
+	// The ARN of the IAM role allows the service to publish logs to CloudWatch
+	// Logs.
 	DeliverLogsPermissionArn *string `locationName:"deliverLogsPermissionArn" type:"string"`
 
 	// The status of the logs delivery (SUCCESS | FAILED).
@@ -106793,22 +106870,16 @@ type FlowLog struct {
 	// The destination options.
 	DestinationOptions *DestinationOptionsResponse `locationName:"destinationOptions" type:"structure"`
 
-	// The flow log ID.
+	// The ID of the flow log.
 	FlowLogId *string `locationName:"flowLogId" type:"string"`
 
 	// The status of the flow log (ACTIVE).
 	FlowLogStatus *string `locationName:"flowLogStatus" type:"string"`
 
-	// The destination to which the flow log data is published. Flow log data can
-	// be published to an CloudWatch Logs log group or an Amazon S3 bucket. If the
-	// flow log publishes to CloudWatch Logs, this element indicates the Amazon
-	// Resource Name (ARN) of the CloudWatch Logs log group to which the data is
-	// published. If the flow log publishes to Amazon S3, this element indicates
-	// the ARN of the Amazon S3 bucket to which the data is published.
+	// The Amazon Resource Name (ARN) of the destination for the flow log data.
 	LogDestination *string `locationName:"logDestination" type:"string"`
 
-	// The type of destination to which the flow log data is published. Flow log
-	// data can be published to CloudWatch Logs or Amazon S3.
+	// The type of destination for the flow log data.
 	LogDestinationType *string `locationName:"logDestinationType" type:"string" enum:"LogDestinationType"`
 
 	// The format of the flow log record.
@@ -106827,7 +106898,7 @@ type FlowLog struct {
 	// Valid Values: 60 | 600
 	MaxAggregationInterval *int64 `locationName:"maxAggregationInterval" type:"integer"`
 
-	// The ID of the resource on which the flow log was created.
+	// The ID of the resource being monitored.
 	ResourceId *string `locationName:"resourceId" type:"string"`
 
 	// The tags for the flow log.
@@ -106858,6 +106929,12 @@ func (s FlowLog) GoString() string {
 // SetCreationTime sets the CreationTime field's value.
 func (s *FlowLog) SetCreationTime(v time.Time) *FlowLog {
 	s.CreationTime = &v
+	return s
+}
+
+// SetDeliverCrossAccountRole sets the DeliverCrossAccountRole field's value.
+func (s *FlowLog) SetDeliverCrossAccountRole(v string) *FlowLog {
+	s.DeliverCrossAccountRole = &v
 	return s
 }
 
@@ -125321,6 +125398,9 @@ func (s *LocalGateway) SetTags(v []*Tag) *LocalGateway {
 type LocalGatewayRoute struct {
 	_ struct{} `type:"structure"`
 
+	// The ID of the customer-owned address pool.
+	CoipPoolId *string `locationName:"coipPoolId" type:"string"`
+
 	// The CIDR block used for destination matches.
 	DestinationCidrBlock *string `locationName:"destinationCidrBlock" type:"string"`
 
@@ -125333,11 +125413,17 @@ type LocalGatewayRoute struct {
 	// The ID of the virtual interface group.
 	LocalGatewayVirtualInterfaceGroupId *string `locationName:"localGatewayVirtualInterfaceGroupId" type:"string"`
 
+	// The ID of the network interface.
+	NetworkInterfaceId *string `locationName:"networkInterfaceId" type:"string"`
+
 	// The ID of the Amazon Web Services account that owns the local gateway route.
 	OwnerId *string `locationName:"ownerId" type:"string"`
 
 	// The state of the route.
 	State *string `locationName:"state" type:"string" enum:"LocalGatewayRouteState"`
+
+	// The ID of the subnet.
+	SubnetId *string `locationName:"subnetId" type:"string"`
 
 	// The route type.
 	Type *string `locationName:"type" type:"string" enum:"LocalGatewayRouteType"`
@@ -125359,6 +125445,12 @@ func (s LocalGatewayRoute) String() string {
 // value will be replaced with "sensitive".
 func (s LocalGatewayRoute) GoString() string {
 	return s.String()
+}
+
+// SetCoipPoolId sets the CoipPoolId field's value.
+func (s *LocalGatewayRoute) SetCoipPoolId(v string) *LocalGatewayRoute {
+	s.CoipPoolId = &v
+	return s
 }
 
 // SetDestinationCidrBlock sets the DestinationCidrBlock field's value.
@@ -125385,6 +125477,12 @@ func (s *LocalGatewayRoute) SetLocalGatewayVirtualInterfaceGroupId(v string) *Lo
 	return s
 }
 
+// SetNetworkInterfaceId sets the NetworkInterfaceId field's value.
+func (s *LocalGatewayRoute) SetNetworkInterfaceId(v string) *LocalGatewayRoute {
+	s.NetworkInterfaceId = &v
+	return s
+}
+
 // SetOwnerId sets the OwnerId field's value.
 func (s *LocalGatewayRoute) SetOwnerId(v string) *LocalGatewayRoute {
 	s.OwnerId = &v
@@ -125394,6 +125492,12 @@ func (s *LocalGatewayRoute) SetOwnerId(v string) *LocalGatewayRoute {
 // SetState sets the State field's value.
 func (s *LocalGatewayRoute) SetState(v string) *LocalGatewayRoute {
 	s.State = &v
+	return s
+}
+
+// SetSubnetId sets the SubnetId field's value.
+func (s *LocalGatewayRoute) SetSubnetId(v string) *LocalGatewayRoute {
+	s.SubnetId = &v
 	return s
 }
 
@@ -125415,6 +125519,9 @@ type LocalGatewayRouteTable struct {
 
 	// The ID of the local gateway route table.
 	LocalGatewayRouteTableId *string `locationName:"localGatewayRouteTableId" type:"string"`
+
+	// The mode of the local gateway route table.
+	Mode *string `locationName:"mode" type:"string" enum:"LocalGatewayRouteTableMode"`
 
 	// The Amazon Resource Name (ARN) of the Outpost.
 	OutpostArn *string `locationName:"outpostArn" type:"string"`
@@ -125463,6 +125570,12 @@ func (s *LocalGatewayRouteTable) SetLocalGatewayRouteTableArn(v string) *LocalGa
 // SetLocalGatewayRouteTableId sets the LocalGatewayRouteTableId field's value.
 func (s *LocalGatewayRouteTable) SetLocalGatewayRouteTableId(v string) *LocalGatewayRouteTable {
 	s.LocalGatewayRouteTableId = &v
+	return s
+}
+
+// SetMode sets the Mode field's value.
+func (s *LocalGatewayRouteTable) SetMode(v string) *LocalGatewayRouteTable {
+	s.Mode = &v
 	return s
 }
 
@@ -129759,6 +129872,124 @@ func (s ModifyLaunchTemplateOutput) GoString() string {
 // SetLaunchTemplate sets the LaunchTemplate field's value.
 func (s *ModifyLaunchTemplateOutput) SetLaunchTemplate(v *LaunchTemplate) *ModifyLaunchTemplateOutput {
 	s.LaunchTemplate = v
+	return s
+}
+
+type ModifyLocalGatewayRouteInput struct {
+	_ struct{} `type:"structure"`
+
+	// The CIDR block used for destination matches. The value that you provide must
+	// match the CIDR of an existing route in the table.
+	//
+	// DestinationCidrBlock is a required field
+	DestinationCidrBlock *string `type:"string" required:"true"`
+
+	// Checks whether you have the required permissions for the action, without
+	// actually making the request, and provides an error response. If you have
+	// the required permissions, the error response is DryRunOperation. Otherwise,
+	// it is UnauthorizedOperation.
+	DryRun *bool `type:"boolean"`
+
+	// The ID of the local gateway route table.
+	//
+	// LocalGatewayRouteTableId is a required field
+	LocalGatewayRouteTableId *string `type:"string" required:"true"`
+
+	// The ID of the network interface.
+	//
+	// NetworkInterfaceId is a required field
+	NetworkInterfaceId *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ModifyLocalGatewayRouteInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ModifyLocalGatewayRouteInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ModifyLocalGatewayRouteInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ModifyLocalGatewayRouteInput"}
+	if s.DestinationCidrBlock == nil {
+		invalidParams.Add(request.NewErrParamRequired("DestinationCidrBlock"))
+	}
+	if s.LocalGatewayRouteTableId == nil {
+		invalidParams.Add(request.NewErrParamRequired("LocalGatewayRouteTableId"))
+	}
+	if s.NetworkInterfaceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("NetworkInterfaceId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDestinationCidrBlock sets the DestinationCidrBlock field's value.
+func (s *ModifyLocalGatewayRouteInput) SetDestinationCidrBlock(v string) *ModifyLocalGatewayRouteInput {
+	s.DestinationCidrBlock = &v
+	return s
+}
+
+// SetDryRun sets the DryRun field's value.
+func (s *ModifyLocalGatewayRouteInput) SetDryRun(v bool) *ModifyLocalGatewayRouteInput {
+	s.DryRun = &v
+	return s
+}
+
+// SetLocalGatewayRouteTableId sets the LocalGatewayRouteTableId field's value.
+func (s *ModifyLocalGatewayRouteInput) SetLocalGatewayRouteTableId(v string) *ModifyLocalGatewayRouteInput {
+	s.LocalGatewayRouteTableId = &v
+	return s
+}
+
+// SetNetworkInterfaceId sets the NetworkInterfaceId field's value.
+func (s *ModifyLocalGatewayRouteInput) SetNetworkInterfaceId(v string) *ModifyLocalGatewayRouteInput {
+	s.NetworkInterfaceId = &v
+	return s
+}
+
+type ModifyLocalGatewayRouteOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Describes a route for a local gateway route table.
+	Route *LocalGatewayRoute `locationName:"route" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ModifyLocalGatewayRouteOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ModifyLocalGatewayRouteOutput) GoString() string {
+	return s.String()
+}
+
+// SetRoute sets the Route field's value.
+func (s *ModifyLocalGatewayRouteOutput) SetRoute(v *LocalGatewayRoute) *ModifyLocalGatewayRouteOutput {
+	s.Route = v
 	return s
 }
 
@@ -136995,9 +137226,8 @@ func (s *PeeringAttachmentStatus) SetMessage(v string) *PeeringAttachmentStatus 
 	return s
 }
 
-// We are retiring EC2-Classic on August 15, 2022. We recommend that you migrate
-// from EC2-Classic to a VPC. For more information, see Migrate from EC2-Classic
-// to a VPC (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-migrate.html)
+// We are retiring EC2-Classic. We recommend that you migrate from EC2-Classic
+// to a VPC. For more information, see Migrate from EC2-Classic to a VPC (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-migrate.html)
 // in the Amazon Elastic Compute Cloud User Guide.
 //
 // Describes the VPC peering connection options.
@@ -137053,9 +137283,8 @@ func (s *PeeringConnectionOptions) SetAllowEgressFromLocalVpcToRemoteClassicLink
 	return s
 }
 
-// We are retiring EC2-Classic on August 15, 2022. We recommend that you migrate
-// from EC2-Classic to a VPC. For more information, see Migrate from EC2-Classic
-// to a VPC (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-migrate.html)
+// We are retiring EC2-Classic. We recommend that you migrate from EC2-Classic
+// to a VPC. For more information, see Migrate from EC2-Classic to a VPC (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-migrate.html)
 // in the Amazon Elastic Compute Cloud User Guide.
 //
 // The VPC peering connection options.
@@ -161962,9 +162191,8 @@ func (s *VpcCidrBlockState) SetStatusMessage(v string) *VpcCidrBlockState {
 	return s
 }
 
-// We are retiring EC2-Classic on August 15, 2022. We recommend that you migrate
-// from EC2-Classic to a VPC. For more information, see Migrate from EC2-Classic
-// to a VPC (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-migrate.html)
+// We are retiring EC2-Classic. We recommend that you migrate from EC2-Classic
+// to a VPC. For more information, see Migrate from EC2-Classic to a VPC (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-migrate.html)
 // in the Amazon Elastic Compute Cloud User Guide.
 //
 // Describes whether a VPC is enabled for ClassicLink.
@@ -162466,9 +162694,8 @@ func (s *VpcPeeringConnection) SetVpcPeeringConnectionId(v string) *VpcPeeringCo
 	return s
 }
 
-// We are retiring EC2-Classic on August 15, 2022. We recommend that you migrate
-// from EC2-Classic to a VPC. For more information, see Migrate from EC2-Classic
-// to a VPC (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-migrate.html)
+// We are retiring EC2-Classic. We recommend that you migrate from EC2-Classic
+// to a VPC. For more information, see Migrate from EC2-Classic to a VPC (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/vpc-migrate.html)
 // in the Amazon Elastic Compute Cloud User Guide.
 //
 // Describes the VPC peering connection options.
@@ -163750,6 +163977,12 @@ const (
 
 	// AcceleratorNameVu9p is a AcceleratorName enum value
 	AcceleratorNameVu9p = "vu9p"
+
+	// AcceleratorNameInferentia is a AcceleratorName enum value
+	AcceleratorNameInferentia = "inferentia"
+
+	// AcceleratorNameK520 is a AcceleratorName enum value
+	AcceleratorNameK520 = "k520"
 )
 
 // AcceleratorName_Values returns all elements of the AcceleratorName enum
@@ -163762,6 +163995,8 @@ func AcceleratorName_Values() []string {
 		AcceleratorNameM60,
 		AcceleratorNameRadeonProV520,
 		AcceleratorNameVu9p,
+		AcceleratorNameInferentia,
+		AcceleratorNameK520,
 	}
 }
 
@@ -169362,6 +169597,22 @@ func LocalGatewayRouteState_Values() []string {
 }
 
 const (
+	// LocalGatewayRouteTableModeDirectVpcRouting is a LocalGatewayRouteTableMode enum value
+	LocalGatewayRouteTableModeDirectVpcRouting = "direct-vpc-routing"
+
+	// LocalGatewayRouteTableModeCoip is a LocalGatewayRouteTableMode enum value
+	LocalGatewayRouteTableModeCoip = "coip"
+)
+
+// LocalGatewayRouteTableMode_Values returns all elements of the LocalGatewayRouteTableMode enum
+func LocalGatewayRouteTableMode_Values() []string {
+	return []string{
+		LocalGatewayRouteTableModeDirectVpcRouting,
+		LocalGatewayRouteTableModeCoip,
+	}
+}
+
+const (
 	// LocalGatewayRouteTypeStatic is a LocalGatewayRouteType enum value
 	LocalGatewayRouteTypeStatic = "static"
 
@@ -169439,6 +169690,9 @@ const (
 
 	// LogDestinationTypeS3 is a LogDestinationType enum value
 	LogDestinationTypeS3 = "s3"
+
+	// LogDestinationTypeKinesisDataFirehose is a LogDestinationType enum value
+	LogDestinationTypeKinesisDataFirehose = "kinesis-data-firehose"
 )
 
 // LogDestinationType_Values returns all elements of the LogDestinationType enum
@@ -169446,6 +169700,7 @@ func LogDestinationType_Values() []string {
 	return []string{
 		LogDestinationTypeCloudWatchLogs,
 		LogDestinationTypeS3,
+		LogDestinationTypeKinesisDataFirehose,
 	}
 }
 
