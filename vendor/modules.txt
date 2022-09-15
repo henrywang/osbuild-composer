@@ -268,7 +268,7 @@ github.com/docker/go-metrics
 github.com/docker/go-units
 # github.com/dougm/pretty v0.0.0-20171025230240-2ee9d7453c02
 github.com/dougm/pretty
-# github.com/getkin/kin-openapi v0.93.0
+# github.com/getkin/kin-openapi v0.101.0
 ## explicit
 github.com/getkin/kin-openapi/jsoninfo
 github.com/getkin/kin-openapi/openapi3
@@ -359,6 +359,8 @@ github.com/hashicorp/go-multierror
 github.com/hashicorp/go-retryablehttp
 # github.com/inconshreveable/mousetrap v1.0.0
 github.com/inconshreveable/mousetrap
+# github.com/invopop/yaml v0.1.0
+github.com/invopop/yaml
 # github.com/jackc/chunkreader/v2 v2.0.1
 github.com/jackc/chunkreader/v2
 # github.com/jackc/pgconn v1.13.0
