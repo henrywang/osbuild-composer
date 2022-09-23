@@ -14,6 +14,7 @@
 package runtime
 
 import (
+	"errors"
 	"fmt"
 	"net/url"
 	"reflect"
@@ -21,8 +22,6 @@ import (
 	"strconv"
 	"strings"
 	"time"
-
-	"github.com/pkg/errors"
 
 	"github.com/deepmap/oapi-codegen/pkg/types"
 )
@@ -185,7 +184,7 @@ func styleStruct(style string, explode bool, paramName string, paramLocation Par
 	if timeVal, ok := marshalDateTimeValue(value); ok {
 		styledVal, err := stylePrimitive(style, explode, paramName, paramLocation, timeVal)
 		if err != nil {
-			return "", errors.Wrap(err, "failed to style time")
+			return "", fmt.Errorf("failed to style time: %w", err)
 		}
 		return styledVal, nil
 	}
@@ -349,14 +348,22 @@ func stylePrimitive(style string, explode bool, paramName string, paramLocation 
 func primitiveToString(value interface{}) (string, error) {
 	var output string
 
+	// sometimes time and date used like primitive types
+	// it can happen if paramether is object and has time or date as field
+	if res, ok := marshalDateTimeValue(value); ok {
+		return res, nil
+	}
+
 	// Values may come in by pointer for optionals, so make sure to dereferene.
 	v := reflect.Indirect(reflect.ValueOf(value))
 	t := v.Type()
 	kind := t.Kind()
 
 	switch kind {
-	case reflect.Int8, reflect.Int32, reflect.Int64, reflect.Int:
+	case reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64, reflect.Int:
 		output = strconv.FormatInt(v.Int(), 10)
+	case reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64, reflect.Uint:
+		output = strconv.FormatUint(v.Uint(), 10)
 	case reflect.Float64:
 		output = strconv.FormatFloat(v.Float(), 'f', -1, 64)
 	case reflect.Float32:
