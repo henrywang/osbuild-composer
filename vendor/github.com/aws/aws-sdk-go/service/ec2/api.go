@@ -52152,10 +52152,10 @@ type AnalysisLoadBalancerListener struct {
 	_ struct{} `type:"structure"`
 
 	// [Classic Load Balancers] The back-end port for the listener.
-	InstancePort *int64 `locationName:"instancePort" min:"1" type:"integer"`
+	InstancePort *int64 `locationName:"instancePort" type:"integer"`
 
 	// The port on which the load balancer is listening.
-	LoadBalancerPort *int64 `locationName:"loadBalancerPort" min:"1" type:"integer"`
+	LoadBalancerPort *int64 `locationName:"loadBalancerPort" type:"integer"`
 }
 
 // String returns the string representation.
@@ -52202,7 +52202,7 @@ type AnalysisLoadBalancerTarget struct {
 	Instance *AnalysisComponent `locationName:"instance" type:"structure"`
 
 	// The port on which the target is listening.
-	Port *int64 `locationName:"port" min:"1" type:"integer"`
+	Port *int64 `locationName:"port" type:"integer"`
 }
 
 // String returns the string representation.
@@ -66764,7 +66764,7 @@ type CreateNetworkInsightsPathInput struct {
 	DestinationIp *string `type:"string"`
 
 	// The destination port.
-	DestinationPort *int64 `min:"1" type:"integer"`
+	DestinationPort *int64 `type:"integer"`
 
 	// Checks whether you have the required permissions for the action, without
 	// actually making the request, and provides an error response. If you have
@@ -66813,9 +66813,6 @@ func (s *CreateNetworkInsightsPathInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "CreateNetworkInsightsPathInput"}
 	if s.Destination == nil {
 		invalidParams.Add(request.NewErrParamRequired("Destination"))
-	}
-	if s.DestinationPort != nil && *s.DestinationPort < 1 {
-		invalidParams.Add(request.NewErrParamMinValue("DestinationPort", 1))
 	}
 	if s.Protocol == nil {
 		invalidParams.Add(request.NewErrParamRequired("Protocol"))
@@ -85380,6 +85377,14 @@ type DescribeImageAttributeOutput struct {
 	// The ID of the AMI.
 	ImageId *string `locationName:"imageId" type:"string"`
 
+	// If v2.0, it indicates that IMDSv2 is specified in the AMI. Instances launched
+	// from this AMI will have HttpTokens automatically set to required so that,
+	// by default, the instance requires that IMDSv2 is used when requesting instance
+	// metadata. In addition, HttpPutResponseHopLimit is set to 2. For more information,
+	// see Configure the AMI (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/configuring-IMDS-new-instances.html#configure-IMDS-new-instances-ami-configuration)
+	// in the Amazon Elastic Compute Cloud User Guide.
+	ImdsSupport *AttributeValue `locationName:"imdsSupport" type:"structure"`
+
 	// The kernel ID.
 	KernelId *AttributeValue `locationName:"kernel" type:"structure"`
 
@@ -85454,6 +85459,12 @@ func (s *DescribeImageAttributeOutput) SetDescription(v *AttributeValue) *Descri
 // SetImageId sets the ImageId field's value.
 func (s *DescribeImageAttributeOutput) SetImageId(v string) *DescribeImageAttributeOutput {
 	s.ImageId = &v
+	return s
+}
+
+// SetImdsSupport sets the ImdsSupport field's value.
+func (s *DescribeImageAttributeOutput) SetImdsSupport(v *AttributeValue) *DescribeImageAttributeOutput {
+	s.ImdsSupport = v
 	return s
 }
 
@@ -105569,7 +105580,7 @@ type Explanation struct {
 	LoadBalancerArn *string `locationName:"loadBalancerArn" min:"1" type:"string"`
 
 	// The listener port of the load balancer.
-	LoadBalancerListenerPort *int64 `locationName:"loadBalancerListenerPort" min:"1" type:"integer"`
+	LoadBalancerListenerPort *int64 `locationName:"loadBalancerListenerPort" type:"integer"`
 
 	// The target.
 	LoadBalancerTarget *AnalysisLoadBalancerTarget `locationName:"loadBalancerTarget" type:"structure"`
@@ -105581,7 +105592,7 @@ type Explanation struct {
 	LoadBalancerTargetGroups []*AnalysisComponent `locationName:"loadBalancerTargetGroupSet" locationNameList:"item" type:"list"`
 
 	// The target port.
-	LoadBalancerTargetPort *int64 `locationName:"loadBalancerTargetPort" min:"1" type:"integer"`
+	LoadBalancerTargetPort *int64 `locationName:"loadBalancerTargetPort" type:"integer"`
 
 	// The missing component.
 	MissingComponent *string `locationName:"missingComponent" type:"string"`
@@ -105596,7 +105607,7 @@ type Explanation struct {
 	PacketField *string `locationName:"packetField" type:"string"`
 
 	// The port.
-	Port *int64 `locationName:"port" min:"1" type:"integer"`
+	Port *int64 `locationName:"port" type:"integer"`
 
 	// The port ranges.
 	PortRanges []*PortRange `locationName:"portRangeSet" locationNameList:"item" type:"list"`
@@ -115016,6 +115027,14 @@ type Image struct {
 	// The type of image.
 	ImageType *string `locationName:"imageType" type:"string" enum:"ImageTypeValues"`
 
+	// If v2.0, it indicates that IMDSv2 is specified in the AMI. Instances launched
+	// from this AMI will have HttpTokens automatically set to required so that,
+	// by default, the instance requires that IMDSv2 is used when requesting instance
+	// metadata. In addition, HttpPutResponseHopLimit is set to 2. For more information,
+	// see Configure the AMI (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/configuring-IMDS-new-instances.html#configure-IMDS-new-instances-ami-configuration)
+	// in the Amazon Elastic Compute Cloud User Guide.
+	ImdsSupport *string `locationName:"imdsSupport" type:"string" enum:"ImdsSupportValues"`
+
 	// The kernel associated with the image, if any. Only applicable for machine
 	// images.
 	KernelId *string `locationName:"kernelId" type:"string"`
@@ -115173,6 +115192,12 @@ func (s *Image) SetImageOwnerAlias(v string) *Image {
 // SetImageType sets the ImageType field's value.
 func (s *Image) SetImageType(v string) *Image {
 	s.ImageType = &v
+	return s
+}
+
+// SetImdsSupport sets the ImdsSupport field's value.
+func (s *Image) SetImdsSupport(v string) *Image {
+	s.ImdsSupport = &v
 	return s
 }
 
@@ -142169,6 +142194,17 @@ type RegisterImageInput struct {
 	// in the Amazon S3 Service Developer Guide.
 	ImageLocation *string `type:"string"`
 
+	// Set to v2.0 to indicate that IMDSv2 is specified in the AMI. Instances launched
+	// from this AMI will have HttpTokens automatically set to required so that,
+	// by default, the instance requires that IMDSv2 is used when requesting instance
+	// metadata. In addition, HttpPutResponseHopLimit is set to 2. For more information,
+	// see Configure the AMI (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/configuring-IMDS-new-instances.html#configure-IMDS-new-instances-ami-configuration)
+	// in the Amazon Elastic Compute Cloud User Guide.
+	//
+	// If you set the value to v2.0, make sure that your AMI software can support
+	// IMDSv2.
+	ImdsSupport *string `type:"string" enum:"ImdsSupportValues"`
+
 	// The ID of the kernel.
 	KernelId *string `locationName:"kernelId" type:"string"`
 
@@ -142292,6 +142328,12 @@ func (s *RegisterImageInput) SetEnaSupport(v bool) *RegisterImageInput {
 // SetImageLocation sets the ImageLocation field's value.
 func (s *RegisterImageInput) SetImageLocation(v string) *RegisterImageInput {
 	s.ImageLocation = &v
+	return s
+}
+
+// SetImdsSupport sets the ImdsSupport field's value.
+func (s *RegisterImageInput) SetImdsSupport(v string) *RegisterImageInput {
+	s.ImdsSupport = &v
 	return s
 }
 
@@ -167939,6 +167981,9 @@ const (
 
 	// ImageAttributeNameLastLaunchedTime is a ImageAttributeName enum value
 	ImageAttributeNameLastLaunchedTime = "lastLaunchedTime"
+
+	// ImageAttributeNameImdsSupport is a ImageAttributeName enum value
+	ImageAttributeNameImdsSupport = "imdsSupport"
 )
 
 // ImageAttributeName_Values returns all elements of the ImageAttributeName enum
@@ -167955,6 +168000,7 @@ func ImageAttributeName_Values() []string {
 		ImageAttributeNameTpmSupport,
 		ImageAttributeNameUefiData,
 		ImageAttributeNameLastLaunchedTime,
+		ImageAttributeNameImdsSupport,
 	}
 }
 
@@ -168011,6 +168057,18 @@ func ImageTypeValues_Values() []string {
 		ImageTypeValuesMachine,
 		ImageTypeValuesKernel,
 		ImageTypeValuesRamdisk,
+	}
+}
+
+const (
+	// ImdsSupportValuesV20 is a ImdsSupportValues enum value
+	ImdsSupportValuesV20 = "v2.0"
+)
+
+// ImdsSupportValues_Values returns all elements of the ImdsSupportValues enum
+func ImdsSupportValues_Values() []string {
+	return []string{
+		ImdsSupportValuesV20,
 	}
 }
 
