@@ -5,14 +5,16 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/getkin/kin-openapi/jsoninfo"
 	"github.com/go-openapi/jsonpointer"
+
+	"github.com/getkin/kin-openapi/jsoninfo"
 )
 
 type RequestBodies map[string]*RequestBodyRef
 
 var _ jsonpointer.JSONPointable = (*RequestBodyRef)(nil)
 
+// JSONLookup implements github.com/go-openapi/jsonpointer#JSONPointable
 func (r RequestBodies) JSONLookup(token string) (interface{}, error) {
 	ref, ok := r[token]
 	if ok == false {
@@ -28,7 +30,7 @@ func (r RequestBodies) JSONLookup(token string) (interface{}, error) {
 // RequestBody is specified by OpenAPI/Swagger 3.0 standard.
 // See https://github.com/OAI/OpenAPI-Specification/blob/main/versions/3.0.3.md#requestBodyObject
 type RequestBody struct {
-	ExtensionProps
+	ExtensionProps `json:"-" yaml:"-"`
 
 	Description string  `json:"description,omitempty" yaml:"description,omitempty"`
 	Required    bool    `json:"required,omitempty" yaml:"required,omitempty"`
@@ -92,17 +94,25 @@ func (requestBody *RequestBody) GetMediaType(mediaType string) *MediaType {
 	return m[mediaType]
 }
 
+// MarshalJSON returns the JSON encoding of RequestBody.
 func (requestBody *RequestBody) MarshalJSON() ([]byte, error) {
 	return jsoninfo.MarshalStrictStruct(requestBody)
 }
 
+// UnmarshalJSON sets RequestBody to a copy of data.
 func (requestBody *RequestBody) UnmarshalJSON(data []byte) error {
 	return jsoninfo.UnmarshalStrictStruct(data, requestBody)
 }
 
-func (value *RequestBody) Validate(ctx context.Context) error {
-	if value.Content == nil {
+// Validate returns an error if RequestBody does not comply with the OpenAPI spec.
+func (requestBody *RequestBody) Validate(ctx context.Context) error {
+	if requestBody.Content == nil {
 		return errors.New("content of the request body is required")
 	}
-	return value.Content.Validate(ctx)
+
+	if vo := getValidationOptions(ctx); !vo.ExamplesValidationDisabled {
+		vo.examplesValidationAsReq, vo.examplesValidationAsRes = true, false
+	}
+
+	return requestBody.Content.Validate(ctx)
 }
