@@ -187295,6 +187295,78 @@ const (
 
 	// InstanceTypeHpc7a96xlarge is a InstanceType enum value
 	InstanceTypeHpc7a96xlarge = "hpc7a.96xlarge"
+
+	// InstanceTypeC7gdMedium is a InstanceType enum value
+	InstanceTypeC7gdMedium = "c7gd.medium"
+
+	// InstanceTypeC7gdLarge is a InstanceType enum value
+	InstanceTypeC7gdLarge = "c7gd.large"
+
+	// InstanceTypeC7gdXlarge is a InstanceType enum value
+	InstanceTypeC7gdXlarge = "c7gd.xlarge"
+
+	// InstanceTypeC7gd2xlarge is a InstanceType enum value
+	InstanceTypeC7gd2xlarge = "c7gd.2xlarge"
+
+	// InstanceTypeC7gd4xlarge is a InstanceType enum value
+	InstanceTypeC7gd4xlarge = "c7gd.4xlarge"
+
+	// InstanceTypeC7gd8xlarge is a InstanceType enum value
+	InstanceTypeC7gd8xlarge = "c7gd.8xlarge"
+
+	// InstanceTypeC7gd12xlarge is a InstanceType enum value
+	InstanceTypeC7gd12xlarge = "c7gd.12xlarge"
+
+	// InstanceTypeC7gd16xlarge is a InstanceType enum value
+	InstanceTypeC7gd16xlarge = "c7gd.16xlarge"
+
+	// InstanceTypeM7gdMedium is a InstanceType enum value
+	InstanceTypeM7gdMedium = "m7gd.medium"
+
+	// InstanceTypeM7gdLarge is a InstanceType enum value
+	InstanceTypeM7gdLarge = "m7gd.large"
+
+	// InstanceTypeM7gdXlarge is a InstanceType enum value
+	InstanceTypeM7gdXlarge = "m7gd.xlarge"
+
+	// InstanceTypeM7gd2xlarge is a InstanceType enum value
+	InstanceTypeM7gd2xlarge = "m7gd.2xlarge"
+
+	// InstanceTypeM7gd4xlarge is a InstanceType enum value
+	InstanceTypeM7gd4xlarge = "m7gd.4xlarge"
+
+	// InstanceTypeM7gd8xlarge is a InstanceType enum value
+	InstanceTypeM7gd8xlarge = "m7gd.8xlarge"
+
+	// InstanceTypeM7gd12xlarge is a InstanceType enum value
+	InstanceTypeM7gd12xlarge = "m7gd.12xlarge"
+
+	// InstanceTypeM7gd16xlarge is a InstanceType enum value
+	InstanceTypeM7gd16xlarge = "m7gd.16xlarge"
+
+	// InstanceTypeR7gdMedium is a InstanceType enum value
+	InstanceTypeR7gdMedium = "r7gd.medium"
+
+	// InstanceTypeR7gdLarge is a InstanceType enum value
+	InstanceTypeR7gdLarge = "r7gd.large"
+
+	// InstanceTypeR7gdXlarge is a InstanceType enum value
+	InstanceTypeR7gdXlarge = "r7gd.xlarge"
+
+	// InstanceTypeR7gd2xlarge is a InstanceType enum value
+	InstanceTypeR7gd2xlarge = "r7gd.2xlarge"
+
+	// InstanceTypeR7gd4xlarge is a InstanceType enum value
+	InstanceTypeR7gd4xlarge = "r7gd.4xlarge"
+
+	// InstanceTypeR7gd8xlarge is a InstanceType enum value
+	InstanceTypeR7gd8xlarge = "r7gd.8xlarge"
+
+	// InstanceTypeR7gd12xlarge is a InstanceType enum value
+	InstanceTypeR7gd12xlarge = "r7gd.12xlarge"
+
+	// InstanceTypeR7gd16xlarge is a InstanceType enum value
+	InstanceTypeR7gd16xlarge = "r7gd.16xlarge"
 )
 
 // InstanceType_Values returns all elements of the InstanceType enum
@@ -187996,6 +188068,30 @@ func InstanceType_Values() []string {
 		InstanceTypeHpc7a24xlarge,
 		InstanceTypeHpc7a48xlarge,
 		InstanceTypeHpc7a96xlarge,
+		InstanceTypeC7gdMedium,
+		InstanceTypeC7gdLarge,
+		InstanceTypeC7gdXlarge,
+		InstanceTypeC7gd2xlarge,
+		InstanceTypeC7gd4xlarge,
+		InstanceTypeC7gd8xlarge,
+		InstanceTypeC7gd12xlarge,
+		InstanceTypeC7gd16xlarge,
+		InstanceTypeM7gdMedium,
+		InstanceTypeM7gdLarge,
+		InstanceTypeM7gdXlarge,
+		InstanceTypeM7gd2xlarge,
+		InstanceTypeM7gd4xlarge,
+		InstanceTypeM7gd8xlarge,
+		InstanceTypeM7gd12xlarge,
+		InstanceTypeM7gd16xlarge,
+		InstanceTypeR7gdMedium,
+		InstanceTypeR7gdLarge,
+		InstanceTypeR7gdXlarge,
+		InstanceTypeR7gd2xlarge,
+		InstanceTypeR7gd4xlarge,
+		InstanceTypeR7gd8xlarge,
+		InstanceTypeR7gd12xlarge,
+		InstanceTypeR7gd16xlarge,
 	}
 }
 
@@ -188944,6 +189040,9 @@ const (
 
 	// LocationTypeAvailabilityZoneId is a LocationType enum value
 	LocationTypeAvailabilityZoneId = "availability-zone-id"
+
+	// LocationTypeOutpost is a LocationType enum value
+	LocationTypeOutpost = "outpost"
 )
 
 // LocationType_Values returns all elements of the LocationType enum
@@ -188952,6 +189051,7 @@ func LocationType_Values() []string {
 		LocationTypeRegion,
 		LocationTypeAvailabilityZone,
 		LocationTypeAvailabilityZoneId,
+		LocationTypeOutpost,
 	}
 }
 
