@@ -35494,6 +35494,90 @@ func (c *EC2) DisableFastSnapshotRestoresWithContext(ctx aws.Context, input *Dis
 	return out, req.Send()
 }
 
+const opDisableImageBlockPublicAccess = "DisableImageBlockPublicAccess"
+
+// DisableImageBlockPublicAccessRequest generates a "aws/request.Request" representing the
+// client's request for the DisableImageBlockPublicAccess operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DisableImageBlockPublicAccess for more information on using the DisableImageBlockPublicAccess
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the DisableImageBlockPublicAccessRequest method.
+//	req, resp := client.DisableImageBlockPublicAccessRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/DisableImageBlockPublicAccess
+func (c *EC2) DisableImageBlockPublicAccessRequest(input *DisableImageBlockPublicAccessInput) (req *request.Request, output *DisableImageBlockPublicAccessOutput) {
+	op := &request.Operation{
+		Name:       opDisableImageBlockPublicAccess,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DisableImageBlockPublicAccessInput{}
+	}
+
+	output = &DisableImageBlockPublicAccessOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DisableImageBlockPublicAccess API operation for Amazon Elastic Compute Cloud.
+//
+// Disables block public access for AMIs at the account level in the specified
+// Amazon Web Services Region. This removes the block public access restriction
+// from your account. With the restriction removed, you can publicly share your
+// AMIs in the specified Amazon Web Services Region.
+//
+// The API can take up to 10 minutes to configure this setting. During this
+// time, if you run GetImageBlockPublicAccessState (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_GetImageBlockPublicAccessState.html),
+// the response will be block-new-sharing. When the API has completed the configuration,
+// the response will be unblocked.
+//
+// For more information, see Block public access to your AMIs (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/sharingamis-intro.html#block-public-access-to-amis)
+// in the Amazon EC2 User Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Elastic Compute Cloud's
+// API operation DisableImageBlockPublicAccess for usage and error information.
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/DisableImageBlockPublicAccess
+func (c *EC2) DisableImageBlockPublicAccess(input *DisableImageBlockPublicAccessInput) (*DisableImageBlockPublicAccessOutput, error) {
+	req, out := c.DisableImageBlockPublicAccessRequest(input)
+	return out, req.Send()
+}
+
+// DisableImageBlockPublicAccessWithContext is the same as DisableImageBlockPublicAccess with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DisableImageBlockPublicAccess for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *EC2) DisableImageBlockPublicAccessWithContext(ctx aws.Context, input *DisableImageBlockPublicAccessInput, opts ...request.Option) (*DisableImageBlockPublicAccessOutput, error) {
+	req, out := c.DisableImageBlockPublicAccessRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opDisableImageDeprecation = "DisableImageDeprecation"
 
 // DisableImageDeprecationRequest generates a "aws/request.Request" representing the
@@ -37499,6 +37583,89 @@ func (c *EC2) EnableFastSnapshotRestores(input *EnableFastSnapshotRestoresInput)
 // for more information on using Contexts.
 func (c *EC2) EnableFastSnapshotRestoresWithContext(ctx aws.Context, input *EnableFastSnapshotRestoresInput, opts ...request.Option) (*EnableFastSnapshotRestoresOutput, error) {
 	req, out := c.EnableFastSnapshotRestoresRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opEnableImageBlockPublicAccess = "EnableImageBlockPublicAccess"
+
+// EnableImageBlockPublicAccessRequest generates a "aws/request.Request" representing the
+// client's request for the EnableImageBlockPublicAccess operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See EnableImageBlockPublicAccess for more information on using the EnableImageBlockPublicAccess
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the EnableImageBlockPublicAccessRequest method.
+//	req, resp := client.EnableImageBlockPublicAccessRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/EnableImageBlockPublicAccess
+func (c *EC2) EnableImageBlockPublicAccessRequest(input *EnableImageBlockPublicAccessInput) (req *request.Request, output *EnableImageBlockPublicAccessOutput) {
+	op := &request.Operation{
+		Name:       opEnableImageBlockPublicAccess,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &EnableImageBlockPublicAccessInput{}
+	}
+
+	output = &EnableImageBlockPublicAccessOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// EnableImageBlockPublicAccess API operation for Amazon Elastic Compute Cloud.
+//
+// Enables block public access for AMIs at the account level in the specified
+// Amazon Web Services Region. This prevents the public sharing of your AMIs.
+// However, if you already have public AMIs, they will remain publicly available.
+//
+// The API can take up to 10 minutes to configure this setting. During this
+// time, if you run GetImageBlockPublicAccessState (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_GetImageBlockPublicAccessState.html),
+// the response will be unblocked. When the API has completed the configuration,
+// the response will be block-new-sharing.
+//
+// For more information, see Block public access to your AMIs (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/sharingamis-intro.html#block-public-access-to-amis)
+// in the Amazon EC2 User Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Elastic Compute Cloud's
+// API operation EnableImageBlockPublicAccess for usage and error information.
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/EnableImageBlockPublicAccess
+func (c *EC2) EnableImageBlockPublicAccess(input *EnableImageBlockPublicAccessInput) (*EnableImageBlockPublicAccessOutput, error) {
+	req, out := c.EnableImageBlockPublicAccessRequest(input)
+	return out, req.Send()
+}
+
+// EnableImageBlockPublicAccessWithContext is the same as EnableImageBlockPublicAccess with the addition of
+// the ability to pass a context and additional request options.
+//
+// See EnableImageBlockPublicAccess for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *EC2) EnableImageBlockPublicAccessWithContext(ctx aws.Context, input *EnableImageBlockPublicAccessInput, opts ...request.Option) (*EnableImageBlockPublicAccessOutput, error) {
+	req, out := c.EnableImageBlockPublicAccessRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -39676,6 +39843,83 @@ func (c *EC2) GetHostReservationPurchasePreview(input *GetHostReservationPurchas
 // for more information on using Contexts.
 func (c *EC2) GetHostReservationPurchasePreviewWithContext(ctx aws.Context, input *GetHostReservationPurchasePreviewInput, opts ...request.Option) (*GetHostReservationPurchasePreviewOutput, error) {
 	req, out := c.GetHostReservationPurchasePreviewRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetImageBlockPublicAccessState = "GetImageBlockPublicAccessState"
+
+// GetImageBlockPublicAccessStateRequest generates a "aws/request.Request" representing the
+// client's request for the GetImageBlockPublicAccessState operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetImageBlockPublicAccessState for more information on using the GetImageBlockPublicAccessState
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the GetImageBlockPublicAccessStateRequest method.
+//	req, resp := client.GetImageBlockPublicAccessStateRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/GetImageBlockPublicAccessState
+func (c *EC2) GetImageBlockPublicAccessStateRequest(input *GetImageBlockPublicAccessStateInput) (req *request.Request, output *GetImageBlockPublicAccessStateOutput) {
+	op := &request.Operation{
+		Name:       opGetImageBlockPublicAccessState,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetImageBlockPublicAccessStateInput{}
+	}
+
+	output = &GetImageBlockPublicAccessStateOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetImageBlockPublicAccessState API operation for Amazon Elastic Compute Cloud.
+//
+// Gets the current state of block public access for AMIs at the account level
+// in the specified Amazon Web Services Region.
+//
+// For more information, see Block public access to your AMIs (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/sharingamis-intro.html#block-public-access-to-amis)
+// in the Amazon EC2 User Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Elastic Compute Cloud's
+// API operation GetImageBlockPublicAccessState for usage and error information.
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/GetImageBlockPublicAccessState
+func (c *EC2) GetImageBlockPublicAccessState(input *GetImageBlockPublicAccessStateInput) (*GetImageBlockPublicAccessStateOutput, error) {
+	req, out := c.GetImageBlockPublicAccessStateRequest(input)
+	return out, req.Send()
+}
+
+// GetImageBlockPublicAccessStateWithContext is the same as GetImageBlockPublicAccessState with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetImageBlockPublicAccessState for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *EC2) GetImageBlockPublicAccessStateWithContext(ctx aws.Context, input *GetImageBlockPublicAccessStateInput, opts ...request.Option) (*GetImageBlockPublicAccessStateOutput, error) {
+	req, out := c.GetImageBlockPublicAccessStateRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -110469,6 +110713,71 @@ func (s *DisableFastSnapshotRestoresOutput) SetUnsuccessful(v []*DisableFastSnap
 	return s
 }
 
+type DisableImageBlockPublicAccessInput struct {
+	_ struct{} `type:"structure"`
+
+	// Checks whether you have the required permissions for the action, without
+	// actually making the request, and provides an error response. If you have
+	// the required permissions, the error response is DryRunOperation. Otherwise,
+	// it is UnauthorizedOperation.
+	DryRun *bool `type:"boolean"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DisableImageBlockPublicAccessInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DisableImageBlockPublicAccessInput) GoString() string {
+	return s.String()
+}
+
+// SetDryRun sets the DryRun field's value.
+func (s *DisableImageBlockPublicAccessInput) SetDryRun(v bool) *DisableImageBlockPublicAccessInput {
+	s.DryRun = &v
+	return s
+}
+
+type DisableImageBlockPublicAccessOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Returns unblocked if the request succeeds; otherwise, it returns an error.
+	ImageBlockPublicAccessState *string `locationName:"imageBlockPublicAccessState" type:"string" enum:"ImageBlockPublicAccessDisabledState"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DisableImageBlockPublicAccessOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DisableImageBlockPublicAccessOutput) GoString() string {
+	return s.String()
+}
+
+// SetImageBlockPublicAccessState sets the ImageBlockPublicAccessState field's value.
+func (s *DisableImageBlockPublicAccessOutput) SetImageBlockPublicAccessState(v string) *DisableImageBlockPublicAccessOutput {
+	s.ImageBlockPublicAccessState = &v
+	return s
+}
+
 type DisableImageDeprecationInput struct {
 	_ struct{} `type:"structure"`
 
@@ -114946,6 +115255,98 @@ func (s *EnableFastSnapshotRestoresOutput) SetSuccessful(v []*EnableFastSnapshot
 // SetUnsuccessful sets the Unsuccessful field's value.
 func (s *EnableFastSnapshotRestoresOutput) SetUnsuccessful(v []*EnableFastSnapshotRestoreErrorItem) *EnableFastSnapshotRestoresOutput {
 	s.Unsuccessful = v
+	return s
+}
+
+type EnableImageBlockPublicAccessInput struct {
+	_ struct{} `type:"structure"`
+
+	// Checks whether you have the required permissions for the action, without
+	// actually making the request, and provides an error response. If you have
+	// the required permissions, the error response is DryRunOperation. Otherwise,
+	// it is UnauthorizedOperation.
+	DryRun *bool `type:"boolean"`
+
+	// Specify block-new-sharing to enable block public access for AMIs at the account
+	// level in the specified Region. This will block any attempt to publicly share
+	// your AMIs in the specified Region.
+	//
+	// ImageBlockPublicAccessState is a required field
+	ImageBlockPublicAccessState *string `type:"string" required:"true" enum:"ImageBlockPublicAccessEnabledState"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EnableImageBlockPublicAccessInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EnableImageBlockPublicAccessInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *EnableImageBlockPublicAccessInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "EnableImageBlockPublicAccessInput"}
+	if s.ImageBlockPublicAccessState == nil {
+		invalidParams.Add(request.NewErrParamRequired("ImageBlockPublicAccessState"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDryRun sets the DryRun field's value.
+func (s *EnableImageBlockPublicAccessInput) SetDryRun(v bool) *EnableImageBlockPublicAccessInput {
+	s.DryRun = &v
+	return s
+}
+
+// SetImageBlockPublicAccessState sets the ImageBlockPublicAccessState field's value.
+func (s *EnableImageBlockPublicAccessInput) SetImageBlockPublicAccessState(v string) *EnableImageBlockPublicAccessInput {
+	s.ImageBlockPublicAccessState = &v
+	return s
+}
+
+type EnableImageBlockPublicAccessOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Returns block-new-sharing if the request succeeds; otherwise, it returns
+	// an error.
+	ImageBlockPublicAccessState *string `locationName:"imageBlockPublicAccessState" type:"string" enum:"ImageBlockPublicAccessEnabledState"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EnableImageBlockPublicAccessOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EnableImageBlockPublicAccessOutput) GoString() string {
+	return s.String()
+}
+
+// SetImageBlockPublicAccessState sets the ImageBlockPublicAccessState field's value.
+func (s *EnableImageBlockPublicAccessOutput) SetImageBlockPublicAccessState(v string) *EnableImageBlockPublicAccessOutput {
+	s.ImageBlockPublicAccessState = &v
 	return s
 }
 
@@ -121249,6 +121650,79 @@ func (s *GetHostReservationPurchasePreviewOutput) SetTotalHourlyPrice(v string) 
 // SetTotalUpfrontPrice sets the TotalUpfrontPrice field's value.
 func (s *GetHostReservationPurchasePreviewOutput) SetTotalUpfrontPrice(v string) *GetHostReservationPurchasePreviewOutput {
 	s.TotalUpfrontPrice = &v
+	return s
+}
+
+type GetImageBlockPublicAccessStateInput struct {
+	_ struct{} `type:"structure"`
+
+	// Checks whether you have the required permissions for the action, without
+	// actually making the request, and provides an error response. If you have
+	// the required permissions, the error response is DryRunOperation. Otherwise,
+	// it is UnauthorizedOperation.
+	DryRun *bool `type:"boolean"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetImageBlockPublicAccessStateInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetImageBlockPublicAccessStateInput) GoString() string {
+	return s.String()
+}
+
+// SetDryRun sets the DryRun field's value.
+func (s *GetImageBlockPublicAccessStateInput) SetDryRun(v bool) *GetImageBlockPublicAccessStateInput {
+	s.DryRun = &v
+	return s
+}
+
+type GetImageBlockPublicAccessStateOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The current state of block public access for AMIs at the account level in
+	// the specified Amazon Web Services Region.
+	//
+	// Possible values:
+	//
+	//    * block-new-sharing - Any attempt to publicly share your AMIs in the specified
+	//    Region is blocked.
+	//
+	//    * unblocked - Your AMIs in the specified Region can be publicly shared.
+	ImageBlockPublicAccessState *string `locationName:"imageBlockPublicAccessState" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetImageBlockPublicAccessStateOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetImageBlockPublicAccessStateOutput) GoString() string {
+	return s.String()
+}
+
+// SetImageBlockPublicAccessState sets the ImageBlockPublicAccessState field's value.
+func (s *GetImageBlockPublicAccessStateOutput) SetImageBlockPublicAccessState(v string) *GetImageBlockPublicAccessStateOutput {
+	s.ImageBlockPublicAccessState = &v
 	return s
 }
 
@@ -184800,6 +185274,30 @@ func ImageAttributeName_Values() []string {
 }
 
 const (
+	// ImageBlockPublicAccessDisabledStateUnblocked is a ImageBlockPublicAccessDisabledState enum value
+	ImageBlockPublicAccessDisabledStateUnblocked = "unblocked"
+)
+
+// ImageBlockPublicAccessDisabledState_Values returns all elements of the ImageBlockPublicAccessDisabledState enum
+func ImageBlockPublicAccessDisabledState_Values() []string {
+	return []string{
+		ImageBlockPublicAccessDisabledStateUnblocked,
+	}
+}
+
+const (
+	// ImageBlockPublicAccessEnabledStateBlockNewSharing is a ImageBlockPublicAccessEnabledState enum value
+	ImageBlockPublicAccessEnabledStateBlockNewSharing = "block-new-sharing"
+)
+
+// ImageBlockPublicAccessEnabledState_Values returns all elements of the ImageBlockPublicAccessEnabledState enum
+func ImageBlockPublicAccessEnabledState_Values() []string {
+	return []string{
+		ImageBlockPublicAccessEnabledStateBlockNewSharing,
+	}
+}
+
+const (
 	// ImageStatePending is a ImageState enum value
 	ImageStatePending = "pending"
 
@@ -187295,6 +187793,78 @@ const (
 
 	// InstanceTypeHpc7a96xlarge is a InstanceType enum value
 	InstanceTypeHpc7a96xlarge = "hpc7a.96xlarge"
+
+	// InstanceTypeC7gdMedium is a InstanceType enum value
+	InstanceTypeC7gdMedium = "c7gd.medium"
+
+	// InstanceTypeC7gdLarge is a InstanceType enum value
+	InstanceTypeC7gdLarge = "c7gd.large"
+
+	// InstanceTypeC7gdXlarge is a InstanceType enum value
+	InstanceTypeC7gdXlarge = "c7gd.xlarge"
+
+	// InstanceTypeC7gd2xlarge is a InstanceType enum value
+	InstanceTypeC7gd2xlarge = "c7gd.2xlarge"
+
+	// InstanceTypeC7gd4xlarge is a InstanceType enum value
+	InstanceTypeC7gd4xlarge = "c7gd.4xlarge"
+
+	// InstanceTypeC7gd8xlarge is a InstanceType enum value
+	InstanceTypeC7gd8xlarge = "c7gd.8xlarge"
+
+	// InstanceTypeC7gd12xlarge is a InstanceType enum value
+	InstanceTypeC7gd12xlarge = "c7gd.12xlarge"
+
+	// InstanceTypeC7gd16xlarge is a InstanceType enum value
+	InstanceTypeC7gd16xlarge = "c7gd.16xlarge"
+
+	// InstanceTypeM7gdMedium is a InstanceType enum value
+	InstanceTypeM7gdMedium = "m7gd.medium"
+
+	// InstanceTypeM7gdLarge is a InstanceType enum value
+	InstanceTypeM7gdLarge = "m7gd.large"
+
+	// InstanceTypeM7gdXlarge is a InstanceType enum value
+	InstanceTypeM7gdXlarge = "m7gd.xlarge"
+
+	// InstanceTypeM7gd2xlarge is a InstanceType enum value
+	InstanceTypeM7gd2xlarge = "m7gd.2xlarge"
+
+	// InstanceTypeM7gd4xlarge is a InstanceType enum value
+	InstanceTypeM7gd4xlarge = "m7gd.4xlarge"
+
+	// InstanceTypeM7gd8xlarge is a InstanceType enum value
+	InstanceTypeM7gd8xlarge = "m7gd.8xlarge"
+
+	// InstanceTypeM7gd12xlarge is a InstanceType enum value
+	InstanceTypeM7gd12xlarge = "m7gd.12xlarge"
+
+	// InstanceTypeM7gd16xlarge is a InstanceType enum value
+	InstanceTypeM7gd16xlarge = "m7gd.16xlarge"
+
+	// InstanceTypeR7gdMedium is a InstanceType enum value
+	InstanceTypeR7gdMedium = "r7gd.medium"
+
+	// InstanceTypeR7gdLarge is a InstanceType enum value
+	InstanceTypeR7gdLarge = "r7gd.large"
+
+	// InstanceTypeR7gdXlarge is a InstanceType enum value
+	InstanceTypeR7gdXlarge = "r7gd.xlarge"
+
+	// InstanceTypeR7gd2xlarge is a InstanceType enum value
+	InstanceTypeR7gd2xlarge = "r7gd.2xlarge"
+
+	// InstanceTypeR7gd4xlarge is a InstanceType enum value
+	InstanceTypeR7gd4xlarge = "r7gd.4xlarge"
+
+	// InstanceTypeR7gd8xlarge is a InstanceType enum value
+	InstanceTypeR7gd8xlarge = "r7gd.8xlarge"
+
+	// InstanceTypeR7gd12xlarge is a InstanceType enum value
+	InstanceTypeR7gd12xlarge = "r7gd.12xlarge"
+
+	// InstanceTypeR7gd16xlarge is a InstanceType enum value
+	InstanceTypeR7gd16xlarge = "r7gd.16xlarge"
 )
 
 // InstanceType_Values returns all elements of the InstanceType enum
@@ -187996,6 +188566,30 @@ func InstanceType_Values() []string {
 		InstanceTypeHpc7a24xlarge,
 		InstanceTypeHpc7a48xlarge,
 		InstanceTypeHpc7a96xlarge,
+		InstanceTypeC7gdMedium,
+		InstanceTypeC7gdLarge,
+		InstanceTypeC7gdXlarge,
+		InstanceTypeC7gd2xlarge,
+		InstanceTypeC7gd4xlarge,
+		InstanceTypeC7gd8xlarge,
+		InstanceTypeC7gd12xlarge,
+		InstanceTypeC7gd16xlarge,
+		InstanceTypeM7gdMedium,
+		InstanceTypeM7gdLarge,
+		InstanceTypeM7gdXlarge,
+		InstanceTypeM7gd2xlarge,
+		InstanceTypeM7gd4xlarge,
+		InstanceTypeM7gd8xlarge,
+		InstanceTypeM7gd12xlarge,
+		InstanceTypeM7gd16xlarge,
+		InstanceTypeR7gdMedium,
+		InstanceTypeR7gdLarge,
+		InstanceTypeR7gdXlarge,
+		InstanceTypeR7gd2xlarge,
+		InstanceTypeR7gd4xlarge,
+		InstanceTypeR7gd8xlarge,
+		InstanceTypeR7gd12xlarge,
+		InstanceTypeR7gd16xlarge,
 	}
 }
 
@@ -188944,6 +189538,9 @@ const (
 
 	// LocationTypeAvailabilityZoneId is a LocationType enum value
 	LocationTypeAvailabilityZoneId = "availability-zone-id"
+
+	// LocationTypeOutpost is a LocationType enum value
+	LocationTypeOutpost = "outpost"
 )
 
 // LocationType_Values returns all elements of the LocationType enum
@@ -188952,6 +189549,7 @@ func LocationType_Values() []string {
 		LocationTypeRegion,
 		LocationTypeAvailabilityZone,
 		LocationTypeAvailabilityZoneId,
+		LocationTypeOutpost,
 	}
 }
 
