@@ -21,7 +21,7 @@ import (
 	"golang.org/x/exp/slices"
 )
 
-type imageFunc func(workload workload.Workload, t *imageType, customizations *blueprint.Customizations, options distro.ImageOptions, packageSets map[string]rpmmd.PackageSet, containers []container.SourceSpec, rng *rand.Rand) (image.ImageKind, error)
+type imageFunc func(workload workload.Workload, t *imageType, bp *blueprint.Blueprint, options distro.ImageOptions, packageSets map[string]rpmmd.PackageSet, containers []container.SourceSpec, rng *rand.Rand) (image.ImageKind, error)
 
 type packageSetFunc func(t *imageType) rpmmd.PackageSet
 
@@ -136,9 +136,18 @@ func (t *imageType) getPartitionTable(
 
 	imageSize := t.Size(options.Size)
 
-	lvmify := !t.rpmOstree
+	partitioningMode := options.PartitioningMode
+	if t.rpmOstree {
+		// IoT supports only LVM, force it.
+		// Raw is not supported, return an error if it is requested
+		// TODO Need a central location for logic like this
+		if partitioningMode == disk.RawPartitioningMode {
+			return nil, fmt.Errorf("partitioning mode raw not supported for %s on %s", t.Name(), t.arch.Name())
+		}
+		partitioningMode = disk.AutoLVMPartitioningMode
+	}
 
-	return disk.NewPartitionTable(&basePartitionTable, mountpoints, imageSize, lvmify, t.requiredPartitionSizes, rng)
+	return disk.NewPartitionTable(&basePartitionTable, mountpoints, imageSize, partitioningMode, t.requiredPartitionSizes, rng)
 }
 
 func (t *imageType) getDefaultImageConfig() *distro.ImageConfig {
@@ -174,8 +183,11 @@ func (t *imageType) Manifest(bp *blueprint.Blueprint,
 	// of the same name from the distro and arch
 	staticPackageSets := make(map[string]rpmmd.PackageSet)
 
-	for name, getter := range t.packageSets {
-		staticPackageSets[name] = getter(t)
+	// don't add any static packages if Minimal was selected
+	if !bp.Minimal {
+		for name, getter := range t.packageSets {
+			staticPackageSets[name] = getter(t)
+		}
 	}
 
 	// amend with repository information and collect payload repos
@@ -219,7 +231,7 @@ func (t *imageType) Manifest(bp *blueprint.Blueprint,
 	/* #nosec G404 */
 	rng := rand.New(source)
 
-	img, err := t.image(w, t, bp.Customizations, options, staticPackageSets, containerSources, rng)
+	img, err := t.image(w, t, bp, options, staticPackageSets, containerSources, rng)
 	if err != nil {
 		return nil, nil, err
 	}
