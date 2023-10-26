@@ -27,7 +27,6 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"log"
 	"net"
 	"net/http"
@@ -79,10 +78,10 @@ type Client struct {
 	hostsMu sync.Mutex
 	hosts   map[string]string
 
-	Namespace string // Vim namespace
-	Version   string // Vim version
-	Types     types.Func
-	UserAgent string
+	Namespace string     `json:"namespace"` // Vim namespace
+	Version   string     `json:"version"`   // Vim version
+	Types     types.Func `json:"types"`
+	UserAgent string     `json:"userAgent"`
 
 	cookie          string
 	insecureCookies bool
@@ -267,7 +266,7 @@ func (c *Client) SetRootCAs(pemPaths string) error {
 	pool := x509.NewCertPool()
 
 	for _, name := range filepath.SplitList(pemPaths) {
-		pem, err := ioutil.ReadFile(filepath.Clean(name))
+		pem, err := os.ReadFile(filepath.Clean(name))
 		if err != nil {
 			return err
 		}
@@ -317,6 +316,20 @@ func (c *Client) Thumbprint(host string) string {
 	c.hostsMu.Lock()
 	defer c.hostsMu.Unlock()
 	return c.hosts[host]
+}
+
+// KnownThumbprint checks whether the provided thumbprint is known to this client.
+func (c *Client) KnownThumbprint(tp string) bool {
+	c.hostsMu.Lock()
+	defer c.hostsMu.Unlock()
+
+	for _, v := range c.hosts {
+		if v == tp {
+			return true
+		}
+	}
+
+	return false
 }
 
 // LoadThumbprints from file with the give name.
@@ -487,11 +500,11 @@ func (c *Client) URL() *url.URL {
 }
 
 type marshaledClient struct {
-	Cookies  []*http.Cookie
-	URL      *url.URL
-	Insecure bool
-	Version  string
-	UseJSON  bool
+	Cookies  []*http.Cookie `json:"cookies"`
+	URL      *url.URL       `json:"url"`
+	Insecure bool           `json:"insecure"`
+	Version  string         `json:"version"`
+	UseJSON  bool           `json:"useJSON"`
 }
 
 // MarshalJSON writes the Client configuration to JSON.
@@ -727,6 +740,7 @@ type Upload struct {
 	Headers       map[string]string
 	Ticket        *http.Cookie
 	Progress      progress.Sinker
+	Close         bool
 }
 
 var DefaultUpload = Upload{
@@ -754,7 +768,7 @@ func (c *Client) Upload(ctx context.Context, f io.Reader, u *url.URL, param *Upl
 	}
 
 	req = req.WithContext(ctx)
-
+	req.Close = param.Close
 	req.ContentLength = param.ContentLength
 	req.Header.Set("Content-Type", param.Type)
 
@@ -812,6 +826,7 @@ type Download struct {
 	Ticket   *http.Cookie
 	Progress progress.Sinker
 	Writer   io.Writer
+	Close    bool
 }
 
 var DefaultDownload = Download{
@@ -826,6 +841,7 @@ func (c *Client) DownloadRequest(ctx context.Context, u *url.URL, param *Downloa
 	}
 
 	req = req.WithContext(ctx)
+	req.Close = param.Close
 
 	for k, v := range param.Headers {
 		req.Header.Add(k, v)
