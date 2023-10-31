@@ -41863,6 +41863,137 @@ func (c *EC2) GetReservedInstancesExchangeQuoteWithContext(ctx aws.Context, inpu
 	return out, req.Send()
 }
 
+const opGetSecurityGroupsForVpc = "GetSecurityGroupsForVpc"
+
+// GetSecurityGroupsForVpcRequest generates a "aws/request.Request" representing the
+// client's request for the GetSecurityGroupsForVpc operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetSecurityGroupsForVpc for more information on using the GetSecurityGroupsForVpc
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the GetSecurityGroupsForVpcRequest method.
+//	req, resp := client.GetSecurityGroupsForVpcRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/GetSecurityGroupsForVpc
+func (c *EC2) GetSecurityGroupsForVpcRequest(input *GetSecurityGroupsForVpcInput) (req *request.Request, output *GetSecurityGroupsForVpcOutput) {
+	op := &request.Operation{
+		Name:       opGetSecurityGroupsForVpc,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &GetSecurityGroupsForVpcInput{}
+	}
+
+	output = &GetSecurityGroupsForVpcOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetSecurityGroupsForVpc API operation for Amazon Elastic Compute Cloud.
+//
+// Gets security groups that can be associated by the Amazon Web Services account
+// making the request with network interfaces in the specified VPC.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Elastic Compute Cloud's
+// API operation GetSecurityGroupsForVpc for usage and error information.
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/GetSecurityGroupsForVpc
+func (c *EC2) GetSecurityGroupsForVpc(input *GetSecurityGroupsForVpcInput) (*GetSecurityGroupsForVpcOutput, error) {
+	req, out := c.GetSecurityGroupsForVpcRequest(input)
+	return out, req.Send()
+}
+
+// GetSecurityGroupsForVpcWithContext is the same as GetSecurityGroupsForVpc with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetSecurityGroupsForVpc for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *EC2) GetSecurityGroupsForVpcWithContext(ctx aws.Context, input *GetSecurityGroupsForVpcInput, opts ...request.Option) (*GetSecurityGroupsForVpcOutput, error) {
+	req, out := c.GetSecurityGroupsForVpcRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// GetSecurityGroupsForVpcPages iterates over the pages of a GetSecurityGroupsForVpc operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See GetSecurityGroupsForVpc method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//	// Example iterating over at most 3 pages of a GetSecurityGroupsForVpc operation.
+//	pageNum := 0
+//	err := client.GetSecurityGroupsForVpcPages(params,
+//	    func(page *ec2.GetSecurityGroupsForVpcOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
+func (c *EC2) GetSecurityGroupsForVpcPages(input *GetSecurityGroupsForVpcInput, fn func(*GetSecurityGroupsForVpcOutput, bool) bool) error {
+	return c.GetSecurityGroupsForVpcPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// GetSecurityGroupsForVpcPagesWithContext same as GetSecurityGroupsForVpcPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *EC2) GetSecurityGroupsForVpcPagesWithContext(ctx aws.Context, input *GetSecurityGroupsForVpcInput, fn func(*GetSecurityGroupsForVpcOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *GetSecurityGroupsForVpcInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.GetSecurityGroupsForVpcRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*GetSecurityGroupsForVpcOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opGetSerialConsoleAccessStatus = "GetSerialConsoleAccessStatus"
 
 // GetSerialConsoleAccessStatusRequest generates a "aws/request.Request" representing the
@@ -103706,8 +103837,8 @@ type DescribeSpotPriceHistoryInput struct {
 	//    greater than or less than comparison is not supported).
 	//
 	//    * timestamp - The time stamp of the Spot price history, in UTC format
-	//    (for example, YYYY-MM-DDTHH:MM:SSZ). You can use wildcards (* and ?).
-	//    Greater than or less than comparison is not supported.
+	//    (for example, ddd MMM dd HH:mm:ss UTC YYYY). You can use wildcards (*
+	//    and ?). Greater than or less than comparison is not supported.
 	Filters []*Filter `locationName:"Filter" locationNameList:"Filter" type:"list"`
 
 	// Filters the results by the specified instance types.
@@ -124228,6 +124359,149 @@ func (s *GetReservedInstancesExchangeQuoteOutput) SetValidationFailureReason(v s
 	return s
 }
 
+type GetSecurityGroupsForVpcInput struct {
+	_ struct{} `type:"structure"`
+
+	// Checks whether you have the required permissions for the action, without
+	// actually making the request, and provides an error response. If you have
+	// the required permissions, the error response is DryRunOperation. Otherwise,
+	// it is UnauthorizedOperation.
+	DryRun *bool `type:"boolean"`
+
+	// The filters. If using multiple filters, the results include security groups
+	// which match all filters.
+	//
+	//    * group-id: The security group ID.
+	//
+	//    * description: The security group's description.
+	//
+	//    * group-name: The security group name.
+	//
+	//    * owner-id: The security group owner ID.
+	//
+	//    * primary-vpc-id: The VPC ID in which the security group was created.
+	Filters []*Filter `locationName:"Filter" locationNameList:"Filter" type:"list"`
+
+	// The maximum number of items to return for this request. To get the next page
+	// of items, make another request with the token returned in the output. For
+	// more information, see Pagination (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Query-Requests.html#api-pagination).
+	MaxResults *int64 `min:"5" type:"integer"`
+
+	// The token returned from a previous paginated request. Pagination continues
+	// from the end of the items returned by the previous request.
+	NextToken *string `type:"string"`
+
+	// The VPC ID where the security group can be used.
+	//
+	// VpcId is a required field
+	VpcId *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetSecurityGroupsForVpcInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetSecurityGroupsForVpcInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetSecurityGroupsForVpcInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetSecurityGroupsForVpcInput"}
+	if s.MaxResults != nil && *s.MaxResults < 5 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 5))
+	}
+	if s.VpcId == nil {
+		invalidParams.Add(request.NewErrParamRequired("VpcId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDryRun sets the DryRun field's value.
+func (s *GetSecurityGroupsForVpcInput) SetDryRun(v bool) *GetSecurityGroupsForVpcInput {
+	s.DryRun = &v
+	return s
+}
+
+// SetFilters sets the Filters field's value.
+func (s *GetSecurityGroupsForVpcInput) SetFilters(v []*Filter) *GetSecurityGroupsForVpcInput {
+	s.Filters = v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *GetSecurityGroupsForVpcInput) SetMaxResults(v int64) *GetSecurityGroupsForVpcInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *GetSecurityGroupsForVpcInput) SetNextToken(v string) *GetSecurityGroupsForVpcInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetVpcId sets the VpcId field's value.
+func (s *GetSecurityGroupsForVpcInput) SetVpcId(v string) *GetSecurityGroupsForVpcInput {
+	s.VpcId = &v
+	return s
+}
+
+type GetSecurityGroupsForVpcOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The token to include in another request to get the next page of items. This
+	// value is null when there are no more items to return.
+	NextToken *string `locationName:"nextToken" type:"string"`
+
+	// The security group that can be used by interfaces in the VPC.
+	SecurityGroupForVpcs []*SecurityGroupForVpc `locationName:"securityGroupForVpcSet" locationNameList:"item" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetSecurityGroupsForVpcOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetSecurityGroupsForVpcOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *GetSecurityGroupsForVpcOutput) SetNextToken(v string) *GetSecurityGroupsForVpcOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetSecurityGroupForVpcs sets the SecurityGroupForVpcs field's value.
+func (s *GetSecurityGroupsForVpcOutput) SetSecurityGroupForVpcs(v []*SecurityGroupForVpc) *GetSecurityGroupsForVpcOutput {
+	s.SecurityGroupForVpcs = v
+	return s
+}
+
 type GetSerialConsoleAccessStatusInput struct {
 	_ struct{} `type:"structure"`
 
@@ -126399,6 +126673,15 @@ type HibernationOptionsRequest struct {
 	_ struct{} `type:"structure"`
 
 	// Set to true to enable your instance for hibernation.
+	//
+	// For Spot Instances, if you set Configured to true, either omit the InstanceInterruptionBehavior
+	// parameter (for SpotMarketOptions (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_SpotMarketOptions.html)),
+	// or set it to hibernate. When Configured is true:
+	//
+	//    * If you omit InstanceInterruptionBehavior, it defaults to hibernate.
+	//
+	//    * If you set InstanceInterruptionBehavior to a value other than hibernate,
+	//    you'll get an error.
 	//
 	// Default: false
 	Configured *bool `type:"boolean"`
@@ -167806,6 +168089,83 @@ func (s *SecurityGroup) SetVpcId(v string) *SecurityGroup {
 	return s
 }
 
+// A security group that can be used by interfaces in the VPC.
+type SecurityGroupForVpc struct {
+	_ struct{} `type:"structure"`
+
+	// The security group's description.
+	Description *string `locationName:"description" type:"string"`
+
+	// The security group ID.
+	GroupId *string `locationName:"groupId" type:"string"`
+
+	// The security group name.
+	GroupName *string `locationName:"groupName" type:"string"`
+
+	// The security group owner ID.
+	OwnerId *string `locationName:"ownerId" type:"string"`
+
+	// The VPC ID in which the security group was created.
+	PrimaryVpcId *string `locationName:"primaryVpcId" type:"string"`
+
+	// The security group tags.
+	Tags []*Tag `locationName:"tagSet" locationNameList:"item" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SecurityGroupForVpc) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SecurityGroupForVpc) GoString() string {
+	return s.String()
+}
+
+// SetDescription sets the Description field's value.
+func (s *SecurityGroupForVpc) SetDescription(v string) *SecurityGroupForVpc {
+	s.Description = &v
+	return s
+}
+
+// SetGroupId sets the GroupId field's value.
+func (s *SecurityGroupForVpc) SetGroupId(v string) *SecurityGroupForVpc {
+	s.GroupId = &v
+	return s
+}
+
+// SetGroupName sets the GroupName field's value.
+func (s *SecurityGroupForVpc) SetGroupName(v string) *SecurityGroupForVpc {
+	s.GroupName = &v
+	return s
+}
+
+// SetOwnerId sets the OwnerId field's value.
+func (s *SecurityGroupForVpc) SetOwnerId(v string) *SecurityGroupForVpc {
+	s.OwnerId = &v
+	return s
+}
+
+// SetPrimaryVpcId sets the PrimaryVpcId field's value.
+func (s *SecurityGroupForVpc) SetPrimaryVpcId(v string) *SecurityGroupForVpc {
+	s.PrimaryVpcId = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *SecurityGroupForVpc) SetTags(v []*Tag) *SecurityGroupForVpc {
+	s.Tags = v
+	return s
+}
+
 // Describes a security group.
 type SecurityGroupIdentifier struct {
 	_ struct{} `type:"structure"`
@@ -170987,7 +171347,18 @@ type SpotMarketOptions struct {
 	// Deprecated.
 	BlockDurationMinutes *int64 `type:"integer"`
 
-	// The behavior when a Spot Instance is interrupted. The default is terminate.
+	// The behavior when a Spot Instance is interrupted.
+	//
+	// If Configured (for HibernationOptions (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_HibernationOptionsRequest.html))
+	// is set to true, the InstanceInterruptionBehavior parameter is automatically
+	// set to hibernate. If you set it to stop or terminate, you'll get an error.
+	//
+	// If Configured (for HibernationOptions (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_HibernationOptionsRequest.html))
+	// is set to false or null, the InstanceInterruptionBehavior parameter is automatically
+	// set to terminate. You can also set it to stop or hibernate.
+	//
+	// For more information, see Interruption behavior (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/interruption-behavior.html)
+	// in the Amazon EC2 User Guide.
 	InstanceInterruptionBehavior *string `type:"string" enum:"InstanceInterruptionBehavior"`
 
 	// The maximum hourly price that you're willing to pay for a Spot Instance.
@@ -188693,6 +189064,72 @@ const (
 
 	// InstanceTypeR7iz32xlarge is a InstanceType enum value
 	InstanceTypeR7iz32xlarge = "r7iz.32xlarge"
+
+	// InstanceTypeC7aMedium is a InstanceType enum value
+	InstanceTypeC7aMedium = "c7a.medium"
+
+	// InstanceTypeC7aLarge is a InstanceType enum value
+	InstanceTypeC7aLarge = "c7a.large"
+
+	// InstanceTypeC7aXlarge is a InstanceType enum value
+	InstanceTypeC7aXlarge = "c7a.xlarge"
+
+	// InstanceTypeC7a2xlarge is a InstanceType enum value
+	InstanceTypeC7a2xlarge = "c7a.2xlarge"
+
+	// InstanceTypeC7a4xlarge is a InstanceType enum value
+	InstanceTypeC7a4xlarge = "c7a.4xlarge"
+
+	// InstanceTypeC7a8xlarge is a InstanceType enum value
+	InstanceTypeC7a8xlarge = "c7a.8xlarge"
+
+	// InstanceTypeC7a12xlarge is a InstanceType enum value
+	InstanceTypeC7a12xlarge = "c7a.12xlarge"
+
+	// InstanceTypeC7a16xlarge is a InstanceType enum value
+	InstanceTypeC7a16xlarge = "c7a.16xlarge"
+
+	// InstanceTypeC7a24xlarge is a InstanceType enum value
+	InstanceTypeC7a24xlarge = "c7a.24xlarge"
+
+	// InstanceTypeC7a32xlarge is a InstanceType enum value
+	InstanceTypeC7a32xlarge = "c7a.32xlarge"
+
+	// InstanceTypeC7a48xlarge is a InstanceType enum value
+	InstanceTypeC7a48xlarge = "c7a.48xlarge"
+
+	// InstanceTypeC7aMetal48xl is a InstanceType enum value
+	InstanceTypeC7aMetal48xl = "c7a.metal-48xl"
+
+	// InstanceTypeR7aMetal48xl is a InstanceType enum value
+	InstanceTypeR7aMetal48xl = "r7a.metal-48xl"
+
+	// InstanceTypeR7iLarge is a InstanceType enum value
+	InstanceTypeR7iLarge = "r7i.large"
+
+	// InstanceTypeR7iXlarge is a InstanceType enum value
+	InstanceTypeR7iXlarge = "r7i.xlarge"
+
+	// InstanceTypeR7i2xlarge is a InstanceType enum value
+	InstanceTypeR7i2xlarge = "r7i.2xlarge"
+
+	// InstanceTypeR7i4xlarge is a InstanceType enum value
+	InstanceTypeR7i4xlarge = "r7i.4xlarge"
+
+	// InstanceTypeR7i8xlarge is a InstanceType enum value
+	InstanceTypeR7i8xlarge = "r7i.8xlarge"
+
+	// InstanceTypeR7i12xlarge is a InstanceType enum value
+	InstanceTypeR7i12xlarge = "r7i.12xlarge"
+
+	// InstanceTypeR7i16xlarge is a InstanceType enum value
+	InstanceTypeR7i16xlarge = "r7i.16xlarge"
+
+	// InstanceTypeR7i24xlarge is a InstanceType enum value
+	InstanceTypeR7i24xlarge = "r7i.24xlarge"
+
+	// InstanceTypeR7i48xlarge is a InstanceType enum value
+	InstanceTypeR7i48xlarge = "r7i.48xlarge"
 )
 
 // InstanceType_Values returns all elements of the InstanceType enum
@@ -189447,6 +189884,28 @@ func InstanceType_Values() []string {
 		InstanceTypeR7iz12xlarge,
 		InstanceTypeR7iz16xlarge,
 		InstanceTypeR7iz32xlarge,
+		InstanceTypeC7aMedium,
+		InstanceTypeC7aLarge,
+		InstanceTypeC7aXlarge,
+		InstanceTypeC7a2xlarge,
+		InstanceTypeC7a4xlarge,
+		InstanceTypeC7a8xlarge,
+		InstanceTypeC7a12xlarge,
+		InstanceTypeC7a16xlarge,
+		InstanceTypeC7a24xlarge,
+		InstanceTypeC7a32xlarge,
+		InstanceTypeC7a48xlarge,
+		InstanceTypeC7aMetal48xl,
+		InstanceTypeR7aMetal48xl,
+		InstanceTypeR7iLarge,
+		InstanceTypeR7iXlarge,
+		InstanceTypeR7i2xlarge,
+		InstanceTypeR7i4xlarge,
+		InstanceTypeR7i8xlarge,
+		InstanceTypeR7i12xlarge,
+		InstanceTypeR7i16xlarge,
+		InstanceTypeR7i24xlarge,
+		InstanceTypeR7i48xlarge,
 	}
 }
 
