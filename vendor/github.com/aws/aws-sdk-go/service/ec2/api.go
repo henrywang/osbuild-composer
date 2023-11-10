@@ -18138,6 +18138,137 @@ func (c *EC2) DescribeByoipCidrsPagesWithContext(ctx aws.Context, input *Describ
 	return p.Err()
 }
 
+const opDescribeCapacityBlockOfferings = "DescribeCapacityBlockOfferings"
+
+// DescribeCapacityBlockOfferingsRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeCapacityBlockOfferings operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DescribeCapacityBlockOfferings for more information on using the DescribeCapacityBlockOfferings
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the DescribeCapacityBlockOfferingsRequest method.
+//	req, resp := client.DescribeCapacityBlockOfferingsRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/DescribeCapacityBlockOfferings
+func (c *EC2) DescribeCapacityBlockOfferingsRequest(input *DescribeCapacityBlockOfferingsInput) (req *request.Request, output *DescribeCapacityBlockOfferingsOutput) {
+	op := &request.Operation{
+		Name:       opDescribeCapacityBlockOfferings,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &DescribeCapacityBlockOfferingsInput{}
+	}
+
+	output = &DescribeCapacityBlockOfferingsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DescribeCapacityBlockOfferings API operation for Amazon Elastic Compute Cloud.
+//
+// Describes Capacity Block offerings available for purchase. With Capacity
+// Blocks, you purchase a specific instance type for a period of time.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Elastic Compute Cloud's
+// API operation DescribeCapacityBlockOfferings for usage and error information.
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/DescribeCapacityBlockOfferings
+func (c *EC2) DescribeCapacityBlockOfferings(input *DescribeCapacityBlockOfferingsInput) (*DescribeCapacityBlockOfferingsOutput, error) {
+	req, out := c.DescribeCapacityBlockOfferingsRequest(input)
+	return out, req.Send()
+}
+
+// DescribeCapacityBlockOfferingsWithContext is the same as DescribeCapacityBlockOfferings with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DescribeCapacityBlockOfferings for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *EC2) DescribeCapacityBlockOfferingsWithContext(ctx aws.Context, input *DescribeCapacityBlockOfferingsInput, opts ...request.Option) (*DescribeCapacityBlockOfferingsOutput, error) {
+	req, out := c.DescribeCapacityBlockOfferingsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// DescribeCapacityBlockOfferingsPages iterates over the pages of a DescribeCapacityBlockOfferings operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See DescribeCapacityBlockOfferings method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//	// Example iterating over at most 3 pages of a DescribeCapacityBlockOfferings operation.
+//	pageNum := 0
+//	err := client.DescribeCapacityBlockOfferingsPages(params,
+//	    func(page *ec2.DescribeCapacityBlockOfferingsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
+func (c *EC2) DescribeCapacityBlockOfferingsPages(input *DescribeCapacityBlockOfferingsInput, fn func(*DescribeCapacityBlockOfferingsOutput, bool) bool) error {
+	return c.DescribeCapacityBlockOfferingsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// DescribeCapacityBlockOfferingsPagesWithContext same as DescribeCapacityBlockOfferingsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *EC2) DescribeCapacityBlockOfferingsPagesWithContext(ctx aws.Context, input *DescribeCapacityBlockOfferingsInput, fn func(*DescribeCapacityBlockOfferingsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *DescribeCapacityBlockOfferingsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.DescribeCapacityBlockOfferingsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*DescribeCapacityBlockOfferingsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opDescribeCapacityReservationFleets = "DescribeCapacityReservationFleets"
 
 // DescribeCapacityReservationFleetsRequest generates a "aws/request.Request" representing the
@@ -35921,6 +36052,89 @@ func (c *EC2) DisableSerialConsoleAccessWithContext(ctx aws.Context, input *Disa
 	return out, req.Send()
 }
 
+const opDisableSnapshotBlockPublicAccess = "DisableSnapshotBlockPublicAccess"
+
+// DisableSnapshotBlockPublicAccessRequest generates a "aws/request.Request" representing the
+// client's request for the DisableSnapshotBlockPublicAccess operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DisableSnapshotBlockPublicAccess for more information on using the DisableSnapshotBlockPublicAccess
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the DisableSnapshotBlockPublicAccessRequest method.
+//	req, resp := client.DisableSnapshotBlockPublicAccessRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/DisableSnapshotBlockPublicAccess
+func (c *EC2) DisableSnapshotBlockPublicAccessRequest(input *DisableSnapshotBlockPublicAccessInput) (req *request.Request, output *DisableSnapshotBlockPublicAccessOutput) {
+	op := &request.Operation{
+		Name:       opDisableSnapshotBlockPublicAccess,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DisableSnapshotBlockPublicAccessInput{}
+	}
+
+	output = &DisableSnapshotBlockPublicAccessOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DisableSnapshotBlockPublicAccess API operation for Amazon Elastic Compute Cloud.
+//
+// Disables the block public access for snapshots setting at the account level
+// for the specified Amazon Web Services Region. After you disable block public
+// access for snapshots in a Region, users can publicly share snapshots in that
+// Region.
+//
+// If block public access is enabled in block-all-sharing mode, and you disable
+// block public access, all snapshots that were previously publicly shared are
+// no longer treated as private and they become publicly accessible again.
+//
+// For more information, see Block public access for snapshots (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/block-public-access-snapshots.html)
+// in the Amazon Elastic Compute Cloud User Guide .
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Elastic Compute Cloud's
+// API operation DisableSnapshotBlockPublicAccess for usage and error information.
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/DisableSnapshotBlockPublicAccess
+func (c *EC2) DisableSnapshotBlockPublicAccess(input *DisableSnapshotBlockPublicAccessInput) (*DisableSnapshotBlockPublicAccessOutput, error) {
+	req, out := c.DisableSnapshotBlockPublicAccessRequest(input)
+	return out, req.Send()
+}
+
+// DisableSnapshotBlockPublicAccessWithContext is the same as DisableSnapshotBlockPublicAccess with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DisableSnapshotBlockPublicAccess for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *EC2) DisableSnapshotBlockPublicAccessWithContext(ctx aws.Context, input *DisableSnapshotBlockPublicAccessInput, opts ...request.Option) (*DisableSnapshotBlockPublicAccessOutput, error) {
+	req, out := c.DisableSnapshotBlockPublicAccessRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opDisableTransitGatewayRouteTablePropagation = "DisableTransitGatewayRouteTablePropagation"
 
 // DisableTransitGatewayRouteTablePropagationRequest generates a "aws/request.Request" representing the
@@ -38170,6 +38384,92 @@ func (c *EC2) EnableSerialConsoleAccess(input *EnableSerialConsoleAccessInput) (
 // for more information on using Contexts.
 func (c *EC2) EnableSerialConsoleAccessWithContext(ctx aws.Context, input *EnableSerialConsoleAccessInput, opts ...request.Option) (*EnableSerialConsoleAccessOutput, error) {
 	req, out := c.EnableSerialConsoleAccessRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opEnableSnapshotBlockPublicAccess = "EnableSnapshotBlockPublicAccess"
+
+// EnableSnapshotBlockPublicAccessRequest generates a "aws/request.Request" representing the
+// client's request for the EnableSnapshotBlockPublicAccess operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See EnableSnapshotBlockPublicAccess for more information on using the EnableSnapshotBlockPublicAccess
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the EnableSnapshotBlockPublicAccessRequest method.
+//	req, resp := client.EnableSnapshotBlockPublicAccessRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/EnableSnapshotBlockPublicAccess
+func (c *EC2) EnableSnapshotBlockPublicAccessRequest(input *EnableSnapshotBlockPublicAccessInput) (req *request.Request, output *EnableSnapshotBlockPublicAccessOutput) {
+	op := &request.Operation{
+		Name:       opEnableSnapshotBlockPublicAccess,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &EnableSnapshotBlockPublicAccessInput{}
+	}
+
+	output = &EnableSnapshotBlockPublicAccessOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// EnableSnapshotBlockPublicAccess API operation for Amazon Elastic Compute Cloud.
+//
+// Enables or modifies the block public access for snapshots setting at the
+// account level for the specified Amazon Web Services Region. After you enable
+// block public access for snapshots in a Region, users can no longer request
+// public sharing for snapshots in that Region. Snapshots that are already publicly
+// shared are either treated as private or they remain publicly shared, depending
+// on the State that you specify.
+//
+// If block public access is enabled in block-all-sharing mode, and you change
+// the mode to block-new-sharing, all snapshots that were previously publicly
+// shared are no longer treated as private and they become publicly accessible
+// again.
+//
+// For more information, see Block public access for snapshots (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/block-public-access-snapshots.html)
+// in the Amazon Elastic Compute Cloud User Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Elastic Compute Cloud's
+// API operation EnableSnapshotBlockPublicAccess for usage and error information.
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/EnableSnapshotBlockPublicAccess
+func (c *EC2) EnableSnapshotBlockPublicAccess(input *EnableSnapshotBlockPublicAccessInput) (*EnableSnapshotBlockPublicAccessOutput, error) {
+	req, out := c.EnableSnapshotBlockPublicAccessRequest(input)
+	return out, req.Send()
+}
+
+// EnableSnapshotBlockPublicAccessWithContext is the same as EnableSnapshotBlockPublicAccess with the addition of
+// the ability to pass a context and additional request options.
+//
+// See EnableSnapshotBlockPublicAccess for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *EC2) EnableSnapshotBlockPublicAccessWithContext(ctx aws.Context, input *EnableSnapshotBlockPublicAccessInput, opts ...request.Option) (*EnableSnapshotBlockPublicAccessOutput, error) {
+	req, out := c.EnableSnapshotBlockPublicAccessRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -41863,6 +42163,137 @@ func (c *EC2) GetReservedInstancesExchangeQuoteWithContext(ctx aws.Context, inpu
 	return out, req.Send()
 }
 
+const opGetSecurityGroupsForVpc = "GetSecurityGroupsForVpc"
+
+// GetSecurityGroupsForVpcRequest generates a "aws/request.Request" representing the
+// client's request for the GetSecurityGroupsForVpc operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetSecurityGroupsForVpc for more information on using the GetSecurityGroupsForVpc
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the GetSecurityGroupsForVpcRequest method.
+//	req, resp := client.GetSecurityGroupsForVpcRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/GetSecurityGroupsForVpc
+func (c *EC2) GetSecurityGroupsForVpcRequest(input *GetSecurityGroupsForVpcInput) (req *request.Request, output *GetSecurityGroupsForVpcOutput) {
+	op := &request.Operation{
+		Name:       opGetSecurityGroupsForVpc,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &GetSecurityGroupsForVpcInput{}
+	}
+
+	output = &GetSecurityGroupsForVpcOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetSecurityGroupsForVpc API operation for Amazon Elastic Compute Cloud.
+//
+// Gets security groups that can be associated by the Amazon Web Services account
+// making the request with network interfaces in the specified VPC.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Elastic Compute Cloud's
+// API operation GetSecurityGroupsForVpc for usage and error information.
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/GetSecurityGroupsForVpc
+func (c *EC2) GetSecurityGroupsForVpc(input *GetSecurityGroupsForVpcInput) (*GetSecurityGroupsForVpcOutput, error) {
+	req, out := c.GetSecurityGroupsForVpcRequest(input)
+	return out, req.Send()
+}
+
+// GetSecurityGroupsForVpcWithContext is the same as GetSecurityGroupsForVpc with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetSecurityGroupsForVpc for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *EC2) GetSecurityGroupsForVpcWithContext(ctx aws.Context, input *GetSecurityGroupsForVpcInput, opts ...request.Option) (*GetSecurityGroupsForVpcOutput, error) {
+	req, out := c.GetSecurityGroupsForVpcRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// GetSecurityGroupsForVpcPages iterates over the pages of a GetSecurityGroupsForVpc operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See GetSecurityGroupsForVpc method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//	// Example iterating over at most 3 pages of a GetSecurityGroupsForVpc operation.
+//	pageNum := 0
+//	err := client.GetSecurityGroupsForVpcPages(params,
+//	    func(page *ec2.GetSecurityGroupsForVpcOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
+func (c *EC2) GetSecurityGroupsForVpcPages(input *GetSecurityGroupsForVpcInput, fn func(*GetSecurityGroupsForVpcOutput, bool) bool) error {
+	return c.GetSecurityGroupsForVpcPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// GetSecurityGroupsForVpcPagesWithContext same as GetSecurityGroupsForVpcPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *EC2) GetSecurityGroupsForVpcPagesWithContext(ctx aws.Context, input *GetSecurityGroupsForVpcInput, fn func(*GetSecurityGroupsForVpcOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *GetSecurityGroupsForVpcInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.GetSecurityGroupsForVpcRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*GetSecurityGroupsForVpcOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opGetSerialConsoleAccessStatus = "GetSerialConsoleAccessStatus"
 
 // GetSerialConsoleAccessStatusRequest generates a "aws/request.Request" representing the
@@ -41935,6 +42366,83 @@ func (c *EC2) GetSerialConsoleAccessStatus(input *GetSerialConsoleAccessStatusIn
 // for more information on using Contexts.
 func (c *EC2) GetSerialConsoleAccessStatusWithContext(ctx aws.Context, input *GetSerialConsoleAccessStatusInput, opts ...request.Option) (*GetSerialConsoleAccessStatusOutput, error) {
 	req, out := c.GetSerialConsoleAccessStatusRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetSnapshotBlockPublicAccessState = "GetSnapshotBlockPublicAccessState"
+
+// GetSnapshotBlockPublicAccessStateRequest generates a "aws/request.Request" representing the
+// client's request for the GetSnapshotBlockPublicAccessState operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetSnapshotBlockPublicAccessState for more information on using the GetSnapshotBlockPublicAccessState
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the GetSnapshotBlockPublicAccessStateRequest method.
+//	req, resp := client.GetSnapshotBlockPublicAccessStateRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/GetSnapshotBlockPublicAccessState
+func (c *EC2) GetSnapshotBlockPublicAccessStateRequest(input *GetSnapshotBlockPublicAccessStateInput) (req *request.Request, output *GetSnapshotBlockPublicAccessStateOutput) {
+	op := &request.Operation{
+		Name:       opGetSnapshotBlockPublicAccessState,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetSnapshotBlockPublicAccessStateInput{}
+	}
+
+	output = &GetSnapshotBlockPublicAccessStateOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetSnapshotBlockPublicAccessState API operation for Amazon Elastic Compute Cloud.
+//
+// Gets the current state of block public access for snapshots setting for the
+// account and Region.
+//
+// For more information, see Block public access for snapshots (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/block-public-access-snapshots.html)
+// in the Amazon Elastic Compute Cloud User Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Elastic Compute Cloud's
+// API operation GetSnapshotBlockPublicAccessState for usage and error information.
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/GetSnapshotBlockPublicAccessState
+func (c *EC2) GetSnapshotBlockPublicAccessState(input *GetSnapshotBlockPublicAccessStateInput) (*GetSnapshotBlockPublicAccessStateOutput, error) {
+	req, out := c.GetSnapshotBlockPublicAccessStateRequest(input)
+	return out, req.Send()
+}
+
+// GetSnapshotBlockPublicAccessStateWithContext is the same as GetSnapshotBlockPublicAccessState with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetSnapshotBlockPublicAccessState for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *EC2) GetSnapshotBlockPublicAccessStateWithContext(ctx aws.Context, input *GetSnapshotBlockPublicAccessStateInput, opts ...request.Option) (*GetSnapshotBlockPublicAccessStateOutput, error) {
+	req, out := c.GetSnapshotBlockPublicAccessStateRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -49785,6 +50293,81 @@ func (c *EC2) ProvisionPublicIpv4PoolCidr(input *ProvisionPublicIpv4PoolCidrInpu
 // for more information on using Contexts.
 func (c *EC2) ProvisionPublicIpv4PoolCidrWithContext(ctx aws.Context, input *ProvisionPublicIpv4PoolCidrInput, opts ...request.Option) (*ProvisionPublicIpv4PoolCidrOutput, error) {
 	req, out := c.ProvisionPublicIpv4PoolCidrRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opPurchaseCapacityBlock = "PurchaseCapacityBlock"
+
+// PurchaseCapacityBlockRequest generates a "aws/request.Request" representing the
+// client's request for the PurchaseCapacityBlock operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See PurchaseCapacityBlock for more information on using the PurchaseCapacityBlock
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the PurchaseCapacityBlockRequest method.
+//	req, resp := client.PurchaseCapacityBlockRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/PurchaseCapacityBlock
+func (c *EC2) PurchaseCapacityBlockRequest(input *PurchaseCapacityBlockInput) (req *request.Request, output *PurchaseCapacityBlockOutput) {
+	op := &request.Operation{
+		Name:       opPurchaseCapacityBlock,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &PurchaseCapacityBlockInput{}
+	}
+
+	output = &PurchaseCapacityBlockOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// PurchaseCapacityBlock API operation for Amazon Elastic Compute Cloud.
+//
+// Purchase the Capacity Block for use with your account. With Capacity Blocks
+// you ensure GPU capacity is available for machine learning (ML) workloads.
+// You must specify the ID of the Capacity Block offering you are purchasing.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Elastic Compute Cloud's
+// API operation PurchaseCapacityBlock for usage and error information.
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/PurchaseCapacityBlock
+func (c *EC2) PurchaseCapacityBlock(input *PurchaseCapacityBlockInput) (*PurchaseCapacityBlockOutput, error) {
+	req, out := c.PurchaseCapacityBlockRequest(input)
+	return out, req.Send()
+}
+
+// PurchaseCapacityBlockWithContext is the same as PurchaseCapacityBlock with the addition of
+// the ability to pass a context and additional request options.
+//
+// See PurchaseCapacityBlock for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *EC2) PurchaseCapacityBlockWithContext(ctx aws.Context, input *PurchaseCapacityBlockInput, opts ...request.Option) (*PurchaseCapacityBlockOutput, error) {
+	req, out := c.PurchaseCapacityBlockRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -63781,6 +64364,119 @@ func (s *CapacityAllocation) SetCount(v int64) *CapacityAllocation {
 	return s
 }
 
+// The recommended Capacity Block that fits your search requirements.
+type CapacityBlockOffering struct {
+	_ struct{} `type:"structure"`
+
+	// The Availability Zone of the Capacity Block offering.
+	AvailabilityZone *string `locationName:"availabilityZone" type:"string"`
+
+	// The amount of time of the Capacity Block reservation in hours.
+	CapacityBlockDurationHours *int64 `locationName:"capacityBlockDurationHours" type:"integer"`
+
+	// The ID of the Capacity Block offering.
+	CapacityBlockOfferingId *string `locationName:"capacityBlockOfferingId" type:"string"`
+
+	// The currency of the payment for the Capacity Block.
+	CurrencyCode *string `locationName:"currencyCode" type:"string"`
+
+	// The end date of the Capacity Block offering.
+	EndDate *time.Time `locationName:"endDate" type:"timestamp"`
+
+	// The number of instances in the Capacity Block offering.
+	InstanceCount *int64 `locationName:"instanceCount" type:"integer"`
+
+	// The instance type of the Capacity Block offering.
+	InstanceType *string `locationName:"instanceType" type:"string"`
+
+	// The start date of the Capacity Block offering.
+	StartDate *time.Time `locationName:"startDate" type:"timestamp"`
+
+	// The tenancy of the Capacity Block.
+	Tenancy *string `locationName:"tenancy" type:"string" enum:"CapacityReservationTenancy"`
+
+	// The total price to be paid up front.
+	UpfrontFee *string `locationName:"upfrontFee" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CapacityBlockOffering) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s CapacityBlockOffering) GoString() string {
+	return s.String()
+}
+
+// SetAvailabilityZone sets the AvailabilityZone field's value.
+func (s *CapacityBlockOffering) SetAvailabilityZone(v string) *CapacityBlockOffering {
+	s.AvailabilityZone = &v
+	return s
+}
+
+// SetCapacityBlockDurationHours sets the CapacityBlockDurationHours field's value.
+func (s *CapacityBlockOffering) SetCapacityBlockDurationHours(v int64) *CapacityBlockOffering {
+	s.CapacityBlockDurationHours = &v
+	return s
+}
+
+// SetCapacityBlockOfferingId sets the CapacityBlockOfferingId field's value.
+func (s *CapacityBlockOffering) SetCapacityBlockOfferingId(v string) *CapacityBlockOffering {
+	s.CapacityBlockOfferingId = &v
+	return s
+}
+
+// SetCurrencyCode sets the CurrencyCode field's value.
+func (s *CapacityBlockOffering) SetCurrencyCode(v string) *CapacityBlockOffering {
+	s.CurrencyCode = &v
+	return s
+}
+
+// SetEndDate sets the EndDate field's value.
+func (s *CapacityBlockOffering) SetEndDate(v time.Time) *CapacityBlockOffering {
+	s.EndDate = &v
+	return s
+}
+
+// SetInstanceCount sets the InstanceCount field's value.
+func (s *CapacityBlockOffering) SetInstanceCount(v int64) *CapacityBlockOffering {
+	s.InstanceCount = &v
+	return s
+}
+
+// SetInstanceType sets the InstanceType field's value.
+func (s *CapacityBlockOffering) SetInstanceType(v string) *CapacityBlockOffering {
+	s.InstanceType = &v
+	return s
+}
+
+// SetStartDate sets the StartDate field's value.
+func (s *CapacityBlockOffering) SetStartDate(v time.Time) *CapacityBlockOffering {
+	s.StartDate = &v
+	return s
+}
+
+// SetTenancy sets the Tenancy field's value.
+func (s *CapacityBlockOffering) SetTenancy(v string) *CapacityBlockOffering {
+	s.Tenancy = &v
+	return s
+}
+
+// SetUpfrontFee sets the UpfrontFee field's value.
+func (s *CapacityBlockOffering) SetUpfrontFee(v string) *CapacityBlockOffering {
+	s.UpfrontFee = &v
+	return s
+}
+
 // Describes a Capacity Reservation.
 type CapacityReservation struct {
 	_ struct{} `type:"structure"`
@@ -63871,6 +64567,9 @@ type CapacityReservation struct {
 	// for cluster placement groups (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/cr-cpg.html)
 	// in the Amazon EC2 User Guide.
 	PlacementGroupArn *string `locationName:"placementGroupArn" type:"string"`
+
+	// The type of Capacity Reservation.
+	ReservationType *string `locationName:"reservationType" type:"string" enum:"CapacityReservationType"`
 
 	// The date and time at which the Capacity Reservation was started.
 	StartDate *time.Time `locationName:"startDate" type:"timestamp"`
@@ -64037,6 +64736,12 @@ func (s *CapacityReservation) SetOwnerId(v string) *CapacityReservation {
 // SetPlacementGroupArn sets the PlacementGroupArn field's value.
 func (s *CapacityReservation) SetPlacementGroupArn(v string) *CapacityReservation {
 	s.PlacementGroupArn = &v
+	return s
+}
+
+// SetReservationType sets the ReservationType field's value.
+func (s *CapacityReservation) SetReservationType(v string) *CapacityReservation {
+	s.ReservationType = &v
 	return s
 }
 
@@ -89371,6 +90076,175 @@ func (s *DescribeByoipCidrsOutput) SetNextToken(v string) *DescribeByoipCidrsOut
 	return s
 }
 
+type DescribeCapacityBlockOfferingsInput struct {
+	_ struct{} `type:"structure"`
+
+	// The number of hours for which to reserve Capacity Block.
+	//
+	// CapacityDurationHours is a required field
+	CapacityDurationHours *int64 `type:"integer" required:"true"`
+
+	// Checks whether you have the required permissions for the action, without
+	// actually making the request, and provides an error response. If you have
+	// the required permissions, the error response is DryRunOperation. Otherwise,
+	// it is UnauthorizedOperation.
+	DryRun *bool `type:"boolean"`
+
+	// The latest end date for the Capacity Block offering.
+	EndDateRange *time.Time `type:"timestamp"`
+
+	// The number of instances for which to reserve capacity.
+	//
+	// InstanceCount is a required field
+	InstanceCount *int64 `type:"integer" required:"true"`
+
+	// The type of instance for which the Capacity Block offering reserves capacity.
+	//
+	// InstanceType is a required field
+	InstanceType *string `type:"string" required:"true"`
+
+	// The maximum number of results to return for the request in a single page.
+	// The remaining results can be seen by sending another request with the returned
+	// nextToken value. This value can be between 5 and 500. If maxResults is given
+	// a larger value than 500, you receive an error.
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	// The token to use to retrieve the next page of results.
+	NextToken *string `type:"string"`
+
+	// The earliest start date for the Capacity Block offering.
+	StartDateRange *time.Time `type:"timestamp"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeCapacityBlockOfferingsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeCapacityBlockOfferingsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeCapacityBlockOfferingsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeCapacityBlockOfferingsInput"}
+	if s.CapacityDurationHours == nil {
+		invalidParams.Add(request.NewErrParamRequired("CapacityDurationHours"))
+	}
+	if s.InstanceCount == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceCount"))
+	}
+	if s.InstanceType == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstanceType"))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetCapacityDurationHours sets the CapacityDurationHours field's value.
+func (s *DescribeCapacityBlockOfferingsInput) SetCapacityDurationHours(v int64) *DescribeCapacityBlockOfferingsInput {
+	s.CapacityDurationHours = &v
+	return s
+}
+
+// SetDryRun sets the DryRun field's value.
+func (s *DescribeCapacityBlockOfferingsInput) SetDryRun(v bool) *DescribeCapacityBlockOfferingsInput {
+	s.DryRun = &v
+	return s
+}
+
+// SetEndDateRange sets the EndDateRange field's value.
+func (s *DescribeCapacityBlockOfferingsInput) SetEndDateRange(v time.Time) *DescribeCapacityBlockOfferingsInput {
+	s.EndDateRange = &v
+	return s
+}
+
+// SetInstanceCount sets the InstanceCount field's value.
+func (s *DescribeCapacityBlockOfferingsInput) SetInstanceCount(v int64) *DescribeCapacityBlockOfferingsInput {
+	s.InstanceCount = &v
+	return s
+}
+
+// SetInstanceType sets the InstanceType field's value.
+func (s *DescribeCapacityBlockOfferingsInput) SetInstanceType(v string) *DescribeCapacityBlockOfferingsInput {
+	s.InstanceType = &v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *DescribeCapacityBlockOfferingsInput) SetMaxResults(v int64) *DescribeCapacityBlockOfferingsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *DescribeCapacityBlockOfferingsInput) SetNextToken(v string) *DescribeCapacityBlockOfferingsInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetStartDateRange sets the StartDateRange field's value.
+func (s *DescribeCapacityBlockOfferingsInput) SetStartDateRange(v time.Time) *DescribeCapacityBlockOfferingsInput {
+	s.StartDateRange = &v
+	return s
+}
+
+type DescribeCapacityBlockOfferingsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The recommended Capacity Block offering for the dates specified.
+	CapacityBlockOfferings []*CapacityBlockOffering `locationName:"capacityBlockOfferingSet" locationNameList:"item" type:"list"`
+
+	// The token to use to retrieve the next page of results. This value is null
+	// when there are no more results to return.
+	NextToken *string `locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeCapacityBlockOfferingsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeCapacityBlockOfferingsOutput) GoString() string {
+	return s.String()
+}
+
+// SetCapacityBlockOfferings sets the CapacityBlockOfferings field's value.
+func (s *DescribeCapacityBlockOfferingsOutput) SetCapacityBlockOfferings(v []*CapacityBlockOffering) *DescribeCapacityBlockOfferingsOutput {
+	s.CapacityBlockOfferings = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *DescribeCapacityBlockOfferingsOutput) SetNextToken(v string) *DescribeCapacityBlockOfferingsOutput {
+	s.NextToken = &v
+	return s
+}
+
 type DescribeCapacityReservationFleetsInput struct {
 	_ struct{} `type:"structure"`
 
@@ -103706,8 +104580,8 @@ type DescribeSpotPriceHistoryInput struct {
 	//    greater than or less than comparison is not supported).
 	//
 	//    * timestamp - The time stamp of the Spot price history, in UTC format
-	//    (for example, YYYY-MM-DDTHH:MM:SSZ). You can use wildcards (* and ?).
-	//    Greater than or less than comparison is not supported.
+	//    (for example, ddd MMM dd HH:mm:ss UTC YYYY). You can use wildcards (*
+	//    and ?). Greater than or less than comparison is not supported.
 	Filters []*Filter `locationName:"Filter" locationNameList:"Filter" type:"list"`
 
 	// Filters the results by the specified instance types.
@@ -111420,6 +112294,71 @@ func (s *DisableSerialConsoleAccessOutput) SetSerialConsoleAccessEnabled(v bool)
 	return s
 }
 
+type DisableSnapshotBlockPublicAccessInput struct {
+	_ struct{} `type:"structure"`
+
+	// Checks whether you have the required permissions for the action, without
+	// actually making the request, and provides an error response. If you have
+	// the required permissions, the error response is DryRunOperation. Otherwise,
+	// it is UnauthorizedOperation.
+	DryRun *bool `type:"boolean"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DisableSnapshotBlockPublicAccessInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DisableSnapshotBlockPublicAccessInput) GoString() string {
+	return s.String()
+}
+
+// SetDryRun sets the DryRun field's value.
+func (s *DisableSnapshotBlockPublicAccessInput) SetDryRun(v bool) *DisableSnapshotBlockPublicAccessInput {
+	s.DryRun = &v
+	return s
+}
+
+type DisableSnapshotBlockPublicAccessOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Returns unblocked if the request succeeds.
+	State *string `locationName:"state" type:"string" enum:"SnapshotBlockPublicAccessState"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DisableSnapshotBlockPublicAccessOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DisableSnapshotBlockPublicAccessOutput) GoString() string {
+	return s.String()
+}
+
+// SetState sets the State field's value.
+func (s *DisableSnapshotBlockPublicAccessOutput) SetState(v string) *DisableSnapshotBlockPublicAccessOutput {
+	s.State = &v
+	return s
+}
+
 type DisableTransitGatewayRouteTablePropagationInput struct {
 	_ struct{} `type:"structure"`
 
@@ -116163,6 +117102,112 @@ func (s EnableSerialConsoleAccessOutput) GoString() string {
 // SetSerialConsoleAccessEnabled sets the SerialConsoleAccessEnabled field's value.
 func (s *EnableSerialConsoleAccessOutput) SetSerialConsoleAccessEnabled(v bool) *EnableSerialConsoleAccessOutput {
 	s.SerialConsoleAccessEnabled = &v
+	return s
+}
+
+type EnableSnapshotBlockPublicAccessInput struct {
+	_ struct{} `type:"structure"`
+
+	// Checks whether you have the required permissions for the action, without
+	// actually making the request, and provides an error response. If you have
+	// the required permissions, the error response is DryRunOperation. Otherwise,
+	// it is UnauthorizedOperation.
+	DryRun *bool `type:"boolean"`
+
+	// The mode in which to enable block public access for snapshots for the Region.
+	// Specify one of the following values:
+	//
+	//    * block-all-sharing - Prevents all public sharing of snapshots in the
+	//    Region. Users in the account will no longer be able to request new public
+	//    sharing. Additionally, snapshots that are already publicly shared are
+	//    treated as private and they are no longer publicly available. If you enable
+	//    block public access for snapshots in block-all-sharing mode, it does not
+	//    change the permissions for snapshots that are already publicly shared.
+	//    Instead, it prevents these snapshots from be publicly visible and publicly
+	//    accessible. Therefore, the attributes for these snapshots still indicate
+	//    that they are publicly shared, even though they are not publicly available.
+	//
+	//    * block-new-sharing - Prevents only new public sharing of snapshots in
+	//    the Region. Users in the account will no longer be able to request new
+	//    public sharing. However, snapshots that are already publicly shared, remain
+	//    publicly available.
+	//
+	// State is a required field
+	State *string `type:"string" required:"true" enum:"SnapshotBlockPublicAccessState"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EnableSnapshotBlockPublicAccessInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EnableSnapshotBlockPublicAccessInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *EnableSnapshotBlockPublicAccessInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "EnableSnapshotBlockPublicAccessInput"}
+	if s.State == nil {
+		invalidParams.Add(request.NewErrParamRequired("State"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDryRun sets the DryRun field's value.
+func (s *EnableSnapshotBlockPublicAccessInput) SetDryRun(v bool) *EnableSnapshotBlockPublicAccessInput {
+	s.DryRun = &v
+	return s
+}
+
+// SetState sets the State field's value.
+func (s *EnableSnapshotBlockPublicAccessInput) SetState(v string) *EnableSnapshotBlockPublicAccessInput {
+	s.State = &v
+	return s
+}
+
+type EnableSnapshotBlockPublicAccessOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The state of block public access for snapshots for the account and Region.
+	// Returns either block-all-sharing or block-new-sharing if the request succeeds.
+	State *string `locationName:"state" type:"string" enum:"SnapshotBlockPublicAccessState"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EnableSnapshotBlockPublicAccessOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s EnableSnapshotBlockPublicAccessOutput) GoString() string {
+	return s.String()
+}
+
+// SetState sets the State field's value.
+func (s *EnableSnapshotBlockPublicAccessOutput) SetState(v string) *EnableSnapshotBlockPublicAccessOutput {
+	s.State = &v
 	return s
 }
 
@@ -124228,6 +125273,149 @@ func (s *GetReservedInstancesExchangeQuoteOutput) SetValidationFailureReason(v s
 	return s
 }
 
+type GetSecurityGroupsForVpcInput struct {
+	_ struct{} `type:"structure"`
+
+	// Checks whether you have the required permissions for the action, without
+	// actually making the request, and provides an error response. If you have
+	// the required permissions, the error response is DryRunOperation. Otherwise,
+	// it is UnauthorizedOperation.
+	DryRun *bool `type:"boolean"`
+
+	// The filters. If using multiple filters, the results include security groups
+	// which match all filters.
+	//
+	//    * group-id: The security group ID.
+	//
+	//    * description: The security group's description.
+	//
+	//    * group-name: The security group name.
+	//
+	//    * owner-id: The security group owner ID.
+	//
+	//    * primary-vpc-id: The VPC ID in which the security group was created.
+	Filters []*Filter `locationName:"Filter" locationNameList:"Filter" type:"list"`
+
+	// The maximum number of items to return for this request. To get the next page
+	// of items, make another request with the token returned in the output. For
+	// more information, see Pagination (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Query-Requests.html#api-pagination).
+	MaxResults *int64 `min:"5" type:"integer"`
+
+	// The token returned from a previous paginated request. Pagination continues
+	// from the end of the items returned by the previous request.
+	NextToken *string `type:"string"`
+
+	// The VPC ID where the security group can be used.
+	//
+	// VpcId is a required field
+	VpcId *string `type:"string" required:"true"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetSecurityGroupsForVpcInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetSecurityGroupsForVpcInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetSecurityGroupsForVpcInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetSecurityGroupsForVpcInput"}
+	if s.MaxResults != nil && *s.MaxResults < 5 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 5))
+	}
+	if s.VpcId == nil {
+		invalidParams.Add(request.NewErrParamRequired("VpcId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDryRun sets the DryRun field's value.
+func (s *GetSecurityGroupsForVpcInput) SetDryRun(v bool) *GetSecurityGroupsForVpcInput {
+	s.DryRun = &v
+	return s
+}
+
+// SetFilters sets the Filters field's value.
+func (s *GetSecurityGroupsForVpcInput) SetFilters(v []*Filter) *GetSecurityGroupsForVpcInput {
+	s.Filters = v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *GetSecurityGroupsForVpcInput) SetMaxResults(v int64) *GetSecurityGroupsForVpcInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *GetSecurityGroupsForVpcInput) SetNextToken(v string) *GetSecurityGroupsForVpcInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetVpcId sets the VpcId field's value.
+func (s *GetSecurityGroupsForVpcInput) SetVpcId(v string) *GetSecurityGroupsForVpcInput {
+	s.VpcId = &v
+	return s
+}
+
+type GetSecurityGroupsForVpcOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The token to include in another request to get the next page of items. This
+	// value is null when there are no more items to return.
+	NextToken *string `locationName:"nextToken" type:"string"`
+
+	// The security group that can be used by interfaces in the VPC.
+	SecurityGroupForVpcs []*SecurityGroupForVpc `locationName:"securityGroupForVpcSet" locationNameList:"item" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetSecurityGroupsForVpcOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetSecurityGroupsForVpcOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *GetSecurityGroupsForVpcOutput) SetNextToken(v string) *GetSecurityGroupsForVpcOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetSecurityGroupForVpcs sets the SecurityGroupForVpcs field's value.
+func (s *GetSecurityGroupsForVpcOutput) SetSecurityGroupForVpcs(v []*SecurityGroupForVpc) *GetSecurityGroupsForVpcOutput {
+	s.SecurityGroupForVpcs = v
+	return s
+}
+
 type GetSerialConsoleAccessStatusInput struct {
 	_ struct{} `type:"structure"`
 
@@ -124292,6 +125480,83 @@ func (s GetSerialConsoleAccessStatusOutput) GoString() string {
 // SetSerialConsoleAccessEnabled sets the SerialConsoleAccessEnabled field's value.
 func (s *GetSerialConsoleAccessStatusOutput) SetSerialConsoleAccessEnabled(v bool) *GetSerialConsoleAccessStatusOutput {
 	s.SerialConsoleAccessEnabled = &v
+	return s
+}
+
+type GetSnapshotBlockPublicAccessStateInput struct {
+	_ struct{} `type:"structure"`
+
+	// Checks whether you have the required permissions for the action, without
+	// actually making the request, and provides an error response. If you have
+	// the required permissions, the error response is DryRunOperation. Otherwise,
+	// it is UnauthorizedOperation.
+	DryRun *bool `type:"boolean"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetSnapshotBlockPublicAccessStateInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetSnapshotBlockPublicAccessStateInput) GoString() string {
+	return s.String()
+}
+
+// SetDryRun sets the DryRun field's value.
+func (s *GetSnapshotBlockPublicAccessStateInput) SetDryRun(v bool) *GetSnapshotBlockPublicAccessStateInput {
+	s.DryRun = &v
+	return s
+}
+
+type GetSnapshotBlockPublicAccessStateOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The current state of block public access for snapshots. Possible values include:
+	//
+	//    * block-all-sharing - All public sharing of snapshots is blocked. Users
+	//    in the account can't request new public sharing. Additionally, snapshots
+	//    that were already publicly shared are treated as private and are not publicly
+	//    available.
+	//
+	//    * block-new-sharing - Only new public sharing of snapshots is blocked.
+	//    Users in the account can't request new public sharing. However, snapshots
+	//    that were already publicly shared, remain publicly available.
+	//
+	//    * unblocked - Public sharing is not blocked. Users can publicly share
+	//    snapshots.
+	State *string `locationName:"state" type:"string" enum:"SnapshotBlockPublicAccessState"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetSnapshotBlockPublicAccessStateOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetSnapshotBlockPublicAccessStateOutput) GoString() string {
+	return s.String()
+}
+
+// SetState sets the State field's value.
+func (s *GetSnapshotBlockPublicAccessStateOutput) SetState(v string) *GetSnapshotBlockPublicAccessStateOutput {
+	s.State = &v
 	return s
 }
 
@@ -126399,6 +127664,15 @@ type HibernationOptionsRequest struct {
 	_ struct{} `type:"structure"`
 
 	// Set to true to enable your instance for hibernation.
+	//
+	// For Spot Instances, if you set Configured to true, either omit the InstanceInterruptionBehavior
+	// parameter (for SpotMarketOptions (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_SpotMarketOptions.html)),
+	// or set it to hibernate. When Configured is true:
+	//
+	//    * If you omit InstanceInterruptionBehavior, it defaults to hibernate.
+	//
+	//    * If you set InstanceInterruptionBehavior to a value other than hibernate,
+	//    you'll get an error.
 	//
 	// Default: false
 	Configured *bool `type:"boolean"`
@@ -132306,8 +133580,10 @@ func (s *InstancePrivateIpAddress) SetPrivateIpAddress(v string) *InstancePrivat
 // or with the RunInstances API (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_RunInstances.html),
 // you can't specify InstanceRequirements.
 //
-// For more information, see Attribute-based instance type selection for EC2
-// Fleet (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-fleet-attribute-based-instance-type-selection.html),
+// For more information, see Create a mixed instances group using attribute-based
+// instance type selection (https://docs.aws.amazon.com/autoscaling/ec2/userguide/create-mixed-instances-group-attribute-based-instance-type-selection.html)
+// in the Amazon EC2 Auto Scaling User Guide, and also Attribute-based instance
+// type selection for EC2 Fleet (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-fleet-attribute-based-instance-type-selection.html),
 // Attribute-based instance type selection for Spot Fleet (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-fleet-attribute-based-instance-type-selection.html),
 // and Spot placement score (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-placement-score.html)
 // in the Amazon EC2 User Guide.
@@ -156924,6 +158200,118 @@ func (s *Purchase) SetUpfrontPrice(v string) *Purchase {
 	return s
 }
 
+type PurchaseCapacityBlockInput struct {
+	_ struct{} `type:"structure"`
+
+	// The ID of the Capacity Block offering.
+	//
+	// CapacityBlockOfferingId is a required field
+	CapacityBlockOfferingId *string `type:"string" required:"true"`
+
+	// Checks whether you have the required permissions for the action, without
+	// actually making the request, and provides an error response. If you have
+	// the required permissions, the error response is DryRunOperation. Otherwise,
+	// it is UnauthorizedOperation.
+	DryRun *bool `type:"boolean"`
+
+	// The type of operating system for which to reserve capacity.
+	//
+	// InstancePlatform is a required field
+	InstancePlatform *string `type:"string" required:"true" enum:"CapacityReservationInstancePlatform"`
+
+	// The tags to apply to the Capacity Block during launch.
+	TagSpecifications []*TagSpecification `locationName:"TagSpecification" locationNameList:"item" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PurchaseCapacityBlockInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PurchaseCapacityBlockInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *PurchaseCapacityBlockInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "PurchaseCapacityBlockInput"}
+	if s.CapacityBlockOfferingId == nil {
+		invalidParams.Add(request.NewErrParamRequired("CapacityBlockOfferingId"))
+	}
+	if s.InstancePlatform == nil {
+		invalidParams.Add(request.NewErrParamRequired("InstancePlatform"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetCapacityBlockOfferingId sets the CapacityBlockOfferingId field's value.
+func (s *PurchaseCapacityBlockInput) SetCapacityBlockOfferingId(v string) *PurchaseCapacityBlockInput {
+	s.CapacityBlockOfferingId = &v
+	return s
+}
+
+// SetDryRun sets the DryRun field's value.
+func (s *PurchaseCapacityBlockInput) SetDryRun(v bool) *PurchaseCapacityBlockInput {
+	s.DryRun = &v
+	return s
+}
+
+// SetInstancePlatform sets the InstancePlatform field's value.
+func (s *PurchaseCapacityBlockInput) SetInstancePlatform(v string) *PurchaseCapacityBlockInput {
+	s.InstancePlatform = &v
+	return s
+}
+
+// SetTagSpecifications sets the TagSpecifications field's value.
+func (s *PurchaseCapacityBlockInput) SetTagSpecifications(v []*TagSpecification) *PurchaseCapacityBlockInput {
+	s.TagSpecifications = v
+	return s
+}
+
+type PurchaseCapacityBlockOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The Capacity Reservation.
+	CapacityReservation *CapacityReservation `locationName:"capacityReservation" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PurchaseCapacityBlockOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s PurchaseCapacityBlockOutput) GoString() string {
+	return s.String()
+}
+
+// SetCapacityReservation sets the CapacityReservation field's value.
+func (s *PurchaseCapacityBlockOutput) SetCapacityReservation(v *CapacityReservation) *PurchaseCapacityBlockOutput {
+	s.CapacityReservation = v
+	return s
+}
+
 type PurchaseHostReservationInput struct {
 	_ struct{} `type:"structure"`
 
@@ -167806,6 +169194,83 @@ func (s *SecurityGroup) SetVpcId(v string) *SecurityGroup {
 	return s
 }
 
+// A security group that can be used by interfaces in the VPC.
+type SecurityGroupForVpc struct {
+	_ struct{} `type:"structure"`
+
+	// The security group's description.
+	Description *string `locationName:"description" type:"string"`
+
+	// The security group ID.
+	GroupId *string `locationName:"groupId" type:"string"`
+
+	// The security group name.
+	GroupName *string `locationName:"groupName" type:"string"`
+
+	// The security group owner ID.
+	OwnerId *string `locationName:"ownerId" type:"string"`
+
+	// The VPC ID in which the security group was created.
+	PrimaryVpcId *string `locationName:"primaryVpcId" type:"string"`
+
+	// The security group tags.
+	Tags []*Tag `locationName:"tagSet" locationNameList:"item" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SecurityGroupForVpc) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s SecurityGroupForVpc) GoString() string {
+	return s.String()
+}
+
+// SetDescription sets the Description field's value.
+func (s *SecurityGroupForVpc) SetDescription(v string) *SecurityGroupForVpc {
+	s.Description = &v
+	return s
+}
+
+// SetGroupId sets the GroupId field's value.
+func (s *SecurityGroupForVpc) SetGroupId(v string) *SecurityGroupForVpc {
+	s.GroupId = &v
+	return s
+}
+
+// SetGroupName sets the GroupName field's value.
+func (s *SecurityGroupForVpc) SetGroupName(v string) *SecurityGroupForVpc {
+	s.GroupName = &v
+	return s
+}
+
+// SetOwnerId sets the OwnerId field's value.
+func (s *SecurityGroupForVpc) SetOwnerId(v string) *SecurityGroupForVpc {
+	s.OwnerId = &v
+	return s
+}
+
+// SetPrimaryVpcId sets the PrimaryVpcId field's value.
+func (s *SecurityGroupForVpc) SetPrimaryVpcId(v string) *SecurityGroupForVpc {
+	s.PrimaryVpcId = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *SecurityGroupForVpc) SetTags(v []*Tag) *SecurityGroupForVpc {
+	s.Tags = v
+	return s
+}
+
 // Describes a security group.
 type SecurityGroupIdentifier struct {
 	_ struct{} `type:"structure"`
@@ -170987,7 +172452,18 @@ type SpotMarketOptions struct {
 	// Deprecated.
 	BlockDurationMinutes *int64 `type:"integer"`
 
-	// The behavior when a Spot Instance is interrupted. The default is terminate.
+	// The behavior when a Spot Instance is interrupted.
+	//
+	// If Configured (for HibernationOptions (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_HibernationOptionsRequest.html))
+	// is set to true, the InstanceInterruptionBehavior parameter is automatically
+	// set to hibernate. If you set it to stop or terminate, you'll get an error.
+	//
+	// If Configured (for HibernationOptions (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_HibernationOptionsRequest.html))
+	// is set to false or null, the InstanceInterruptionBehavior parameter is automatically
+	// set to terminate. You can also set it to stop or hibernate.
+	//
+	// For more information, see Interruption behavior (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/interruption-behavior.html)
+	// in the Amazon EC2 User Guide.
 	InstanceInterruptionBehavior *string `type:"string" enum:"InstanceInterruptionBehavior"`
 
 	// The maximum hourly price that you're willing to pay for a Spot Instance.
@@ -184537,6 +186013,15 @@ const (
 
 	// CapacityReservationStateFailed is a CapacityReservationState enum value
 	CapacityReservationStateFailed = "failed"
+
+	// CapacityReservationStateScheduled is a CapacityReservationState enum value
+	CapacityReservationStateScheduled = "scheduled"
+
+	// CapacityReservationStatePaymentPending is a CapacityReservationState enum value
+	CapacityReservationStatePaymentPending = "payment-pending"
+
+	// CapacityReservationStatePaymentFailed is a CapacityReservationState enum value
+	CapacityReservationStatePaymentFailed = "payment-failed"
 )
 
 // CapacityReservationState_Values returns all elements of the CapacityReservationState enum
@@ -184547,6 +186032,9 @@ func CapacityReservationState_Values() []string {
 		CapacityReservationStateCancelled,
 		CapacityReservationStatePending,
 		CapacityReservationStateFailed,
+		CapacityReservationStateScheduled,
+		CapacityReservationStatePaymentPending,
+		CapacityReservationStatePaymentFailed,
 	}
 }
 
@@ -184563,6 +186051,22 @@ func CapacityReservationTenancy_Values() []string {
 	return []string{
 		CapacityReservationTenancyDefault,
 		CapacityReservationTenancyDedicated,
+	}
+}
+
+const (
+	// CapacityReservationTypeDefault is a CapacityReservationType enum value
+	CapacityReservationTypeDefault = "default"
+
+	// CapacityReservationTypeCapacityBlock is a CapacityReservationType enum value
+	CapacityReservationTypeCapacityBlock = "capacity-block"
+)
+
+// CapacityReservationType_Values returns all elements of the CapacityReservationType enum
+func CapacityReservationType_Values() []string {
+	return []string{
+		CapacityReservationTypeDefault,
+		CapacityReservationTypeCapacityBlock,
 	}
 }
 
@@ -184916,6 +186420,9 @@ const (
 
 	// DefaultTargetCapacityTypeOnDemand is a DefaultTargetCapacityType enum value
 	DefaultTargetCapacityTypeOnDemand = "on-demand"
+
+	// DefaultTargetCapacityTypeCapacityBlock is a DefaultTargetCapacityType enum value
+	DefaultTargetCapacityTypeCapacityBlock = "capacity-block"
 )
 
 // DefaultTargetCapacityType_Values returns all elements of the DefaultTargetCapacityType enum
@@ -184923,6 +186430,7 @@ func DefaultTargetCapacityType_Values() []string {
 	return []string{
 		DefaultTargetCapacityTypeSpot,
 		DefaultTargetCapacityTypeOnDemand,
+		DefaultTargetCapacityTypeCapacityBlock,
 	}
 }
 
@@ -186308,6 +187816,9 @@ const (
 
 	// InstanceLifecycleTypeScheduled is a InstanceLifecycleType enum value
 	InstanceLifecycleTypeScheduled = "scheduled"
+
+	// InstanceLifecycleTypeCapacityBlock is a InstanceLifecycleType enum value
+	InstanceLifecycleTypeCapacityBlock = "capacity-block"
 )
 
 // InstanceLifecycleType_Values returns all elements of the InstanceLifecycleType enum
@@ -186315,6 +187826,7 @@ func InstanceLifecycleType_Values() []string {
 	return []string{
 		InstanceLifecycleTypeSpot,
 		InstanceLifecycleTypeScheduled,
+		InstanceLifecycleTypeCapacityBlock,
 	}
 }
 
@@ -188693,6 +190205,72 @@ const (
 
 	// InstanceTypeR7iz32xlarge is a InstanceType enum value
 	InstanceTypeR7iz32xlarge = "r7iz.32xlarge"
+
+	// InstanceTypeC7aMedium is a InstanceType enum value
+	InstanceTypeC7aMedium = "c7a.medium"
+
+	// InstanceTypeC7aLarge is a InstanceType enum value
+	InstanceTypeC7aLarge = "c7a.large"
+
+	// InstanceTypeC7aXlarge is a InstanceType enum value
+	InstanceTypeC7aXlarge = "c7a.xlarge"
+
+	// InstanceTypeC7a2xlarge is a InstanceType enum value
+	InstanceTypeC7a2xlarge = "c7a.2xlarge"
+
+	// InstanceTypeC7a4xlarge is a InstanceType enum value
+	InstanceTypeC7a4xlarge = "c7a.4xlarge"
+
+	// InstanceTypeC7a8xlarge is a InstanceType enum value
+	InstanceTypeC7a8xlarge = "c7a.8xlarge"
+
+	// InstanceTypeC7a12xlarge is a InstanceType enum value
+	InstanceTypeC7a12xlarge = "c7a.12xlarge"
+
+	// InstanceTypeC7a16xlarge is a InstanceType enum value
+	InstanceTypeC7a16xlarge = "c7a.16xlarge"
+
+	// InstanceTypeC7a24xlarge is a InstanceType enum value
+	InstanceTypeC7a24xlarge = "c7a.24xlarge"
+
+	// InstanceTypeC7a32xlarge is a InstanceType enum value
+	InstanceTypeC7a32xlarge = "c7a.32xlarge"
+
+	// InstanceTypeC7a48xlarge is a InstanceType enum value
+	InstanceTypeC7a48xlarge = "c7a.48xlarge"
+
+	// InstanceTypeC7aMetal48xl is a InstanceType enum value
+	InstanceTypeC7aMetal48xl = "c7a.metal-48xl"
+
+	// InstanceTypeR7aMetal48xl is a InstanceType enum value
+	InstanceTypeR7aMetal48xl = "r7a.metal-48xl"
+
+	// InstanceTypeR7iLarge is a InstanceType enum value
+	InstanceTypeR7iLarge = "r7i.large"
+
+	// InstanceTypeR7iXlarge is a InstanceType enum value
+	InstanceTypeR7iXlarge = "r7i.xlarge"
+
+	// InstanceTypeR7i2xlarge is a InstanceType enum value
+	InstanceTypeR7i2xlarge = "r7i.2xlarge"
+
+	// InstanceTypeR7i4xlarge is a InstanceType enum value
+	InstanceTypeR7i4xlarge = "r7i.4xlarge"
+
+	// InstanceTypeR7i8xlarge is a InstanceType enum value
+	InstanceTypeR7i8xlarge = "r7i.8xlarge"
+
+	// InstanceTypeR7i12xlarge is a InstanceType enum value
+	InstanceTypeR7i12xlarge = "r7i.12xlarge"
+
+	// InstanceTypeR7i16xlarge is a InstanceType enum value
+	InstanceTypeR7i16xlarge = "r7i.16xlarge"
+
+	// InstanceTypeR7i24xlarge is a InstanceType enum value
+	InstanceTypeR7i24xlarge = "r7i.24xlarge"
+
+	// InstanceTypeR7i48xlarge is a InstanceType enum value
+	InstanceTypeR7i48xlarge = "r7i.48xlarge"
 )
 
 // InstanceType_Values returns all elements of the InstanceType enum
@@ -189447,6 +191025,28 @@ func InstanceType_Values() []string {
 		InstanceTypeR7iz12xlarge,
 		InstanceTypeR7iz16xlarge,
 		InstanceTypeR7iz32xlarge,
+		InstanceTypeC7aMedium,
+		InstanceTypeC7aLarge,
+		InstanceTypeC7aXlarge,
+		InstanceTypeC7a2xlarge,
+		InstanceTypeC7a4xlarge,
+		InstanceTypeC7a8xlarge,
+		InstanceTypeC7a12xlarge,
+		InstanceTypeC7a16xlarge,
+		InstanceTypeC7a24xlarge,
+		InstanceTypeC7a32xlarge,
+		InstanceTypeC7a48xlarge,
+		InstanceTypeC7aMetal48xl,
+		InstanceTypeR7aMetal48xl,
+		InstanceTypeR7iLarge,
+		InstanceTypeR7iXlarge,
+		InstanceTypeR7i2xlarge,
+		InstanceTypeR7i4xlarge,
+		InstanceTypeR7i8xlarge,
+		InstanceTypeR7i12xlarge,
+		InstanceTypeR7i16xlarge,
+		InstanceTypeR7i24xlarge,
+		InstanceTypeR7i48xlarge,
 	}
 }
 
@@ -190433,12 +192033,16 @@ func LogDestinationType_Values() []string {
 const (
 	// MarketTypeSpot is a MarketType enum value
 	MarketTypeSpot = "spot"
+
+	// MarketTypeCapacityBlock is a MarketType enum value
+	MarketTypeCapacityBlock = "capacity-block"
 )
 
 // MarketType_Values returns all elements of the MarketType enum
 func MarketType_Values() []string {
 	return []string{
 		MarketTypeSpot,
+		MarketTypeCapacityBlock,
 	}
 }
 
@@ -192015,6 +193619,26 @@ func SnapshotAttributeName_Values() []string {
 }
 
 const (
+	// SnapshotBlockPublicAccessStateBlockAllSharing is a SnapshotBlockPublicAccessState enum value
+	SnapshotBlockPublicAccessStateBlockAllSharing = "block-all-sharing"
+
+	// SnapshotBlockPublicAccessStateBlockNewSharing is a SnapshotBlockPublicAccessState enum value
+	SnapshotBlockPublicAccessStateBlockNewSharing = "block-new-sharing"
+
+	// SnapshotBlockPublicAccessStateUnblocked is a SnapshotBlockPublicAccessState enum value
+	SnapshotBlockPublicAccessStateUnblocked = "unblocked"
+)
+
+// SnapshotBlockPublicAccessState_Values returns all elements of the SnapshotBlockPublicAccessState enum
+func SnapshotBlockPublicAccessState_Values() []string {
+	return []string{
+		SnapshotBlockPublicAccessStateBlockAllSharing,
+		SnapshotBlockPublicAccessStateBlockNewSharing,
+		SnapshotBlockPublicAccessStateUnblocked,
+	}
+}
+
+const (
 	// SnapshotStatePending is a SnapshotState enum value
 	SnapshotStatePending = "pending"
 
@@ -193168,6 +194792,9 @@ const (
 
 	// UsageClassTypeOnDemand is a UsageClassType enum value
 	UsageClassTypeOnDemand = "on-demand"
+
+	// UsageClassTypeCapacityBlock is a UsageClassType enum value
+	UsageClassTypeCapacityBlock = "capacity-block"
 )
 
 // UsageClassType_Values returns all elements of the UsageClassType enum
@@ -193175,6 +194802,7 @@ func UsageClassType_Values() []string {
 	return []string{
 		UsageClassTypeSpot,
 		UsageClassTypeOnDemand,
+		UsageClassTypeCapacityBlock,
 	}
 }
 
