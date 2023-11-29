@@ -7,7 +7,7 @@ import (
 	"strconv"
 
 	"github.com/osbuild/images/internal/common"
-	"github.com/osbuild/images/pkg/platform"
+	"github.com/osbuild/images/pkg/arch"
 	"github.com/osbuild/images/pkg/rpmmd"
 )
 
@@ -87,8 +87,8 @@ func iotCommitPackageSet(t *imageType) rpmmd.PackageSet {
 			"clevis-dracut",
 			"clevis-luks",
 			"clevis-pin-tpm2",
-			"container-selinux",
 			"containernetworking-plugins",
+			"container-selinux",
 			"coreutils",
 			"cracklib-dicts",
 			"criu",
@@ -101,6 +101,7 @@ func iotCommitPackageSet(t *imageType) rpmmd.PackageSet {
 			"dracut-network",
 			"e2fsprogs",
 			"efibootmgr",
+			"fedora-iot-config",
 			"fedora-release-iot",
 			"firewalld",
 			"fwupd",
@@ -131,9 +132,9 @@ func iotCommitPackageSet(t *imageType) rpmmd.PackageSet {
 			"NetworkManager-wifi",
 			"NetworkManager-wwan",
 			"nss-altfiles",
-			"openssl",
 			"openssh-clients",
 			"openssh-server",
+			"openssl",
 			"parsec",
 			"passwd",
 			"pinentry",
@@ -164,8 +165,8 @@ func iotCommitPackageSet(t *imageType) rpmmd.PackageSet {
 			"usbguard",
 			"util-linux",
 			"vim-minimal",
-			"wpa_supplicant",
 			"wireless-regdb",
+			"wpa_supplicant",
 			"xfsprogs",
 			"xz",
 			"zezere-ignition",
@@ -363,7 +364,7 @@ func anacondaPackageSet(t *imageType) rpmmd.PackageSet {
 	}
 
 	switch t.Arch().Name() {
-	case platform.ARCH_X86_64.String():
+	case arch.ARCH_X86_64.String():
 		ps = ps.Append(rpmmd.PackageSet{
 			Include: []string{
 				"biosdevname",
@@ -373,7 +374,7 @@ func anacondaPackageSet(t *imageType) rpmmd.PackageSet {
 			},
 		})
 
-	case platform.ARCH_AARCH64.String():
+	case arch.ARCH_AARCH64.String():
 		ps = ps.Append(rpmmd.PackageSet{
 			Include: []string{
 				"dmidecode",
