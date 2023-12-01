@@ -3,7 +3,6 @@ package openapi3filter
 import (
 	"bytes"
 	"io"
-	"io/ioutil"
 	"log"
 	"net/http"
 
@@ -16,6 +15,7 @@ type Validator struct {
 	errFunc ErrFunc
 	logFunc LogFunc
 	strict  bool
+	options Options
 }
 
 // ErrFunc handles errors that may occur during validation.
@@ -56,7 +56,7 @@ func (e ErrCode) responseText() string {
 	}
 }
 
-// NewValidator returns a new response validation middlware, using the given
+// NewValidator returns a new response validation middleware, using the given
 // routes from an OpenAPI 3 specification.
 func NewValidator(router routers.Router, options ...ValidatorOption) *Validator {
 	v := &Validator{
@@ -106,6 +106,13 @@ func Strict(strict bool) ValidatorOption {
 	}
 }
 
+// ValidationOptions sets request/response validation options on the validator.
+func ValidationOptions(options Options) ValidatorOption {
+	return func(v *Validator) {
+		v.options = options
+	}
+}
+
 // Middleware returns an http.Handler which wraps the given handler with
 // request and response validation.
 func (v *Validator) Middleware(h http.Handler) http.Handler {
@@ -120,6 +127,7 @@ func (v *Validator) Middleware(h http.Handler) http.Handler {
 			Request:    r,
 			PathParams: pathParams,
 			Route:      route,
+			Options:    &v.options,
 		}
 		if err = ValidateRequest(r.Context(), requestValidationInput); err != nil {
 			v.logFunc("invalid request", err)
@@ -140,7 +148,8 @@ func (v *Validator) Middleware(h http.Handler) http.Handler {
 			RequestValidationInput: requestValidationInput,
 			Status:                 wr.statusCode(),
 			Header:                 wr.Header(),
-			Body:                   ioutil.NopCloser(bytes.NewBuffer(wr.bodyContents())),
+			Body:                   io.NopCloser(bytes.NewBuffer(wr.bodyContents())),
+			Options:                &v.options,
 		}); err != nil {
 			v.logFunc("invalid response", err)
 			if v.strict {
