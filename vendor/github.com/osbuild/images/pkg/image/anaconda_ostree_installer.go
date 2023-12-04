@@ -6,6 +6,7 @@ import (
 
 	"github.com/osbuild/images/internal/common"
 	"github.com/osbuild/images/internal/users"
+	"github.com/osbuild/images/pkg/arch"
 	"github.com/osbuild/images/pkg/artifact"
 	"github.com/osbuild/images/pkg/disk"
 	"github.com/osbuild/images/pkg/manifest"
@@ -38,6 +39,7 @@ type AnacondaOSTreeInstaller struct {
 	AdditionalDracutModules   []string
 	AdditionalAnacondaModules []string
 	AdditionalDrivers         []string
+	FIPS                      bool
 }
 
 func NewAnacondaOSTreeInstaller(commit ostree.SourceSpec) *AnacondaOSTreeInstaller {
@@ -68,10 +70,16 @@ func (img *AnacondaOSTreeInstaller) InstantiateManifest(m *manifest.Manifest,
 	anacondaPipeline.Users = img.Users
 	anacondaPipeline.Groups = img.Groups
 	anacondaPipeline.Variant = img.Variant
-	anacondaPipeline.Biosdevname = (img.Platform.GetArch() == platform.ARCH_X86_64)
+	anacondaPipeline.Biosdevname = (img.Platform.GetArch() == arch.ARCH_X86_64)
 	anacondaPipeline.Checkpoint()
 	anacondaPipeline.AdditionalDracutModules = img.AdditionalDracutModules
 	anacondaPipeline.AdditionalAnacondaModules = img.AdditionalAnacondaModules
+	if img.FIPS {
+		anacondaPipeline.AdditionalAnacondaModules = append(
+			anacondaPipeline.AdditionalAnacondaModules,
+			"org.fedoraproject.Anaconda.Modules.Security",
+		)
+	}
 	anacondaPipeline.AdditionalDrivers = img.AdditionalDrivers
 
 	rootfsPartitionTable := &disk.PartitionTable{
@@ -100,9 +108,12 @@ func (img *AnacondaOSTreeInstaller) InstantiateManifest(m *manifest.Manifest,
 	bootTreePipeline.UEFIVendor = img.Platform.GetUEFIVendor()
 	bootTreePipeline.ISOLabel = isoLabel
 	bootTreePipeline.KernelOpts = []string{fmt.Sprintf("inst.stage2=hd:LABEL=%s", isoLabel), fmt.Sprintf("inst.ks=hd:LABEL=%s:%s", isoLabel, kspath)}
+	if img.FIPS {
+		bootTreePipeline.KernelOpts = append(bootTreePipeline.KernelOpts, "fips=1")
+	}
 
 	// enable ISOLinux on x86_64 only
-	isoLinuxEnabled := img.Platform.GetArch() == platform.ARCH_X86_64
+	isoLinuxEnabled := img.Platform.GetArch() == arch.ARCH_X86_64
 
 	isoTreePipeline := manifest.NewAnacondaInstallerISOTree(buildPipeline, anacondaPipeline, rootfsImagePipeline, bootTreePipeline)
 	isoTreePipeline.PartitionTable = rootfsPartitionTable
@@ -119,6 +130,9 @@ func (img *AnacondaOSTreeInstaller) InstantiateManifest(m *manifest.Manifest,
 
 	isoTreePipeline.OSTreeCommitSource = &img.Commit
 	isoTreePipeline.ISOLinux = isoLinuxEnabled
+	if img.FIPS {
+		isoTreePipeline.KernelOpts = append(isoTreePipeline.KernelOpts, "fips=1")
+	}
 
 	isoPipeline := manifest.NewISO(buildPipeline, isoTreePipeline, isoLabel)
 	isoPipeline.SetFilename(img.Filename)

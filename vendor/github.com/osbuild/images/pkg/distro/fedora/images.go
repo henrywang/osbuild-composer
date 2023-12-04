@@ -491,7 +491,7 @@ func iotImage(workload workload.Workload,
 	if err != nil {
 		return nil, fmt.Errorf("%s: %s", t.Name(), err.Error())
 	}
-	img := image.NewOSTreeDiskImage(commit)
+	img := image.NewOSTreeDiskImageFromCommit(commit)
 
 	distro := t.Arch().Distro()
 
@@ -519,15 +519,13 @@ func iotImage(workload workload.Workload,
 	img.Workload = workload
 
 	img.Remote = ostree.Remote{
-		Name:        "fedora-iot",
-		URL:         "https://ostree.fedoraproject.org/iot",
-		ContentURL:  "mirrorlist=https://ostree.fedoraproject.org/iot/mirrorlist",
-		GPGKeyPaths: []string{"/etc/pki/rpm-gpg/"},
+		Name: "fedora-iot",
 	}
 	img.OSName = "fedora-iot"
+	img.LockRoot = true
 
 	if !common.VersionLessThan(distro.Releasever(), "38") {
-		img.Ignition = true
+		img.KernelOptionsAppend = append(img.KernelOptionsAppend, "coreos.no_persist_ip")
 		switch img.Platform.GetImageFormat() {
 		case platform.FORMAT_RAW:
 			img.IgnitionPlatform = "metal"
@@ -568,7 +566,7 @@ func iotSimplifiedInstallerImage(workload workload.Workload,
 	if err != nil {
 		return nil, fmt.Errorf("%s: %s", t.Name(), err.Error())
 	}
-	rawImg := image.NewOSTreeDiskImage(commit)
+	rawImg := image.NewOSTreeDiskImageFromCommit(commit)
 
 	customizations := bp.Customizations
 	rawImg.Users = users.UsersFromBP(customizations.GetUsers())
@@ -585,15 +583,14 @@ func iotSimplifiedInstallerImage(workload workload.Workload,
 	rawImg.Platform = t.platform
 	rawImg.Workload = workload
 	rawImg.Remote = ostree.Remote{
-		Name:       "fedora-iot",
-		URL:        options.OSTree.URL,
-		ContentURL: options.OSTree.ContentURL,
+		Name: "fedora-iot",
 	}
 	rawImg.OSName = "fedora"
+	rawImg.LockRoot = true
 
 	if !common.VersionLessThan(t.arch.distro.osVersion, "38") {
-		rawImg.Ignition = true
 		rawImg.IgnitionPlatform = "metal"
+		rawImg.KernelOptionsAppend = append(rawImg.KernelOptionsAppend, "coreos.no_persist_ip")
 		if bpIgnition := customizations.GetIgnition(); bpIgnition != nil && bpIgnition.FirstBoot != nil && bpIgnition.FirstBoot.ProvisioningURL != "" {
 			rawImg.KernelOptionsAppend = append(rawImg.KernelOptionsAppend, "ignition.config.url="+bpIgnition.FirstBoot.ProvisioningURL)
 		}
