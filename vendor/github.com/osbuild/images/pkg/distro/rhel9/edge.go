@@ -5,11 +5,11 @@ import (
 
 	"github.com/osbuild/images/internal/common"
 	"github.com/osbuild/images/internal/environment"
-	"github.com/osbuild/images/internal/fsnode"
+	"github.com/osbuild/images/pkg/arch"
+	"github.com/osbuild/images/pkg/customizations/fsnode"
 	"github.com/osbuild/images/pkg/disk"
 	"github.com/osbuild/images/pkg/distro"
 	"github.com/osbuild/images/pkg/osbuild"
-	"github.com/osbuild/images/pkg/platform"
 	"github.com/osbuild/images/pkg/rpmmd"
 )
 
@@ -237,7 +237,7 @@ func minimalrawPartitionTables(t *imageType) (disk.PartitionTable, bool) {
 	}
 
 	switch t.platform.GetArch() {
-	case platform.ARCH_X86_64:
+	case arch.ARCH_X86_64:
 		return disk.PartitionTable{
 			UUID:        "D209C89E-EA5E-4FBD-B161-B461CCE297E0",
 			Type:        "gpt",
@@ -285,7 +285,7 @@ func minimalrawPartitionTables(t *imageType) (disk.PartitionTable, bool) {
 				},
 			},
 		}, true
-	case platform.ARCH_AARCH64:
+	case arch.ARCH_AARCH64:
 		return disk.PartitionTable{
 			UUID:        "D209C89E-EA5E-4FBD-B161-B461CCE297E0",
 			Type:        "gpt",
@@ -340,7 +340,7 @@ func minimalrawPartitionTables(t *imageType) (disk.PartitionTable, bool) {
 
 func edgeBasePartitionTables(t *imageType) (disk.PartitionTable, bool) {
 	switch t.platform.GetArch() {
-	case platform.ARCH_X86_64:
+	case arch.ARCH_X86_64:
 		return disk.PartitionTable{
 			UUID: "D209C89E-EA5E-4FBD-B161-B461CCE297E0",
 			Type: "gpt",
@@ -400,7 +400,7 @@ func edgeBasePartitionTables(t *imageType) (disk.PartitionTable, bool) {
 							Description: "built with lvm2 and osbuild",
 							LogicalVolumes: []disk.LVMLogicalVolume{
 								{
-									Size: 9 * 1024 * 1024 * 1024, // 9 GB
+									Size: 9 * common.GiB, // 9 GiB
 									Name: "rootlv",
 									Payload: &disk.Filesystem{
 										Type:         "xfs",
@@ -417,7 +417,7 @@ func edgeBasePartitionTables(t *imageType) (disk.PartitionTable, bool) {
 				},
 			},
 		}, true
-	case platform.ARCH_AARCH64:
+	case arch.ARCH_AARCH64:
 		return disk.PartitionTable{
 			UUID: "D209C89E-EA5E-4FBD-B161-B461CCE297E0",
 			Type: "gpt",
@@ -471,7 +471,7 @@ func edgeBasePartitionTables(t *imageType) (disk.PartitionTable, bool) {
 							Description: "built with lvm2 and osbuild",
 							LogicalVolumes: []disk.LVMLogicalVolume{
 								{
-									Size: 9 * 1024 * 1024 * 1024, // 9 GB
+									Size: 9 * common.GiB, // 9 GiB
 									Name: "rootlv",
 									Payload: &disk.Filesystem{
 										Type:         "xfs",
@@ -582,10 +582,10 @@ func edgeCommitPackageSet(t *imageType) rpmmd.PackageSet {
 	}
 
 	switch t.arch.Name() {
-	case platform.ARCH_X86_64.String():
+	case arch.ARCH_X86_64.String():
 		ps = ps.Append(x8664EdgeCommitPackageSet(t))
 
-	case platform.ARCH_AARCH64.String():
+	case arch.ARCH_AARCH64.String():
 		ps = ps.Append(aarch64EdgeCommitPackageSet(t))
 	}
 
@@ -682,9 +682,9 @@ func edgeSimplifiedInstallerPackageSet(t *imageType) rpmmd.PackageSet {
 
 	switch t.arch.Name() {
 
-	case platform.ARCH_X86_64.String():
+	case arch.ARCH_X86_64.String():
 		ps = ps.Append(x8664EdgeCommitPackageSet(t))
-	case platform.ARCH_AARCH64.String():
+	case arch.ARCH_AARCH64.String():
 		ps = ps.Append(aarch64EdgeCommitPackageSet(t))
 
 	default:
