@@ -81066,15 +81066,15 @@ type CreateVolumeInput struct {
 	//
 	// The following are the supported values for each volume type:
 	//
-	//    * gp3: 3,000-16,000 IOPS
+	//    * gp3: 3,000 - 16,000 IOPS
 	//
-	//    * io1: 100-64,000 IOPS
+	//    * io1: 100 - 64,000 IOPS
 	//
-	//    * io2: 100-64,000 IOPS
+	//    * io2: 100 - 256,000 IOPS
 	//
-	// io1 and io2 volumes support up to 64,000 IOPS only on Instances built on
+	// For io2 volumes, you can achieve up to 256,000 IOPS on instances built on
 	// the Nitro System (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html#ec2-nitro-instances).
-	// Other instance families support performance up to 32,000 IOPS.
+	// On other instances, you can achieve performance up to 32,000 IOPS.
 	//
 	// This parameter is required for io1 and io2 volumes. The default for gp3 volumes
 	// is 3,000 IOPS. This parameter is not supported for gp2, st1, sc1, or standard
@@ -81118,13 +81118,15 @@ type CreateVolumeInput struct {
 	//
 	// The following are the supported volumes sizes for each volume type:
 	//
-	//    * gp2 and gp3: 1-16,384
+	//    * gp2 and gp3: 1 - 16,384 GiB
 	//
-	//    * io1 and io2: 4-16,384
+	//    * io1: 4 - 16,384 GiB
 	//
-	//    * st1 and sc1: 125-16,384
+	//    * io2: 4 - 65,536 GiB
 	//
-	//    * standard: 1-1,024
+	//    * st1 and sc1: 125 - 16,384 GiB
+	//
+	//    * standard: 1 - 1024 GiB
 	Size *int64 `type:"integer"`
 
 	// The snapshot from which to create the volume. You must specify either a snapshot
@@ -106400,8 +106402,8 @@ type DescribeSpotInstanceRequestsInput struct {
 	//    in GiB.
 	//
 	//    * launch.block-device-mapping.volume-type - The type of EBS volume: gp2
-	//    for General Purpose SSD, io1 or io2 for Provisioned IOPS SSD, st1 for
-	//    Throughput Optimized HDD, sc1for Cold HDD, or standard for Magnetic.
+	//    or gp3 for General Purpose SSD, io1 or io2 for Provisioned IOPS SSD, st1
+	//    for Throughput Optimized HDD, sc1 for Cold HDD, or standard for Magnetic.
 	//
 	//    * launch.group-id - The ID of the security group for the instance.
 	//
@@ -116785,19 +116787,18 @@ type EbsBlockDevice struct {
 	//
 	// The following are the supported values for each volume type:
 	//
-	//    * gp3: 3,000-16,000 IOPS
+	//    * gp3: 3,000 - 16,000 IOPS
 	//
-	//    * io1: 100-64,000 IOPS
+	//    * io1: 100 - 64,000 IOPS
 	//
-	//    * io2: 100-64,000 IOPS
+	//    * io2: 100 - 256,000 IOPS
 	//
-	// For io1 and io2 volumes, we guarantee 64,000 IOPS only for Instances built
-	// on the Nitro System (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html#ec2-nitro-instances).
-	// Other instance families guarantee performance up to 32,000 IOPS.
+	// For io2 volumes, you can achieve up to 256,000 IOPS on instances built on
+	// the Nitro System (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html#ec2-nitro-instances).
+	// On other instances, you can achieve performance up to 32,000 IOPS.
 	//
 	// This parameter is required for io1 and io2 volumes. The default for gp3 volumes
-	// is 3,000 IOPS. This parameter is not supported for gp2, st1, sc1, or standard
-	// volumes.
+	// is 3,000 IOPS.
 	Iops *int64 `locationName:"iops" type:"integer"`
 
 	// Identifier (key ID, key alias, ID ARN, or alias ARN) for a customer managed
@@ -116829,20 +116830,21 @@ type EbsBlockDevice struct {
 	// You can specify a volume size that is equal to or larger than the snapshot
 	// size.
 	//
-	// The following are the supported volumes sizes for each volume type:
+	// The following are the supported sizes for each volume type:
 	//
-	//    * gp2 and gp3:1-16,384
+	//    * gp2 and gp3: 1 - 16,384 GiB
 	//
-	//    * io1 and io2: 4-16,384
+	//    * io1: 4 - 16,384 GiB
 	//
-	//    * st1 and sc1: 125-16,384
+	//    * io2: 4 - 65,536 GiB
 	//
-	//    * standard: 1-1,024
+	//    * st1 and sc1: 125 - 16,384 GiB
+	//
+	//    * standard: 1 - 1024 GiB
 	VolumeSize *int64 `locationName:"volumeSize" type:"integer"`
 
 	// The volume type. For more information, see Amazon EBS volume types (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html)
-	// in the Amazon EC2 User Guide. If the volume type is io1 or io2, you must
-	// specify the IOPS that the volume supports.
+	// in the Amazon EC2 User Guide.
 	VolumeType *string `locationName:"volumeType" type:"string" enum:"VolumeType"`
 }
 
@@ -136121,11 +136123,13 @@ type InstanceRequirements struct {
 
 	// Indicates whether instance types must have accelerators by specific manufacturers.
 	//
-	//    * For instance types with NVIDIA devices, specify nvidia.
+	//    * For instance types with Amazon Web Services devices, specify amazon-web-services.
 	//
 	//    * For instance types with AMD devices, specify amd.
 	//
-	//    * For instance types with Amazon Web Services devices, specify amazon-web-services.
+	//    * For instance types with Habana devices, specify habana.
+	//
+	//    * For instance types with NVIDIA devices, specify nvidia.
 	//
 	//    * For instance types with Xilinx devices, specify xilinx.
 	//
@@ -136134,24 +136138,30 @@ type InstanceRequirements struct {
 
 	// The accelerators that must be on the instance type.
 	//
+	//    * For instance types with NVIDIA A10G GPUs, specify a10g.
+	//
 	//    * For instance types with NVIDIA A100 GPUs, specify a100.
 	//
-	//    * For instance types with NVIDIA V100 GPUs, specify v100.
-	//
-	//    * For instance types with NVIDIA K80 GPUs, specify k80.
-	//
-	//    * For instance types with NVIDIA T4 GPUs, specify t4.
-	//
-	//    * For instance types with NVIDIA M60 GPUs, specify m60.
-	//
-	//    * For instance types with AMD Radeon Pro V520 GPUs, specify radeon-pro-v520.
-	//
-	//    * For instance types with Xilinx VU9P FPGAs, specify vu9p.
+	//    * For instance types with NVIDIA H100 GPUs, specify h100.
 	//
 	//    * For instance types with Amazon Web Services Inferentia chips, specify
 	//    inferentia.
 	//
 	//    * For instance types with NVIDIA GRID K520 GPUs, specify k520.
+	//
+	//    * For instance types with NVIDIA K80 GPUs, specify k80.
+	//
+	//    * For instance types with NVIDIA M60 GPUs, specify m60.
+	//
+	//    * For instance types with AMD Radeon Pro V520 GPUs, specify radeon-pro-v520.
+	//
+	//    * For instance types with NVIDIA T4 GPUs, specify t4.
+	//
+	//    * For instance types with NVIDIA T4G GPUs, specify t4g.
+	//
+	//    * For instance types with Xilinx VU9P FPGAs, specify vu9p.
+	//
+	//    * For instance types with NVIDIA V100 GPUs, specify v100.
 	//
 	// Default: Any accelerator
 	AcceleratorNames []*string `locationName:"acceleratorNameSet" locationNameList:"item" type:"list" enum:"AcceleratorName"`
@@ -136565,11 +136575,13 @@ type InstanceRequirementsRequest struct {
 
 	// Indicates whether instance types must have accelerators by specific manufacturers.
 	//
-	//    * For instance types with NVIDIA devices, specify nvidia.
+	//    * For instance types with Amazon Web Services devices, specify amazon-web-services.
 	//
 	//    * For instance types with AMD devices, specify amd.
 	//
-	//    * For instance types with Amazon Web Services devices, specify amazon-web-services.
+	//    * For instance types with Habana devices, specify habana.
+	//
+	//    * For instance types with NVIDIA devices, specify nvidia.
 	//
 	//    * For instance types with Xilinx devices, specify xilinx.
 	//
@@ -136578,24 +136590,30 @@ type InstanceRequirementsRequest struct {
 
 	// The accelerators that must be on the instance type.
 	//
+	//    * For instance types with NVIDIA A10G GPUs, specify a10g.
+	//
 	//    * For instance types with NVIDIA A100 GPUs, specify a100.
 	//
-	//    * For instance types with NVIDIA V100 GPUs, specify v100.
-	//
-	//    * For instance types with NVIDIA K80 GPUs, specify k80.
-	//
-	//    * For instance types with NVIDIA T4 GPUs, specify t4.
-	//
-	//    * For instance types with NVIDIA M60 GPUs, specify m60.
-	//
-	//    * For instance types with AMD Radeon Pro V520 GPUs, specify radeon-pro-v520.
-	//
-	//    * For instance types with Xilinx VU9P FPGAs, specify vu9p.
+	//    * For instance types with NVIDIA H100 GPUs, specify h100.
 	//
 	//    * For instance types with Amazon Web Services Inferentia chips, specify
 	//    inferentia.
 	//
 	//    * For instance types with NVIDIA GRID K520 GPUs, specify k520.
+	//
+	//    * For instance types with NVIDIA K80 GPUs, specify k80.
+	//
+	//    * For instance types with NVIDIA M60 GPUs, specify m60.
+	//
+	//    * For instance types with AMD Radeon Pro V520 GPUs, specify radeon-pro-v520.
+	//
+	//    * For instance types with NVIDIA T4 GPUs, specify t4.
+	//
+	//    * For instance types with NVIDIA T4G GPUs, specify t4g.
+	//
+	//    * For instance types with Xilinx VU9P FPGAs, specify vu9p.
+	//
+	//    * For instance types with NVIDIA V100 GPUs, specify v100.
 	//
 	// Default: Any accelerator
 	AcceleratorNames []*string `locationName:"AcceleratorName" locationNameList:"item" type:"list" enum:"AcceleratorName"`
@@ -142055,18 +142073,17 @@ type LaunchTemplateEbsBlockDeviceRequest struct {
 	//
 	// The following are the supported values for each volume type:
 	//
-	//    * gp3: 3,000-16,000 IOPS
+	//    * gp3: 3,000 - 16,000 IOPS
 	//
-	//    * io1: 100-64,000 IOPS
+	//    * io1: 100 - 64,000 IOPS
 	//
-	//    * io2: 100-64,000 IOPS
+	//    * io2: 100 - 256,000 IOPS
 	//
-	// For io1 and io2 volumes, we guarantee 64,000 IOPS only for Instances built
-	// on the Nitro System (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html#ec2-nitro-instances).
-	// Other instance families guarantee performance up to 32,000 IOPS.
+	// For io2 volumes, you can achieve up to 256,000 IOPS on instances built on
+	// the Nitro System (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html#ec2-nitro-instances).
+	// On other instances, you can achieve performance up to 32,000 IOPS.
 	//
-	// This parameter is supported for io1, io2, and gp3 volumes only. This parameter
-	// is not supported for gp2, st1, sc1, or standard volumes.
+	// This parameter is supported for io1, io2, and gp3 volumes only.
 	Iops *int64 `type:"integer"`
 
 	// The ARN of the symmetric Key Management Service (KMS) CMK used for encryption.
@@ -142084,13 +142101,15 @@ type LaunchTemplateEbsBlockDeviceRequest struct {
 	// a volume size. The following are the supported volumes sizes for each volume
 	// type:
 	//
-	//    * gp2 and gp3: 1-16,384
+	//    * gp2 and gp3: 1 - 16,384 GiB
 	//
-	//    * io1 and io2: 4-16,384
+	//    * io1: 4 - 16,384 GiB
 	//
-	//    * st1 and sc1: 125-16,384
+	//    * io2: 4 - 65,536 GiB
 	//
-	//    * standard: 1-1,024
+	//    * st1 and sc1: 125 - 16,384 GiB
+	//
+	//    * standard: 1 - 1024 GiB
 	VolumeSize *int64 `type:"integer"`
 
 	// The volume type. For more information, see Amazon EBS volume types (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html)
@@ -153779,11 +153798,15 @@ type ModifyVolumeInput struct {
 	//
 	// The following are the supported values for each volume type:
 	//
-	//    * gp3: 3,000-16,000 IOPS
+	//    * gp3: 3,000 - 16,000 IOPS
 	//
-	//    * io1: 100-64,000 IOPS
+	//    * io1: 100 - 64,000 IOPS
 	//
-	//    * io2: 100-64,000 IOPS
+	//    * io2: 100 - 256,000 IOPS
+	//
+	// For io2 volumes, you can achieve up to 256,000 IOPS on instances built on
+	// the Nitro System (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html#ec2-nitro-instances).
+	// On other instances, you can achieve performance up to 32,000 IOPS.
 	//
 	// Default: The existing value is retained if you keep the same volume type.
 	// If you change the volume type to io1, io2, or gp3, the default is 3,000.
@@ -153801,13 +153824,15 @@ type ModifyVolumeInput struct {
 	//
 	// The following are the supported volumes sizes for each volume type:
 	//
-	//    * gp2 and gp3: 1-16,384
+	//    * gp2 and gp3: 1 - 16,384 GiB
 	//
-	//    * io1 and io2: 4-16,384
+	//    * io1: 4 - 16,384 GiB
 	//
-	//    * st1 and sc1: 125-16,384
+	//    * io2: 4 - 65,536 GiB
 	//
-	//    * standard: 1-1,024
+	//    * st1 and sc1: 125 - 16,384 GiB
+	//
+	//    * standard: 1 - 1024 GiB
 	//
 	// Default: The existing size is retained.
 	Size *int64 `type:"integer"`
@@ -160992,6 +161017,9 @@ func (s *PrivateIpAddressSpecification) SetPrivateIpAddress(v string) *PrivateIp
 type ProcessorInfo struct {
 	_ struct{} `type:"structure"`
 
+	// The manufacturer of the processor.
+	Manufacturer *string `locationName:"manufacturer" type:"string"`
+
 	// The architectures supported by the instance type.
 	SupportedArchitectures []*string `locationName:"supportedArchitectures" locationNameList:"item" type:"list" enum:"ArchitectureType"`
 
@@ -161020,6 +161048,12 @@ func (s ProcessorInfo) String() string {
 // value will be replaced with "sensitive".
 func (s ProcessorInfo) GoString() string {
 	return s.String()
+}
+
+// SetManufacturer sets the Manufacturer field's value.
+func (s *ProcessorInfo) SetManufacturer(v string) *ProcessorInfo {
+	s.Manufacturer = &v
+	return s
 }
 
 // SetSupportedArchitectures sets the SupportedArchitectures field's value.
@@ -171882,16 +171916,8 @@ type ScheduledInstancesEbs struct {
 	// only to instances that support them.
 	Encrypted *bool `type:"boolean"`
 
-	// The number of I/O operations per second (IOPS) to provision for an io1 or
-	// io2 volume, with a maximum ratio of 50 IOPS/GiB for io1, and 500 IOPS/GiB
-	// for io2. Range is 100 to 64,000 IOPS for volumes in most Regions. Maximum
-	// IOPS of 64,000 is guaranteed only on instances built on the Nitro System
-	// (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html#ec2-nitro-instances).
-	// Other instance families guarantee performance up to 32,000 IOPS. For more
-	// information, see Amazon EBS volume types (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html)
-	// in the Amazon EC2 User Guide.
-	//
-	// This parameter is valid only for Provisioned IOPS SSD (io1 and io2) volumes.
+	// The number of I/O operations per second (IOPS) to provision for a gp3, io1,
+	// or io2 volume.
 	Iops *int64 `type:"integer"`
 
 	// The ID of the snapshot.
@@ -171903,9 +171929,7 @@ type ScheduledInstancesEbs struct {
 	// a volume size, the default is the snapshot size.
 	VolumeSize *int64 `type:"integer"`
 
-	// The volume type. gp2 for General Purpose SSD, io1 or io2 for Provisioned
-	// IOPS SSD, Throughput Optimized HDD for st1, Cold HDD for sc1, or standard
-	// for Magnetic.
+	// The volume type.
 	//
 	// Default: gp2
 	VolumeType *string `type:"string"`
@@ -189035,6 +189059,9 @@ const (
 
 	// AcceleratorManufacturerXilinx is a AcceleratorManufacturer enum value
 	AcceleratorManufacturerXilinx = "xilinx"
+
+	// AcceleratorManufacturerHabana is a AcceleratorManufacturer enum value
+	AcceleratorManufacturerHabana = "habana"
 )
 
 // AcceleratorManufacturer_Values returns all elements of the AcceleratorManufacturer enum
@@ -189044,6 +189071,7 @@ func AcceleratorManufacturer_Values() []string {
 		AcceleratorManufacturerAmd,
 		AcceleratorManufacturerNvidia,
 		AcceleratorManufacturerXilinx,
+		AcceleratorManufacturerHabana,
 	}
 }
 
@@ -189074,6 +189102,15 @@ const (
 
 	// AcceleratorNameV100 is a AcceleratorName enum value
 	AcceleratorNameV100 = "v100"
+
+	// AcceleratorNameA10g is a AcceleratorName enum value
+	AcceleratorNameA10g = "a10g"
+
+	// AcceleratorNameH100 is a AcceleratorName enum value
+	AcceleratorNameH100 = "h100"
+
+	// AcceleratorNameT4g is a AcceleratorName enum value
+	AcceleratorNameT4g = "t4g"
 )
 
 // AcceleratorName_Values returns all elements of the AcceleratorName enum
@@ -189088,6 +189125,9 @@ func AcceleratorName_Values() []string {
 		AcceleratorNameT4,
 		AcceleratorNameVu9p,
 		AcceleratorNameV100,
+		AcceleratorNameA10g,
+		AcceleratorNameH100,
+		AcceleratorNameT4g,
 	}
 }
 
@@ -194307,6 +194347,33 @@ const (
 
 	// InstanceTypeDl2q24xlarge is a InstanceType enum value
 	InstanceTypeDl2q24xlarge = "dl2q.24xlarge"
+
+	// InstanceTypeMac2M2Metal is a InstanceType enum value
+	InstanceTypeMac2M2Metal = "mac2-m2.metal"
+
+	// InstanceTypeI4i12xlarge is a InstanceType enum value
+	InstanceTypeI4i12xlarge = "i4i.12xlarge"
+
+	// InstanceTypeI4i24xlarge is a InstanceType enum value
+	InstanceTypeI4i24xlarge = "i4i.24xlarge"
+
+	// InstanceTypeC7iMetal24xl is a InstanceType enum value
+	InstanceTypeC7iMetal24xl = "c7i.metal-24xl"
+
+	// InstanceTypeC7iMetal48xl is a InstanceType enum value
+	InstanceTypeC7iMetal48xl = "c7i.metal-48xl"
+
+	// InstanceTypeM7iMetal24xl is a InstanceType enum value
+	InstanceTypeM7iMetal24xl = "m7i.metal-24xl"
+
+	// InstanceTypeM7iMetal48xl is a InstanceType enum value
+	InstanceTypeM7iMetal48xl = "m7i.metal-48xl"
+
+	// InstanceTypeR7iMetal24xl is a InstanceType enum value
+	InstanceTypeR7iMetal24xl = "r7i.metal-24xl"
+
+	// InstanceTypeR7iMetal48xl is a InstanceType enum value
+	InstanceTypeR7iMetal48xl = "r7i.metal-48xl"
 )
 
 // InstanceType_Values returns all elements of the InstanceType enum
@@ -195084,6 +195151,15 @@ func InstanceType_Values() []string {
 		InstanceTypeR7i24xlarge,
 		InstanceTypeR7i48xlarge,
 		InstanceTypeDl2q24xlarge,
+		InstanceTypeMac2M2Metal,
+		InstanceTypeI4i12xlarge,
+		InstanceTypeI4i24xlarge,
+		InstanceTypeC7iMetal24xl,
+		InstanceTypeC7iMetal48xl,
+		InstanceTypeM7iMetal24xl,
+		InstanceTypeM7iMetal48xl,
+		InstanceTypeR7iMetal24xl,
+		InstanceTypeR7iMetal48xl,
 	}
 }
 

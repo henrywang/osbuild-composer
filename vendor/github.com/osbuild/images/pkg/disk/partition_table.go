@@ -7,6 +7,7 @@ import (
 
 	"github.com/google/uuid"
 
+	"github.com/osbuild/images/internal/common"
 	"github.com/osbuild/images/pkg/blueprint"
 )
 
@@ -385,7 +386,7 @@ func (pt *PartitionTable) applyCustomization(mountpoints []blueprint.FilesystemC
 
 // Dynamically calculate and update the start point for each of the existing
 // partitions. Adjusts the overall size of image to either the supplied
-// value in `size` or to the sum of all partitions if that is lager.
+// value in `size` or to the sum of all partitions if that is larger.
 // Will grow the root partition if there is any empty space.
 // Returns the updated start point.
 func (pt *PartitionTable) relayout(size uint64) uint64 {
@@ -406,6 +407,8 @@ func (pt *PartitionTable) relayout(size uint64) uint64 {
 	for idx := range pt.Partitions {
 		partition := &pt.Partitions[idx]
 		if len(entityPath(partition, "/")) != 0 {
+			// keep the root partition index to handle after all the other
+			// partitions have been moved and resized
 			rootIdx = idx
 			continue
 		}
@@ -586,6 +589,13 @@ func resizeEntityBranch(path []Entity, size uint64) {
 				break
 			}
 		}
+		// If containerSize is 0, it means it doesn't have any direct sizeable
+		// children (e.g., a LUKS container with a VG child).  In that case,
+		// set the containerSize to the desired size for the branch before
+		// adding any metadata.
+		if containerSize == 0 {
+			containerSize = size
+		}
 		if vc, ok := element.(VolumeContainer); ok {
 			containerSize += vc.MetadataSize()
 		}
@@ -621,7 +631,7 @@ func (pt *PartitionTable) ensureLVM() error {
 	// we need a /boot partition to boot LVM, ensure one exists
 	bootPath := entityPath(pt, "/boot")
 	if bootPath == nil {
-		_, err := pt.CreateMountpoint("/boot", 512*1024*1024)
+		_, err := pt.CreateMountpoint("/boot", 512*common.MiB)
 
 		if err != nil {
 			return err
@@ -642,14 +652,17 @@ func (pt *PartitionTable) ensureLVM() error {
 			Description: "created via lvm2 and osbuild",
 		}
 
+		// create root logical volume on the new volume group with the same
+		// size and filesystem as the previous root partition
 		_, err := vg.CreateLogicalVolume("root", part.Size, filesystem)
 		if err != nil {
 			panic(fmt.Sprintf("Could not create LV: %v", err))
 		}
 
+		// replace the top-level partition payload with the new volume group
 		part.Payload = vg
 
-		// reset it so it will be grown later
+		// reset the vg partition size - it will be grown later
 		part.Size = 0
 
 		if pt.Type == "gpt" {

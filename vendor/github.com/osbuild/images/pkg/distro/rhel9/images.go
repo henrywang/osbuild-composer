@@ -5,14 +5,14 @@ import (
 	"math/rand"
 
 	"github.com/osbuild/images/internal/common"
-	"github.com/osbuild/images/internal/fdo"
-	"github.com/osbuild/images/internal/fsnode"
-	"github.com/osbuild/images/internal/ignition"
-	"github.com/osbuild/images/internal/oscap"
-	"github.com/osbuild/images/internal/users"
 	"github.com/osbuild/images/internal/workload"
 	"github.com/osbuild/images/pkg/blueprint"
 	"github.com/osbuild/images/pkg/container"
+	"github.com/osbuild/images/pkg/customizations/fdo"
+	"github.com/osbuild/images/pkg/customizations/fsnode"
+	"github.com/osbuild/images/pkg/customizations/ignition"
+	"github.com/osbuild/images/pkg/customizations/oscap"
+	"github.com/osbuild/images/pkg/customizations/users"
 	"github.com/osbuild/images/pkg/distro"
 	"github.com/osbuild/images/pkg/image"
 	"github.com/osbuild/images/pkg/manifest"
@@ -401,7 +401,7 @@ func edgeRawImage(workload workload.Workload,
 	if err != nil {
 		return nil, fmt.Errorf("%s: %s", t.Name(), err.Error())
 	}
-	img := image.NewOSTreeDiskImage(commit)
+	img := image.NewOSTreeDiskImageFromCommit(commit)
 
 	img.Users = users.UsersFromBP(customizations.GetUsers())
 	img.Groups = users.GroupsFromBP(customizations.GetGroups())
@@ -421,8 +421,8 @@ func edgeRawImage(workload workload.Workload,
 	}
 
 	if !common.VersionLessThan(t.arch.distro.osVersion, "9.2") || !t.arch.distro.isRHEL() {
-		img.Ignition = true
 		img.IgnitionPlatform = "metal"
+		img.KernelOptionsAppend = append(img.KernelOptionsAppend, "coreos.no_persist_ip")
 		if bpIgnition := customizations.GetIgnition(); bpIgnition != nil && bpIgnition.FirstBoot != nil && bpIgnition.FirstBoot.ProvisioningURL != "" {
 			img.KernelOptionsAppend = append(img.KernelOptionsAppend, "ignition.config.url="+bpIgnition.FirstBoot.ProvisioningURL)
 		}
@@ -436,6 +436,7 @@ func edgeRawImage(workload workload.Workload,
 		ContentURL: options.OSTree.ContentURL,
 	}
 	img.OSName = "redhat"
+	img.LockRoot = true
 
 	if kopts := customizations.GetKernel(); kopts != nil && kopts.Append != "" {
 		img.KernelOptionsAppend = append(img.KernelOptionsAppend, kopts.Append)
@@ -466,7 +467,7 @@ func edgeSimplifiedInstallerImage(workload workload.Workload,
 	if err != nil {
 		return nil, fmt.Errorf("%s: %s", t.Name(), err.Error())
 	}
-	rawImg := image.NewOSTreeDiskImage(commit)
+	rawImg := image.NewOSTreeDiskImageFromCommit(commit)
 
 	rawImg.Users = users.UsersFromBP(customizations.GetUsers())
 	rawImg.Groups = users.GroupsFromBP(customizations.GetGroups())
@@ -488,10 +489,11 @@ func edgeSimplifiedInstallerImage(workload workload.Workload,
 		ContentURL: options.OSTree.ContentURL,
 	}
 	rawImg.OSName = "redhat"
+	rawImg.LockRoot = true
 
 	if !common.VersionLessThan(t.arch.distro.osVersion, "9.2") || !t.arch.distro.isRHEL() {
-		rawImg.Ignition = true
 		rawImg.IgnitionPlatform = "metal"
+		rawImg.KernelOptionsAppend = append(rawImg.KernelOptionsAppend, "coreos.no_persist_ip")
 		if bpIgnition := customizations.GetIgnition(); bpIgnition != nil && bpIgnition.FirstBoot != nil && bpIgnition.FirstBoot.ProvisioningURL != "" {
 			rawImg.KernelOptionsAppend = append(rawImg.KernelOptionsAppend, "ignition.config.url="+bpIgnition.FirstBoot.ProvisioningURL)
 		}

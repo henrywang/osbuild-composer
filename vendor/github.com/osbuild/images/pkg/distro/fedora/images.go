@@ -5,14 +5,14 @@ import (
 	"math/rand"
 
 	"github.com/osbuild/images/internal/common"
-	"github.com/osbuild/images/internal/fdo"
-	"github.com/osbuild/images/internal/fsnode"
-	"github.com/osbuild/images/internal/ignition"
-	"github.com/osbuild/images/internal/oscap"
-	"github.com/osbuild/images/internal/users"
 	"github.com/osbuild/images/internal/workload"
 	"github.com/osbuild/images/pkg/blueprint"
 	"github.com/osbuild/images/pkg/container"
+	"github.com/osbuild/images/pkg/customizations/fdo"
+	"github.com/osbuild/images/pkg/customizations/fsnode"
+	"github.com/osbuild/images/pkg/customizations/ignition"
+	"github.com/osbuild/images/pkg/customizations/oscap"
+	"github.com/osbuild/images/pkg/customizations/users"
 	"github.com/osbuild/images/pkg/distro"
 	"github.com/osbuild/images/pkg/image"
 	"github.com/osbuild/images/pkg/manifest"
@@ -491,7 +491,7 @@ func iotImage(workload workload.Workload,
 	if err != nil {
 		return nil, fmt.Errorf("%s: %s", t.Name(), err.Error())
 	}
-	img := image.NewOSTreeDiskImage(commit)
+	img := image.NewOSTreeDiskImageFromCommit(commit)
 
 	distro := t.Arch().Distro()
 
@@ -522,9 +522,10 @@ func iotImage(workload workload.Workload,
 		Name: "fedora-iot",
 	}
 	img.OSName = "fedora-iot"
+	img.LockRoot = true
 
 	if !common.VersionLessThan(distro.Releasever(), "38") {
-		img.Ignition = true
+		img.KernelOptionsAppend = append(img.KernelOptionsAppend, "coreos.no_persist_ip")
 		switch img.Platform.GetImageFormat() {
 		case platform.FORMAT_RAW:
 			img.IgnitionPlatform = "metal"
@@ -565,7 +566,7 @@ func iotSimplifiedInstallerImage(workload workload.Workload,
 	if err != nil {
 		return nil, fmt.Errorf("%s: %s", t.Name(), err.Error())
 	}
-	rawImg := image.NewOSTreeDiskImage(commit)
+	rawImg := image.NewOSTreeDiskImageFromCommit(commit)
 
 	customizations := bp.Customizations
 	rawImg.Users = users.UsersFromBP(customizations.GetUsers())
@@ -585,10 +586,11 @@ func iotSimplifiedInstallerImage(workload workload.Workload,
 		Name: "fedora-iot",
 	}
 	rawImg.OSName = "fedora"
+	rawImg.LockRoot = true
 
 	if !common.VersionLessThan(t.arch.distro.osVersion, "38") {
-		rawImg.Ignition = true
 		rawImg.IgnitionPlatform = "metal"
+		rawImg.KernelOptionsAppend = append(rawImg.KernelOptionsAppend, "coreos.no_persist_ip")
 		if bpIgnition := customizations.GetIgnition(); bpIgnition != nil && bpIgnition.FirstBoot != nil && bpIgnition.FirstBoot.ProvisioningURL != "" {
 			rawImg.KernelOptionsAppend = append(rawImg.KernelOptionsAppend, "ignition.config.url="+bpIgnition.FirstBoot.ProvisioningURL)
 		}
