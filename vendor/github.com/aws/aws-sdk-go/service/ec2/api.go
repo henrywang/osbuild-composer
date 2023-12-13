@@ -161017,6 +161017,9 @@ func (s *PrivateIpAddressSpecification) SetPrivateIpAddress(v string) *PrivateIp
 type ProcessorInfo struct {
 	_ struct{} `type:"structure"`
 
+	// The manufacturer of the processor.
+	Manufacturer *string `locationName:"manufacturer" type:"string"`
+
 	// The architectures supported by the instance type.
 	SupportedArchitectures []*string `locationName:"supportedArchitectures" locationNameList:"item" type:"list" enum:"ArchitectureType"`
 
@@ -161045,6 +161048,12 @@ func (s ProcessorInfo) String() string {
 // value will be replaced with "sensitive".
 func (s ProcessorInfo) GoString() string {
 	return s.String()
+}
+
+// SetManufacturer sets the Manufacturer field's value.
+func (s *ProcessorInfo) SetManufacturer(v string) *ProcessorInfo {
+	s.Manufacturer = &v
+	return s
 }
 
 // SetSupportedArchitectures sets the SupportedArchitectures field's value.
@@ -194338,6 +194347,33 @@ const (
 
 	// InstanceTypeDl2q24xlarge is a InstanceType enum value
 	InstanceTypeDl2q24xlarge = "dl2q.24xlarge"
+
+	// InstanceTypeMac2M2Metal is a InstanceType enum value
+	InstanceTypeMac2M2Metal = "mac2-m2.metal"
+
+	// InstanceTypeI4i12xlarge is a InstanceType enum value
+	InstanceTypeI4i12xlarge = "i4i.12xlarge"
+
+	// InstanceTypeI4i24xlarge is a InstanceType enum value
+	InstanceTypeI4i24xlarge = "i4i.24xlarge"
+
+	// InstanceTypeC7iMetal24xl is a InstanceType enum value
+	InstanceTypeC7iMetal24xl = "c7i.metal-24xl"
+
+	// InstanceTypeC7iMetal48xl is a InstanceType enum value
+	InstanceTypeC7iMetal48xl = "c7i.metal-48xl"
+
+	// InstanceTypeM7iMetal24xl is a InstanceType enum value
+	InstanceTypeM7iMetal24xl = "m7i.metal-24xl"
+
+	// InstanceTypeM7iMetal48xl is a InstanceType enum value
+	InstanceTypeM7iMetal48xl = "m7i.metal-48xl"
+
+	// InstanceTypeR7iMetal24xl is a InstanceType enum value
+	InstanceTypeR7iMetal24xl = "r7i.metal-24xl"
+
+	// InstanceTypeR7iMetal48xl is a InstanceType enum value
+	InstanceTypeR7iMetal48xl = "r7i.metal-48xl"
 )
 
 // InstanceType_Values returns all elements of the InstanceType enum
@@ -195115,6 +195151,15 @@ func InstanceType_Values() []string {
 		InstanceTypeR7i24xlarge,
 		InstanceTypeR7i48xlarge,
 		InstanceTypeDl2q24xlarge,
+		InstanceTypeMac2M2Metal,
+		InstanceTypeI4i12xlarge,
+		InstanceTypeI4i24xlarge,
+		InstanceTypeC7iMetal24xl,
+		InstanceTypeC7iMetal48xl,
+		InstanceTypeM7iMetal24xl,
+		InstanceTypeM7iMetal48xl,
+		InstanceTypeR7iMetal24xl,
+		InstanceTypeR7iMetal48xl,
 	}
 }
 
