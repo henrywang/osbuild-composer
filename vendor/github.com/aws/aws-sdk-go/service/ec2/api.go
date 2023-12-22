@@ -58035,6 +58035,25 @@ type AdvertiseByoipCidrInput struct {
 	// the required permissions, the error response is DryRunOperation. Otherwise,
 	// it is UnauthorizedOperation.
 	DryRun *bool `type:"boolean"`
+
+	// If you have Local Zones (https://docs.aws.amazon.com/local-zones/latest/ug/how-local-zones-work.html)
+	// enabled, you can choose a network border group for Local Zones when you provision
+	// and advertise a BYOIPv4 CIDR. Choose the network border group carefully as
+	// the EIP and the Amazon Web Services resource it is associated with must reside
+	// in the same network border group.
+	//
+	// You can provision BYOIP address ranges to and advertise them in the following
+	// Local Zone network border groups:
+	//
+	//    * us-east-1-dfw-2
+	//
+	//    * us-west-2-lax-1
+	//
+	//    * us-west-2-phx-2
+	//
+	// You cannot provision or advertise BYOIPv6 address ranges in Local Zones at
+	// this time.
+	NetworkBorderGroup *string `type:"string"`
 }
 
 // String returns the string representation.
@@ -58083,6 +58102,12 @@ func (s *AdvertiseByoipCidrInput) SetCidr(v string) *AdvertiseByoipCidrInput {
 // SetDryRun sets the DryRun field's value.
 func (s *AdvertiseByoipCidrInput) SetDryRun(v bool) *AdvertiseByoipCidrInput {
 	s.DryRun = &v
+	return s
+}
+
+// SetNetworkBorderGroup sets the NetworkBorderGroup field's value.
+func (s *AdvertiseByoipCidrInput) SetNetworkBorderGroup(v string) *AdvertiseByoipCidrInput {
+	s.NetworkBorderGroup = &v
 	return s
 }
 
@@ -64318,6 +64343,25 @@ type ByoipCidr struct {
 	// The description of the address range.
 	Description *string `locationName:"description" type:"string"`
 
+	// If you have Local Zones (https://docs.aws.amazon.com/local-zones/latest/ug/how-local-zones-work.html)
+	// enabled, you can choose a network border group for Local Zones when you provision
+	// and advertise a BYOIPv4 CIDR. Choose the network border group carefully as
+	// the EIP and the Amazon Web Services resource it is associated with must reside
+	// in the same network border group.
+	//
+	// You can provision BYOIP address ranges to and advertise them in the following
+	// Local Zone network border groups:
+	//
+	//    * us-east-1-dfw-2
+	//
+	//    * us-west-2-lax-1
+	//
+	//    * us-west-2-phx-2
+	//
+	// You cannot provision or advertise BYOIPv6 address ranges in Local Zones at
+	// this time.
+	NetworkBorderGroup *string `locationName:"networkBorderGroup" type:"string"`
+
 	// The state of the address pool.
 	State *string `locationName:"state" type:"string" enum:"ByoipCidrState"`
 
@@ -64359,6 +64403,12 @@ func (s *ByoipCidr) SetCidr(v string) *ByoipCidr {
 // SetDescription sets the Description field's value.
 func (s *ByoipCidr) SetDescription(v string) *ByoipCidr {
 	s.Description = &v
+	return s
+}
+
+// SetNetworkBorderGroup sets the NetworkBorderGroup field's value.
+func (s *ByoipCidr) SetNetworkBorderGroup(v string) *ByoipCidr {
+	s.NetworkBorderGroup = &v
 	return s
 }
 
@@ -135752,6 +135802,11 @@ type InstanceNetworkInterfaceSpecification struct {
 	// for eth0, and can only be assigned to a new network interface, not an existing
 	// one. You cannot specify more than one network interface in the request. If
 	// launching into a default subnet, the default value is true.
+	//
+	// Starting on February 1, 2024, Amazon Web Services will charge for all public
+	// IPv4 addresses, including public IPv4 addresses associated with running instances
+	// and Elastic IP addresses. For more information, see the Public IPv4 Address
+	// tab on the Amazon VPC pricing page (http://aws.amazon.com/vpc/pricing/).
 	AssociatePublicIpAddress *bool `locationName:"associatePublicIpAddress" type:"boolean"`
 
 	// A security group connection tracking specification that enables you to set
@@ -142771,20 +142826,18 @@ type LaunchTemplateInstanceMetadataOptions struct {
 	// Possible values: Integers from 1 to 64
 	HttpPutResponseHopLimit *int64 `locationName:"httpPutResponseHopLimit" type:"integer"`
 
-	// Indicates whether IMDSv2 is optional or required.
+	// Indicates whether IMDSv2 is required.
 	//
-	// optional - When IMDSv2 is optional, you can choose to retrieve instance metadata
-	// with or without a session token in your request. If you retrieve the IAM
-	// role credentials without a token, the IMDSv1 role credentials are returned.
-	// If you retrieve the IAM role credentials using a valid session token, the
-	// IMDSv2 role credentials are returned.
+	//    * optional - IMDSv2 is optional. You can choose whether to send a session
+	//    token in your instance metadata retrieval requests. If you retrieve IAM
+	//    role credentials without a session token, you receive the IMDSv1 role
+	//    credentials. If you retrieve IAM role credentials using a valid session
+	//    token, you receive the IMDSv2 role credentials.
 	//
-	// required - When IMDSv2 is required, you must send a session token with any
-	// instance metadata retrieval requests. In this state, retrieving the IAM role
-	// credentials always returns IMDSv2 credentials; IMDSv1 credentials are not
-	// available.
-	//
-	// Default: optional
+	//    * required - IMDSv2 is required. You must send a session token in your
+	//    instance metadata retrieval requests. With this option, retrieving the
+	//    IAM role credentials always returns IMDSv2 credentials; IMDSv1 credentials
+	//    are not available.
 	HttpTokens *string `locationName:"httpTokens" type:"string" enum:"LaunchTemplateHttpTokensState"`
 
 	// Set to enabled to allow access to instance tags from the instance metadata.
@@ -142884,22 +142937,21 @@ type LaunchTemplateInstanceMetadataOptionsRequest struct {
 	// Possible values: Integers from 1 to 64
 	HttpPutResponseHopLimit *int64 `type:"integer"`
 
-	// IMDSv2 uses token-backed sessions. Set the use of HTTP tokens to optional
-	// (in other words, set the use of IMDSv2 to optional) or required (in other
-	// words, set the use of IMDSv2 to required).
+	// Indicates whether IMDSv2 is required.
 	//
-	//    * optional - When IMDSv2 is optional, you can choose to retrieve instance
-	//    metadata with or without a session token in your request. If you retrieve
-	//    the IAM role credentials without a token, the IMDSv1 role credentials
-	//    are returned. If you retrieve the IAM role credentials using a valid session
-	//    token, the IMDSv2 role credentials are returned.
+	//    * optional - IMDSv2 is optional. You can choose whether to send a session
+	//    token in your instance metadata retrieval requests. If you retrieve IAM
+	//    role credentials without a session token, you receive the IMDSv1 role
+	//    credentials. If you retrieve IAM role credentials using a valid session
+	//    token, you receive the IMDSv2 role credentials.
 	//
-	//    * required - When IMDSv2 is required, you must send a session token with
-	//    any instance metadata retrieval requests. In this state, retrieving the
+	//    * required - IMDSv2 is required. You must send a session token in your
+	//    instance metadata retrieval requests. With this option, retrieving the
 	//    IAM role credentials always returns IMDSv2 credentials; IMDSv1 credentials
 	//    are not available.
 	//
-	// Default: optional
+	// Default: If the value of ImdsSupport for the Amazon Machine Image (AMI) for
+	// your instance is v2.0, the default is required.
 	HttpTokens *string `type:"string" enum:"LaunchTemplateHttpTokensState"`
 
 	// Set to enabled to allow access to instance tags from the instance metadata.
@@ -142974,6 +143026,11 @@ type LaunchTemplateInstanceNetworkInterfaceSpecification struct {
 
 	// Indicates whether to associate a public IPv4 address with eth0 for a new
 	// network interface.
+	//
+	// Starting on February 1, 2024, Amazon Web Services will charge for all public
+	// IPv4 addresses, including public IPv4 addresses associated with running instances
+	// and Elastic IP addresses. For more information, see the Public IPv4 Address
+	// tab on the Amazon VPC pricing page (http://aws.amazon.com/vpc/pricing/).
 	AssociatePublicIpAddress *bool `locationName:"associatePublicIpAddress" type:"boolean"`
 
 	// A security group connection tracking specification that enables you to set
@@ -143210,6 +143267,11 @@ type LaunchTemplateInstanceNetworkInterfaceSpecificationRequest struct {
 	AssociateCarrierIpAddress *bool `type:"boolean"`
 
 	// Associates a public IPv4 address with eth0 for a new network interface.
+	//
+	// Starting on February 1, 2024, Amazon Web Services will charge for all public
+	// IPv4 addresses, including public IPv4 addresses associated with running instances
+	// and Elastic IP addresses. For more information, see the Public IPv4 Address
+	// tab on the Amazon VPC pricing page (http://aws.amazon.com/vpc/pricing/).
 	AssociatePublicIpAddress *bool `type:"boolean"`
 
 	// A security group connection tracking specification that enables you to set
@@ -161174,6 +161236,25 @@ type ProvisionByoipCidrInput struct {
 	// Reserved.
 	MultiRegion *bool `type:"boolean"`
 
+	// If you have Local Zones (https://docs.aws.amazon.com/local-zones/latest/ug/how-local-zones-work.html)
+	// enabled, you can choose a network border group for Local Zones when you provision
+	// and advertise a BYOIPv4 CIDR. Choose the network border group carefully as
+	// the EIP and the Amazon Web Services resource it is associated with must reside
+	// in the same network border group.
+	//
+	// You can provision BYOIP address ranges to and advertise them in the following
+	// Local Zone network border groups:
+	//
+	//    * us-east-1-dfw-2
+	//
+	//    * us-west-2-lax-1
+	//
+	//    * us-west-2-phx-2
+	//
+	// You cannot provision or advertise BYOIPv6 address ranges in Local Zones at
+	// this time.
+	NetworkBorderGroup *string `type:"string"`
+
 	// The tags to apply to the address pool.
 	PoolTagSpecifications []*TagSpecification `locationName:"PoolTagSpecification" locationNameList:"item" type:"list"`
 
@@ -161247,6 +161328,12 @@ func (s *ProvisionByoipCidrInput) SetDryRun(v bool) *ProvisionByoipCidrInput {
 // SetMultiRegion sets the MultiRegion field's value.
 func (s *ProvisionByoipCidrInput) SetMultiRegion(v bool) *ProvisionByoipCidrInput {
 	s.MultiRegion = &v
+	return s
+}
+
+// SetNetworkBorderGroup sets the NetworkBorderGroup field's value.
+func (s *ProvisionByoipCidrInput) SetNetworkBorderGroup(v string) *ProvisionByoipCidrInput {
+	s.NetworkBorderGroup = &v
 	return s
 }
 
@@ -165874,23 +165961,7 @@ type RequestLaunchTemplateData struct {
 	SecurityGroups []*string `locationName:"SecurityGroup" locationNameList:"SecurityGroup" type:"list"`
 
 	// The tags to apply to the resources that are created during instance launch.
-	//
-	// You can specify tags for the following resources only:
-	//
-	//    * Instances
-	//
-	//    * Volumes
-	//
-	//    * Elastic graphics
-	//
-	//    * Spot Instance requests
-	//
-	//    * Network interfaces
-	//
-	// To tag a resource after it has been created, see CreateTags (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateTags.html).
-	//
-	// To tag the launch template itself, you must use the TagSpecification (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateLaunchTemplate.html)
-	// parameter.
+	// These tags are not applied to the launch template.
 	TagSpecifications []*LaunchTemplateTagSpecificationRequest `locationName:"TagSpecification" locationNameList:"LaunchTemplateTagSpecificationRequest" type:"list"`
 
 	// The user data to make available to the instance. You must provide base64-encoded
