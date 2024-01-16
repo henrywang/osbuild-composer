@@ -47,6 +47,8 @@ func osCustomizations(
 		osc.KernelOptionsAppend = kernelOptions
 	}
 
+	osc.FIPS = c.GetFIPS()
+
 	osc.ExtraBasePackages = osPackageSet.Include
 	osc.ExcludeBasePackages = osPackageSet.Exclude
 	osc.ExtraBaseRepos = osPackageSet.Repositories
@@ -134,6 +136,19 @@ func osCustomizations(
 		// In theory this should never happen, because the blueprint file customizations
 		// should have been validated before this point.
 		panic(fmt.Sprintf("failed to convert file customizations to fs node files: %v", err))
+	}
+
+	// OSTree commits do not include data in `/var` since that is tied to the
+	// deployment, rather than the commit. Therefore the containers need to be
+	// stored in a different location, like `/usr/share`, and the container
+	// storage engine configured accordingly.
+	if t.rpmOstree && len(containers) > 0 {
+		storagePath := "/usr/share/containers/storage"
+		osc.ContainersStorage = &storagePath
+	}
+
+	if containerStorage := c.GetContainerStorage(); containerStorage != nil {
+		osc.ContainersStorage = containerStorage.StoragePath
 	}
 
 	customRepos, err := c.GetRepositories()
@@ -467,6 +482,7 @@ func iotInstallerImage(workload workload.Workload,
 	img := image.NewAnacondaOSTreeInstaller(commit)
 
 	customizations := bp.Customizations
+	img.FIPS = customizations.GetFIPS()
 	img.Platform = t.platform
 	img.ExtraBasePackages = packageSets[installerPkgsKey]
 	img.Users = users.UsersFromBP(customizations.GetUsers())
@@ -508,6 +524,7 @@ func iotImage(workload workload.Workload,
 	distro := t.Arch().Distro()
 
 	customizations := bp.Customizations
+	img.FIPS = customizations.GetFIPS()
 	img.Users = users.UsersFromBP(customizations.GetUsers())
 	img.Groups = users.GroupsFromBP(customizations.GetGroups())
 
@@ -581,6 +598,7 @@ func iotSimplifiedInstallerImage(workload workload.Workload,
 	rawImg := image.NewOSTreeDiskImageFromCommit(commit)
 
 	customizations := bp.Customizations
+	rawImg.FIPS = customizations.GetFIPS()
 	rawImg.Users = users.UsersFromBP(customizations.GetUsers())
 	rawImg.Groups = users.GroupsFromBP(customizations.GetGroups())
 
