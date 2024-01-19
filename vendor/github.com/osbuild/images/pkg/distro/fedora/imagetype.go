@@ -256,6 +256,14 @@ func (t *imageType) checkOptions(bp *blueprint.Blueprint, options distro.ImageOp
 		return nil, fmt.Errorf("embedding containers is not supported for %s on %s", t.name, t.arch.distro.name)
 	}
 
+	if len(bp.Containers) > 0 {
+		for _, container := range bp.Containers {
+			if err := container.Validate(); err != nil {
+				return nil, err
+			}
+		}
+	}
+
 	if options.OSTree != nil {
 		if err := options.OSTree.Validate(); err != nil {
 			return nil, err
@@ -270,7 +278,7 @@ func (t *imageType) checkOptions(bp *blueprint.Blueprint, options distro.ImageOp
 	}
 
 	if t.name == "iot-raw-image" || t.name == "iot-qcow2-image" {
-		allowed := []string{"User", "Group", "Directories", "Files", "Services"}
+		allowed := []string{"User", "Group", "Directories", "Files", "Services", "FIPS"}
 		if err := customizations.CheckAllowed(allowed...); err != nil {
 			return nil, fmt.Errorf("unsupported blueprint customizations found for image type %q: (allowed: %s)", t.name, strings.Join(allowed, ", "))
 		}
@@ -281,7 +289,7 @@ func (t *imageType) checkOptions(bp *blueprint.Blueprint, options distro.ImageOp
 	// TODO: Support kernel name selection for image-installer
 	if t.bootISO {
 		if t.name == "iot-simplified-installer" {
-			allowed := []string{"InstallationDevice", "FDO", "Ignition", "Kernel", "User", "Group"}
+			allowed := []string{"InstallationDevice", "FDO", "Ignition", "Kernel", "User", "Group", "FIPS"}
 			if err := customizations.CheckAllowed(allowed...); err != nil {
 				return nil, fmt.Errorf("unsupported blueprint customizations found for boot ISO image type %q: (allowed: %s)", t.name, strings.Join(allowed, ", "))
 			}
@@ -319,7 +327,7 @@ func (t *imageType) checkOptions(bp *blueprint.Blueprint, options distro.ImageOp
 				}
 			}
 		} else if t.name == "iot-installer" || t.name == "image-installer" {
-			allowed := []string{"User", "Group"}
+			allowed := []string{"User", "Group", "FIPS"}
 			if err := customizations.CheckAllowed(allowed...); err != nil {
 				return nil, fmt.Errorf("unsupported blueprint customizations found for boot ISO image type %q: (allowed: %s)", t.name, strings.Join(allowed, ", "))
 			}
