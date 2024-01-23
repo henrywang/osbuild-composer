@@ -20194,6 +20194,10 @@ func (c *EC2) DescribeElasticGpusRequest(input *DescribeElasticGpusInput) (req *
 
 // DescribeElasticGpus API operation for Amazon Elastic Compute Cloud.
 //
+// Amazon Elastic Graphics reached end of life on January 8, 2024. For workloads
+// that require graphics acceleration, we recommend that you use Amazon EC2
+// G4ad, G4dn, or G5 instances.
+//
 // Describes the Elastic Graphics accelerator associated with your instances.
 // For more information about Elastic Graphics, see Amazon Elastic Graphics
 // (https://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/elastic-graphics.html).
@@ -35610,6 +35614,10 @@ func (c *EC2) DetachVolumeRequest(input *DetachVolumeInput) (req *request.Reques
 // When a volume with an Amazon Web Services Marketplace product code is detached
 // from an instance, the product code is no longer associated with the instance.
 //
+// You can't detach or force detach volumes that are attached to Amazon ECS
+// or Fargate tasks. Attempting to do this results in the UnsupportedOperationException
+// exception with the Unable to detach volume attached to ECS tasks error message.
+//
 // For more information, see Detach an Amazon EBS volume (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-detaching-volume.html)
 // in the Amazon Elastic Compute Cloud User Guide.
 //
@@ -42103,8 +42111,8 @@ func (c *EC2) GetLaunchTemplateDataRequest(input *GetLaunchTemplateDataInput) (r
 // This action calls on other describe actions to get instance information.
 // Depending on your instance configuration, you may need to allow the following
 // actions in your IAM policy: DescribeSpotInstanceRequests, DescribeInstanceCreditSpecifications,
-// DescribeVolumes, DescribeInstanceAttribute, and DescribeElasticGpus. Or,
-// you can allow describe* depending on your instance requirements.
+// DescribeVolumes, and DescribeInstanceAttribute. Or, you can allow describe*
+// depending on your instance requirements.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -55133,7 +55141,7 @@ func (c *EC2) StartInstancesRequest(input *StartInstancesInput) (req *request.Re
 // Performing this operation on an instance that uses an instance store as its
 // root device returns an error.
 //
-// If you attempt to start a T3 instance with host tenancy and the unlimted
+// If you attempt to start a T3 instance with host tenancy and the unlimited
 // CPU credit option, the request fails. The unlimited CPU credit option is
 // not supported on Dedicated Hosts. Before you start the instance, either change
 // its CPU credit option to standard, or change its tenancy to default or dedicated.
@@ -58035,6 +58043,25 @@ type AdvertiseByoipCidrInput struct {
 	// the required permissions, the error response is DryRunOperation. Otherwise,
 	// it is UnauthorizedOperation.
 	DryRun *bool `type:"boolean"`
+
+	// If you have Local Zones (https://docs.aws.amazon.com/local-zones/latest/ug/how-local-zones-work.html)
+	// enabled, you can choose a network border group for Local Zones when you provision
+	// and advertise a BYOIPv4 CIDR. Choose the network border group carefully as
+	// the EIP and the Amazon Web Services resource it is associated with must reside
+	// in the same network border group.
+	//
+	// You can provision BYOIP address ranges to and advertise them in the following
+	// Local Zone network border groups:
+	//
+	//    * us-east-1-dfw-2
+	//
+	//    * us-west-2-lax-1
+	//
+	//    * us-west-2-phx-2
+	//
+	// You cannot provision or advertise BYOIPv6 address ranges in Local Zones at
+	// this time.
+	NetworkBorderGroup *string `type:"string"`
 }
 
 // String returns the string representation.
@@ -58083,6 +58110,12 @@ func (s *AdvertiseByoipCidrInput) SetCidr(v string) *AdvertiseByoipCidrInput {
 // SetDryRun sets the DryRun field's value.
 func (s *AdvertiseByoipCidrInput) SetDryRun(v bool) *AdvertiseByoipCidrInput {
 	s.DryRun = &v
+	return s
+}
+
+// SetNetworkBorderGroup sets the NetworkBorderGroup field's value.
+func (s *AdvertiseByoipCidrInput) SetNetworkBorderGroup(v string) *AdvertiseByoipCidrInput {
+	s.NetworkBorderGroup = &v
 	return s
 }
 
@@ -64318,6 +64351,25 @@ type ByoipCidr struct {
 	// The description of the address range.
 	Description *string `locationName:"description" type:"string"`
 
+	// If you have Local Zones (https://docs.aws.amazon.com/local-zones/latest/ug/how-local-zones-work.html)
+	// enabled, you can choose a network border group for Local Zones when you provision
+	// and advertise a BYOIPv4 CIDR. Choose the network border group carefully as
+	// the EIP and the Amazon Web Services resource it is associated with must reside
+	// in the same network border group.
+	//
+	// You can provision BYOIP address ranges to and advertise them in the following
+	// Local Zone network border groups:
+	//
+	//    * us-east-1-dfw-2
+	//
+	//    * us-west-2-lax-1
+	//
+	//    * us-west-2-phx-2
+	//
+	// You cannot provision or advertise BYOIPv6 address ranges in Local Zones at
+	// this time.
+	NetworkBorderGroup *string `locationName:"networkBorderGroup" type:"string"`
+
 	// The state of the address pool.
 	State *string `locationName:"state" type:"string" enum:"ByoipCidrState"`
 
@@ -64359,6 +64411,12 @@ func (s *ByoipCidr) SetCidr(v string) *ByoipCidr {
 // SetDescription sets the Description field's value.
 func (s *ByoipCidr) SetDescription(v string) *ByoipCidr {
 	s.Description = &v
+	return s
+}
+
+// SetNetworkBorderGroup sets the NetworkBorderGroup field's value.
+func (s *ByoipCidr) SetNetworkBorderGroup(v string) *ByoipCidr {
+	s.NetworkBorderGroup = &v
 	return s
 }
 
@@ -91295,10 +91353,10 @@ type DescribeAvailabilityZonesInput struct {
 	//
 	//    * opt-in-status - The opt-in status (opted-in | not-opted-in | opt-in-not-required).
 	//
-	//    * parent-zoneID - The ID of the zone that handles some of the Local Zone
+	//    * parent-zone-id - The ID of the zone that handles some of the Local Zone
 	//    and Wavelength Zone control plane operations, such as API calls.
 	//
-	//    * parent-zoneName - The ID of the zone that handles some of the Local
+	//    * parent-zone-name - The ID of the zone that handles some of the Local
 	//    Zone and Wavelength Zone control plane operations, such as API calls.
 	//
 	//    * region-name - The name of the Region for the Zone (for example, us-east-1).
@@ -91752,10 +91810,9 @@ type DescribeCapacityBlockOfferingsInput struct {
 	// InstanceType is a required field
 	InstanceType *string `type:"string" required:"true"`
 
-	// The maximum number of results to return for the request in a single page.
-	// The remaining results can be seen by sending another request with the returned
-	// nextToken value. This value can be between 5 and 500. If maxResults is given
-	// a larger value than 500, you receive an error.
+	// The maximum number of items to return for this request. To get the next page
+	// of items, make another request with the token returned in the output. For
+	// more information, see Pagination (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Query-Requests.html#api-pagination).
 	MaxResults *int64 `min:"1" type:"integer"`
 
 	// The token to use to retrieve the next page of results.
@@ -91920,10 +91977,9 @@ type DescribeCapacityReservationFleetsInput struct {
 	//    prioritized is supported.
 	Filters []*Filter `locationName:"Filter" locationNameList:"Filter" type:"list"`
 
-	// The maximum number of results to return for the request in a single page.
-	// The remaining results can be seen by sending another request with the returned
-	// nextToken value. This value can be between 5 and 500. If maxResults is given
-	// a larger value than 500, you receive an error.
+	// The maximum number of items to return for this request. To get the next page
+	// of items, make another request with the token returned in the output. For
+	// more information, see Pagination (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Query-Requests.html#api-pagination).
 	MaxResults *int64 `min:"1" type:"integer"`
 
 	// The token to use to retrieve the next page of results.
@@ -92107,10 +92163,9 @@ type DescribeCapacityReservationsInput struct {
 	//    the Capacity Reservation was created.
 	Filters []*Filter `locationName:"Filter" locationNameList:"Filter" type:"list"`
 
-	// The maximum number of results to return for the request in a single page.
-	// The remaining results can be seen by sending another request with the returned
-	// nextToken value. This value can be between 5 and 500. If maxResults is given
-	// a larger value than 500, you receive an error.
+	// The maximum number of items to return for this request. To get the next page
+	// of items, make another request with the token returned in the output. For
+	// more information, see Pagination (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Query-Requests.html#api-pagination).
 	MaxResults *int64 `min:"1" type:"integer"`
 
 	// The token to use to retrieve the next page of results.
@@ -104526,6 +104581,8 @@ type DescribeRouteTablesInput struct {
 	DryRun *bool `locationName:"dryRun" type:"boolean"`
 
 	// The filters.
+	//
+	//    * association.gateway-id - The ID of the gateway involved in the association.
 	//
 	//    * association.route-table-association-id - The ID of an association ID
 	//    for the route table.
@@ -116985,6 +117042,9 @@ func (s *EbsInfo) SetNvmeSupport(v string) *EbsInfo {
 type EbsInstanceBlockDevice struct {
 	_ struct{} `type:"structure"`
 
+	// The ARN of the Amazon ECS or Fargate task to which the volume is attached.
+	AssociatedResource *string `locationName:"associatedResource" type:"string"`
+
 	// The time stamp when the attachment initiated.
 	AttachTime *time.Time `locationName:"attachTime" type:"timestamp"`
 
@@ -116996,6 +117056,12 @@ type EbsInstanceBlockDevice struct {
 
 	// The ID of the EBS volume.
 	VolumeId *string `locationName:"volumeId" type:"string"`
+
+	// The ID of the Amazon Web Services account that owns the volume.
+	//
+	// This parameter is returned only for volumes that are attached to Fargate
+	// tasks.
+	VolumeOwnerId *string `locationName:"volumeOwnerId" type:"string"`
 }
 
 // String returns the string representation.
@@ -117014,6 +117080,12 @@ func (s EbsInstanceBlockDevice) String() string {
 // value will be replaced with "sensitive".
 func (s EbsInstanceBlockDevice) GoString() string {
 	return s.String()
+}
+
+// SetAssociatedResource sets the AssociatedResource field's value.
+func (s *EbsInstanceBlockDevice) SetAssociatedResource(v string) *EbsInstanceBlockDevice {
+	s.AssociatedResource = &v
+	return s
 }
 
 // SetAttachTime sets the AttachTime field's value.
@@ -117037,6 +117109,12 @@ func (s *EbsInstanceBlockDevice) SetStatus(v string) *EbsInstanceBlockDevice {
 // SetVolumeId sets the VolumeId field's value.
 func (s *EbsInstanceBlockDevice) SetVolumeId(v string) *EbsInstanceBlockDevice {
 	s.VolumeId = &v
+	return s
+}
+
+// SetVolumeOwnerId sets the VolumeOwnerId field's value.
+func (s *EbsInstanceBlockDevice) SetVolumeOwnerId(v string) *EbsInstanceBlockDevice {
+	s.VolumeOwnerId = &v
 	return s
 }
 
@@ -117417,6 +117495,10 @@ func (s *EgressOnlyInternetGateway) SetTags(v []*Tag) *EgressOnlyInternetGateway
 	return s
 }
 
+// Amazon Elastic Graphics reached end of life on January 8, 2024. For workloads
+// that require graphics acceleration, we recommend that you use Amazon EC2
+// G4ad, G4dn, or G5 instances.
+//
 // Describes the association between an instance and an Elastic Graphics accelerator.
 type ElasticGpuAssociation struct {
 	_ struct{} `type:"structure"`
@@ -117477,6 +117559,10 @@ func (s *ElasticGpuAssociation) SetElasticGpuId(v string) *ElasticGpuAssociation
 	return s
 }
 
+// Amazon Elastic Graphics reached end of life on January 8, 2024. For workloads
+// that require graphics acceleration, we recommend that you use Amazon EC2
+// G4ad, G4dn, or G5 instances.
+//
 // Describes the status of an Elastic Graphics accelerator.
 type ElasticGpuHealth struct {
 	_ struct{} `type:"structure"`
@@ -117509,6 +117595,10 @@ func (s *ElasticGpuHealth) SetStatus(v string) *ElasticGpuHealth {
 	return s
 }
 
+// Amazon Elastic Graphics reached end of life on January 8, 2024. For workloads
+// that require graphics acceleration, we recommend that you use Amazon EC2
+// G4ad, G4dn, or G5 instances.
+//
 // A specification for an Elastic Graphics accelerator.
 type ElasticGpuSpecification struct {
 	_ struct{} `type:"structure"`
@@ -117559,11 +117649,19 @@ func (s *ElasticGpuSpecification) SetType(v string) *ElasticGpuSpecification {
 	return s
 }
 
-// Describes an elastic GPU.
+// Deprecated.
+//
+// Amazon Elastic Graphics reached end of life on January 8, 2024. For workloads
+// that require graphics acceleration, we recommend that you use Amazon EC2
+// G4ad, G4dn, or G5 instances.
 type ElasticGpuSpecificationResponse struct {
 	_ struct{} `type:"structure"`
 
-	// The elastic GPU type.
+	// Deprecated.
+	//
+	// Amazon Elastic Graphics reached end of life on January 8, 2024. For workloads
+	// that require graphics acceleration, we recommend that you use Amazon EC2
+	// G4ad, G4dn, or G5 instances.
 	Type *string `locationName:"type" type:"string"`
 }
 
@@ -117591,6 +117689,10 @@ func (s *ElasticGpuSpecificationResponse) SetType(v string) *ElasticGpuSpecifica
 	return s
 }
 
+// Amazon Elastic Graphics reached end of life on January 8, 2024. For workloads
+// that require graphics acceleration, we recommend that you use Amazon EC2
+// G4ad, G4dn, or G5 instances.
+//
 // Describes an Elastic Graphics accelerator.
 type ElasticGpus struct {
 	_ struct{} `type:"structure"`
@@ -118072,8 +118174,9 @@ func (s *EnableAddressTransferOutput) SetAddressTransfer(v *AddressTransfer) *En
 type EnableAwsNetworkPerformanceMetricSubscriptionInput struct {
 	_ struct{} `type:"structure"`
 
-	// The target Region or Availability Zone that the metric subscription is enabled
-	// for. For example, eu-west-1.
+	// The target Region (like us-east-2) or Availability Zone ID (like use2-az2)
+	// that the metric subscription is enabled for. If you use Availability Zone
+	// IDs, the Source and Destination Availability Zones must be in the same Region.
 	Destination *string `type:"string"`
 
 	// Checks whether you have the required permissions for the action, without
@@ -118085,8 +118188,9 @@ type EnableAwsNetworkPerformanceMetricSubscriptionInput struct {
 	// The metric used for the enabled subscription.
 	Metric *string `type:"string" enum:"MetricType"`
 
-	// The source Region or Availability Zone that the metric subscription is enabled
-	// for. For example, us-east-1.
+	// The source Region (like us-east-1) or Availability Zone ID (like use1-az1)
+	// that the metric subscription is enabled for. If you use Availability Zone
+	// IDs, the Source and Destination Availability Zones must be in the same Region.
 	Source *string `type:"string"`
 
 	// The statistic used for the enabled subscription.
@@ -119359,6 +119463,8 @@ type EnableSnapshotBlockPublicAccessInput struct {
 	//    the Region. Users in the account will no longer be able to request new
 	//    public sharing. However, snapshots that are already publicly shared, remain
 	//    publicly available.
+	//
+	// unblocked is not a valid value for EnableSnapshotBlockPublicAccess.
 	//
 	// State is a required field
 	State *string `type:"string" required:"true" enum:"SnapshotBlockPublicAccessState"`
@@ -124262,12 +124368,9 @@ type GetCapacityReservationUsageInput struct {
 	// it is UnauthorizedOperation.
 	DryRun *bool `type:"boolean"`
 
-	// The maximum number of results to return for the request in a single page.
-	// The remaining results can be seen by sending another request with the returned
-	// nextToken value. This value can be between 5 and 500. If maxResults is given
-	// a larger value than 500, you receive an error.
-	//
-	// Valid range: Minimum value of 1. Maximum value of 1000.
+	// The maximum number of items to return for this request. To get the next page
+	// of items, make another request with the token returned in the output. For
+	// more information, see Pagination (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Query-Requests.html#api-pagination).
 	MaxResults *int64 `min:"1" type:"integer"`
 
 	// The token to use to retrieve the next page of results.
@@ -125189,10 +125292,9 @@ type GetGroupsForCapacityReservationInput struct {
 	// it is UnauthorizedOperation.
 	DryRun *bool `type:"boolean"`
 
-	// The maximum number of results to return for the request in a single page.
-	// The remaining results can be seen by sending another request with the returned
-	// nextToken value. This value can be between 5 and 500. If maxResults is given
-	// a larger value than 500, you receive an error.
+	// The maximum number of items to return for this request. To get the next page
+	// of items, make another request with the token returned in the output. For
+	// more information, see Pagination (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Query-Requests.html#api-pagination).
 	MaxResults *int64 `min:"1" type:"integer"`
 
 	// The token to use to retrieve the next page of results.
@@ -127997,8 +128099,6 @@ type GetSpotPlacementScoresInput struct {
 	TargetCapacity *int64 `min:"1" type:"integer" required:"true"`
 
 	// The unit for the target capacity.
-	//
-	// Default: units (translates to number of instances)
 	TargetCapacityUnitType *string `type:"string" enum:"TargetCapacityUnitType"`
 }
 
@@ -133486,7 +133586,11 @@ type Instance struct {
 	// Optimized instance.
 	EbsOptimized *bool `locationName:"ebsOptimized" type:"boolean"`
 
-	// The Elastic GPU associated with the instance.
+	// Deprecated.
+	//
+	// Amazon Elastic Graphics reached end of life on January 8, 2024. For workloads
+	// that require graphics acceleration, we recommend that you use Amazon EC2
+	// G4ad, G4dn, or G5 instances.
 	ElasticGpuAssociations []*ElasticGpuAssociation `locationName:"elasticGpuAssociationSet" locationNameList:"item" type:"list"`
 
 	// The elastic inference accelerator associated with the instance.
@@ -135156,22 +135260,21 @@ type InstanceMetadataOptionsRequest struct {
 	// Possible values: Integers from 1 to 64
 	HttpPutResponseHopLimit *int64 `type:"integer"`
 
-	// IMDSv2 uses token-backed sessions. Set the use of HTTP tokens to optional
-	// (in other words, set the use of IMDSv2 to optional) or required (in other
-	// words, set the use of IMDSv2 to required).
+	// Indicates whether IMDSv2 is required.
 	//
-	//    * optional - When IMDSv2 is optional, you can choose to retrieve instance
-	//    metadata with or without a session token in your request. If you retrieve
-	//    the IAM role credentials without a token, the IMDSv1 role credentials
-	//    are returned. If you retrieve the IAM role credentials using a valid session
-	//    token, the IMDSv2 role credentials are returned.
+	//    * optional - IMDSv2 is optional. You can choose whether to send a session
+	//    token in your instance metadata retrieval requests. If you retrieve IAM
+	//    role credentials without a session token, you receive the IMDSv1 role
+	//    credentials. If you retrieve IAM role credentials using a valid session
+	//    token, you receive the IMDSv2 role credentials.
 	//
-	//    * required - When IMDSv2 is required, you must send a session token with
-	//    any instance metadata retrieval requests. In this state, retrieving the
+	//    * required - IMDSv2 is required. You must send a session token in your
+	//    instance metadata retrieval requests. With this option, retrieving the
 	//    IAM role credentials always returns IMDSv2 credentials; IMDSv1 credentials
 	//    are not available.
 	//
-	// Default: optional
+	// Default: If the value of ImdsSupport for the Amazon Machine Image (AMI) for
+	// your instance is v2.0, the default is required.
 	HttpTokens *string `type:"string" enum:"HttpTokensState"`
 
 	// Set to enabled to allow access to instance tags from the instance metadata.
@@ -135253,22 +135356,18 @@ type InstanceMetadataOptionsResponse struct {
 	// Possible values: Integers from 1 to 64
 	HttpPutResponseHopLimit *int64 `locationName:"httpPutResponseHopLimit" type:"integer"`
 
-	// IMDSv2 uses token-backed sessions. Indicates whether the use of HTTP tokens
-	// is optional (in other words, indicates whether the use of IMDSv2 is optional)
-	// or required (in other words, indicates whether the use of IMDSv2 is required).
+	// Indicates whether IMDSv2 is required.
 	//
-	//    * optional - When IMDSv2 is optional, you can choose to retrieve instance
-	//    metadata with or without a session token in your request. If you retrieve
-	//    the IAM role credentials without a token, the IMDSv1 role credentials
-	//    are returned. If you retrieve the IAM role credentials using a valid session
-	//    token, the IMDSv2 role credentials are returned.
+	//    * optional - IMDSv2 is optional. You can choose whether to send a session
+	//    token in your instance metadata retrieval requests. If you retrieve IAM
+	//    role credentials without a session token, you receive the IMDSv1 role
+	//    credentials. If you retrieve IAM role credentials using a valid session
+	//    token, you receive the IMDSv2 role credentials.
 	//
-	//    * required - When IMDSv2 is required, you must send a session token with
-	//    any instance metadata retrieval requests. In this state, retrieving the
+	//    * required - IMDSv2 is required. You must send a session token in your
+	//    instance metadata retrieval requests. With this option, retrieving the
 	//    IAM role credentials always returns IMDSv2 credentials; IMDSv1 credentials
 	//    are not available.
-	//
-	// Default: optional
 	HttpTokens *string `locationName:"httpTokens" type:"string" enum:"HttpTokensState"`
 
 	// Indicates whether access to instance tags from the instance metadata is enabled
@@ -135752,6 +135851,11 @@ type InstanceNetworkInterfaceSpecification struct {
 	// for eth0, and can only be assigned to a new network interface, not an existing
 	// one. You cannot specify more than one network interface in the request. If
 	// launching into a default subnet, the default value is true.
+	//
+	// Starting on February 1, 2024, Amazon Web Services will charge for all public
+	// IPv4 addresses, including public IPv4 addresses associated with running instances
+	// and Elastic IP addresses. For more information, see the Public IPv4 Address
+	// tab on the Amazon VPC pricing page (http://aws.amazon.com/vpc/pricing/).
 	AssociatePublicIpAddress *bool `locationName:"associatePublicIpAddress" type:"boolean"`
 
 	// A security group connection tracking specification that enables you to set
@@ -142771,20 +142875,18 @@ type LaunchTemplateInstanceMetadataOptions struct {
 	// Possible values: Integers from 1 to 64
 	HttpPutResponseHopLimit *int64 `locationName:"httpPutResponseHopLimit" type:"integer"`
 
-	// Indicates whether IMDSv2 is optional or required.
+	// Indicates whether IMDSv2 is required.
 	//
-	// optional - When IMDSv2 is optional, you can choose to retrieve instance metadata
-	// with or without a session token in your request. If you retrieve the IAM
-	// role credentials without a token, the IMDSv1 role credentials are returned.
-	// If you retrieve the IAM role credentials using a valid session token, the
-	// IMDSv2 role credentials are returned.
+	//    * optional - IMDSv2 is optional. You can choose whether to send a session
+	//    token in your instance metadata retrieval requests. If you retrieve IAM
+	//    role credentials without a session token, you receive the IMDSv1 role
+	//    credentials. If you retrieve IAM role credentials using a valid session
+	//    token, you receive the IMDSv2 role credentials.
 	//
-	// required - When IMDSv2 is required, you must send a session token with any
-	// instance metadata retrieval requests. In this state, retrieving the IAM role
-	// credentials always returns IMDSv2 credentials; IMDSv1 credentials are not
-	// available.
-	//
-	// Default: optional
+	//    * required - IMDSv2 is required. You must send a session token in your
+	//    instance metadata retrieval requests. With this option, retrieving the
+	//    IAM role credentials always returns IMDSv2 credentials; IMDSv1 credentials
+	//    are not available.
 	HttpTokens *string `locationName:"httpTokens" type:"string" enum:"LaunchTemplateHttpTokensState"`
 
 	// Set to enabled to allow access to instance tags from the instance metadata.
@@ -142884,22 +142986,21 @@ type LaunchTemplateInstanceMetadataOptionsRequest struct {
 	// Possible values: Integers from 1 to 64
 	HttpPutResponseHopLimit *int64 `type:"integer"`
 
-	// IMDSv2 uses token-backed sessions. Set the use of HTTP tokens to optional
-	// (in other words, set the use of IMDSv2 to optional) or required (in other
-	// words, set the use of IMDSv2 to required).
+	// Indicates whether IMDSv2 is required.
 	//
-	//    * optional - When IMDSv2 is optional, you can choose to retrieve instance
-	//    metadata with or without a session token in your request. If you retrieve
-	//    the IAM role credentials without a token, the IMDSv1 role credentials
-	//    are returned. If you retrieve the IAM role credentials using a valid session
-	//    token, the IMDSv2 role credentials are returned.
+	//    * optional - IMDSv2 is optional. You can choose whether to send a session
+	//    token in your instance metadata retrieval requests. If you retrieve IAM
+	//    role credentials without a session token, you receive the IMDSv1 role
+	//    credentials. If you retrieve IAM role credentials using a valid session
+	//    token, you receive the IMDSv2 role credentials.
 	//
-	//    * required - When IMDSv2 is required, you must send a session token with
-	//    any instance metadata retrieval requests. In this state, retrieving the
+	//    * required - IMDSv2 is required. You must send a session token in your
+	//    instance metadata retrieval requests. With this option, retrieving the
 	//    IAM role credentials always returns IMDSv2 credentials; IMDSv1 credentials
 	//    are not available.
 	//
-	// Default: optional
+	// Default: If the value of ImdsSupport for the Amazon Machine Image (AMI) for
+	// your instance is v2.0, the default is required.
 	HttpTokens *string `type:"string" enum:"LaunchTemplateHttpTokensState"`
 
 	// Set to enabled to allow access to instance tags from the instance metadata.
@@ -142974,6 +143075,11 @@ type LaunchTemplateInstanceNetworkInterfaceSpecification struct {
 
 	// Indicates whether to associate a public IPv4 address with eth0 for a new
 	// network interface.
+	//
+	// Starting on February 1, 2024, Amazon Web Services will charge for all public
+	// IPv4 addresses, including public IPv4 addresses associated with running instances
+	// and Elastic IP addresses. For more information, see the Public IPv4 Address
+	// tab on the Amazon VPC pricing page (http://aws.amazon.com/vpc/pricing/).
 	AssociatePublicIpAddress *bool `locationName:"associatePublicIpAddress" type:"boolean"`
 
 	// A security group connection tracking specification that enables you to set
@@ -143210,6 +143316,11 @@ type LaunchTemplateInstanceNetworkInterfaceSpecificationRequest struct {
 	AssociateCarrierIpAddress *bool `type:"boolean"`
 
 	// Associates a public IPv4 address with eth0 for a new network interface.
+	//
+	// Starting on February 1, 2024, Amazon Web Services will charge for all public
+	// IPv4 addresses, including public IPv4 addresses associated with running instances
+	// and Elastic IP addresses. For more information, see the Public IPv4 Address
+	// tab on the Amazon VPC pricing page (http://aws.amazon.com/vpc/pricing/).
 	AssociatePublicIpAddress *bool `type:"boolean"`
 
 	// A security group connection tracking specification that enables you to set
@@ -144220,10 +144331,9 @@ type LaunchTemplateTagSpecificationRequest struct {
 	//
 	// Valid Values lists all resource types for Amazon EC2 that can be tagged.
 	// When you create a launch template, you can specify tags for the following
-	// resource types only: instance | volume | elastic-gpu | network-interface
-	// | spot-instances-request. If the instance does not include the resource type
-	// that you specify, the instance launch fails. For example, not all instance
-	// types include an Elastic GPU.
+	// resource types only: instance | volume | network-interface | spot-instances-request.
+	// If the instance does not include the resource type that you specify, the
+	// instance launch fails. For example, not all instance types include a volume.
 	//
 	// To tag a resource after it has been created, see CreateTags (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateTags.html).
 	ResourceType *string `type:"string" enum:"ResourceType"`
@@ -148195,7 +148305,8 @@ type ModifyInstanceAttributeInput struct {
 	// Modifies the DeleteOnTermination attribute for volumes that are currently
 	// attached. The volume must be owned by the caller. If no value is specified
 	// for DeleteOnTermination, the default is true and the volume is deleted when
-	// the instance is terminated.
+	// the instance is terminated. You can't modify the DeleteOnTermination attribute
+	// for volumes that are attached to Fargate tasks.
 	//
 	// To add instance store volumes to an Amazon EBS-backed instance, you must
 	// add them when you launch the instance. For more information, see Update the
@@ -149055,22 +149166,21 @@ type ModifyInstanceMetadataOptionsInput struct {
 	// Possible values: Integers from 1 to 64
 	HttpPutResponseHopLimit *int64 `type:"integer"`
 
-	// IMDSv2 uses token-backed sessions. Set the use of HTTP tokens to optional
-	// (in other words, set the use of IMDSv2 to optional) or required (in other
-	// words, set the use of IMDSv2 to required).
+	// Indicates whether IMDSv2 is required.
 	//
-	//    * optional - When IMDSv2 is optional, you can choose to retrieve instance
-	//    metadata with or without a session token in your request. If you retrieve
-	//    the IAM role credentials without a token, the IMDSv1 role credentials
-	//    are returned. If you retrieve the IAM role credentials using a valid session
-	//    token, the IMDSv2 role credentials are returned.
+	//    * optional - IMDSv2 is optional. You can choose whether to send a session
+	//    token in your instance metadata retrieval requests. If you retrieve IAM
+	//    role credentials without a session token, you receive the IMDSv1 role
+	//    credentials. If you retrieve IAM role credentials using a valid session
+	//    token, you receive the IMDSv2 role credentials.
 	//
-	//    * required - When IMDSv2 is required, you must send a session token with
-	//    any instance metadata retrieval requests. In this state, retrieving the
+	//    * required - IMDSv2 is required. You must send a session token in your
+	//    instance metadata retrieval requests. With this option, retrieving the
 	//    IAM role credentials always returns IMDSv2 credentials; IMDSv1 credentials
 	//    are not available.
 	//
-	// Default: optional
+	// Default: If the value of ImdsSupport for the Amazon Machine Image (AMI) for
+	// your instance is v2.0, the default is required.
 	HttpTokens *string `type:"string" enum:"HttpTokensState"`
 
 	// The ID of the instance.
@@ -151379,6 +151489,11 @@ type ModifySubnetAttributeInput struct {
 
 	// Specify true to indicate that network interfaces attached to instances created
 	// in the specified subnet should be assigned a public IPv4 address.
+	//
+	// Starting on February 1, 2024, Amazon Web Services will charge for all public
+	// IPv4 addresses, including public IPv4 addresses associated with running instances
+	// and Elastic IP addresses. For more information, see the Public IPv4 Address
+	// tab on the Amazon VPC pricing page (http://aws.amazon.com/vpc/pricing/).
 	MapPublicIpOnLaunch *AttributeBooleanValue `type:"structure"`
 
 	// The type of hostname to assign to instances in the subnet at launch. For
@@ -155598,7 +155713,7 @@ type ModifyVpnTunnelOptionsSpecification struct {
 	//
 	// Constraints: A value between 60 and half of Phase2LifetimeSeconds.
 	//
-	// Default: 540
+	// Default: 270
 	RekeyMarginTimeSeconds *int64 `type:"integer"`
 
 	// The number of packets in an IKE replay window.
@@ -161174,6 +161289,25 @@ type ProvisionByoipCidrInput struct {
 	// Reserved.
 	MultiRegion *bool `type:"boolean"`
 
+	// If you have Local Zones (https://docs.aws.amazon.com/local-zones/latest/ug/how-local-zones-work.html)
+	// enabled, you can choose a network border group for Local Zones when you provision
+	// and advertise a BYOIPv4 CIDR. Choose the network border group carefully as
+	// the EIP and the Amazon Web Services resource it is associated with must reside
+	// in the same network border group.
+	//
+	// You can provision BYOIP address ranges to and advertise them in the following
+	// Local Zone network border groups:
+	//
+	//    * us-east-1-dfw-2
+	//
+	//    * us-west-2-lax-1
+	//
+	//    * us-west-2-phx-2
+	//
+	// You cannot provision or advertise BYOIPv6 address ranges in Local Zones at
+	// this time.
+	NetworkBorderGroup *string `type:"string"`
+
 	// The tags to apply to the address pool.
 	PoolTagSpecifications []*TagSpecification `locationName:"PoolTagSpecification" locationNameList:"item" type:"list"`
 
@@ -161247,6 +161381,12 @@ func (s *ProvisionByoipCidrInput) SetDryRun(v bool) *ProvisionByoipCidrInput {
 // SetMultiRegion sets the MultiRegion field's value.
 func (s *ProvisionByoipCidrInput) SetMultiRegion(v bool) *ProvisionByoipCidrInput {
 	s.MultiRegion = &v
+	return s
+}
+
+// SetNetworkBorderGroup sets the NetworkBorderGroup field's value.
+func (s *ProvisionByoipCidrInput) SetNetworkBorderGroup(v string) *ProvisionByoipCidrInput {
+	s.NetworkBorderGroup = &v
 	return s
 }
 
@@ -165709,7 +165849,11 @@ type RequestLaunchTemplateData struct {
 	// an EBS-optimized instance.
 	EbsOptimized *bool `type:"boolean"`
 
-	// An elastic GPU to associate with the instance.
+	// Deprecated.
+	//
+	// Amazon Elastic Graphics reached end of life on January 8, 2024. For workloads
+	// that require graphics acceleration, we recommend that you use Amazon EC2
+	// G4ad, G4dn, or G5 instances.
 	ElasticGpuSpecifications []*ElasticGpuSpecification `locationName:"ElasticGpuSpecification" locationNameList:"ElasticGpuSpecification" type:"list"`
 
 	// An elastic inference accelerator to associate with the instance. Elastic
@@ -165874,23 +166018,7 @@ type RequestLaunchTemplateData struct {
 	SecurityGroups []*string `locationName:"SecurityGroup" locationNameList:"SecurityGroup" type:"list"`
 
 	// The tags to apply to the resources that are created during instance launch.
-	//
-	// You can specify tags for the following resources only:
-	//
-	//    * Instances
-	//
-	//    * Volumes
-	//
-	//    * Elastic graphics
-	//
-	//    * Spot Instance requests
-	//
-	//    * Network interfaces
-	//
-	// To tag a resource after it has been created, see CreateTags (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateTags.html).
-	//
-	// To tag the launch template itself, you must use the TagSpecification (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateLaunchTemplate.html)
-	// parameter.
+	// These tags are not applied to the launch template.
 	TagSpecifications []*LaunchTemplateTagSpecificationRequest `locationName:"TagSpecification" locationNameList:"LaunchTemplateTagSpecificationRequest" type:"list"`
 
 	// The user data to make available to the instance. You must provide base64-encoded
@@ -168534,7 +168662,11 @@ type ResponseLaunchTemplateData struct {
 	// Indicates whether the instance is optimized for Amazon EBS I/O.
 	EbsOptimized *bool `locationName:"ebsOptimized" type:"boolean"`
 
-	// The elastic GPU specification.
+	// Deprecated.
+	//
+	// Amazon Elastic Graphics reached end of life on January 8, 2024. For workloads
+	// that require graphics acceleration, we recommend that you use Amazon EC2
+	// G4ad, G4dn, or G5 instances.
 	ElasticGpuSpecifications []*ElasticGpuSpecificationResponse `locationName:"elasticGpuSpecificationSet" locationNameList:"item" type:"list"`
 
 	// An elastic inference accelerator to associate with the instance. Elastic
@@ -170530,10 +170662,11 @@ type RunInstancesInput struct {
 	// Default: false
 	EbsOptimized *bool `locationName:"ebsOptimized" type:"boolean"`
 
-	// An elastic GPU to associate with the instance. An Elastic GPU is a GPU resource
-	// that you can attach to your Windows instance to accelerate the graphics performance
-	// of your applications. For more information, see Amazon EC2 Elastic GPUs (https://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/elastic-graphics.html)
-	// in the Amazon EC2 User Guide.
+	// Deprecated.
+	//
+	// Amazon Elastic Graphics reached end of life on January 8, 2024. For workloads
+	// that require graphics acceleration, we recommend that you use Amazon EC2
+	// G4ad, G4dn, or G5 instances.
 	ElasticGpuSpecification []*ElasticGpuSpecification `locationNameList:"item" type:"list"`
 
 	// An elastic inference accelerator to associate with the instance. Elastic
@@ -170744,8 +170877,6 @@ type RunInstancesInput struct {
 	//    * Instances
 	//
 	//    * Volumes
-	//
-	//    * Elastic graphics
 	//
 	//    * Spot Instance requests
 	//
@@ -172277,6 +172408,11 @@ type ScheduledInstancesNetworkInterface struct {
 	// for eth0, and can only be assigned to a new network interface, not an existing
 	// one. You cannot specify more than one network interface in the request. If
 	// launching into a default subnet, the default value is true.
+	//
+	// Starting on February 1, 2024, Amazon Web Services will charge for all public
+	// IPv4 addresses, including public IPv4 addresses associated with running instances
+	// and Elastic IP addresses. For more information, see the Public IPv4 Address
+	// tab on the Amazon VPC pricing page (http://aws.amazon.com/vpc/pricing/).
 	AssociatePublicIpAddress *bool `type:"boolean"`
 
 	// Indicates whether to delete the interface when the instance is terminated.
@@ -175669,10 +175805,10 @@ type SpotFleetRequestConfigData struct {
 	// TargetCapacity is a required field
 	TargetCapacity *int64 `locationName:"targetCapacity" type:"integer" required:"true"`
 
-	// The unit for the target capacity. TargetCapacityUnitType can only be specified
-	// when InstanceRequirements is specified.
+	// The unit for the target capacity. You can specify this parameter only when
+	// using attribute-based instance type selection.
 	//
-	// Default: units (translates to number of instances)
+	// Default: units (the number of instances)
 	TargetCapacityUnitType *string `locationName:"targetCapacityUnitType" type:"string" enum:"TargetCapacityUnitType"`
 
 	// Indicates whether running Spot Instances are terminated when the Spot Fleet
@@ -177547,8 +177683,8 @@ type StateReason struct {
 	//    the Spot price exceeded available capacity or because of an increase in
 	//    the Spot price.
 	//
-	//    * Client.InstanceInitiatedShutdown: The instance was shut down using the
-	//    shutdown -h command from the instance.
+	//    * Client.InstanceInitiatedShutdown: The instance was shut down from the
+	//    operating system of the instance.
 	//
 	//    * Client.InstanceTerminated: The instance was terminated or rebooted during
 	//    AMI creation.
@@ -177925,6 +178061,11 @@ type Subnet struct {
 
 	// Indicates whether instances launched in this subnet receive a public IPv4
 	// address.
+	//
+	// Starting on February 1, 2024, Amazon Web Services will charge for all public
+	// IPv4 addresses, including public IPv4 addresses associated with running instances
+	// and Elastic IP addresses. For more information, see the Public IPv4 Address
+	// tab on the Amazon VPC pricing page (http://aws.amazon.com/vpc/pricing/).
 	MapPublicIpOnLaunch *bool `locationName:"mapPublicIpOnLaunch" type:"boolean"`
 
 	// The Amazon Resource Name (ARN) of the Outpost.
@@ -178684,7 +178825,7 @@ func (s *TagSpecification) SetTags(v []*Tag) *TagSpecification {
 type TargetCapacitySpecification struct {
 	_ struct{} `type:"structure"`
 
-	// The default TotalTargetCapacity, which is either Spot or On-Demand.
+	// The default target capacity type.
 	DefaultTargetCapacityType *string `locationName:"defaultTargetCapacityType" type:"string" enum:"DefaultTargetCapacityType"`
 
 	// The number of On-Demand units to request. If you specify a target capacity
@@ -178695,13 +178836,10 @@ type TargetCapacitySpecification struct {
 	// for On-Demand units, you cannot specify a target capacity for Spot units.
 	SpotTargetCapacity *int64 `locationName:"spotTargetCapacity" type:"integer"`
 
-	// The unit for the target capacity. TargetCapacityUnitType can only be specified
-	// when InstanceRequirements is specified.
-	//
-	// Default: units (translates to number of instances)
+	// The unit for the target capacity.
 	TargetCapacityUnitType *string `locationName:"targetCapacityUnitType" type:"string" enum:"TargetCapacityUnitType"`
 
-	// The number of units to request, filled using DefaultTargetCapacityType.
+	// The number of units to request, filled the default target capacity type.
 	TotalTargetCapacity *int64 `locationName:"totalTargetCapacity" type:"integer"`
 }
 
@@ -178765,13 +178903,13 @@ func (s *TargetCapacitySpecification) SetTotalTargetCapacity(v int64) *TargetCap
 // On-Demand Instances and Spot Instances in your request, EC2 Fleet will launch
 // instances until it reaches the maximum amount that you're willing to pay.
 // When the maximum amount you're willing to pay is reached, the fleet stops
-// launching instances even if it hasn’t met the target capacity. The MaxTotalPrice
+// launching instances even if it hasn't met the target capacity. The MaxTotalPrice
 // parameters are located in OnDemandOptionsRequest (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_OnDemandOptionsRequest)
 // and SpotOptionsRequest (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_SpotOptionsRequest).
 type TargetCapacitySpecificationRequest struct {
 	_ struct{} `type:"structure"`
 
-	// The default TotalTargetCapacity, which is either Spot or On-Demand.
+	// The default target capacity type.
 	DefaultTargetCapacityType *string `type:"string" enum:"DefaultTargetCapacityType"`
 
 	// The number of On-Demand units to request.
@@ -178780,13 +178918,14 @@ type TargetCapacitySpecificationRequest struct {
 	// The number of Spot units to request.
 	SpotTargetCapacity *int64 `type:"integer"`
 
-	// The unit for the target capacity. TargetCapacityUnitType can only be specified
-	// when InstanceRequirements is specified.
+	// The unit for the target capacity. You can specify this parameter only when
+	// using attributed-based instance type selection.
 	//
-	// Default: units (translates to number of instances)
+	// Default: units (the number of instances)
 	TargetCapacityUnitType *string `type:"string" enum:"TargetCapacityUnitType"`
 
-	// The number of units to request, filled using DefaultTargetCapacityType.
+	// The number of units to request, filled using the default target capacity
+	// type.
 	//
 	// TotalTargetCapacity is a required field
 	TotalTargetCapacity *int64 `type:"integer" required:"true"`
@@ -186399,6 +186538,9 @@ func (s *Volume) SetVolumeType(v string) *Volume {
 type VolumeAttachment struct {
 	_ struct{} `type:"structure"`
 
+	// The ARN of the Amazon ECS or Fargate task to which the volume is attached.
+	AssociatedResource *string `locationName:"associatedResource" type:"string"`
+
 	// The time stamp when the attachment initiated.
 	AttachTime *time.Time `locationName:"attachTime" type:"timestamp"`
 
@@ -186406,10 +186548,21 @@ type VolumeAttachment struct {
 	DeleteOnTermination *bool `locationName:"deleteOnTermination" type:"boolean"`
 
 	// The device name.
+	//
+	// If the volume is attached to a Fargate task, this parameter returns null.
 	Device *string `locationName:"device" type:"string"`
 
 	// The ID of the instance.
+	//
+	// If the volume is attached to a Fargate task, this parameter returns null.
 	InstanceId *string `locationName:"instanceId" type:"string"`
+
+	// The service principal of Amazon Web Services service that owns the underlying
+	// instance to which the volume is attached.
+	//
+	// This parameter is returned only for volumes that are attached to Fargate
+	// tasks.
+	InstanceOwningService *string `locationName:"instanceOwningService" type:"string"`
 
 	// The attachment state of the volume.
 	State *string `locationName:"status" type:"string" enum:"VolumeAttachmentState"`
@@ -186436,6 +186589,12 @@ func (s VolumeAttachment) GoString() string {
 	return s.String()
 }
 
+// SetAssociatedResource sets the AssociatedResource field's value.
+func (s *VolumeAttachment) SetAssociatedResource(v string) *VolumeAttachment {
+	s.AssociatedResource = &v
+	return s
+}
+
 // SetAttachTime sets the AttachTime field's value.
 func (s *VolumeAttachment) SetAttachTime(v time.Time) *VolumeAttachment {
 	s.AttachTime = &v
@@ -186457,6 +186616,12 @@ func (s *VolumeAttachment) SetDevice(v string) *VolumeAttachment {
 // SetInstanceId sets the InstanceId field's value.
 func (s *VolumeAttachment) SetInstanceId(v string) *VolumeAttachment {
 	s.InstanceId = &v
+	return s
+}
+
+// SetInstanceOwningService sets the InstanceOwningService field's value.
+func (s *VolumeAttachment) SetInstanceOwningService(v string) *VolumeAttachment {
+	s.InstanceOwningService = &v
 	return s
 }
 
@@ -188771,7 +188936,7 @@ type VpnTunnelOptionsSpecification struct {
 	//
 	// Constraints: A value between 60 and half of Phase2LifetimeSeconds.
 	//
-	// Default: 540
+	// Default: 270
 	RekeyMarginTimeSeconds *int64 `type:"integer"`
 
 	// The number of packets in an IKE replay window.
@@ -194374,6 +194539,12 @@ const (
 
 	// InstanceTypeR7iMetal48xl is a InstanceType enum value
 	InstanceTypeR7iMetal48xl = "r7i.metal-48xl"
+
+	// InstanceTypeR7izMetal16xl is a InstanceType enum value
+	InstanceTypeR7izMetal16xl = "r7iz.metal-16xl"
+
+	// InstanceTypeR7izMetal32xl is a InstanceType enum value
+	InstanceTypeR7izMetal32xl = "r7iz.metal-32xl"
 )
 
 // InstanceType_Values returns all elements of the InstanceType enum
@@ -195160,6 +195331,8 @@ func InstanceType_Values() []string {
 		InstanceTypeM7iMetal48xl,
 		InstanceTypeR7iMetal24xl,
 		InstanceTypeR7iMetal48xl,
+		InstanceTypeR7izMetal16xl,
+		InstanceTypeR7izMetal32xl,
 	}
 }
 
