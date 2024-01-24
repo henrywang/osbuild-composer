@@ -20,6 +20,24 @@ import (
 
 const kspath = "/osbuild.ks"
 
+func efiBootPartitionTable(rng *rand.Rand) *disk.PartitionTable {
+	var efibootImageSize uint64 = 20 * common.MebiByte
+	return &disk.PartitionTable{
+		Size: efibootImageSize,
+		Partitions: []disk.Partition{
+			{
+				Start: 0,
+				Size:  efibootImageSize,
+				Payload: &disk.Filesystem{
+					Type:       "vfat",
+					Mountpoint: "/",
+					UUID:       disk.NewVolIDFromRand(rng),
+				},
+			},
+		},
+	}
+}
+
 type AnacondaTarInstaller struct {
 	Base
 	Platform         platform.Platform
@@ -66,14 +84,15 @@ func (img *AnacondaTarInstaller) InstantiateManifest(m *manifest.Manifest,
 	buildPipeline := manifest.NewBuild(m, runner, repos, nil)
 	buildPipeline.Checkpoint()
 
-	anacondaPipeline := manifest.NewAnacondaInstaller(m,
+	anacondaPipeline := manifest.NewAnacondaInstaller(
 		manifest.AnacondaInstallerTypePayload,
 		buildPipeline,
 		img.Platform,
 		repos,
 		"kernel",
 		img.Product,
-		img.OSVersion)
+		img.OSVersion,
+	)
 
 	anacondaPipeline.ExtraPackages = img.ExtraBasePackages.Include
 	anacondaPipeline.ExcludePackages = img.ExtraBasePackages.Exclude
@@ -83,6 +102,12 @@ func (img *AnacondaTarInstaller) InstantiateManifest(m *manifest.Manifest,
 	anacondaPipeline.Variant = img.Variant
 	anacondaPipeline.Biosdevname = (img.Platform.GetArch() == arch.ARCH_X86_64)
 	anacondaPipeline.AdditionalAnacondaModules = img.AdditionalAnacondaModules
+	if img.OSCustomizations.FIPS {
+		anacondaPipeline.AdditionalAnacondaModules = append(
+			anacondaPipeline.AdditionalAnacondaModules,
+			"org.fedoraproject.Anaconda.Modules.Security",
+		)
+	}
 	anacondaPipeline.AdditionalDracutModules = img.AdditionalDracutModules
 	anacondaPipeline.AdditionalDrivers = img.AdditionalDrivers
 
@@ -95,28 +120,13 @@ func (img *AnacondaTarInstaller) InstantiateManifest(m *manifest.Manifest,
 
 	anacondaPipeline.Checkpoint()
 
-	rootfsPartitionTable := &disk.PartitionTable{
-		Size: 20 * common.MebiByte,
-		Partitions: []disk.Partition{
-			{
-				Start: 0,
-				Size:  20 * common.MebiByte,
-				Payload: &disk.Filesystem{
-					Type:       "vfat",
-					Mountpoint: "/",
-					UUID:       disk.NewVolIDFromRand(rng),
-				},
-			},
-		},
-	}
-
 	// TODO: replace isoLabelTmpl with more high-level properties
 	isoLabel := fmt.Sprintf(img.ISOLabelTempl, img.Platform.GetArch())
 
 	rootfsImagePipeline := manifest.NewISORootfsImg(buildPipeline, anacondaPipeline)
-	rootfsImagePipeline.Size = 4 * common.GibiByte
+	rootfsImagePipeline.Size = 5 * common.GibiByte
 
-	bootTreePipeline := manifest.NewEFIBootTree(m, buildPipeline, img.Product, img.OSVersion)
+	bootTreePipeline := manifest.NewEFIBootTree(buildPipeline, img.Product, img.OSVersion)
 	bootTreePipeline.Platform = img.Platform
 	bootTreePipeline.UEFIVendor = img.Platform.GetUEFIVendor()
 	bootTreePipeline.ISOLabel = isoLabel
@@ -125,10 +135,13 @@ func (img *AnacondaTarInstaller) InstantiateManifest(m *manifest.Manifest,
 	if img.ISORootKickstart {
 		kernelOpts = append(kernelOpts, fmt.Sprintf("inst.ks=hd:LABEL=%s:%s", isoLabel, kspath))
 	}
+	if img.OSCustomizations.FIPS {
+		kernelOpts = append(kernelOpts, "fips=1")
+	}
 	kernelOpts = append(kernelOpts, img.AdditionalKernelOpts...)
 	bootTreePipeline.KernelOpts = kernelOpts
 
-	osPipeline := manifest.NewOS(m, buildPipeline, img.Platform, repos)
+	osPipeline := manifest.NewOS(buildPipeline, img.Platform, repos)
 	osPipeline.OSCustomizations = img.OSCustomizations
 	osPipeline.Environment = img.Environment
 	osPipeline.Workload = img.Workload
@@ -137,7 +150,7 @@ func (img *AnacondaTarInstaller) InstantiateManifest(m *manifest.Manifest,
 	isoLinuxEnabled := img.Platform.GetArch() == arch.ARCH_X86_64
 
 	isoTreePipeline := manifest.NewAnacondaInstallerISOTree(buildPipeline, anacondaPipeline, rootfsImagePipeline, bootTreePipeline)
-	isoTreePipeline.PartitionTable = rootfsPartitionTable
+	isoTreePipeline.PartitionTable = efiBootPartitionTable(rng)
 	isoTreePipeline.Release = img.Release
 	isoTreePipeline.OSName = img.OSName
 	isoTreePipeline.Users = img.Users
@@ -151,6 +164,10 @@ func (img *AnacondaTarInstaller) InstantiateManifest(m *manifest.Manifest,
 
 	isoTreePipeline.OSPipeline = osPipeline
 	isoTreePipeline.KernelOpts = img.AdditionalKernelOpts
+	if img.OSCustomizations.FIPS {
+		isoTreePipeline.KernelOpts = append(isoTreePipeline.KernelOpts, "fips=1")
+	}
+
 	isoTreePipeline.ISOLinux = isoLinuxEnabled
 
 	isoPipeline := manifest.NewISO(buildPipeline, isoTreePipeline, isoLabel)
