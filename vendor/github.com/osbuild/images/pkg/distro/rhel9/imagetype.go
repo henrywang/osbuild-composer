@@ -167,12 +167,7 @@ func (t *imageType) getPartitionTable(
 	partitioningMode := options.PartitioningMode
 	if t.rpmOstree {
 		// Edge supports only LVM, force it.
-		// Raw is not supported, return an error if it is requested
 		// TODO Need a central location for logic like this
-		if partitioningMode == disk.RawPartitioningMode {
-			return nil, fmt.Errorf("partitioning mode raw not supported for %s on %s", t.Name(), t.arch.Name())
-		}
-
 		partitioningMode = disk.LVMPartitioningMode
 	}
 
@@ -286,13 +281,21 @@ func (t *imageType) checkOptions(bp *blueprint.Blueprint, options distro.ImageOp
 		// set of customizations.  The current set of customizations defined in
 		// the blueprint spec corresponds to the Custom workflow.
 		if customizations != nil {
-			return warnings, fmt.Errorf("image type %q does not support customizations", t.name)
+			return warnings, fmt.Errorf(distro.NoCustomizationsAllowedError, t.name)
 		}
 	}
 
 	// we do not support embedding containers on ostree-derived images, only on commits themselves
 	if len(bp.Containers) > 0 && t.rpmOstree && (t.name != "edge-commit" && t.name != "edge-container") {
 		return warnings, fmt.Errorf("embedding containers is not supported for %s on %s", t.name, t.arch.distro.name)
+	}
+
+	if len(bp.Containers) > 0 {
+		for _, container := range bp.Containers {
+			if err := container.Validate(); err != nil {
+				return nil, err
+			}
+		}
 	}
 
 	if options.OSTree != nil {
@@ -308,9 +311,9 @@ func (t *imageType) checkOptions(bp *blueprint.Blueprint, options distro.ImageOp
 		}
 
 		if t.name == "edge-simplified-installer" {
-			allowed := []string{"InstallationDevice", "FDO", "Ignition", "Kernel", "User", "Group", "FIPS"}
+			allowed := []string{"InstallationDevice", "FDO", "Ignition", "Kernel", "User", "Group", "FIPS", "Filesystem"}
 			if err := customizations.CheckAllowed(allowed...); err != nil {
-				return warnings, fmt.Errorf("unsupported blueprint customizations found for boot ISO image type %q: (allowed: %s)", t.name, strings.Join(allowed, ", "))
+				return warnings, fmt.Errorf(distro.UnsupportedCustomizationError, t.name, strings.Join(allowed, ", "))
 			}
 			if customizations.GetInstallationDevice() == "" {
 				return warnings, fmt.Errorf("boot ISO image type %q requires specifying an installation device to install to", t.name)
@@ -348,7 +351,7 @@ func (t *imageType) checkOptions(bp *blueprint.Blueprint, options distro.ImageOp
 		} else if t.name == "edge-installer" {
 			allowed := []string{"User", "Group", "FIPS"}
 			if err := customizations.CheckAllowed(allowed...); err != nil {
-				return warnings, fmt.Errorf("unsupported blueprint customizations found for boot ISO image type %q: (allowed: %s)", t.name, strings.Join(allowed, ", "))
+				return warnings, fmt.Errorf(distro.UnsupportedCustomizationError, t.name, strings.Join(allowed, ", "))
 			}
 		}
 	}
@@ -358,10 +361,9 @@ func (t *imageType) checkOptions(bp *blueprint.Blueprint, options distro.ImageOp
 		if options.OSTree == nil || options.OSTree.URL == "" {
 			return warnings, fmt.Errorf("%q images require specifying a URL from which to retrieve the OSTree commit", t.name)
 		}
-
-		allowed := []string{"Ignition", "Kernel", "User", "Group", "FIPS"}
+		allowed := []string{"Ignition", "Kernel", "User", "Group", "FIPS", "Filesystem"}
 		if err := customizations.CheckAllowed(allowed...); err != nil {
-			return warnings, fmt.Errorf("unsupported blueprint customizations found for image type %q: (allowed: %s)", t.name, strings.Join(allowed, ", "))
+			return warnings, fmt.Errorf(distro.UnsupportedCustomizationError, t.name, strings.Join(allowed, ", "))
 		}
 		// TODO: consider additional checks, such as those in "edge-simplified-installer"
 	}
@@ -386,9 +388,14 @@ func (t *imageType) checkOptions(bp *blueprint.Blueprint, options distro.ImageOp
 	}
 
 	mountpoints := customizations.GetFilesystems()
-
-	if mountpoints != nil && t.rpmOstree {
-		return warnings, fmt.Errorf("Custom mountpoints are not supported for ostree types")
+	if mountpoints != nil && t.rpmOstree && (t.name == "edge-container" || t.name == "edge-commit") {
+		return warnings, fmt.Errorf("Custom mountpoints are not supported for edge-container and edge-commit")
+	} else if mountpoints != nil && t.rpmOstree && !(t.name == "edge-container" || t.name == "edge-commit") {
+		//customization allowed for edge-raw-image,edge-ami,edge-vsphere,edge-simplified-installer
+		err := blueprint.CheckMountpointsPolicy(mountpoints, pathpolicy.OstreeMountpointPolicies)
+		if err != nil {
+			return warnings, err
+		}
 	}
 
 	err := blueprint.CheckMountpointsPolicy(mountpoints, pathpolicy.MountpointPolicies)
@@ -433,6 +440,12 @@ func (t *imageType) checkOptions(bp *blueprint.Blueprint, options distro.ImageOp
 	_, err = customizations.GetRepositories()
 	if err != nil {
 		return warnings, err
+	}
+
+	if customizations.GetFIPS() && !common.IsBuildHostFIPSEnabled() {
+		w := fmt.Sprintln(common.FIPSEnabledImageWarning)
+		log.Print(w)
+		warnings = append(warnings, w)
 	}
 
 	return warnings, nil
