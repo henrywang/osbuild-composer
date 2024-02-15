@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"path"
 
+	"github.com/osbuild/images/internal/common"
 	"github.com/osbuild/images/pkg/container"
 	"github.com/osbuild/images/pkg/customizations/fsnode"
 	"github.com/osbuild/images/pkg/customizations/users"
@@ -26,6 +27,10 @@ type AnacondaInstallerISOTree struct {
 	Remote  string
 	Users   []users.User
 	Groups  []users.Group
+	// whether to create sudoer file for wheel group with NOPASSWD option
+	WheelNoPasswd bool
+	// Whether an unattended kickstart was requested
+	UnattendedKickstart bool
 
 	PartitionTable *disk.PartitionTable
 
@@ -330,9 +335,16 @@ func (p *AnacondaInstallerISOTree) serialize() osbuild.Pipeline {
 			osbuild.NewOstreePullStageInputs("org.osbuild.source", p.ostreeCommitSpec.Checksum, p.ostreeCommitSpec.Ref),
 		))
 
+		baseksPath := p.KSPath
+		if p.WheelNoPasswd {
+			// move the base kickstart to another file so we can write the
+			// %post kickstart snippet in the default location and include the
+			// base
+			baseksPath = "/osbuild-base.ks"
+		}
 		// Configure the kickstart file with the payload and any user options
 		kickstartOptions, err := osbuild.NewKickstartStageOptionsWithOSTreeCommit(
-			p.KSPath,
+			baseksPath,
 			p.Users,
 			p.Groups,
 			makeISORootPath(p.PayloadPath),
@@ -344,7 +356,48 @@ func (p *AnacondaInstallerISOTree) serialize() osbuild.Pipeline {
 			panic("failed to create kickstartstage options")
 		}
 
+		if p.UnattendedKickstart {
+			// set the default options for Unattended kickstart
+			kickstartOptions.DisplayMode = "text"
+			kickstartOptions.Lang = "en_US.UTF-8"
+			kickstartOptions.Keyboard = "us"
+			kickstartOptions.TimeZone = "UTC"
+
+			kickstartOptions.Reboot = &osbuild.RebootOptions{Eject: true}
+			kickstartOptions.RootPassword = &osbuild.RootPasswordOptions{Lock: true}
+
+			kickstartOptions.ZeroMBR = true
+			kickstartOptions.ClearPart = &osbuild.ClearPartOptions{All: true, InitLabel: true}
+			kickstartOptions.AutoPart = &osbuild.AutoPartOptions{Type: "plain", FSType: "xfs", NoHome: true}
+
+			kickstartOptions.Network = []osbuild.NetworkOptions{
+				{BootProto: "dhcp", Device: "link", Activate: common.ToPtr(true), OnBoot: "on"},
+			}
+		}
+
 		pipeline.AddStage(osbuild.NewKickstartStage(kickstartOptions))
+
+		if p.WheelNoPasswd {
+			// Because osbuild core only supports a subset of options,
+			// we append to the base here with hardcoded wheel group with NOPASSWD option
+			hardcodedKickstartBits := `
+%include /run/install/repo/osbuild-base.ks
+
+%post
+echo -e "%wheel\tALL=(ALL)\tNOPASSWD: ALL" > "/etc/sudoers.d/wheel"
+chmod 0440 /etc/sudoers.d/wheel
+restorecon -rvF /etc/sudoers.d
+%end
+`
+			kickstartFile, err := fsnode.NewFile(p.KSPath, nil, nil, nil, []byte(hardcodedKickstartBits))
+			if err != nil {
+				panic(err)
+			}
+
+			p.Files = []*fsnode.File{kickstartFile}
+
+			pipeline.AddStages(osbuild.GenFileNodesStages(p.Files)...)
+		}
 	}
 
 	if p.containerSpec != nil {
@@ -381,8 +434,19 @@ func (p *AnacondaInstallerISOTree) serialize() osbuild.Pipeline {
 		pipeline.AddStage(osbuild.NewKickstartStage(kickstartOptions))
 
 		// and what we can't do in a separate kickstart that we include
+		targetContainerTransport := "registry"
+		if p.containerSpec.ContainersTransport != nil {
+			targetContainerTransport = *p.containerSpec.ContainersTransport
+		}
+		// Canonicalize to registry, as that's what the bootc stack wants
+		if targetContainerTransport == "docker://" {
+			targetContainerTransport = "registry"
+		}
 
-		kickstartFile, err := fsnode.NewFile(p.KSPath, nil, nil, nil, []byte(`
+		// Because osbuild core only supports a subset of options, we append to the
+		// base here with some more hardcoded defaults
+		// that should very likely become configurable.
+		hardcodedKickstartBits := `
 %include /run/install/repo/osbuild-base.ks
 
 rootpw --lock
@@ -399,7 +463,15 @@ part swap --fstype=swap --size=1024
 part / --fstype=ext4 --grow
 
 reboot --eject
-`))
+`
+
+		// Workaround for lack of --target-imgref in Anaconda, xref https://github.com/osbuild/images/issues/380
+		hardcodedKickstartBits += fmt.Sprintf(`%%post
+bootc switch --mutate-in-place --transport %s %s
+%%end
+`, targetContainerTransport, p.containerSpec.LocalName)
+
+		kickstartFile, err := fsnode.NewFile(p.KSPath, nil, nil, nil, []byte(hardcodedKickstartBits))
 
 		if err != nil {
 			panic(err)
