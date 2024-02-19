@@ -21,6 +21,10 @@ type AnacondaOSTreeInstaller struct {
 	ExtraBasePackages rpmmd.PackageSet
 	Users             []users.User
 	Groups            []users.Group
+	// whether to create sudoer file for wheel group with NOPASSWD option
+	WheelNoPasswd bool
+	// Whether an unattended kickstart was requested
+	UnattendedKickstart bool
 
 	SquashfsCompression string
 
@@ -108,7 +112,8 @@ func (img *AnacondaOSTreeInstaller) InstantiateManifest(m *manifest.Manifest,
 	isoTreePipeline.Remote = img.Remote
 	isoTreePipeline.Users = img.Users
 	isoTreePipeline.Groups = img.Groups
-
+	isoTreePipeline.WheelNoPasswd = img.WheelNoPasswd
+	isoTreePipeline.UnattendedKickstart = img.UnattendedKickstart
 	isoTreePipeline.SquashfsCompression = img.SquashfsCompression
 
 	// For ostree installers, always put the kickstart file in the root of the ISO
