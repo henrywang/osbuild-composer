@@ -167,7 +167,12 @@ func (t *imageType) getPartitionTable(
 	partitioningMode := options.PartitioningMode
 	if t.rpmOstree {
 		// Edge supports only LVM, force it.
+		// Raw is not supported, return an error if it is requested
 		// TODO Need a central location for logic like this
+		if partitioningMode == disk.RawPartitioningMode {
+			return nil, fmt.Errorf("partitioning mode raw not supported for %s on %s", t.Name(), t.arch.Name())
+		}
+
 		partitioningMode = disk.LVMPartitioningMode
 	}
 
@@ -245,11 +250,10 @@ func (t *imageType) Manifest(bp *blueprint.Blueprint,
 	containerSources := make([]container.SourceSpec, len(bp.Containers))
 	for idx, cont := range bp.Containers {
 		containerSources[idx] = container.SourceSpec{
-			Source:              cont.Source,
-			Name:                cont.Name,
-			TLSVerify:           cont.TLSVerify,
-			ContainersTransport: cont.ContainersTransport,
-			StoragePath:         cont.StoragePath,
+			Source:    cont.Source,
+			Name:      cont.Name,
+			TLSVerify: cont.TLSVerify,
+			Local:     cont.LocalStorage,
 		}
 	}
 
@@ -296,14 +300,6 @@ func (t *imageType) checkOptions(bp *blueprint.Blueprint, options distro.ImageOp
 		return warnings, fmt.Errorf("embedding containers is not supported for %s on %s", t.name, t.arch.distro.name)
 	}
 
-	if len(bp.Containers) > 0 {
-		for _, container := range bp.Containers {
-			if err := container.Validate(); err != nil {
-				return nil, err
-			}
-		}
-	}
-
 	if options.OSTree != nil {
 		if err := options.OSTree.Validate(); err != nil {
 			return nil, err
@@ -317,7 +313,7 @@ func (t *imageType) checkOptions(bp *blueprint.Blueprint, options distro.ImageOp
 		}
 
 		if t.name == "edge-simplified-installer" {
-			allowed := []string{"InstallationDevice", "FDO", "Ignition", "Kernel", "User", "Group", "FIPS", "Filesystem"}
+			allowed := []string{"InstallationDevice", "FDO", "Ignition", "Kernel", "User", "Group", "FIPS"}
 			if err := customizations.CheckAllowed(allowed...); err != nil {
 				return warnings, fmt.Errorf(distro.UnsupportedCustomizationError, t.name, strings.Join(allowed, ", "))
 			}
@@ -355,7 +351,7 @@ func (t *imageType) checkOptions(bp *blueprint.Blueprint, options distro.ImageOp
 				}
 			}
 		} else if t.name == "edge-installer" {
-			allowed := []string{"User", "Group", "FIPS"}
+			allowed := []string{"User", "Group", "FIPS", "Installer", "Timezone", "Locale"}
 			if err := customizations.CheckAllowed(allowed...); err != nil {
 				return warnings, fmt.Errorf(distro.UnsupportedCustomizationError, t.name, strings.Join(allowed, ", "))
 			}
@@ -367,7 +363,8 @@ func (t *imageType) checkOptions(bp *blueprint.Blueprint, options distro.ImageOp
 		if options.OSTree == nil || options.OSTree.URL == "" {
 			return warnings, fmt.Errorf("%q images require specifying a URL from which to retrieve the OSTree commit", t.name)
 		}
-		allowed := []string{"Ignition", "Kernel", "User", "Group", "FIPS", "Filesystem"}
+
+		allowed := []string{"Ignition", "Kernel", "User", "Group", "FIPS"}
 		if err := customizations.CheckAllowed(allowed...); err != nil {
 			return warnings, fmt.Errorf(distro.UnsupportedCustomizationError, t.name, strings.Join(allowed, ", "))
 		}
@@ -394,14 +391,9 @@ func (t *imageType) checkOptions(bp *blueprint.Blueprint, options distro.ImageOp
 	}
 
 	mountpoints := customizations.GetFilesystems()
-	if mountpoints != nil && t.rpmOstree && (t.name == "edge-container" || t.name == "edge-commit") {
-		return warnings, fmt.Errorf("Custom mountpoints are not supported for edge-container and edge-commit")
-	} else if mountpoints != nil && t.rpmOstree && !(t.name == "edge-container" || t.name == "edge-commit") {
-		//customization allowed for edge-raw-image,edge-ami,edge-vsphere,edge-simplified-installer
-		err := blueprint.CheckMountpointsPolicy(mountpoints, policies.OstreeMountpointPolicies)
-		if err != nil {
-			return warnings, err
-		}
+
+	if mountpoints != nil && t.rpmOstree {
+		return warnings, fmt.Errorf("Custom mountpoints are not supported for ostree types")
 	}
 
 	err := blueprint.CheckMountpointsPolicy(mountpoints, policies.MountpointPolicies)
@@ -452,6 +444,13 @@ func (t *imageType) checkOptions(bp *blueprint.Blueprint, options distro.ImageOp
 		w := fmt.Sprintln(common.FIPSEnabledImageWarning)
 		log.Print(w)
 		warnings = append(warnings, w)
+	}
+
+	if customizations.GetInstaller() != nil {
+		// only supported by the Anaconda installer
+		if slices.Index([]string{"image-installer", "edge-installer", "live-installer"}, t.name) == -1 {
+			return warnings, fmt.Errorf("installer customizations are not supported for %q", t.name)
+		}
 	}
 
 	return warnings, nil
