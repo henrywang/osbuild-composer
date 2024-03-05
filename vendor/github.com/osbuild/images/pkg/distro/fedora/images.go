@@ -69,6 +69,7 @@ func osCustomizations(
 
 	osc.EnabledServices = imageConfig.EnabledServices
 	osc.DisabledServices = imageConfig.DisabledServices
+	osc.MaskedServices = imageConfig.MaskedServices
 	if imageConfig.DefaultTarget != nil {
 		osc.DefaultTarget = *imageConfig.DefaultTarget
 	}
@@ -344,21 +345,25 @@ func imageInstallerImage(workload workload.Workload,
 	containers []container.SourceSpec,
 	rng *rand.Rand) (image.ImageKind, error) {
 
+	customizations := bp.Customizations
+
 	img := image.NewAnacondaTarInstaller()
 
-	// Enable anaconda-webui for Fedora > 38
-	distro := t.Arch().Distro()
-	if !common.VersionLessThan(distro.Releasever(), "38") {
-		img.AdditionalAnacondaModules = []string{
-			"org.fedoraproject.Anaconda.Modules.Security",
-			"org.fedoraproject.Anaconda.Modules.Timezone",
-			"org.fedoraproject.Anaconda.Modules.Localization",
-		}
-		img.AdditionalKernelOpts = []string{"inst.webui", "inst.webui.remote"}
+	if instCust := customizations.GetInstaller(); instCust != nil {
+		img.WheelNoPasswd = instCust.WheelSudoNopasswd
+		img.UnattendedKickstart = instCust.Unattended
 	}
-	img.AdditionalAnacondaModules = append(img.AdditionalAnacondaModules, "org.fedoraproject.Anaconda.Modules.Users")
 
-	customizations := bp.Customizations
+	if img.UnattendedKickstart {
+		// NOTE: this is not supported right now because the
+		// image-installer on Fedora isn't working when unattended.
+		// These options are probably necessary but could change.
+		// Unattended/non-interactive installations are better set to text
+		// time since they might be running headless and a UI is
+		// unnecessary.
+		img.AdditionalKernelOpts = []string{"inst.text", "inst.noninteractive"}
+	}
+
 	img.Platform = t.platform
 	img.Workload = workload
 	img.OSCustomizations = osCustomizations(t, packageSets[osPkgsKey], containers, customizations)
@@ -396,23 +401,23 @@ func iotCommitImage(workload workload.Workload,
 
 	img.Platform = t.platform
 	img.OSCustomizations = osCustomizations(t, packageSets[osPkgsKey], containers, bp.Customizations)
-	if !common.VersionLessThan(d.Releasever(), "38") {
-		// see https://github.com/ostreedev/ostree/issues/2840
-		img.OSCustomizations.Presets = []osbuild.Preset{
-			{
-				Name:  "ignition-firstboot-complete.service",
-				State: osbuild.StateEnable,
-			},
-			{
-				Name:  "coreos-ignition-write-issues.service",
-				State: osbuild.StateEnable,
-			},
-			{
-				Name:  "fdo-client-linuxapp.service",
-				State: osbuild.StateEnable,
-			},
-		}
+
+	// see https://github.com/ostreedev/ostree/issues/2840
+	img.OSCustomizations.Presets = []osbuild.Preset{
+		{
+			Name:  "ignition-firstboot-complete.service",
+			State: osbuild.StateEnable,
+		},
+		{
+			Name:  "coreos-ignition-write-issues.service",
+			State: osbuild.StateEnable,
+		},
+		{
+			Name:  "fdo-client-linuxapp.service",
+			State: osbuild.StateEnable,
+		},
 	}
+
 	img.Environment = t.environment
 	img.Workload = workload
 	img.OSTreeParent = parentCommit
@@ -462,23 +467,23 @@ func iotContainerImage(workload workload.Workload,
 	d := t.arch.distro
 	img.Platform = t.platform
 	img.OSCustomizations = osCustomizations(t, packageSets[osPkgsKey], containers, bp.Customizations)
-	if !common.VersionLessThan(d.Releasever(), "38") {
-		// see https://github.com/ostreedev/ostree/issues/2840
-		img.OSCustomizations.Presets = []osbuild.Preset{
-			{
-				Name:  "ignition-firstboot-complete.service",
-				State: osbuild.StateEnable,
-			},
-			{
-				Name:  "coreos-ignition-write-issues.service",
-				State: osbuild.StateEnable,
-			},
-			{
-				Name:  "fdo-client-linuxapp.service",
-				State: osbuild.StateEnable,
-			},
-		}
+
+	// see https://github.com/ostreedev/ostree/issues/2840
+	img.OSCustomizations.Presets = []osbuild.Preset{
+		{
+			Name:  "ignition-firstboot-complete.service",
+			State: osbuild.StateEnable,
+		},
+		{
+			Name:  "coreos-ignition-write-issues.service",
+			State: osbuild.StateEnable,
+		},
+		{
+			Name:  "fdo-client-linuxapp.service",
+			State: osbuild.StateEnable,
+		},
 	}
+
 	img.ContainerLanguage = img.OSCustomizations.Language
 	img.Environment = t.environment
 	img.Workload = workload
@@ -513,10 +518,21 @@ func iotInstallerImage(workload workload.Workload,
 	img.ExtraBasePackages = packageSets[installerPkgsKey]
 	img.Users = users.UsersFromBP(customizations.GetUsers())
 	img.Groups = users.GroupsFromBP(customizations.GetGroups())
+
+	img.Language, img.Keyboard = customizations.GetPrimaryLocale()
+	// ignore ntp servers - we don't currently support setting these in the
+	// kickstart though kickstart does support setting them
+	img.Timezone, _ = customizations.GetTimezoneSettings()
+
 	img.AdditionalAnacondaModules = []string{
 		"org.fedoraproject.Anaconda.Modules.Timezone",
 		"org.fedoraproject.Anaconda.Modules.Localization",
 		"org.fedoraproject.Anaconda.Modules.Users",
+	}
+
+	if instCust := customizations.GetInstaller(); instCust != nil {
+		img.WheelNoPasswd = instCust.WheelSudoNopasswd
+		img.UnattendedKickstart = instCust.Unattended
 	}
 
 	img.SquashfsCompression = "lz4"
@@ -548,8 +564,6 @@ func iotImage(workload workload.Workload,
 	}
 	img := image.NewOSTreeDiskImageFromCommit(commit)
 
-	distro := t.Arch().Distro()
-
 	customizations := bp.Customizations
 	img.FIPS = customizations.GetFIPS()
 	img.Users = users.UsersFromBP(customizations.GetUsers())
@@ -580,17 +594,15 @@ func iotImage(workload workload.Workload,
 	img.OSName = "fedora-iot"
 	img.LockRoot = true
 
-	if !common.VersionLessThan(distro.Releasever(), "38") {
-		img.KernelOptionsAppend = append(img.KernelOptionsAppend, "coreos.no_persist_ip")
-		switch img.Platform.GetImageFormat() {
-		case platform.FORMAT_RAW:
-			img.IgnitionPlatform = "metal"
-			if bpIgnition := customizations.GetIgnition(); bpIgnition != nil && bpIgnition.FirstBoot != nil && bpIgnition.FirstBoot.ProvisioningURL != "" {
-				img.KernelOptionsAppend = append(img.KernelOptionsAppend, "ignition.config.url="+bpIgnition.FirstBoot.ProvisioningURL)
-			}
-		case platform.FORMAT_QCOW2:
-			img.IgnitionPlatform = "qemu"
+	img.KernelOptionsAppend = append(img.KernelOptionsAppend, "coreos.no_persist_ip")
+	switch img.Platform.GetImageFormat() {
+	case platform.FORMAT_RAW:
+		img.IgnitionPlatform = "metal"
+		if bpIgnition := customizations.GetIgnition(); bpIgnition != nil && bpIgnition.FirstBoot != nil && bpIgnition.FirstBoot.ProvisioningURL != "" {
+			img.KernelOptionsAppend = append(img.KernelOptionsAppend, "ignition.config.url="+bpIgnition.FirstBoot.ProvisioningURL)
 		}
+	case platform.FORMAT_QCOW2:
+		img.IgnitionPlatform = "qemu"
 	}
 
 	if kopts := customizations.GetKernel(); kopts != nil && kopts.Append != "" {
@@ -632,10 +644,8 @@ func iotSimplifiedInstallerImage(workload workload.Workload,
 	rawImg.KernelOptionsAppend = []string{"modprobe.blacklist=vc4"}
 	rawImg.Keyboard = "us"
 	rawImg.Locale = "C.UTF-8"
-	if !common.VersionLessThan(t.arch.distro.osVersion, "38") {
-		rawImg.SysrootReadOnly = true
-		rawImg.KernelOptionsAppend = append(rawImg.KernelOptionsAppend, "rw")
-	}
+	rawImg.SysrootReadOnly = true
+	rawImg.KernelOptionsAppend = append(rawImg.KernelOptionsAppend, "rw")
 
 	rawImg.Platform = t.platform
 	rawImg.Workload = workload
@@ -645,12 +655,10 @@ func iotSimplifiedInstallerImage(workload workload.Workload,
 	rawImg.OSName = "fedora"
 	rawImg.LockRoot = true
 
-	if !common.VersionLessThan(t.arch.distro.osVersion, "38") {
-		rawImg.IgnitionPlatform = "metal"
-		rawImg.KernelOptionsAppend = append(rawImg.KernelOptionsAppend, "coreos.no_persist_ip")
-		if bpIgnition := customizations.GetIgnition(); bpIgnition != nil && bpIgnition.FirstBoot != nil && bpIgnition.FirstBoot.ProvisioningURL != "" {
-			rawImg.KernelOptionsAppend = append(rawImg.KernelOptionsAppend, "ignition.config.url="+bpIgnition.FirstBoot.ProvisioningURL)
-		}
+	rawImg.IgnitionPlatform = "metal"
+	rawImg.KernelOptionsAppend = append(rawImg.KernelOptionsAppend, "coreos.no_persist_ip")
+	if bpIgnition := customizations.GetIgnition(); bpIgnition != nil && bpIgnition.FirstBoot != nil && bpIgnition.FirstBoot.ProvisioningURL != "" {
+		rawImg.KernelOptionsAppend = append(rawImg.KernelOptionsAppend, "ignition.config.url="+bpIgnition.FirstBoot.ProvisioningURL)
 	}
 
 	// TODO: move generation into LiveImage
