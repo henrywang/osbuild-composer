@@ -18344,8 +18344,9 @@ func (c *EC2) DescribeCapacityBlockOfferingsRequest(input *DescribeCapacityBlock
 
 // DescribeCapacityBlockOfferings API operation for Amazon Elastic Compute Cloud.
 //
-// Describes Capacity Block offerings available for purchase. With Capacity
-// Blocks, you purchase a specific instance type for a period of time.
+// Describes Capacity Block offerings available for purchase in the Amazon Web
+// Services Region that you're currently using. With Capacity Blocks, you purchase
+// a specific instance type for a period of time.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -20819,7 +20820,10 @@ func (c *EC2) DescribeFleetInstancesRequest(input *DescribeFleetInstancesInput) 
 //
 // Describes the running instances for the specified EC2 Fleet.
 //
-// For more information, see Monitor your EC2 Fleet (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/manage-ec2-fleet.html#monitor-ec2-fleet)
+// Currently, DescribeFleetInstances does not support fleets of type instant.
+// Instead, use DescribeFleets, specifying the instant fleet ID in the request.
+//
+// For more information, see Describe your EC2 Fleet (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/manage-ec2-fleet.html#monitor-ec2-fleet)
 // in the Amazon EC2 User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -20899,9 +20903,12 @@ func (c *EC2) DescribeFleetsRequest(input *DescribeFleetsInput) (req *request.Re
 
 // DescribeFleets API operation for Amazon Elastic Compute Cloud.
 //
-// Describes the specified EC2 Fleets or all of your EC2 Fleets.
+// Describes the specified EC2 Fleet or all of your EC2 Fleets.
 //
-// For more information, see Monitor your EC2 Fleet (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/manage-ec2-fleet.html#monitor-ec2-fleet)
+// If a fleet is of type instant, you must specify the fleet ID in the request,
+// otherwise the fleet does not appear in the response.
+//
+// For more information, see Describe your EC2 Fleet (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/manage-ec2-fleet.html#monitor-ec2-fleet)
 // in the Amazon EC2 User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -23157,6 +23164,10 @@ func (c *EC2) DescribeInstanceStatusRequest(input *DescribeInstanceStatusInput) 
 //     (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-lifecycle.html)
 //     in the Amazon EC2 User Guide.
 //
+// The order of the elements in the response, including those within nested
+// structures, might vary. Applications should not assume the elements appear
+// in a particular order.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -23713,6 +23724,10 @@ func (c *EC2) DescribeInstancesRequest(input *DescribeInstancesInput) (req *requ
 // the affected zone, or do not specify any instance IDs at all, the call fails.
 // If you describe instances and specify only instance IDs that are in an unaffected
 // zone, the call works normally.
+//
+// The order of the elements in the response, including those within nested
+// structures, might vary. Applications should not assume the elements appear
+// in a particular order.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -28113,6 +28128,10 @@ func (c *EC2) DescribeReservedInstancesRequest(input *DescribeReservedInstancesI
 // For more information about Reserved Instances, see Reserved Instances (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/concepts-on-demand-reserved-instances.html)
 // in the Amazon EC2 User Guide.
 //
+// The order of the elements in the response, including those within nested
+// structures, might vary. Applications should not assume the elements appear
+// in a particular order.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -28207,6 +28226,10 @@ func (c *EC2) DescribeReservedInstancesListingsRequest(input *DescribeReservedIn
 // For more information, see Reserved Instance Marketplace (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ri-market-general.html)
 // in the Amazon EC2 User Guide.
 //
+// The order of the elements in the response, including those within nested
+// structures, might vary. Applications should not assume the elements appear
+// in a particular order.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -28291,6 +28314,10 @@ func (c *EC2) DescribeReservedInstancesModificationsRequest(input *DescribeReser
 //
 // For more information, see Modifying Reserved Instances (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ri-modifying.html)
 // in the Amazon EC2 User Guide.
+//
+// The order of the elements in the response, including those within nested
+// structures, might vary. Applications should not assume the elements appear
+// in a particular order.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -28432,6 +28459,10 @@ func (c *EC2) DescribeReservedInstancesOfferingsRequest(input *DescribeReservedI
 //
 // For more information, see Reserved Instance Marketplace (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ri-market-general.html)
 // in the Amazon EC2 User Guide.
+//
+// The order of the elements in the response, including those within nested
+// structures, might vary. Applications should not assume the elements appear
+// in a particular order.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -47095,7 +47126,7 @@ func (c *EC2) ModifyInstancePlacementRequest(input *ModifyInstancePlacementInput
 //
 //   - Modify the affinity between an instance and a Dedicated Host (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/dedicated-hosts-overview.html).
 //     When affinity is set to host and the instance is not associated with a
-//     specific Dedicated Host, the next time the instance is launched, it is
+//     specific Dedicated Host, the next time the instance is started, it is
 //     automatically associated with the host on which it lands. If the instance
 //     is restarted or rebooted, this relationship persists.
 //
@@ -106817,7 +106848,7 @@ type DescribeSpotPriceHistoryOutput struct {
 	_ struct{} `type:"structure"`
 
 	// The token to include in another request to get the next page of items. This
-	// value is null when there are no more items to return.
+	// value is an empty string ("") or null when there are no more items to return.
 	NextToken *string `locationName:"nextToken" type:"string"`
 
 	// The historical Spot prices.
@@ -122882,6 +122913,12 @@ type FleetLaunchTemplateOverrides struct {
 	SubnetId *string `locationName:"subnetId" type:"string"`
 
 	// The number of units provided by the specified instance type.
+	//
+	// When specifying weights, the price used in the lowest-price and price-capacity-optimized
+	// allocation strategies is per unit hour (where the instance price is divided
+	// by the specified weight). However, if all the specified weights are above
+	// the requested TargetCapacity, resulting in only 1 instance being launched,
+	// the price used is per instance hour.
 	WeightedCapacity *float64 `locationName:"weightedCapacity" type:"double"`
 }
 
@@ -123017,6 +123054,12 @@ type FleetLaunchTemplateOverridesRequest struct {
 	SubnetId *string `type:"string"`
 
 	// The number of units provided by the specified instance type.
+	//
+	// When specifying weights, the price used in the lowest-price and price-capacity-optimized
+	// allocation strategies is per unit hour (where the instance price is divided
+	// by the specified weight). However, if all the specified weights are above
+	// the requested TargetCapacity, resulting in only 1 instance being launched,
+	// the price used is per instance hour.
 	WeightedCapacity *float64 `type:"double"`
 }
 
@@ -136453,16 +136496,16 @@ type InstanceRequirements struct {
 	//
 	// The parameter accepts an integer, which Amazon EC2 interprets as a percentage.
 	//
-	// To indicate no price protection threshold, specify a high value, such as
-	// 999999.
-	//
 	// If you set DesiredCapacityType to vcpu or memory-mib, the price protection
 	// threshold is based on the per vCPU or per memory price instead of the per
 	// instance price.
 	//
 	// Only one of SpotMaxPricePercentageOverLowestPrice or MaxSpotPriceAsPercentageOfOptimalOnDemandPrice
-	// can be specified. If you don't specify either, then SpotMaxPricePercentageOverLowestPrice
-	// is used and the value for that parameter defaults to 100.
+	// can be specified. If you don't specify either, Amazon EC2 will automatically
+	// apply optimal price protection to consistently select from a wide range of
+	// instance types. To indicate no price protection threshold for Spot Instances,
+	// meaning you want to consider all instance types that match your attributes,
+	// include one of these parameters and specify a high value, such as 999999.
 	MaxSpotPriceAsPercentageOfOptimalOnDemandPrice *int64 `locationName:"maxSpotPriceAsPercentageOfOptimalOnDemandPrice" type:"integer"`
 
 	// The minimum and maximum amount of memory per vCPU, in GiB.
@@ -136524,9 +136567,6 @@ type InstanceRequirements struct {
 	//
 	// The parameter accepts an integer, which Amazon EC2 interprets as a percentage.
 	//
-	// To indicate no price protection threshold, specify a high value, such as
-	// 999999.
-	//
 	// If you set TargetCapacityUnitType to vcpu or memory-mib, the price protection
 	// threshold is applied based on the per-vCPU or per-memory price instead of
 	// the per-instance price.
@@ -136535,8 +136575,11 @@ type InstanceRequirements struct {
 	// and GetInstanceTypesFromInstanceRequirements (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_GetInstanceTypesFromInstanceRequirements.html).
 	//
 	// Only one of SpotMaxPricePercentageOverLowestPrice or MaxSpotPriceAsPercentageOfOptimalOnDemandPrice
-	// can be specified. If you don't specify either, then SpotMaxPricePercentageOverLowestPrice
-	// is used and the value for that parameter defaults to 100.
+	// can be specified. If you don't specify either, Amazon EC2 will automatically
+	// apply optimal price protection to consistently select from a wide range of
+	// instance types. To indicate no price protection threshold for Spot Instances,
+	// meaning you want to consider all instance types that match your attributes,
+	// include one of these parameters and specify a high value, such as 999999.
 	//
 	// Default: 100
 	SpotMaxPricePercentageOverLowestPrice *int64 `locationName:"spotMaxPricePercentageOverLowestPrice" type:"integer"`
@@ -136945,16 +136988,16 @@ type InstanceRequirementsRequest struct {
 	//
 	// The parameter accepts an integer, which Amazon EC2 interprets as a percentage.
 	//
-	// To indicate no price protection threshold, specify a high value, such as
-	// 999999.
-	//
 	// If you set DesiredCapacityType to vcpu or memory-mib, the price protection
 	// threshold is based on the per vCPU or per memory price instead of the per
 	// instance price.
 	//
 	// Only one of SpotMaxPricePercentageOverLowestPrice or MaxSpotPriceAsPercentageOfOptimalOnDemandPrice
-	// can be specified. If you don't specify either, then SpotMaxPricePercentageOverLowestPrice
-	// is used and the value for that parameter defaults to 100.
+	// can be specified. If you don't specify either, Amazon EC2 will automatically
+	// apply optimal price protection to consistently select from a wide range of
+	// instance types. To indicate no price protection threshold for Spot Instances,
+	// meaning you want to consider all instance types that match your attributes,
+	// include one of these parameters and specify a high value, such as 999999.
 	MaxSpotPriceAsPercentageOfOptimalOnDemandPrice *int64 `type:"integer"`
 
 	// The minimum and maximum amount of memory per vCPU, in GiB.
@@ -137021,9 +137064,6 @@ type InstanceRequirementsRequest struct {
 	//
 	// The parameter accepts an integer, which Amazon EC2 interprets as a percentage.
 	//
-	// To indicate no price protection threshold, specify a high value, such as
-	// 999999.
-	//
 	// If you set TargetCapacityUnitType to vcpu or memory-mib, the price protection
 	// threshold is applied based on the per-vCPU or per-memory price instead of
 	// the per-instance price.
@@ -137032,8 +137072,11 @@ type InstanceRequirementsRequest struct {
 	// and GetInstanceTypesFromInstanceRequirements (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_GetInstanceTypesFromInstanceRequirements.html).
 	//
 	// Only one of SpotMaxPricePercentageOverLowestPrice or MaxSpotPriceAsPercentageOfOptimalOnDemandPrice
-	// can be specified. If you don't specify either, then SpotMaxPricePercentageOverLowestPrice
-	// is used and the value for that parameter defaults to 100.
+	// can be specified. If you don't specify either, Amazon EC2 will automatically
+	// apply optimal price protection to consistently select from a wide range of
+	// instance types. To indicate no price protection threshold for Spot Instances,
+	// meaning you want to consider all instance types that match your attributes,
+	// include one of these parameters and specify a high value, such as 999999.
 	//
 	// Default: 100
 	SpotMaxPricePercentageOverLowestPrice *int64 `type:"integer"`
@@ -137876,7 +137919,7 @@ type InstanceTopology struct {
 	InstanceType *string `locationName:"instanceType" type:"string"`
 
 	// The network nodes. The nodes are hashed based on your account. Instances
-	// from different accounts running under the same droplet will return a different
+	// from different accounts running under the same server will return a different
 	// hashed list of strings.
 	NetworkNodes []*string `locationName:"networkNodeSet" locationNameList:"item" type:"list"`
 
@@ -143789,6 +143832,12 @@ type LaunchTemplateOverrides struct {
 	SubnetId *string `locationName:"subnetId" type:"string"`
 
 	// The number of units provided by the specified instance type.
+	//
+	// When specifying weights, the price used in the lowest-price and price-capacity-optimized
+	// allocation strategies is per unit hour (where the instance price is divided
+	// by the specified weight). However, if all the specified weights are above
+	// the requested TargetCapacity, resulting in only 1 instance being launched,
+	// the price used is per instance hour.
 	WeightedCapacity *float64 `locationName:"weightedCapacity" type:"double"`
 }
 
@@ -149434,7 +149483,9 @@ func (s *ModifyInstanceMetadataOptionsOutput) SetInstanceMetadataOptions(v *Inst
 type ModifyInstancePlacementInput struct {
 	_ struct{} `type:"structure"`
 
-	// The affinity setting for the instance.
+	// The affinity setting for the instance. For more information, see Host affinity
+	// (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/how-dedicated-hosts-work.html#dedicated-hosts-affinity)
+	// in the Amazon EC2 User Guide.
 	Affinity *string `locationName:"affinity" type:"string" enum:"Affinity"`
 
 	// The Group Id of a placement group. You must specify the Placement Group Group
@@ -172530,10 +172581,10 @@ type ScheduledInstancesNetworkInterface struct {
 	// one. You cannot specify more than one network interface in the request. If
 	// launching into a default subnet, the default value is true.
 	//
-	// Starting on February 1, 2024, Amazon Web Services will charge for all public
-	// IPv4 addresses, including public IPv4 addresses associated with running instances
-	// and Elastic IP addresses. For more information, see the Public IPv4 Address
-	// tab on the Amazon VPC pricing page (http://aws.amazon.com/vpc/pricing/).
+	// Amazon Web Services charges for all public IPv4 addresses, including public
+	// IPv4 addresses associated with running instances and Elastic IP addresses.
+	// For more information, see the Public IPv4 Address tab on the Amazon VPC pricing
+	// page (http://aws.amazon.com/vpc/pricing/).
 	AssociatePublicIpAddress *bool `type:"boolean"`
 
 	// Indicates whether to delete the interface when the instance is terminated.
