@@ -68,6 +68,7 @@ func osCustomizations(
 
 	osc.EnabledServices = imageConfig.EnabledServices
 	osc.DisabledServices = imageConfig.DisabledServices
+	osc.MaskedServices = imageConfig.MaskedServices
 	if imageConfig.DefaultTarget != nil {
 		osc.DefaultTarget = *imageConfig.DefaultTarget
 	}
@@ -327,7 +328,7 @@ func edgeCommitImage(workload workload.Workload,
 	img.OSVersion = t.arch.distro.osVersion
 	img.Filename = t.Filename()
 
-	if !common.VersionLessThan(t.arch.distro.osVersion, "9.2") || !t.arch.distro.isRHEL() {
+	if common.VersionGreaterThanOrEqual(t.arch.distro.osVersion, "9.2") || !t.arch.distro.isRHEL() {
 		img.OSCustomizations.EnabledServices = append(img.OSCustomizations.EnabledServices, "ignition-firstboot-complete.service", "coreos-ignition-write-issues.service")
 	}
 	img.Environment = t.environment
@@ -361,7 +362,7 @@ func edgeContainerImage(workload workload.Workload,
 	img.ExtraContainerPackages = packageSets[containerPkgsKey]
 	img.Filename = t.Filename()
 
-	if !common.VersionLessThan(t.arch.distro.osVersion, "9.2") || !t.arch.distro.isRHEL() {
+	if common.VersionGreaterThanOrEqual(t.arch.distro.osVersion, "9.2") || !t.arch.distro.isRHEL() {
 		img.OSCustomizations.EnabledServices = append(img.OSCustomizations.EnabledServices, "ignition-firstboot-complete.service", "coreos-ignition-write-issues.service")
 	}
 
@@ -390,6 +391,16 @@ func edgeInstallerImage(workload workload.Workload,
 	img.Users = users.UsersFromBP(customizations.GetUsers())
 	img.Groups = users.GroupsFromBP(customizations.GetGroups())
 
+	img.Language, img.Keyboard = customizations.GetPrimaryLocale()
+	// ignore ntp servers - we don't currently support setting these in the
+	// kickstart though kickstart does support setting them
+	img.Timezone, _ = customizations.GetTimezoneSettings()
+
+	if instCust := customizations.GetInstaller(); instCust != nil {
+		img.NoPasswd = instCust.SudoNopasswd
+		img.UnattendedKickstart = instCust.Unattended
+	}
+
 	img.SquashfsCompression = "xz"
 	img.AdditionalDracutModules = []string{
 		"nvdimm", // non-volatile DIMM firmware (provides nfit, cuse, and nd_e820)
@@ -403,7 +414,7 @@ func edgeInstallerImage(workload workload.Workload,
 		img.AdditionalAnacondaModules = []string{"org.fedoraproject.Anaconda.Modules.Users"}
 	}
 
-	img.ISOLabelTempl = d.isolabelTmpl
+	img.ISOLabelTmpl = d.isolabelTmpl
 	img.Product = d.product
 	img.Variant = "edge"
 	img.OSName = "rhel"
@@ -442,12 +453,12 @@ func edgeRawImage(workload workload.Workload,
 	}
 	img.Keyboard = "us"
 	img.Locale = "C.UTF-8"
-	if !common.VersionLessThan(t.arch.distro.osVersion, "9.2") || !t.arch.distro.isRHEL() {
+	if common.VersionGreaterThanOrEqual(t.arch.distro.osVersion, "9.2") || !t.arch.distro.isRHEL() {
 		img.SysrootReadOnly = true
 		img.KernelOptionsAppend = append(img.KernelOptionsAppend, "rw")
 	}
 
-	if !common.VersionLessThan(t.arch.distro.osVersion, "9.2") || !t.arch.distro.isRHEL() {
+	if common.VersionGreaterThanOrEqual(t.arch.distro.osVersion, "9.2") || !t.arch.distro.isRHEL() {
 		img.IgnitionPlatform = "metal"
 		img.KernelOptionsAppend = append(img.KernelOptionsAppend, "coreos.no_persist_ip")
 		if bpIgnition := customizations.GetIgnition(); bpIgnition != nil && bpIgnition.FirstBoot != nil && bpIgnition.FirstBoot.ProvisioningURL != "" {
@@ -503,7 +514,7 @@ func edgeSimplifiedInstallerImage(workload workload.Workload,
 	rawImg.KernelOptionsAppend = []string{"modprobe.blacklist=vc4"}
 	rawImg.Keyboard = "us"
 	rawImg.Locale = "C.UTF-8"
-	if !common.VersionLessThan(t.arch.distro.osVersion, "9.2") || !t.arch.distro.isRHEL() {
+	if common.VersionGreaterThanOrEqual(t.arch.distro.osVersion, "9.2") || !t.arch.distro.isRHEL() {
 		rawImg.SysrootReadOnly = true
 		rawImg.KernelOptionsAppend = append(rawImg.KernelOptionsAppend, "rw")
 	}
@@ -518,7 +529,7 @@ func edgeSimplifiedInstallerImage(workload workload.Workload,
 	rawImg.OSName = "redhat"
 	rawImg.LockRoot = true
 
-	if !common.VersionLessThan(t.arch.distro.osVersion, "9.2") || !t.arch.distro.isRHEL() {
+	if common.VersionGreaterThanOrEqual(t.arch.distro.osVersion, "9.2") || !t.arch.distro.isRHEL() {
 		rawImg.IgnitionPlatform = "metal"
 		rawImg.KernelOptionsAppend = append(rawImg.KernelOptionsAppend, "coreos.no_persist_ip")
 		if bpIgnition := customizations.GetIgnition(); bpIgnition != nil && bpIgnition.FirstBoot != nil && bpIgnition.FirstBoot.ProvisioningURL != "" {
@@ -560,7 +571,7 @@ func edgeSimplifiedInstallerImage(workload workload.Workload,
 	}
 
 	d := t.arch.distro
-	img.ISOLabelTempl = d.isolabelTmpl
+	img.ISOLabelTmpl = d.isolabelTmpl
 	img.Product = d.product
 	img.Variant = "edge"
 	img.OSName = "redhat"
@@ -595,6 +606,11 @@ func imageInstallerImage(workload workload.Workload,
 	img.AdditionalDrivers = []string{"cuse", "ipmi_devintf", "ipmi_msghandler"}
 	img.AdditionalAnacondaModules = []string{"org.fedoraproject.Anaconda.Modules.Users"}
 
+	if instCust := customizations.GetInstaller(); instCust != nil {
+		img.NoPasswd = instCust.SudoNopasswd
+		img.UnattendedKickstart = instCust.Unattended
+	}
+
 	img.SquashfsCompression = "xz"
 
 	// put the kickstart file in the root of the iso
@@ -602,7 +618,7 @@ func imageInstallerImage(workload workload.Workload,
 
 	d := t.arch.distro
 
-	img.ISOLabelTempl = d.isolabelTmpl
+	img.ISOLabelTmpl = d.isolabelTmpl
 	img.Product = d.product
 	img.OSName = "redhat"
 	img.OSVersion = d.osVersion
