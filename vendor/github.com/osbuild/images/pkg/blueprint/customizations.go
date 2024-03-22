@@ -26,6 +26,7 @@ type Customizations struct {
 	Repositories       []RepositoryCustomization      `json:"repositories,omitempty" toml:"repositories,omitempty"`
 	FIPS               *bool                          `json:"fips,omitempty" toml:"fips,omitempty"`
 	ContainersStorage  *ContainerStorageCustomization `json:"containers-storage,omitempty" toml:"containers-storage,omitempty"`
+	Installer          *InstallerCustomization        `json:"installer,omitempty" toml:"installer,omitempty"`
 }
 
 type IgnitionCustomization struct {
@@ -107,6 +108,7 @@ type FirewallServicesCustomization struct {
 type ServicesCustomization struct {
 	Enabled  []string `json:"enabled,omitempty" toml:"enabled,omitempty"`
 	Disabled []string `json:"disabled,omitempty" toml:"disabled,omitempty"`
+	Masked   []string `json:"masked,omitempty" toml:"masked,omitempty"`
 }
 
 type OpenSCAPCustomization struct {
@@ -382,4 +384,11 @@ func (c *Customizations) GetContainerStorage() *ContainerStorageCustomization {
 		return nil
 	}
 	return c.ContainersStorage
+}
+
+func (c *Customizations) GetInstaller() *InstallerCustomization {
+	if c == nil || c.Installer == nil {
+		return nil
+	}
+	return c.Installer
 }
