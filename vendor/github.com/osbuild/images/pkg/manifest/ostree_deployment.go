@@ -228,7 +228,6 @@ func (p *OSTreeDeployment) doOSTreeSpec(pipeline *osbuild.Pipeline, repoPath str
 }
 
 func (p *OSTreeDeployment) doOSTreeContainerSpec(pipeline *osbuild.Pipeline, repoPath string, kernelOpts []string) string {
-	cont := *p.containerSpec
 	ref := p.ref
 
 	var targetImgref string
@@ -249,7 +248,8 @@ func (p *OSTreeDeployment) doOSTreeContainerSpec(pipeline *osbuild.Pipeline, rep
 			Label: "root",
 		},
 	}
-	images := osbuild.NewContainersInputForSources([]container.Spec{cont})
+
+	images := osbuild.NewContainersInputForSingleSource(*p.containerSpec)
 	pipeline.AddStage(osbuild.NewOSTreeDeployContainerStage(options, images))
 	return ref
 }
@@ -292,7 +292,6 @@ func (p *OSTreeDeployment) serialize() osbuild.Pipeline {
 
 	if p.FIPS {
 		kernelOpts = append(kernelOpts, osbuild.GenFIPSKernelOptions(p.PartitionTable)...)
-		p.Files = append(p.Files, osbuild.GenFIPSFiles()...)
 	}
 
 	var ref string
@@ -408,6 +407,7 @@ func (p *OSTreeDeployment) serialize() osbuild.Pipeline {
 	}
 
 	if p.FIPS {
+		p.Files = append(p.Files, osbuild.GenFIPSFiles()...)
 		for _, stage := range osbuild.GenFIPSStages() {
 			stage.MountOSTree(p.osName, ref, 0)
 			pipeline.AddStage(stage)
