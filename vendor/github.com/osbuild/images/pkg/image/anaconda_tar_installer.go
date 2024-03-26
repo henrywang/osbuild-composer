@@ -13,12 +13,11 @@ import (
 	"github.com/osbuild/images/pkg/customizations/users"
 	"github.com/osbuild/images/pkg/disk"
 	"github.com/osbuild/images/pkg/manifest"
+	"github.com/osbuild/images/pkg/osbuild"
 	"github.com/osbuild/images/pkg/platform"
 	"github.com/osbuild/images/pkg/rpmmd"
 	"github.com/osbuild/images/pkg/runner"
 )
-
-const kspath = "/osbuild.ks"
 
 func efiBootPartitionTable(rng *rand.Rand) *disk.PartitionTable {
 	var efibootImageSize uint64 = 20 * common.MebiByte
@@ -49,19 +48,33 @@ type AnacondaTarInstaller struct {
 	Users             []users.User
 	Groups            []users.Group
 
-	// If set, the kickstart file will be added to the bootiso-tree as
-	// /osbuild.ks, otherwise any kickstart options will be configured in the
-	// default /usr/share/anaconda/interactive-defaults.ks in the rootfs.
+	// If set, the kickstart file will be added to the bootiso-tree at the
+	// default path for osbuild, otherwise any kickstart options will be
+	// configured in the default location for interactive defaults in the
+	// rootfs. Enabling UnattendedKickstart automatically enables this option
+	// because automatic installations cannot be configured using interactive
+	// defaults.
 	ISORootKickstart bool
+
+	// Create a sudoers drop-in file for each user or group to enable the
+	// NOPASSWD option
+	NoPasswd []string
+
+	// Add kickstart options to make the installation fully unattended.
+	// Enabling this option also automatically enables the ISORootKickstart
+	// option.
+	UnattendedKickstart bool
 
 	SquashfsCompression string
 
-	ISOLabelTempl string
-	Product       string
-	Variant       string
-	OSName        string
-	OSVersion     string
-	Release       string
+	ISOLabel     string
+	ISOLabelTmpl string
+	Product      string
+	Variant      string
+	OSName       string
+	OSVersion    string
+	Release      string
+	Preview      bool
 
 	Filename string
 
@@ -84,6 +97,12 @@ func (img *AnacondaTarInstaller) InstantiateManifest(m *manifest.Manifest,
 	buildPipeline := manifest.NewBuild(m, runner, repos, nil)
 	buildPipeline.Checkpoint()
 
+	if img.UnattendedKickstart {
+		// if we're building an unattended installer, override the
+		// ISORootKickstart option
+		img.ISORootKickstart = true
+	}
+
 	anacondaPipeline := manifest.NewAnacondaInstaller(
 		manifest.AnacondaInstallerTypePayload,
 		buildPipeline,
@@ -92,6 +111,7 @@ func (img *AnacondaTarInstaller) InstantiateManifest(m *manifest.Manifest,
 		"kernel",
 		img.Product,
 		img.OSVersion,
+		img.Preview,
 	)
 
 	anacondaPipeline.ExtraPackages = img.ExtraBasePackages.Include
@@ -120,8 +140,14 @@ func (img *AnacondaTarInstaller) InstantiateManifest(m *manifest.Manifest,
 
 	anacondaPipeline.Checkpoint()
 
-	// TODO: replace isoLabelTmpl with more high-level properties
-	isoLabel := fmt.Sprintf(img.ISOLabelTempl, img.Platform.GetArch())
+	var isoLabel string
+
+	if len(img.ISOLabel) > 0 {
+		isoLabel = img.ISOLabel
+	} else {
+		// TODO: replace isoLabelTmpl with more high-level properties
+		isoLabel = fmt.Sprintf(img.ISOLabelTmpl, img.Platform.GetArch())
+	}
 
 	rootfsImagePipeline := manifest.NewISORootfsImg(buildPipeline, anacondaPipeline)
 	rootfsImagePipeline.Size = 5 * common.GibiByte
@@ -131,6 +157,7 @@ func (img *AnacondaTarInstaller) InstantiateManifest(m *manifest.Manifest,
 	bootTreePipeline.UEFIVendor = img.Platform.GetUEFIVendor()
 	bootTreePipeline.ISOLabel = isoLabel
 
+	kspath := osbuild.KickstartPathOSBuild
 	kernelOpts := []string{fmt.Sprintf("inst.stage2=hd:LABEL=%s", isoLabel)}
 	if img.ISORootKickstart {
 		kernelOpts = append(kernelOpts, fmt.Sprintf("inst.ks=hd:LABEL=%s:%s", isoLabel, kspath))
@@ -150,16 +177,27 @@ func (img *AnacondaTarInstaller) InstantiateManifest(m *manifest.Manifest,
 	isoLinuxEnabled := img.Platform.GetArch() == arch.ARCH_X86_64
 
 	isoTreePipeline := manifest.NewAnacondaInstallerISOTree(buildPipeline, anacondaPipeline, rootfsImagePipeline, bootTreePipeline)
+	// TODO: the partition table is required - make it a ctor arg or set a default one in the pipeline
 	isoTreePipeline.PartitionTable = efiBootPartitionTable(rng)
 	isoTreePipeline.Release = img.Release
 	isoTreePipeline.OSName = img.OSName
 	isoTreePipeline.Users = img.Users
 	isoTreePipeline.Groups = img.Groups
+	isoTreePipeline.Keyboard = img.OSCustomizations.Keyboard
+
+	if img.OSCustomizations.Language != "" {
+		isoTreePipeline.Language = &img.OSCustomizations.Language
+	}
+	if img.OSCustomizations.Timezone != "" {
+		isoTreePipeline.Timezone = &img.OSCustomizations.Timezone
+	}
 	isoTreePipeline.PayloadPath = tarPath
 	if img.ISORootKickstart {
 		isoTreePipeline.KSPath = kspath
 	}
 
+	isoTreePipeline.NoPasswd = img.NoPasswd
+	isoTreePipeline.UnattendedKickstart = img.UnattendedKickstart
 	isoTreePipeline.SquashfsCompression = img.SquashfsCompression
 
 	isoTreePipeline.OSPipeline = osPipeline

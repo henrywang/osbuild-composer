@@ -2864,11 +2864,11 @@ func (c *EC2) AttachVolumeRequest(input *AttachVolumeInput) (req *request.Reques
 // the instance with the specified device name.
 //
 // Encrypted EBS volumes must be attached to instances that support Amazon EBS
-// encryption. For more information, see Amazon EBS encryption (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html)
-// in the Amazon Elastic Compute Cloud User Guide.
+// encryption. For more information, see Amazon EBS encryption (https://docs.aws.amazon.com/ebs/latest/userguide/ebs-encryption.html)
+// in the Amazon EBS User Guide.
 //
 // After you attach an EBS volume, you must make it available. For more information,
-// see Make an EBS volume available for use (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-using-volumes.html).
+// see Make an EBS volume available for use (https://docs.aws.amazon.com/ebs/latest/userguide/ebs-using-volumes.html).
 //
 // If a volume has an Amazon Web Services Marketplace product code:
 //
@@ -2883,8 +2883,8 @@ func (c *EC2) AttachVolumeRequest(input *AttachVolumeInput) (req *request.Reques
 //     the product. For example, you can't detach a volume from a Windows instance
 //     and attach it to a Linux instance.
 //
-// For more information, see Attach an Amazon EBS volume to an instance (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-attaching-volume.html)
-// in the Amazon Elastic Compute Cloud User Guide.
+// For more information, see Attach an Amazon EBS volume to an instance (https://docs.aws.amazon.com/ebs/latest/userguide/ebs-attaching-volume.html)
+// in the Amazon EBS User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3110,29 +3110,28 @@ func (c *EC2) AuthorizeSecurityGroupEgressRequest(input *AuthorizeSecurityGroupE
 
 // AuthorizeSecurityGroupEgress API operation for Amazon Elastic Compute Cloud.
 //
-// Adds the specified outbound (egress) rules to a security group for use with
-// a VPC.
+// Adds the specified outbound (egress) rules to a security group.
 //
 // An outbound rule permits instances to send traffic to the specified IPv4
-// or IPv6 CIDR address ranges, or to the instances that are associated with
-// the specified source security groups. When specifying an outbound rule for
-// your security group in a VPC, the IpPermissions must include a destination
-// for the traffic.
+// or IPv6 address ranges, the IP address ranges specified by a prefix list,
+// or the instances that are associated with a source security group. For more
+// information, see Security group rules (https://docs.aws.amazon.com/vpc/latest/userguide/security-group-rules.html).
 //
-// You specify a protocol for each rule (for example, TCP). For the TCP and
-// UDP protocols, you must also specify the destination port or port range.
-// For the ICMP protocol, you must also specify the ICMP type and code. You
-// can use -1 for the type or code to mean all types or all codes.
+// You must specify exactly one of the following destinations: an IPv4 or IPv6
+// address range, a prefix list, or a security group. You must specify a protocol
+// for each rule (for example, TCP). If the protocol is TCP or UDP, you must
+// also specify a port or port range. If the protocol is ICMP or ICMPv6, you
+// must also specify the ICMP type and code.
 //
-// Rule changes are propagated to affected instances as quickly as possible.
-// However, a small delay might occur.
+// Rule changes are propagated to instances associated with the security group
+// as quickly as possible. However, a small delay might occur.
 //
-// For information about VPC security group quotas, see Amazon VPC quotas (https://docs.aws.amazon.com/vpc/latest/userguide/amazon-vpc-limits.html).
+// For examples of rules that you can add to security groups for specific access
+// scenarios, see Security group rules for different use cases (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/security-group-rules-reference.html)
+// in the Amazon EC2 User Guide.
 //
-// If you want to reference a security group across VPCs attached to a transit
-// gateway using the security group referencing feature (https://docs.aws.amazon.com/vpc/latest/tgw/tgw-transit-gateways.html#create-tgw),
-// note that you can only reference security groups for ingress rules. You cannot
-// reference a security group for egress rules.
+// For information about security group quotas, see Amazon VPC quotas (https://docs.aws.amazon.com/vpc/latest/userguide/amazon-vpc-limits.html)
+// in the Amazon VPC User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3208,21 +3207,25 @@ func (c *EC2) AuthorizeSecurityGroupIngressRequest(input *AuthorizeSecurityGroup
 // Adds the specified inbound (ingress) rules to a security group.
 //
 // An inbound rule permits instances to receive traffic from the specified IPv4
-// or IPv6 CIDR address range, or from the instances that are associated with
-// the specified destination security groups. When specifying an inbound rule
-// for your security group in a VPC, the IpPermissions must include a source
-// for the traffic.
+// or IPv6 address range, the IP address ranges that are specified by a prefix
+// list, or the instances that are associated with a destination security group.
+// For more information, see Security group rules (https://docs.aws.amazon.com/vpc/latest/userguide/security-group-rules.html).
 //
-// You specify a protocol for each rule (for example, TCP). For TCP and UDP,
-// you must also specify the destination port or port range. For ICMP/ICMPv6,
-// you must also specify the ICMP/ICMPv6 type and code. You can use -1 to mean
-// all types or all codes.
+// You must specify exactly one of the following sources: an IPv4 or IPv6 address
+// range, a prefix list, or a security group. You must specify a protocol for
+// each rule (for example, TCP). If the protocol is TCP or UDP, you must also
+// specify a port or port range. If the protocol is ICMP or ICMPv6, you must
+// also specify the ICMP/ICMPv6 type and code.
 //
-// Rule changes are propagated to instances within the security group as quickly
-// as possible. However, a small delay might occur.
+// Rule changes are propagated to instances associated with the security group
+// as quickly as possible. However, a small delay might occur.
 //
-// For more information about VPC security group quotas, see Amazon VPC quotas
-// (https://docs.aws.amazon.com/vpc/latest/userguide/amazon-vpc-limits.html).
+// For examples of rules that you can add to security groups for specific access
+// scenarios, see Security group rules for different use cases (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/security-group-rules-reference.html)
+// in the Amazon EC2 User Guide.
+//
+// For more information about security group quotas, see Amazon VPC quotas (https://docs.aws.amazon.com/vpc/latest/userguide/amazon-vpc-limits.html)
+// in the Amazon VPC User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -4316,8 +4319,8 @@ func (c *EC2) CopyImageRequest(input *CopyImageInput) (req *request.Request, out
 // by default using the default encryption key for the Region, or a different
 // key that you specify in the request using KmsKeyId. Outposts do not support
 // unencrypted snapshots. For more information, Amazon EBS local snapshots on
-// Outposts (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/snapshots-outposts.html#ami)
-// in the Amazon EC2 User Guide.
+// Outposts (https://docs.aws.amazon.com/ebs/latest/userguide/snapshots-outposts.html#ami)
+// in the Amazon EBS User Guide.
 //
 // For more information about the prerequisites and limits when copying an AMI,
 // see Copy an AMI (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/CopyingAMIs.html)
@@ -4412,14 +4415,14 @@ func (c *EC2) CopySnapshotRequest(input *CopySnapshotInput) (req *request.Reques
 // Snapshots copied to an Outpost are encrypted by default using the default
 // encryption key for the Region, or a different key that you specify in the
 // request using KmsKeyId. Outposts do not support unencrypted snapshots. For
-// more information, Amazon EBS local snapshots on Outposts (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/snapshots-outposts.html#ami)
-// in the Amazon Elastic Compute Cloud User Guide.
+// more information, Amazon EBS local snapshots on Outposts (https://docs.aws.amazon.com/ebs/latest/userguide/snapshots-outposts.html#ami)
+// in the Amazon EBS User Guide.
 //
 // Snapshots created by copying another snapshot have an arbitrary volume ID
 // that should not be used for any purpose.
 //
-// For more information, see Copy an Amazon EBS snapshot (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-copy-snapshot.html)
-// in the Amazon Elastic Compute Cloud User Guide.
+// For more information, see Copy an Amazon EBS snapshot (https://docs.aws.amazon.com/ebs/latest/userguide/ebs-copy-snapshot.html)
+// in the Amazon EBS User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -5281,45 +5284,48 @@ func (c *EC2) CreateDhcpOptionsRequest(input *CreateDhcpOptionsInput) (req *requ
 
 // CreateDhcpOptions API operation for Amazon Elastic Compute Cloud.
 //
-// Creates a set of DHCP options for your VPC. After creating the set, you must
-// associate it with the VPC, causing all existing and new instances that you
-// launch in the VPC to use this set of DHCP options. The following are the
-// individual DHCP options you can specify. For more information about the options,
-// see RFC 2132 (http://www.ietf.org/rfc/rfc2132.txt).
+// Creates a custom set of DHCP options. After you create a DHCP option set,
+// you associate it with a VPC. After you associate a DHCP option set with a
+// VPC, all existing and newly launched instances in the VPC use this set of
+// DHCP options.
 //
-//   - domain-name-servers - The IP addresses of up to four domain name servers,
-//     or AmazonProvidedDNS. The default DHCP option set specifies AmazonProvidedDNS.
-//     If specifying more than one domain name server, specify the IP addresses
-//     in a single parameter, separated by commas. To have your instance receive
-//     a custom DNS hostname as specified in domain-name, you must set domain-name-servers
-//     to a custom DNS server.
+// The following are the individual DHCP options you can specify. For more information,
+// see DHCP options sets (https://docs.aws.amazon.com/vpc/latest/userguide/VPC_DHCP_Options.html)
+// in the Amazon VPC User Guide.
 //
 //   - domain-name - If you're using AmazonProvidedDNS in us-east-1, specify
-//     ec2.internal. If you're using AmazonProvidedDNS in another Region, specify
-//     region.compute.internal (for example, ap-northeast-1.compute.internal).
-//     Otherwise, specify a domain name (for example, ExampleCompany.com). This
-//     value is used to complete unqualified DNS hostnames. Important: Some Linux
-//     operating systems accept multiple domain names separated by spaces. However,
-//     Windows and other Linux operating systems treat the value as a single
-//     domain, which results in unexpected behavior. If your DHCP options set
-//     is associated with a VPC that has instances with multiple operating systems,
-//     specify only one domain name.
+//     ec2.internal. If you're using AmazonProvidedDNS in any other Region, specify
+//     region.compute.internal. Otherwise, specify a custom domain name. This
+//     value is used to complete unqualified DNS hostnames. Some Linux operating
+//     systems accept multiple domain names separated by spaces. However, Windows
+//     and other Linux operating systems treat the value as a single domain,
+//     which results in unexpected behavior. If your DHCP option set is associated
+//     with a VPC that has instances running operating systems that treat the
+//     value as a single domain, specify only one domain name.
 //
-//   - ntp-servers - The IP addresses of up to four Network Time Protocol (NTP)
-//     servers.
+//   - domain-name-servers - The IP addresses of up to four DNS servers, or
+//     AmazonProvidedDNS. To specify multiple domain name servers in a single
+//     parameter, separate the IP addresses using commas. To have your instances
+//     receive custom DNS hostnames as specified in domain-name, you must specify
+//     a custom DNS server.
+//
+//   - ntp-servers - The IP addresses of up to eight Network Time Protocol
+//     (NTP) servers (four IPv4 addresses and four IPv6 addresses).
 //
 //   - netbios-name-servers - The IP addresses of up to four NetBIOS name servers.
 //
 //   - netbios-node-type - The NetBIOS node type (1, 2, 4, or 8). We recommend
-//     that you specify 2 (broadcast and multicast are not currently supported).
-//     For more information about these node types, see RFC 2132 (http://www.ietf.org/rfc/rfc2132.txt).
+//     that you specify 2. Broadcast and multicast are not supported. For more
+//     information about NetBIOS node types, see RFC 2132 (http://www.ietf.org/rfc/rfc2132.txt).
 //
-// Your VPC automatically starts out with a set of DHCP options that includes
-// only a DNS server that we provide (AmazonProvidedDNS). If you create a set
-// of options, and if your VPC has an internet gateway, make sure to set the
-// domain-name-servers option either to AmazonProvidedDNS or to a domain name
-// server of your choice. For more information, see DHCP options sets (https://docs.aws.amazon.com/vpc/latest/userguide/VPC_DHCP_Options.html)
-// in the Amazon VPC User Guide.
+//   - ipv6-preferred-lease-time - A value (in seconds, minutes, hours, or
+//     years) for how frequently a running instance with an IPv6 assigned to
+//     it goes through DHCPv6 lease renewal. Acceptable values are between 140
+//     and 2147483647 seconds (approximately 68 years). If no value is entered,
+//     the default lease time is 140 seconds. If you use long-term addressing
+//     for EC2 instances, you can increase the lease time and avoid frequent
+//     lease renewal requests. Lease renewal typically occurs when half of the
+//     lease time has elapsed.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -8370,9 +8376,9 @@ func (c *EC2) CreateSnapshotRequest(input *CreateSnapshotInput) (req *request.Re
 // your Amazon EC2 resources (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html)
 // in the Amazon Elastic Compute Cloud User Guide.
 //
-// For more information, see Amazon Elastic Block Store (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AmazonEBS.html)
-// and Amazon EBS encryption (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html)
-// in the Amazon Elastic Compute Cloud User Guide.
+// For more information, see Amazon Elastic Block Store (https://docs.aws.amazon.com/ebs/latest/userguide/what-is-ebs.html)
+// and Amazon EBS encryption (https://docs.aws.amazon.com/ebs/latest/userguide/ebs-encryption.html)
+// in the Amazon EBS User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -10435,15 +10441,15 @@ func (c *EC2) CreateVolumeRequest(input *CreateVolumeInput) (req *request.Reques
 // You can create encrypted volumes. Encrypted volumes must be attached to instances
 // that support Amazon EBS encryption. Volumes that are created from encrypted
 // snapshots are also automatically encrypted. For more information, see Amazon
-// EBS encryption (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html)
-// in the Amazon Elastic Compute Cloud User Guide.
+// EBS encryption (https://docs.aws.amazon.com/ebs/latest/userguide/ebs-encryption.html)
+// in the Amazon EBS User Guide.
 //
 // You can tag your volumes during creation. For more information, see Tag your
 // Amazon EC2 resources (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html)
 // in the Amazon Elastic Compute Cloud User Guide.
 //
-// For more information, see Create an Amazon EBS volume (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-creating-volume.html)
-// in the Amazon Elastic Compute Cloud User Guide.
+// For more information, see Create an Amazon EBS volume (https://docs.aws.amazon.com/ebs/latest/userguide/ebs-creating-volume.html)
+// in the Amazon EBS User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -14297,8 +14303,8 @@ func (c *EC2) DeleteSnapshotRequest(input *DeleteSnapshotInput) (req *request.Re
 // a registered AMI. You must first de-register the AMI before you can delete
 // the snapshot.
 //
-// For more information, see Delete an Amazon EBS snapshot (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-deleting-snapshot.html)
-// in the Amazon Elastic Compute Cloud User Guide.
+// For more information, see Delete an Amazon EBS snapshot (https://docs.aws.amazon.com/ebs/latest/userguide/ebs-deleting-snapshot.html)
+// in the Amazon EBS User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -16074,8 +16080,8 @@ func (c *EC2) DeleteVolumeRequest(input *DeleteVolumeInput) (req *request.Reques
 //
 // The volume can remain in the deleting state for several minutes.
 //
-// For more information, see Delete an Amazon EBS volume (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-deleting-volume.html)
-// in the Amazon Elastic Compute Cloud User Guide.
+// For more information, see Delete an Amazon EBS volume (https://docs.aws.amazon.com/ebs/latest/userguide/ebs-deleting-volume.html)
+// in the Amazon EBS User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -17415,6 +17421,10 @@ func (c *EC2) DescribeAccountAttributesRequest(input *DescribeAccountAttributesI
 //   - vpc-max-security-groups-per-interface: The maximum number of security
 //     groups that you can assign to a network interface.
 //
+// The order of the elements in the response, including those within nested
+// structures, might vary. Applications should not assume the elements appear
+// in a particular order.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -17926,6 +17936,10 @@ func (c *EC2) DescribeAvailabilityZonesRequest(input *DescribeAvailabilityZonesI
 // Zones, see Regions and zones (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html)
 // in the Amazon Elastic Compute Cloud User Guide.
 //
+// The order of the elements in the response, including those within nested
+// structures, might vary. Applications should not assume the elements appear
+// in a particular order.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -18133,6 +18147,10 @@ func (c *EC2) DescribeBundleTasksRequest(input *DescribeBundleTasksInput) (req *
 // task is no longer in the list, you can still register an AMI from it. Just
 // use RegisterImage with the Amazon S3 bucket name and image manifest name
 // you provided to the bundle task.
+//
+// The order of the elements in the response, including those within nested
+// structures, might vary. Applications should not assume the elements appear
+// in a particular order.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -18344,8 +18362,9 @@ func (c *EC2) DescribeCapacityBlockOfferingsRequest(input *DescribeCapacityBlock
 
 // DescribeCapacityBlockOfferings API operation for Amazon Elastic Compute Cloud.
 //
-// Describes Capacity Block offerings available for purchase. With Capacity
-// Blocks, you purchase a specific instance type for a period of time.
+// Describes Capacity Block offerings available for purchase in the Amazon Web
+// Services Region that you're currently using. With Capacity Blocks, you purchase
+// a specific instance type for a period of time.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -20819,7 +20838,10 @@ func (c *EC2) DescribeFleetInstancesRequest(input *DescribeFleetInstancesInput) 
 //
 // Describes the running instances for the specified EC2 Fleet.
 //
-// For more information, see Monitor your EC2 Fleet (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/manage-ec2-fleet.html#monitor-ec2-fleet)
+// Currently, DescribeFleetInstances does not support fleets of type instant.
+// Instead, use DescribeFleets, specifying the instant fleet ID in the request.
+//
+// For more information, see Describe your EC2 Fleet (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/manage-ec2-fleet.html#monitor-ec2-fleet)
 // in the Amazon EC2 User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -20899,9 +20921,12 @@ func (c *EC2) DescribeFleetsRequest(input *DescribeFleetsInput) (req *request.Re
 
 // DescribeFleets API operation for Amazon Elastic Compute Cloud.
 //
-// Describes the specified EC2 Fleets or all of your EC2 Fleets.
+// Describes the specified EC2 Fleet or all of your EC2 Fleets.
 //
-// For more information, see Monitor your EC2 Fleet (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/manage-ec2-fleet.html#monitor-ec2-fleet)
+// If a fleet is of type instant, you must specify the fleet ID in the request,
+// otherwise the fleet does not appear in the response.
+//
+// For more information, see Describe your EC2 Fleet (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/manage-ec2-fleet.html#monitor-ec2-fleet)
 // in the Amazon EC2 User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -22081,6 +22106,10 @@ func (c *EC2) DescribeImageAttributeRequest(input *DescribeImageAttributeInput) 
 // Describes the specified attribute of the specified AMI. You can specify only
 // one attribute at a time.
 //
+// The order of the elements in the response, including those within nested
+// structures, might vary. Applications should not assume the elements appear
+// in a particular order.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -22169,6 +22198,10 @@ func (c *EC2) DescribeImagesRequest(input *DescribeImagesInput) (req *request.Re
 // and then return empty results. After all instances that reference a deregistered
 // AMI are terminated, specifying the ID of the image will eventually return
 // an error indicating that the AMI ID cannot be found.
+//
+// The order of the elements in the response, including those within nested
+// structures, might vary. Applications should not assume the elements appear
+// in a particular order.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -23157,6 +23190,10 @@ func (c *EC2) DescribeInstanceStatusRequest(input *DescribeInstanceStatusInput) 
 //     (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-lifecycle.html)
 //     in the Amazon EC2 User Guide.
 //
+// The order of the elements in the response, including those within nested
+// structures, might vary. Applications should not assume the elements appear
+// in a particular order.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -23713,6 +23750,10 @@ func (c *EC2) DescribeInstancesRequest(input *DescribeInstancesInput) (req *requ
 // the affected zone, or do not specify any instance IDs at all, the call fails.
 // If you describe instances and specify only instance IDs that are in an unaffected
 // zone, the call works normally.
+//
+// The order of the elements in the response, including those within nested
+// structures, might vary. Applications should not assume the elements appear
+// in a particular order.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -25982,6 +26023,137 @@ func (c *EC2) DescribeLockedSnapshotsWithContext(ctx aws.Context, input *Describ
 	return out, req.Send()
 }
 
+const opDescribeMacHosts = "DescribeMacHosts"
+
+// DescribeMacHostsRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeMacHosts operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DescribeMacHosts for more information on using the DescribeMacHosts
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the DescribeMacHostsRequest method.
+//	req, resp := client.DescribeMacHostsRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/DescribeMacHosts
+func (c *EC2) DescribeMacHostsRequest(input *DescribeMacHostsInput) (req *request.Request, output *DescribeMacHostsOutput) {
+	op := &request.Operation{
+		Name:       opDescribeMacHosts,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &DescribeMacHostsInput{}
+	}
+
+	output = &DescribeMacHostsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DescribeMacHosts API operation for Amazon Elastic Compute Cloud.
+//
+// Describes the specified EC2 Mac Dedicated Host or all of your EC2 Mac Dedicated
+// Hosts.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Elastic Compute Cloud's
+// API operation DescribeMacHosts for usage and error information.
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/DescribeMacHosts
+func (c *EC2) DescribeMacHosts(input *DescribeMacHostsInput) (*DescribeMacHostsOutput, error) {
+	req, out := c.DescribeMacHostsRequest(input)
+	return out, req.Send()
+}
+
+// DescribeMacHostsWithContext is the same as DescribeMacHosts with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DescribeMacHosts for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *EC2) DescribeMacHostsWithContext(ctx aws.Context, input *DescribeMacHostsInput, opts ...request.Option) (*DescribeMacHostsOutput, error) {
+	req, out := c.DescribeMacHostsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// DescribeMacHostsPages iterates over the pages of a DescribeMacHosts operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See DescribeMacHosts method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//	// Example iterating over at most 3 pages of a DescribeMacHosts operation.
+//	pageNum := 0
+//	err := client.DescribeMacHostsPages(params,
+//	    func(page *ec2.DescribeMacHostsOutput, lastPage bool) bool {
+//	        pageNum++
+//	        fmt.Println(page)
+//	        return pageNum <= 3
+//	    })
+func (c *EC2) DescribeMacHostsPages(input *DescribeMacHostsInput, fn func(*DescribeMacHostsOutput, bool) bool) error {
+	return c.DescribeMacHostsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// DescribeMacHostsPagesWithContext same as DescribeMacHostsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *EC2) DescribeMacHostsPagesWithContext(ctx aws.Context, input *DescribeMacHostsInput, fn func(*DescribeMacHostsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *DescribeMacHostsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.DescribeMacHostsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*DescribeMacHostsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opDescribeManagedPrefixLists = "DescribeManagedPrefixLists"
 
 // DescribeManagedPrefixListsRequest generates a "aws/request.Request" representing the
@@ -27905,6 +28077,10 @@ func (c *EC2) DescribeRegionsRequest(input *DescribeRegionsInput) (req *request.
 // Managing Amazon Web Services Regions (https://docs.aws.amazon.com/general/latest/gr/rande-manage.html)
 // in the Amazon Web Services General Reference.
 //
+// The order of the elements in the response, including those within nested
+// structures, might vary. Applications should not assume the elements appear
+// in a particular order.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -28113,6 +28289,10 @@ func (c *EC2) DescribeReservedInstancesRequest(input *DescribeReservedInstancesI
 // For more information about Reserved Instances, see Reserved Instances (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/concepts-on-demand-reserved-instances.html)
 // in the Amazon EC2 User Guide.
 //
+// The order of the elements in the response, including those within nested
+// structures, might vary. Applications should not assume the elements appear
+// in a particular order.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -28207,6 +28387,10 @@ func (c *EC2) DescribeReservedInstancesListingsRequest(input *DescribeReservedIn
 // For more information, see Reserved Instance Marketplace (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ri-market-general.html)
 // in the Amazon EC2 User Guide.
 //
+// The order of the elements in the response, including those within nested
+// structures, might vary. Applications should not assume the elements appear
+// in a particular order.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -28291,6 +28475,10 @@ func (c *EC2) DescribeReservedInstancesModificationsRequest(input *DescribeReser
 //
 // For more information, see Modifying Reserved Instances (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ri-modifying.html)
 // in the Amazon EC2 User Guide.
+//
+// The order of the elements in the response, including those within nested
+// structures, might vary. Applications should not assume the elements appear
+// in a particular order.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -28432,6 +28620,10 @@ func (c *EC2) DescribeReservedInstancesOfferingsRequest(input *DescribeReservedI
 //
 // For more information, see Reserved Instance Marketplace (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ri-market-general.html)
 // in the Amazon EC2 User Guide.
+//
+// The order of the elements in the response, including those within nested
+// structures, might vary. Applications should not assume the elements appear
+// in a particular order.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -28961,9 +29153,8 @@ func (c *EC2) DescribeSecurityGroupReferencesRequest(input *DescribeSecurityGrou
 
 // DescribeSecurityGroupReferences API operation for Amazon Elastic Compute Cloud.
 //
-// Describes the VPCs on the other side of a VPC peering connection or the VPCs
-// attached to a transit gateway that are referencing the security groups you've
-// specified in this request.
+// Describes the VPCs on the other side of a VPC peering connection that are
+// referencing the security groups you've specified in this request.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -29299,8 +29490,8 @@ func (c *EC2) DescribeSnapshotAttributeRequest(input *DescribeSnapshotAttributeI
 // Describes the specified attribute of the specified snapshot. You can specify
 // only one attribute at a time.
 //
-// For more information about EBS snapshots, see Amazon EBS snapshots (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSSnapshots.html)
-// in the Amazon Elastic Compute Cloud User Guide.
+// For more information about EBS snapshots, see Amazon EBS snapshots (https://docs.aws.amazon.com/ebs/latest/userguide/ebs-snapshots.html)
+// in the Amazon EBS User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -29555,8 +29746,8 @@ func (c *EC2) DescribeSnapshotsRequest(input *DescribeSnapshotsInput) (req *requ
 //
 // To get the state of fast snapshot restores for a snapshot, use DescribeFastSnapshotRestores.
 //
-// For more information about EBS snapshots, see Amazon EBS snapshots (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSSnapshots.html)
-// in the Amazon Elastic Compute Cloud User Guide.
+// For more information about EBS snapshots, see Amazon EBS snapshots (https://docs.aws.amazon.com/ebs/latest/userguide/ebs-snapshots.html)
+// in the Amazon EBS User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -30333,12 +30524,8 @@ func (c *EC2) DescribeStaleSecurityGroupsRequest(input *DescribeStaleSecurityGro
 //
 // Describes the stale security group rules for security groups in a specified
 // VPC. Rules are stale when they reference a deleted security group in the
-// same VPC, peered VPC, or in separate VPCs attached to a transit gateway (with
-// security group referencing support (https://docs.aws.amazon.com/vpc/latest/tgw/tgw-transit-gateways.html#create-tgw)
-// enabled). Rules can also be stale if they reference a security group in a
-// peer VPC for which the VPC peering connection has been deleted or if they
-// reference a security group in a VPC that has been detached from a transit
-// gateway.
+// same VPC or peered VPC. Rules can also be stale if they reference a security
+// group in a peer VPC for which the VPC peering connection has been deleted.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -30751,6 +30938,10 @@ func (c *EC2) DescribeTagsRequest(input *DescribeTagsInput) (req *request.Reques
 //
 // For more information about tags, see Tag your Amazon EC2 resources (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html)
 // in the Amazon Elastic Compute Cloud User Guide.
+//
+// The order of the elements in the response, including those within nested
+// structures, might vary. Applications should not assume the elements appear
+// in a particular order.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -33354,8 +33545,8 @@ func (c *EC2) DescribeVolumeAttributeRequest(input *DescribeVolumeAttributeInput
 // Describes the specified attribute of the specified volume. You can specify
 // only one attribute at a time.
 //
-// For more information about EBS volumes, see Amazon EBS volumes (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumes.html)
-// in the Amazon Elastic Compute Cloud User Guide.
+// For more information about EBS volumes, see Amazon EBS volumes (https://docs.aws.amazon.com/ebs/latest/userguide/ebs-volumes.html)
+// in the Amazon EBS User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -33452,8 +33643,8 @@ func (c *EC2) DescribeVolumeStatusRequest(input *DescribeVolumeStatusInput) (req
 // If the status is insufficient-data, then the checks might still be taking
 // place on your volume at the time. We recommend that you retry the request.
 // For more information about volume status, see Monitor the status of your
-// volumes (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/monitoring-volume-status.html)
-// in the Amazon Elastic Compute Cloud User Guide.
+// volumes (https://docs.aws.amazon.com/ebs/latest/userguide/monitoring-volume-status.html)
+// in the Amazon EBS User Guide.
 //
 // Events: Reflect the cause of a volume status and might require you to take
 // action. For example, if your volume returns an impaired status, then the
@@ -33470,6 +33661,10 @@ func (c *EC2) DescribeVolumeStatusRequest(input *DescribeVolumeStatusInput) (req
 // Volume status is based on the volume status checks, and does not reflect
 // the volume state. Therefore, volume status does not indicate volumes in the
 // error state (for example, when a volume is incapable of accepting I/O.)
+//
+// The order of the elements in the response, including those within nested
+// structures, might vary. Applications should not assume the elements appear
+// in a particular order.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -33605,8 +33800,12 @@ func (c *EC2) DescribeVolumesRequest(input *DescribeVolumesInput) (req *request.
 // the output to make the list more manageable. For more information, see Pagination
 // (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Query-Requests.html#api-pagination).
 //
-// For more information about EBS volumes, see Amazon EBS volumes (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumes.html)
-// in the Amazon Elastic Compute Cloud User Guide.
+// For more information about EBS volumes, see Amazon EBS volumes (https://docs.aws.amazon.com/ebs/latest/userguide/ebs-volumes.html)
+// in the Amazon EBS User Guide.
+//
+// The order of the elements in the response, including those within nested
+// structures, might vary. Applications should not assume the elements appear
+// in a particular order.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -33746,8 +33945,8 @@ func (c *EC2) DescribeVolumesModificationsRequest(input *DescribeVolumesModifica
 // You can also use CloudWatch Events to check the status of a modification
 // to an EBS volume. For information about CloudWatch Events, see the Amazon
 // CloudWatch Events User Guide (https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/).
-// For more information, see Monitor the progress of volume modifications (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/monitoring-volume-modifications.html)
-// in the Amazon Elastic Compute Cloud User Guide.
+// For more information, see Monitor the progress of volume modifications (https://docs.aws.amazon.com/ebs/latest/userguide/monitoring-volume-modifications.html)
+// in the Amazon EBS User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -35618,8 +35817,8 @@ func (c *EC2) DetachVolumeRequest(input *DetachVolumeInput) (req *request.Reques
 // or Fargate tasks. Attempting to do this results in the UnsupportedOperationException
 // exception with the Unable to detach volume attached to ECS tasks error message.
 //
-// For more information, see Detach an Amazon EBS volume (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-detaching-volume.html)
-// in the Amazon Elastic Compute Cloud User Guide.
+// For more information, see Detach an Amazon EBS volume (https://docs.aws.amazon.com/ebs/latest/userguide/ebs-detaching-volume.html)
+// in the Amazon EBS User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -35929,8 +36128,8 @@ func (c *EC2) DisableEbsEncryptionByDefaultRequest(input *DisableEbsEncryptionBy
 // Disabling encryption by default does not change the encryption status of
 // your existing volumes.
 //
-// For more information, see Amazon EBS encryption (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html)
-// in the Amazon Elastic Compute Cloud User Guide.
+// For more information, see Amazon EBS encryption (https://docs.aws.amazon.com/ebs/latest/userguide/ebs-encryption.html)
+// in the Amazon EBS User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -36565,8 +36764,8 @@ func (c *EC2) DisableSnapshotBlockPublicAccessRequest(input *DisableSnapshotBloc
 // block public access, all snapshots that were previously publicly shared are
 // no longer treated as private and they become publicly accessible again.
 //
-// For more information, see Block public access for snapshots (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/block-public-access-snapshots.html)
-// in the Amazon Elastic Compute Cloud User Guide .
+// For more information, see Block public access for snapshots (https://docs.aws.amazon.com/ebs/latest/userguide/block-public-access-snapshots.html)
+// in the Amazon EBS User Guide .
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -38250,8 +38449,8 @@ func (c *EC2) EnableEbsEncryptionByDefaultRequest(input *EnableEbsEncryptionByDe
 // After you enable encryption by default, the EBS volumes that you create are
 // always encrypted, either using the default KMS key or the KMS key that you
 // specified when you created each volume. For more information, see Amazon
-// EBS encryption (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html)
-// in the Amazon Elastic Compute Cloud User Guide.
+// EBS encryption (https://docs.aws.amazon.com/ebs/latest/userguide/ebs-encryption.html)
+// in the Amazon EBS User Guide.
 //
 // You can specify the default KMS key for encryption by default using ModifyEbsDefaultKmsKeyId
 // or ResetEbsDefaultKmsKeyId.
@@ -38261,7 +38460,7 @@ func (c *EC2) EnableEbsEncryptionByDefaultRequest(input *EnableEbsEncryptionByDe
 //
 // After you enable encryption by default, you can no longer launch instances
 // using instance types that do not support encryption. For more information,
-// see Supported instance types (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html#EBSEncryption_supported_instances).
+// see Supported instance types (https://docs.aws.amazon.com/ebs/latest/userguide/ebs-encryption-requirements.html#ebs-encryption_supported_instances).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -38422,8 +38621,8 @@ func (c *EC2) EnableFastSnapshotRestoresRequest(input *EnableFastSnapshotRestore
 // state. To get the current state of fast snapshot restores, use DescribeFastSnapshotRestores.
 // To disable fast snapshot restores, use DisableFastSnapshotRestores.
 //
-// For more information, see Amazon EBS fast snapshot restore (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-fast-snapshot-restore.html)
-// in the Amazon Elastic Compute Cloud User Guide.
+// For more information, see Amazon EBS fast snapshot restore (https://docs.aws.amazon.com/ebs/latest/userguide/ebs-fast-snapshot-restore.html)
+// in the Amazon EBS User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -38980,8 +39179,8 @@ func (c *EC2) EnableSnapshotBlockPublicAccessRequest(input *EnableSnapshotBlockP
 // shared are no longer treated as private and they become publicly accessible
 // again.
 //
-// For more information, see Block public access for snapshots (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/block-public-access-snapshots.html)
-// in the Amazon Elastic Compute Cloud User Guide.
+// For more information, see Block public access for snapshots (https://docs.aws.amazon.com/ebs/latest/userguide/block-public-access-snapshots.html)
+// in the Amazon EBS User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -40476,8 +40675,8 @@ func (c *EC2) GetEbsDefaultKmsKeyIdRequest(input *GetEbsDefaultKmsKeyIdInput) (r
 // in this Region. You can change the default KMS key for encryption by default
 // using ModifyEbsDefaultKmsKeyId or ResetEbsDefaultKmsKeyId.
 //
-// For more information, see Amazon EBS encryption (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html)
-// in the Amazon Elastic Compute Cloud User Guide.
+// For more information, see Amazon EBS encryption (https://docs.aws.amazon.com/ebs/latest/userguide/ebs-encryption.html)
+// in the Amazon EBS User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -40553,8 +40752,8 @@ func (c *EC2) GetEbsEncryptionByDefaultRequest(input *GetEbsEncryptionByDefaultI
 // Describes whether EBS encryption by default is enabled for your account in
 // the current Region.
 //
-// For more information, see Amazon EBS encryption (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html)
-// in the Amazon Elastic Compute Cloud User Guide.
+// For more information, see Amazon EBS encryption (https://docs.aws.amazon.com/ebs/latest/userguide/ebs-encryption.html)
+// in the Amazon EBS User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -40953,6 +41152,84 @@ func (c *EC2) GetImageBlockPublicAccessState(input *GetImageBlockPublicAccessSta
 // for more information on using Contexts.
 func (c *EC2) GetImageBlockPublicAccessStateWithContext(ctx aws.Context, input *GetImageBlockPublicAccessStateInput, opts ...request.Option) (*GetImageBlockPublicAccessStateOutput, error) {
 	req, out := c.GetImageBlockPublicAccessStateRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetInstanceMetadataDefaults = "GetInstanceMetadataDefaults"
+
+// GetInstanceMetadataDefaultsRequest generates a "aws/request.Request" representing the
+// client's request for the GetInstanceMetadataDefaults operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetInstanceMetadataDefaults for more information on using the GetInstanceMetadataDefaults
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the GetInstanceMetadataDefaultsRequest method.
+//	req, resp := client.GetInstanceMetadataDefaultsRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/GetInstanceMetadataDefaults
+func (c *EC2) GetInstanceMetadataDefaultsRequest(input *GetInstanceMetadataDefaultsInput) (req *request.Request, output *GetInstanceMetadataDefaultsOutput) {
+	op := &request.Operation{
+		Name:       opGetInstanceMetadataDefaults,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &GetInstanceMetadataDefaultsInput{}
+	}
+
+	output = &GetInstanceMetadataDefaultsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetInstanceMetadataDefaults API operation for Amazon Elastic Compute Cloud.
+//
+// Gets the default instance metadata service (IMDS) settings that are set at
+// the account level in the specified Amazon Web Services Region.
+//
+// For more information, see Order of precedence for instance metadata options
+// (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/configuring-instance-metadata-options.html#instance-metadata-options-order-of-precedence)
+// in the Amazon EC2 User Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Elastic Compute Cloud's
+// API operation GetInstanceMetadataDefaults for usage and error information.
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/GetInstanceMetadataDefaults
+func (c *EC2) GetInstanceMetadataDefaults(input *GetInstanceMetadataDefaultsInput) (*GetInstanceMetadataDefaultsOutput, error) {
+	req, out := c.GetInstanceMetadataDefaultsRequest(input)
+	return out, req.Send()
+}
+
+// GetInstanceMetadataDefaultsWithContext is the same as GetInstanceMetadataDefaults with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetInstanceMetadataDefaults for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *EC2) GetInstanceMetadataDefaultsWithContext(ctx aws.Context, input *GetInstanceMetadataDefaultsInput, opts ...request.Option) (*GetInstanceMetadataDefaultsOutput, error) {
+	req, out := c.GetInstanceMetadataDefaultsRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -43026,8 +43303,8 @@ func (c *EC2) GetSnapshotBlockPublicAccessStateRequest(input *GetSnapshotBlockPu
 // Gets the current state of block public access for snapshots setting for the
 // account and Region.
 //
-// For more information, see Block public access for snapshots (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/block-public-access-snapshots.html)
-// in the Amazon Elastic Compute Cloud User Guide.
+// For more information, see Block public access for snapshots (https://docs.aws.amazon.com/ebs/latest/userguide/block-public-access-snapshots.html)
+// in the Amazon EBS User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -45929,8 +46206,8 @@ func (c *EC2) ModifyEbsDefaultKmsKeyIdRequest(input *ModifyEbsDefaultKmsKeyIdInp
 // If you delete or disable the customer managed KMS key that you specified
 // for use with encryption by default, your instances will fail to launch.
 //
-// For more information, see Amazon EBS encryption (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html)
-// in the Amazon Elastic Compute Cloud User Guide.
+// For more information, see Amazon EBS encryption (https://docs.aws.amazon.com/ebs/latest/userguide/ebs-encryption.html)
+// in the Amazon EBS User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -46967,6 +47244,86 @@ func (c *EC2) ModifyInstanceMaintenanceOptionsWithContext(ctx aws.Context, input
 	return out, req.Send()
 }
 
+const opModifyInstanceMetadataDefaults = "ModifyInstanceMetadataDefaults"
+
+// ModifyInstanceMetadataDefaultsRequest generates a "aws/request.Request" representing the
+// client's request for the ModifyInstanceMetadataDefaults operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ModifyInstanceMetadataDefaults for more information on using the ModifyInstanceMetadataDefaults
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//	// Example sending a request using the ModifyInstanceMetadataDefaultsRequest method.
+//	req, resp := client.ModifyInstanceMetadataDefaultsRequest(params)
+//
+//	err := req.Send()
+//	if err == nil { // resp is now filled
+//	    fmt.Println(resp)
+//	}
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/ModifyInstanceMetadataDefaults
+func (c *EC2) ModifyInstanceMetadataDefaultsRequest(input *ModifyInstanceMetadataDefaultsInput) (req *request.Request, output *ModifyInstanceMetadataDefaultsOutput) {
+	op := &request.Operation{
+		Name:       opModifyInstanceMetadataDefaults,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &ModifyInstanceMetadataDefaultsInput{}
+	}
+
+	output = &ModifyInstanceMetadataDefaultsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ModifyInstanceMetadataDefaults API operation for Amazon Elastic Compute Cloud.
+//
+// Modifies the default instance metadata service (IMDS) settings at the account
+// level in the specified Amazon Web Services Region.
+//
+// To remove a parameter's account-level default setting, specify no-preference.
+// At instance launch, the value will come from the AMI, or from the launch
+// parameter if specified. For more information, see Order of precedence for
+// instance metadata options (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/configuring-instance-metadata-options.html#instance-metadata-options-order-of-precedence)
+// in the Amazon EC2 User Guide.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Elastic Compute Cloud's
+// API operation ModifyInstanceMetadataDefaults for usage and error information.
+// See also, https://docs.aws.amazon.com/goto/WebAPI/ec2-2016-11-15/ModifyInstanceMetadataDefaults
+func (c *EC2) ModifyInstanceMetadataDefaults(input *ModifyInstanceMetadataDefaultsInput) (*ModifyInstanceMetadataDefaultsOutput, error) {
+	req, out := c.ModifyInstanceMetadataDefaultsRequest(input)
+	return out, req.Send()
+}
+
+// ModifyInstanceMetadataDefaultsWithContext is the same as ModifyInstanceMetadataDefaults with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ModifyInstanceMetadataDefaults for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *EC2) ModifyInstanceMetadataDefaultsWithContext(ctx aws.Context, input *ModifyInstanceMetadataDefaultsInput, opts ...request.Option) (*ModifyInstanceMetadataDefaultsOutput, error) {
+	req, out := c.ModifyInstanceMetadataDefaultsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opModifyInstanceMetadataOptions = "ModifyInstanceMetadataOptions"
 
 // ModifyInstanceMetadataOptionsRequest generates a "aws/request.Request" representing the
@@ -47095,7 +47452,7 @@ func (c *EC2) ModifyInstancePlacementRequest(input *ModifyInstancePlacementInput
 //
 //   - Modify the affinity between an instance and a Dedicated Host (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/dedicated-hosts-overview.html).
 //     When affinity is set to host and the instance is not associated with a
-//     specific Dedicated Host, the next time the instance is launched, it is
+//     specific Dedicated Host, the next time the instance is started, it is
 //     automatically associated with the host on which it lands. If the instance
 //     is restarted or rebooted, this relationship persists.
 //
@@ -48102,8 +48459,8 @@ func (c *EC2) ModifySnapshotAttributeRequest(input *ModifySnapshotAttributeInput
 // cannot be shared with other accounts.
 //
 // For more information about modifying snapshot permissions, see Share a snapshot
-// (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-modifying-snapshot-permissions.html)
-// in the Amazon Elastic Compute Cloud User Guide.
+// (https://docs.aws.amazon.com/ebs/latest/userguide/ebs-modifying-snapshot-permissions.html)
+// in the Amazon EBS User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -48180,8 +48537,8 @@ func (c *EC2) ModifySnapshotTierRequest(input *ModifySnapshotTierInput) (req *re
 // to a full snapshot that includes all of the blocks of data that were written
 // to the volume at the time the snapshot was created, and moved from the standard
 // tier to the archive tier. For more information, see Archive Amazon EBS snapshots
-// (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/snapshot-archive.html)
-// in the Amazon Elastic Compute Cloud User Guide.
+// (https://docs.aws.amazon.com/ebs/latest/userguide/snapshot-archive.html)
+// in the Amazon EBS User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -49414,21 +49771,19 @@ func (c *EC2) ModifyVolumeRequest(input *ModifyVolumeInput) (req *request.Reques
 // size, volume type, and IOPS capacity. If your EBS volume is attached to a
 // current-generation EC2 instance type, you might be able to apply these changes
 // without stopping the instance or detaching the volume from it. For more information
-// about modifying EBS volumes, see Amazon EBS Elastic Volumes (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-modify-volume.html)
-// (Linux instances) or Amazon EBS Elastic Volumes (https://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ebs-modify-volume.html)
-// (Windows instances).
+// about modifying EBS volumes, see Amazon EBS Elastic Volumes (https://docs.aws.amazon.com/ebs/latest/userguide/ebs-modify-volume.html)
+// in the Amazon EBS User Guide.
 //
 // When you complete a resize operation on your volume, you need to extend the
 // volume's file-system size to take advantage of the new storage capacity.
-// For more information, see Extend a Linux file system (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-expand-volume.html#recognize-expanded-volume-linux)
-// or Extend a Windows file system (https://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ebs-expand-volume.html#recognize-expanded-volume-windows).
+// For more information, see Extend the file system (https://docs.aws.amazon.com/ebs/latest/userguide/recognize-expanded-volume-linux.html).
 //
 // You can use CloudWatch Events to check the status of a modification to an
 // EBS volume. For information about CloudWatch Events, see the Amazon CloudWatch
 // Events User Guide (https://docs.aws.amazon.com/AmazonCloudWatch/latest/events/).
 // You can also track the status of a modification using DescribeVolumesModifications.
 // For information about tracking status changes using either method, see Monitor
-// the progress of volume modifications (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/monitoring-volume-modifications.html).
+// the progress of volume modifications (https://docs.aws.amazon.com/ebs/latest/userguide/monitoring-volume-modifications.html).
 //
 // With previous-generation instance types, resizing an EBS volume might require
 // detaching and reattaching the volume or stopping and restarting the instance.
@@ -51521,9 +51876,9 @@ func (c *EC2) RegisterImageRequest(input *RegisterImageInput) (req *request.Requ
 
 // RegisterImage API operation for Amazon Elastic Compute Cloud.
 //
-// Registers an AMI. When you're creating an AMI, this is the final step you
-// must complete before you can launch an instance from the AMI. For more information
-// about creating AMIs, see Create your own AMI (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/creating-an-ami.html)
+// Registers an AMI. When you're creating an instance-store backed AMI, registering
+// the AMI is the final step in the creation process. For more information about
+// creating AMIs, see Create your own AMI (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/creating-an-ami.html)
 // in the Amazon Elastic Compute Cloud User Guide.
 //
 // For Amazon EBS-backed instances, CreateImage creates and registers the AMI
@@ -53398,8 +53753,8 @@ func (c *EC2) ResetEbsDefaultKmsKeyIdRequest(input *ResetEbsDefaultKmsKeyIdInput
 // After resetting the default KMS key to the Amazon Web Services managed KMS
 // key, you can continue to encrypt by a customer managed KMS key by specifying
 // it when you create the volume. For more information, see Amazon EBS encryption
-// (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html)
-// in the Amazon Elastic Compute Cloud User Guide.
+// (https://docs.aws.amazon.com/ebs/latest/userguide/ebs-encryption.html) in
+// the Amazon EBS User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -53781,8 +54136,8 @@ func (c *EC2) ResetSnapshotAttributeRequest(input *ResetSnapshotAttributeInput) 
 // Resets permission settings for the specified snapshot.
 //
 // For more information about modifying snapshot permissions, see Share a snapshot
-// (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-modifying-snapshot-permissions.html)
-// in the Amazon Elastic Compute Cloud User Guide.
+// (https://docs.aws.amazon.com/ebs/latest/userguide/ebs-modifying-snapshot-permissions.html)
+// in the Amazon EBS User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -54083,8 +54438,8 @@ func (c *EC2) RestoreSnapshotFromRecycleBinRequest(input *RestoreSnapshotFromRec
 // RestoreSnapshotFromRecycleBin API operation for Amazon Elastic Compute Cloud.
 //
 // Restores a snapshot from the Recycle Bin. For more information, see Restore
-// snapshots from the Recycle Bin (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/recycle-bin-working-with-snaps.html#recycle-bin-restore-snaps)
-// in the Amazon Elastic Compute Cloud User Guide.
+// snapshots from the Recycle Bin (https://docs.aws.amazon.com/ebs/latest/userguide/recycle-bin-working-with-snaps.html#recycle-bin-restore-snaps)
+// in the Amazon EBS User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -54161,10 +54516,10 @@ func (c *EC2) RestoreSnapshotTierRequest(input *RestoreSnapshotTierInput) (req *
 // or modifies the restore period or restore type for a snapshot that was previously
 // temporarily restored.
 //
-// For more information see Restore an archived snapshot (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/working-with-snapshot-archiving.html#restore-archived-snapshot)
+// For more information see Restore an archived snapshot (https://docs.aws.amazon.com/ebs/latest/userguide/working-with-snapshot-archiving.html#restore-archived-snapshot)
 // and modify the restore period or restore type for a temporarily restored
-// snapshot (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/working-with-snapshot-archiving.html#modify-temp-restore-period)
-// in the Amazon Elastic Compute Cloud User Guide.
+// snapshot (https://docs.aws.amazon.com/ebs/latest/userguide/working-with-snapshot-archiving.html#modify-temp-restore-period)
+// in the Amazon EBS User Guide.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -63248,7 +63603,7 @@ func (s *AuthorizeClientVpnIngressOutput) SetStatus(v *ClientVpnAuthorizationRul
 type AuthorizeSecurityGroupEgressInput struct {
 	_ struct{} `type:"structure"`
 
-	// Not supported. Use a set of IP permissions to specify the CIDR.
+	// Not supported. Use IP permissions instead.
 	CidrIp *string `locationName:"cidrIp" type:"string"`
 
 	// Checks whether you have the required permissions for the action, without
@@ -63257,7 +63612,7 @@ type AuthorizeSecurityGroupEgressInput struct {
 	// it is UnauthorizedOperation.
 	DryRun *bool `locationName:"dryRun" type:"boolean"`
 
-	// Not supported. Use a set of IP permissions to specify the port.
+	// Not supported. Use IP permissions instead.
 	FromPort *int64 `locationName:"fromPort" type:"integer"`
 
 	// The ID of the security group.
@@ -63265,26 +63620,22 @@ type AuthorizeSecurityGroupEgressInput struct {
 	// GroupId is a required field
 	GroupId *string `locationName:"groupId" type:"string" required:"true"`
 
-	// The sets of IP permissions. You can't specify a destination security group
-	// and a CIDR IP address range in the same set of permissions.
+	// The permissions for the security group rules.
 	IpPermissions []*IpPermission `locationName:"ipPermissions" locationNameList:"item" type:"list"`
 
-	// Not supported. Use a set of IP permissions to specify the protocol name or
-	// number.
+	// Not supported. Use IP permissions instead.
 	IpProtocol *string `locationName:"ipProtocol" type:"string"`
 
-	// Not supported. Use a set of IP permissions to specify a destination security
-	// group.
+	// Not supported. Use IP permissions instead.
 	SourceSecurityGroupName *string `locationName:"sourceSecurityGroupName" type:"string"`
 
-	// Not supported. Use a set of IP permissions to specify a destination security
-	// group.
+	// Not supported. Use IP permissions instead.
 	SourceSecurityGroupOwnerId *string `locationName:"sourceSecurityGroupOwnerId" type:"string"`
 
 	// The tags applied to the security group rule.
 	TagSpecifications []*TagSpecification `locationName:"TagSpecification" locationNameList:"item" type:"list"`
 
-	// Not supported. Use a set of IP permissions to specify the port.
+	// Not supported. Use IP permissions instead.
 	ToPort *int64 `locationName:"toPort" type:"integer"`
 }
 
@@ -63422,12 +63773,12 @@ func (s *AuthorizeSecurityGroupEgressOutput) SetSecurityGroupRules(v []*Security
 type AuthorizeSecurityGroupIngressInput struct {
 	_ struct{} `type:"structure"`
 
-	// The IPv4 address range, in CIDR format. You can't specify this parameter
-	// when specifying a source security group. To specify an IPv6 address range,
-	// use a set of IP permissions.
+	// The IPv4 address range, in CIDR format.
 	//
-	// Alternatively, use a set of IP permissions to specify multiple rules and
-	// a description for the rule.
+	// To specify an IPv6 address range, use IP permissions instead.
+	//
+	// To specify multiple rules and descriptions for the rules, use IP permissions
+	// instead.
 	CidrIp *string `type:"string"`
 
 	// Checks whether you have the required permissions for the action, without
@@ -63437,63 +63788,58 @@ type AuthorizeSecurityGroupIngressInput struct {
 	DryRun *bool `locationName:"dryRun" type:"boolean"`
 
 	// If the protocol is TCP or UDP, this is the start of the port range. If the
-	// protocol is ICMP, this is the type number. A value of -1 indicates all ICMP
-	// types. If you specify all ICMP types, you must specify all ICMP codes.
+	// protocol is ICMP, this is the ICMP type or -1 (all ICMP types).
 	//
-	// Alternatively, use a set of IP permissions to specify multiple rules and
-	// a description for the rule.
+	// To specify multiple rules and descriptions for the rules, use IP permissions
+	// instead.
 	FromPort *int64 `type:"integer"`
 
-	// The ID of the security group. You must specify either the security group
-	// ID or the security group name in the request. For security groups in a nondefault
-	// VPC, you must specify the security group ID.
+	// The ID of the security group.
 	GroupId *string `type:"string"`
 
-	// [Default VPC] The name of the security group. You must specify either the
-	// security group ID or the security group name in the request. For security
-	// groups in a nondefault VPC, you must specify the security group ID.
+	// [Default VPC] The name of the security group. For security groups for a default
+	// VPC you can specify either the ID or the name of the security group. For
+	// security groups for a nondefault VPC, you must specify the ID of the security
+	// group.
 	GroupName *string `type:"string"`
 
-	// The sets of IP permissions.
+	// The permissions for the security group rules.
 	IpPermissions []*IpPermission `locationNameList:"item" type:"list"`
 
 	// The IP protocol name (tcp, udp, icmp) or number (see Protocol Numbers (http://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml)).
-	// To specify icmpv6, use a set of IP permissions.
+	// To specify all protocols, use -1.
 	//
-	// Use -1 to specify all protocols. If you specify -1 or a protocol other than
-	// tcp, udp, or icmp, traffic on all ports is allowed, regardless of any ports
-	// you specify.
+	// To specify icmpv6, use IP permissions instead.
 	//
-	// Alternatively, use a set of IP permissions to specify multiple rules and
-	// a description for the rule.
+	// If you specify a protocol other than one of the supported values, traffic
+	// is allowed on all ports, regardless of any ports that you specify.
+	//
+	// To specify multiple rules and descriptions for the rules, use IP permissions
+	// instead.
 	IpProtocol *string `type:"string"`
 
-	// [Default VPC] The name of the source security group. You can't specify this
-	// parameter in combination with the following parameters: the CIDR IP address
-	// range, the start of the port range, the IP protocol, and the end of the port
-	// range. Creates rules that grant full ICMP, UDP, and TCP access. To create
-	// a rule with a specific IP protocol and port range, use a set of IP permissions
-	// instead. The source security group must be in the same VPC.
+	// [Default VPC] The name of the source security group.
+	//
+	// The rule grants full ICMP, UDP, and TCP access. To create a rule with a specific
+	// protocol and port range, specify a set of IP permissions instead.
 	SourceSecurityGroupName *string `type:"string"`
 
-	// [Nondefault VPC] The Amazon Web Services account ID for the source security
-	// group, if the source security group is in a different account. You can't
-	// specify this parameter in combination with the following parameters: the
-	// CIDR IP address range, the IP protocol, the start of the port range, and
-	// the end of the port range. Creates rules that grant full ICMP, UDP, and TCP
-	// access. To create a rule with a specific IP protocol and port range, use
-	// a set of IP permissions instead.
+	// The Amazon Web Services account ID for the source security group, if the
+	// source security group is in a different account.
+	//
+	// The rule grants full ICMP, UDP, and TCP access. To create a rule with a specific
+	// protocol and port range, use IP permissions instead.
 	SourceSecurityGroupOwnerId *string `type:"string"`
 
-	// [VPC Only] The tags applied to the security group rule.
+	// The tags applied to the security group rule.
 	TagSpecifications []*TagSpecification `locationName:"TagSpecification" locationNameList:"item" type:"list"`
 
 	// If the protocol is TCP or UDP, this is the end of the port range. If the
-	// protocol is ICMP, this is the code. A value of -1 indicates all ICMP codes.
-	// If you specify all ICMP types, you must specify all ICMP codes.
+	// protocol is ICMP, this is the ICMP code or -1 (all ICMP codes). If the start
+	// port is -1 (all ICMP types), then the end port must be -1 (all ICMP codes).
 	//
-	// Alternatively, use a set of IP permissions to specify multiple rules and
-	// a description for the rule.
+	// To specify multiple rules and descriptions for the rules, use IP permissions
+	// instead.
 	ToPort *int64 `type:"integer"`
 }
 
@@ -64041,11 +64387,7 @@ type BundleInstanceInput struct {
 
 	// The ID of the instance to bundle.
 	//
-	// Type: String
-	//
 	// Default: None
-	//
-	// Required: Yes
 	//
 	// InstanceId is a required field
 	InstanceId *string `type:"string" required:"true"`
@@ -69199,8 +69541,8 @@ type CopyImageInput struct {
 	// or within the same Outpost.
 	//
 	// For more information, see Copy AMIs from an Amazon Web Services Region to
-	// an Outpost (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/snapshots-outposts.html#copy-amis)
-	// in the Amazon EC2 User Guide.
+	// an Outpost (https://docs.aws.amazon.com/ebs/latest/userguide/snapshots-outposts.html#copy-amis)
+	// in the Amazon EBS User Guide.
 	DestinationOutpostArn *string `type:"string"`
 
 	// Checks whether you have the required permissions for the action, without
@@ -69214,8 +69556,8 @@ type CopyImageInput struct {
 	// create an unencrypted copy of an encrypted snapshot. The default KMS key
 	// for Amazon EBS is used unless you specify a non-default Key Management Service
 	// (KMS) KMS key using KmsKeyId. For more information, see Amazon EBS encryption
-	// (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html)
-	// in the Amazon EC2 User Guide.
+	// (https://docs.aws.amazon.com/ebs/latest/userguide/ebs-encryption.html) in
+	// the Amazon EBS User Guide.
 	Encrypted *bool `locationName:"encrypted" type:"boolean"`
 
 	// The identifier of the symmetric Key Management Service (KMS) KMS key to use
@@ -69256,6 +69598,19 @@ type CopyImageInput struct {
 	//
 	// SourceRegion is a required field
 	SourceRegion *string `type:"string" required:"true"`
+
+	// The tags to apply to the new AMI and new snapshots. You can tag the AMI,
+	// the snapshots, or both.
+	//
+	//    * To tag the new AMI, the value for ResourceType must be image.
+	//
+	//    * To tag the new snapshots, the value for ResourceType must be snapshot.
+	//    The same tag is applied to all the new snapshots.
+	//
+	// If you specify other values for ResourceType, the request fails.
+	//
+	// To tag an AMI or snapshot after it has been created, see CreateTags (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateTags.html).
+	TagSpecifications []*TagSpecification `locationName:"TagSpecification" locationNameList:"item" type:"list"`
 }
 
 // String returns the string representation.
@@ -69355,6 +69710,12 @@ func (s *CopyImageInput) SetSourceRegion(v string) *CopyImageInput {
 	return s
 }
 
+// SetTagSpecifications sets the TagSpecifications field's value.
+func (s *CopyImageInput) SetTagSpecifications(v []*TagSpecification) *CopyImageInput {
+	s.TagSpecifications = v
+	return s
+}
+
 // Contains the output of CopyImage.
 type CopyImageOutput struct {
 	_ struct{} `type:"structure"`
@@ -69400,8 +69761,8 @@ type CopySnapshotInput struct {
 	// Outpost to another, or within the same Outpost.
 	//
 	// For more information, see Copy snapshots from an Amazon Web Services Region
-	// to an Outpost (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/snapshots-outposts.html#copy-snapshots)
-	// in the Amazon Elastic Compute Cloud User Guide.
+	// to an Outpost (https://docs.aws.amazon.com/ebs/latest/userguide/snapshots-outposts.html#copy-snapshots)
+	// in the Amazon EBS User Guide.
 	DestinationOutpostArn *string `type:"string"`
 
 	// The destination Region to use in the PresignedUrl parameter of a snapshot
@@ -69424,8 +69785,8 @@ type CopySnapshotInput struct {
 	// not enabled, enable encryption using this parameter. Otherwise, omit this
 	// parameter. Encrypted snapshots are encrypted, even if you omit this parameter
 	// and encryption by default is not enabled. You cannot set this parameter to
-	// false. For more information, see Amazon EBS encryption (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html)
-	// in the Amazon Elastic Compute Cloud User Guide.
+	// false. For more information, see Amazon EBS encryption (https://docs.aws.amazon.com/ebs/latest/userguide/ebs-encryption.html)
+	// in the Amazon EBS User Guide.
 	Encrypted *bool `locationName:"encrypted" type:"boolean"`
 
 	// The identifier of the Key Management Service (KMS) KMS key to use for Amazon
@@ -72007,11 +72368,12 @@ type CreateFlowLogsInput struct {
 	// accounts.
 	DeliverCrossAccountRole *string `type:"string"`
 
-	// The ARN of the IAM role that allows Amazon EC2 to publish flow logs to a
-	// CloudWatch Logs log group in your account.
+	// The ARN of the IAM role that allows Amazon EC2 to publish flow logs to the
+	// log destination.
 	//
-	// This parameter is required if the destination type is cloud-watch-logs and
-	// unsupported otherwise.
+	// This parameter is required if the destination type is cloud-watch-logs, or
+	// if the destination type is kinesis-data-firehose and the delivery stream
+	// and the resources to monitor are in different accounts.
 	DeliverLogsPermissionArn *string `type:"string"`
 
 	// The destination options.
@@ -77126,8 +77488,8 @@ type CreateSnapshotInput struct {
 	//    must be created on the same Outpost as the volume.
 	//
 	// For more information, see Create local snapshots from volumes on an Outpost
-	// (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/snapshots-outposts.html#create-snapshot)
-	// in the Amazon Elastic Compute Cloud User Guide.
+	// (https://docs.aws.amazon.com/ebs/latest/userguide/snapshots-outposts.html#create-snapshot)
+	// in the Amazon EBS User Guide.
 	OutpostArn *string `type:"string"`
 
 	// The tags to apply to the snapshot during creation.
@@ -77235,8 +77597,8 @@ type CreateSnapshotsInput struct {
 	//    must be created on the same Outpost as the instance.
 	//
 	// For more information, see Create multi-volume local snapshots from instances
-	// on an Outpost (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/snapshots-outposts.html#create-multivol-snapshot)
-	// in the Amazon Elastic Compute Cloud User Guide.
+	// on an Outpost (https://docs.aws.amazon.com/ebs/latest/userguide/snapshots-outposts.html#create-multivol-snapshot)
+	// in the Amazon EBS User Guide.
 	OutpostArn *string `type:"string"`
 
 	// Tags to apply to every snapshot specified by the instance.
@@ -80124,22 +80486,20 @@ type CreateTransitGatewayVpcAttachmentRequestOptions struct {
 	// Enable or disable IPv6 support. The default is disable.
 	Ipv6Support *string `type:"string" enum:"Ipv6SupportValue"`
 
+	//
+	// This parameter is in preview and may not be available for your account.
+	//
 	// Enables you to reference a security group across VPCs attached to a transit
-	// gateway (TGW). Use this option to simplify security group management and
-	// control of instance-to-instance traffic across VPCs that are connected by
-	// transit gateway. You can also use this option to migrate from VPC peering
-	// (which was the only option that supported security group referencing) to
-	// transit gateways (which now also support security group referencing). This
-	// option is disabled by default and there are no additional costs to use this
-	// feature.
+	// gateway. Use this option to simplify security group management and control
+	// of instance-to-instance traffic across VPCs that are connected by transit
+	// gateway. You can also use this option to migrate from VPC peering (which
+	// was the only option that supported security group referencing) to transit
+	// gateways (which now also support security group referencing). This option
+	// is disabled by default and there are no additional costs to use this feature.
 	//
 	// If you don't enable or disable SecurityGroupReferencingSupport in the request,
 	// the attachment will inherit the security group referencing support setting
 	// on the transit gateway.
-	//
-	// For important information about this feature, see Create a transit gateway
-	// attachment to a VPC (https://docs.aws.amazon.com/vpc/latest/tgw/tgw-vpc-attachments.html#create-vpc-attachment)
-	// in the Amazon Web Services Transit Gateway Guide.
 	SecurityGroupReferencingSupport *string `type:"string" enum:"SecurityGroupReferencingSupportValue"`
 }
 
@@ -81150,11 +81510,11 @@ type CreateVolumeInput struct {
 	// Indicates whether the volume should be encrypted. The effect of setting the
 	// encryption state to true depends on the volume origin (new or from a snapshot),
 	// starting encryption state, ownership, and whether encryption by default is
-	// enabled. For more information, see Encryption by default (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html#encryption-by-default)
-	// in the Amazon Elastic Compute Cloud User Guide.
+	// enabled. For more information, see Encryption by default (https://docs.aws.amazon.com/ebs/latest/userguide/work-with-ebs-encr.html#encryption-by-default)
+	// in the Amazon EBS User Guide.
 	//
 	// Encrypted Amazon EBS volumes must be attached to instances that support Amazon
-	// EBS encryption. For more information, see Supported instance types (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html#EBSEncryption_supported_instances).
+	// EBS encryption. For more information, see Supported instance types (https://docs.aws.amazon.com/ebs/latest/userguide/ebs-encryption-requirements.html#ebs-encryption_supported_instances).
 	Encrypted *bool `locationName:"encrypted" type:"boolean"`
 
 	// The number of I/O operations per second (IOPS). For gp3, io1, and io2 volumes,
@@ -81202,8 +81562,8 @@ type CreateVolumeInput struct {
 	// you can attach the volume to up to 16 Instances built on the Nitro System
 	// (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html#ec2-nitro-instances)
 	// in the same Availability Zone. This parameter is supported with io1 and io2
-	// volumes only. For more information, see Amazon EBS Multi-Attach (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-volumes-multi.html)
-	// in the Amazon Elastic Compute Cloud User Guide.
+	// volumes only. For more information, see Amazon EBS Multi-Attach (https://docs.aws.amazon.com/ebs/latest/userguide/ebs-volumes-multi.html)
+	// in the Amazon EBS User Guide.
 	MultiAttachEnabled *bool `type:"boolean"`
 
 	// The Amazon Resource Name (ARN) of the Outpost.
@@ -81256,8 +81616,8 @@ type CreateVolumeInput struct {
 	// Throughput Optimized HDD (st1) and Cold HDD (sc1) volumes can't be used as
 	// boot volumes.
 	//
-	// For more information, see Amazon EBS volume types (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html)
-	// in the Amazon Elastic Compute Cloud User Guide.
+	// For more information, see Amazon EBS volume types (https://docs.aws.amazon.com/ebs/latest/userguide/ebs-volume-types.html)
+	// in the Amazon EBS User Guide.
 	//
 	// Default: gp2
 	VolumeType *string `type:"string" enum:"VolumeType"`
@@ -91387,7 +91747,7 @@ type DescribeAvailabilityZonesInput struct {
 	//    * group-name - For Availability Zones, use the Region name. For Local
 	//    Zones, use the name of the group associated with the Local Zone (for example,
 	//    us-west-2-lax-1) For Wavelength Zones, use the name of the group associated
-	//    with the Wavelength Zone (for example, us-east-1-wl1-bos-wlz-1).
+	//    with the Wavelength Zone (for example, us-east-1-wl1).
 	//
 	//    * message - The Zone message.
 	//
@@ -101604,6 +101964,125 @@ func (s *DescribeLockedSnapshotsOutput) SetSnapshots(v []*LockedSnapshotsInfo) *
 	return s
 }
 
+type DescribeMacHostsInput struct {
+	_ struct{} `type:"structure"`
+
+	// The filters.
+	//
+	//    * availability-zone - The Availability Zone of the EC2 Mac Dedicated Host.
+	//
+	//    * instance-type - The instance type size that the EC2 Mac Dedicated Host
+	//    is configured to support.
+	Filters []*Filter `locationName:"Filter" locationNameList:"Filter" type:"list"`
+
+	// The IDs of the EC2 Mac Dedicated Hosts.
+	HostIds []*string `locationName:"HostId" locationNameList:"item" type:"list"`
+
+	// The maximum number of results to return for the request in a single page.
+	// The remaining results can be seen by sending another request with the returned
+	// nextToken value. This value can be between 5 and 500. If maxResults is given
+	// a larger value than 500, you receive an error.
+	MaxResults *int64 `min:"5" type:"integer"`
+
+	// The token to use to retrieve the next page of results.
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeMacHostsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeMacHostsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeMacHostsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeMacHostsInput"}
+	if s.MaxResults != nil && *s.MaxResults < 5 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 5))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetFilters sets the Filters field's value.
+func (s *DescribeMacHostsInput) SetFilters(v []*Filter) *DescribeMacHostsInput {
+	s.Filters = v
+	return s
+}
+
+// SetHostIds sets the HostIds field's value.
+func (s *DescribeMacHostsInput) SetHostIds(v []*string) *DescribeMacHostsInput {
+	s.HostIds = v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *DescribeMacHostsInput) SetMaxResults(v int64) *DescribeMacHostsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *DescribeMacHostsInput) SetNextToken(v string) *DescribeMacHostsInput {
+	s.NextToken = &v
+	return s
+}
+
+type DescribeMacHostsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Information about the EC2 Mac Dedicated Hosts.
+	MacHosts []*MacHost `locationName:"macHostSet" locationNameList:"item" type:"list"`
+
+	// The token to use to retrieve the next page of results.
+	NextToken *string `locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeMacHostsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s DescribeMacHostsOutput) GoString() string {
+	return s.String()
+}
+
+// SetMacHosts sets the MacHosts field's value.
+func (s *DescribeMacHostsOutput) SetMacHosts(v []*MacHost) *DescribeMacHostsOutput {
+	s.MacHosts = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *DescribeMacHostsOutput) SetNextToken(v string) *DescribeMacHostsOutput {
+	s.NextToken = &v
+	return s
+}
+
 type DescribeManagedPrefixListsInput struct {
 	_ struct{} `type:"structure"`
 
@@ -106817,7 +107296,7 @@ type DescribeSpotPriceHistoryOutput struct {
 	_ struct{} `type:"structure"`
 
 	// The token to include in another request to get the next page of items. This
-	// value is null when there are no more items to return.
+	// value is an empty string ("") or null when there are no more items to return.
 	NextToken *string `locationName:"nextToken" type:"string"`
 
 	// The historical Spot prices.
@@ -116841,13 +117320,13 @@ type EbsBlockDevice struct {
 	// being restored from a backing snapshot. The effect of setting the encryption
 	// state to true depends on the volume origin (new or from a snapshot), starting
 	// encryption state, ownership, and whether encryption by default is enabled.
-	// For more information, see Amazon EBS encryption (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html#encryption-parameters)
-	// in the Amazon EC2 User Guide.
+	// For more information, see Amazon EBS encryption (https://docs.aws.amazon.com/ebs/latest/userguide/ebs-encryption.html#encryption-parameters)
+	// in the Amazon EBS User Guide.
 	//
 	// In no case can you remove encryption from an encrypted volume.
 	//
 	// Encrypted volumes can only be attached to instances that support Amazon EBS
-	// encryption. For more information, see Supported instance types (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html#EBSEncryption_supported_instances).
+	// encryption. For more information, see Supported instance types (https://docs.aws.amazon.com/ebs/latest/userguide/ebs-encryption-requirements.html#ebs-encryption_supported_instances).
 	//
 	// This parameter is not returned by DescribeImageAttribute.
 	//
@@ -116940,8 +117419,8 @@ type EbsBlockDevice struct {
 	//    * standard: 1 - 1024 GiB
 	VolumeSize *int64 `locationName:"volumeSize" type:"integer"`
 
-	// The volume type. For more information, see Amazon EBS volume types (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html)
-	// in the Amazon EC2 User Guide.
+	// The volume type. For more information, see Amazon EBS volume types (https://docs.aws.amazon.com/ebs/latest/userguide/ebs-volume-types.html)
+	// in the Amazon EBS User Guide.
 	VolumeType *string `locationName:"volumeType" type:"string" enum:"VolumeType"`
 }
 
@@ -122882,6 +123361,12 @@ type FleetLaunchTemplateOverrides struct {
 	SubnetId *string `locationName:"subnetId" type:"string"`
 
 	// The number of units provided by the specified instance type.
+	//
+	// When specifying weights, the price used in the lowest-price and price-capacity-optimized
+	// allocation strategies is per unit hour (where the instance price is divided
+	// by the specified weight). However, if all the specified weights are above
+	// the requested TargetCapacity, resulting in only 1 instance being launched,
+	// the price used is per instance hour.
 	WeightedCapacity *float64 `locationName:"weightedCapacity" type:"double"`
 }
 
@@ -123017,6 +123502,12 @@ type FleetLaunchTemplateOverridesRequest struct {
 	SubnetId *string `type:"string"`
 
 	// The number of units provided by the specified instance type.
+	//
+	// When specifying weights, the price used in the lowest-price and price-capacity-optimized
+	// allocation strategies is per unit hour (where the instance price is divided
+	// by the specified weight). However, if all the specified weights are above
+	// the requested TargetCapacity, resulting in only 1 instance being launched,
+	// the price used is per instance hour.
 	WeightedCapacity *float64 `type:"double"`
 }
 
@@ -125631,6 +126122,71 @@ func (s GetImageBlockPublicAccessStateOutput) GoString() string {
 // SetImageBlockPublicAccessState sets the ImageBlockPublicAccessState field's value.
 func (s *GetImageBlockPublicAccessStateOutput) SetImageBlockPublicAccessState(v string) *GetImageBlockPublicAccessStateOutput {
 	s.ImageBlockPublicAccessState = &v
+	return s
+}
+
+type GetInstanceMetadataDefaultsInput struct {
+	_ struct{} `type:"structure"`
+
+	// Checks whether you have the required permissions for the action, without
+	// actually making the request, and provides an error response. If you have
+	// the required permissions, the error response is DryRunOperation. Otherwise,
+	// it is UnauthorizedOperation.
+	DryRun *bool `type:"boolean"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetInstanceMetadataDefaultsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetInstanceMetadataDefaultsInput) GoString() string {
+	return s.String()
+}
+
+// SetDryRun sets the DryRun field's value.
+func (s *GetInstanceMetadataDefaultsInput) SetDryRun(v bool) *GetInstanceMetadataDefaultsInput {
+	s.DryRun = &v
+	return s
+}
+
+type GetInstanceMetadataDefaultsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The account-level default IMDS settings.
+	AccountLevel *InstanceMetadataDefaultsResponse `locationName:"accountLevel" type:"structure"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetInstanceMetadataDefaultsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s GetInstanceMetadataDefaultsOutput) GoString() string {
+	return s.String()
+}
+
+// SetAccountLevel sets the AccountLevel field's value.
+func (s *GetInstanceMetadataDefaultsOutput) SetAccountLevel(v *InstanceMetadataDefaultsResponse) *GetInstanceMetadataDefaultsOutput {
+	s.AccountLevel = v
 	return s
 }
 
@@ -131254,8 +131810,7 @@ type Image struct {
 	// The location of the AMI.
 	ImageLocation *string `locationName:"imageLocation" type:"string"`
 
-	// The Amazon Web Services account alias (for example, amazon, self) or the
-	// Amazon Web Services account ID of the AMI owner.
+	// The owner alias (amazon | aws-marketplace).
 	ImageOwnerAlias *string `locationName:"imageOwnerAlias" type:"string"`
 
 	// The type of image.
@@ -135278,6 +135833,76 @@ func (s *InstanceMarketOptionsRequest) SetSpotOptions(v *SpotMarketOptions) *Ins
 	return s
 }
 
+// The default instance metadata service (IMDS) settings that were set at the
+// account level in the specified Amazon Web Services Region.
+type InstanceMetadataDefaultsResponse struct {
+	_ struct{} `type:"structure"`
+
+	// Indicates whether the IMDS endpoint for an instance is enabled or disabled.
+	// When disabled, the instance metadata can't be accessed.
+	HttpEndpoint *string `locationName:"httpEndpoint" type:"string" enum:"InstanceMetadataEndpointState"`
+
+	// The maximum number of hops that the metadata token can travel.
+	HttpPutResponseHopLimit *int64 `locationName:"httpPutResponseHopLimit" type:"integer"`
+
+	// Indicates whether IMDSv2 is required.
+	//
+	//    * optional – IMDSv2 is optional, which means that you can use either
+	//    IMDSv2 or IMDSv1.
+	//
+	//    * required – IMDSv2 is required, which means that IMDSv1 is disabled,
+	//    and you must use IMDSv2.
+	HttpTokens *string `locationName:"httpTokens" type:"string" enum:"HttpTokensState"`
+
+	// Indicates whether access to instance tags from the instance metadata is enabled
+	// or disabled. For more information, see Work with instance tags using the
+	// instance metadata (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html#work-with-tags-in-IMDS)
+	// in the Amazon EC2 User Guide.
+	InstanceMetadataTags *string `locationName:"instanceMetadataTags" type:"string" enum:"InstanceMetadataTagsState"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s InstanceMetadataDefaultsResponse) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s InstanceMetadataDefaultsResponse) GoString() string {
+	return s.String()
+}
+
+// SetHttpEndpoint sets the HttpEndpoint field's value.
+func (s *InstanceMetadataDefaultsResponse) SetHttpEndpoint(v string) *InstanceMetadataDefaultsResponse {
+	s.HttpEndpoint = &v
+	return s
+}
+
+// SetHttpPutResponseHopLimit sets the HttpPutResponseHopLimit field's value.
+func (s *InstanceMetadataDefaultsResponse) SetHttpPutResponseHopLimit(v int64) *InstanceMetadataDefaultsResponse {
+	s.HttpPutResponseHopLimit = &v
+	return s
+}
+
+// SetHttpTokens sets the HttpTokens field's value.
+func (s *InstanceMetadataDefaultsResponse) SetHttpTokens(v string) *InstanceMetadataDefaultsResponse {
+	s.HttpTokens = &v
+	return s
+}
+
+// SetInstanceMetadataTags sets the InstanceMetadataTags field's value.
+func (s *InstanceMetadataDefaultsResponse) SetInstanceMetadataTags(v string) *InstanceMetadataDefaultsResponse {
+	s.InstanceMetadataTags = &v
+	return s
+}
+
 // The metadata options for the instance.
 type InstanceMetadataOptionsRequest struct {
 	_ struct{} `type:"structure"`
@@ -135290,31 +135915,37 @@ type InstanceMetadataOptionsRequest struct {
 	HttpEndpoint *string `type:"string" enum:"InstanceMetadataEndpointState"`
 
 	// Enables or disables the IPv6 endpoint for the instance metadata service.
+	//
+	// Default: disabled
 	HttpProtocolIpv6 *string `type:"string" enum:"InstanceMetadataProtocolState"`
 
-	// The desired HTTP PUT response hop limit for instance metadata requests. The
-	// larger the number, the further instance metadata requests can travel.
-	//
-	// Default: 1
+	// The maximum number of hops that the metadata token can travel.
 	//
 	// Possible values: Integers from 1 to 64
 	HttpPutResponseHopLimit *int64 `type:"integer"`
 
 	// Indicates whether IMDSv2 is required.
 	//
-	//    * optional - IMDSv2 is optional. You can choose whether to send a session
-	//    token in your instance metadata retrieval requests. If you retrieve IAM
-	//    role credentials without a session token, you receive the IMDSv1 role
-	//    credentials. If you retrieve IAM role credentials using a valid session
-	//    token, you receive the IMDSv2 role credentials.
+	//    * optional - IMDSv2 is optional, which means that you can use either IMDSv2
+	//    or IMDSv1.
 	//
-	//    * required - IMDSv2 is required. You must send a session token in your
-	//    instance metadata retrieval requests. With this option, retrieving the
-	//    IAM role credentials always returns IMDSv2 credentials; IMDSv1 credentials
-	//    are not available.
+	//    * required - IMDSv2 is required, which means that IMDSv1 is disabled,
+	//    and you must use IMDSv2.
 	//
-	// Default: If the value of ImdsSupport for the Amazon Machine Image (AMI) for
-	// your instance is v2.0, the default is required.
+	// Default:
+	//
+	//    * If the value of ImdsSupport for the Amazon Machine Image (AMI) for your
+	//    instance is v2.0 and the account level default is set to no-preference,
+	//    the default is required.
+	//
+	//    * If the value of ImdsSupport for the Amazon Machine Image (AMI) for your
+	//    instance is v2.0, but the account level default is set to V1 or V2, the
+	//    default is optional.
+	//
+	// The default value can also be affected by other combinations of parameters.
+	// For more information, see Order of precedence for instance metadata options
+	// (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/configuring-instance-metadata-options.html#instance-metadata-options-order-of-precedence)
+	// in the Amazon EC2 User Guide.
 	HttpTokens *string `type:"string" enum:"HttpTokensState"`
 
 	// Set to enabled to allow access to instance tags from the instance metadata.
@@ -135386,28 +136017,22 @@ type InstanceMetadataOptionsResponse struct {
 
 	// Indicates whether the IPv6 endpoint for the instance metadata service is
 	// enabled or disabled.
+	//
+	// Default: disabled
 	HttpProtocolIpv6 *string `locationName:"httpProtocolIpv6" type:"string" enum:"InstanceMetadataProtocolState"`
 
-	// The desired HTTP PUT response hop limit for instance metadata requests. The
-	// larger the number, the further instance metadata requests can travel.
-	//
-	// Default: 1
+	// The maximum number of hops that the metadata token can travel.
 	//
 	// Possible values: Integers from 1 to 64
 	HttpPutResponseHopLimit *int64 `locationName:"httpPutResponseHopLimit" type:"integer"`
 
 	// Indicates whether IMDSv2 is required.
 	//
-	//    * optional - IMDSv2 is optional. You can choose whether to send a session
-	//    token in your instance metadata retrieval requests. If you retrieve IAM
-	//    role credentials without a session token, you receive the IMDSv1 role
-	//    credentials. If you retrieve IAM role credentials using a valid session
-	//    token, you receive the IMDSv2 role credentials.
+	//    * optional - IMDSv2 is optional, which means that you can use either IMDSv2
+	//    or IMDSv1.
 	//
-	//    * required - IMDSv2 is required. You must send a session token in your
-	//    instance metadata retrieval requests. With this option, retrieving the
-	//    IAM role credentials always returns IMDSv2 credentials; IMDSv1 credentials
-	//    are not available.
+	//    * required - IMDSv2 is required, which means that IMDSv1 is disabled,
+	//    and you must use IMDSv2.
 	HttpTokens *string `locationName:"httpTokens" type:"string" enum:"HttpTokensState"`
 
 	// Indicates whether access to instance tags from the instance metadata is enabled
@@ -135892,10 +136517,10 @@ type InstanceNetworkInterfaceSpecification struct {
 	// one. You cannot specify more than one network interface in the request. If
 	// launching into a default subnet, the default value is true.
 	//
-	// Starting on February 1, 2024, Amazon Web Services will charge for all public
-	// IPv4 addresses, including public IPv4 addresses associated with running instances
-	// and Elastic IP addresses. For more information, see the Public IPv4 Address
-	// tab on the Amazon VPC pricing page (http://aws.amazon.com/vpc/pricing/).
+	// Amazon Web Services charges for all public IPv4 addresses, including public
+	// IPv4 addresses associated with running instances and Elastic IP addresses.
+	// For more information, see the Public IPv4 Address tab on the Amazon VPC pricing
+	// page (http://aws.amazon.com/vpc/pricing/).
 	AssociatePublicIpAddress *bool `locationName:"associatePublicIpAddress" type:"boolean"`
 
 	// A security group connection tracking specification that enables you to set
@@ -136453,16 +137078,16 @@ type InstanceRequirements struct {
 	//
 	// The parameter accepts an integer, which Amazon EC2 interprets as a percentage.
 	//
-	// To indicate no price protection threshold, specify a high value, such as
-	// 999999.
-	//
 	// If you set DesiredCapacityType to vcpu or memory-mib, the price protection
 	// threshold is based on the per vCPU or per memory price instead of the per
 	// instance price.
 	//
 	// Only one of SpotMaxPricePercentageOverLowestPrice or MaxSpotPriceAsPercentageOfOptimalOnDemandPrice
-	// can be specified. If you don't specify either, then SpotMaxPricePercentageOverLowestPrice
-	// is used and the value for that parameter defaults to 100.
+	// can be specified. If you don't specify either, Amazon EC2 will automatically
+	// apply optimal price protection to consistently select from a wide range of
+	// instance types. To indicate no price protection threshold for Spot Instances,
+	// meaning you want to consider all instance types that match your attributes,
+	// include one of these parameters and specify a high value, such as 999999.
 	MaxSpotPriceAsPercentageOfOptimalOnDemandPrice *int64 `locationName:"maxSpotPriceAsPercentageOfOptimalOnDemandPrice" type:"integer"`
 
 	// The minimum and maximum amount of memory per vCPU, in GiB.
@@ -136524,9 +137149,6 @@ type InstanceRequirements struct {
 	//
 	// The parameter accepts an integer, which Amazon EC2 interprets as a percentage.
 	//
-	// To indicate no price protection threshold, specify a high value, such as
-	// 999999.
-	//
 	// If you set TargetCapacityUnitType to vcpu or memory-mib, the price protection
 	// threshold is applied based on the per-vCPU or per-memory price instead of
 	// the per-instance price.
@@ -136535,8 +137157,11 @@ type InstanceRequirements struct {
 	// and GetInstanceTypesFromInstanceRequirements (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_GetInstanceTypesFromInstanceRequirements.html).
 	//
 	// Only one of SpotMaxPricePercentageOverLowestPrice or MaxSpotPriceAsPercentageOfOptimalOnDemandPrice
-	// can be specified. If you don't specify either, then SpotMaxPricePercentageOverLowestPrice
-	// is used and the value for that parameter defaults to 100.
+	// can be specified. If you don't specify either, Amazon EC2 will automatically
+	// apply optimal price protection to consistently select from a wide range of
+	// instance types. To indicate no price protection threshold for Spot Instances,
+	// meaning you want to consider all instance types that match your attributes,
+	// include one of these parameters and specify a high value, such as 999999.
 	//
 	// Default: 100
 	SpotMaxPricePercentageOverLowestPrice *int64 `locationName:"spotMaxPricePercentageOverLowestPrice" type:"integer"`
@@ -136945,16 +137570,16 @@ type InstanceRequirementsRequest struct {
 	//
 	// The parameter accepts an integer, which Amazon EC2 interprets as a percentage.
 	//
-	// To indicate no price protection threshold, specify a high value, such as
-	// 999999.
-	//
 	// If you set DesiredCapacityType to vcpu or memory-mib, the price protection
 	// threshold is based on the per vCPU or per memory price instead of the per
 	// instance price.
 	//
 	// Only one of SpotMaxPricePercentageOverLowestPrice or MaxSpotPriceAsPercentageOfOptimalOnDemandPrice
-	// can be specified. If you don't specify either, then SpotMaxPricePercentageOverLowestPrice
-	// is used and the value for that parameter defaults to 100.
+	// can be specified. If you don't specify either, Amazon EC2 will automatically
+	// apply optimal price protection to consistently select from a wide range of
+	// instance types. To indicate no price protection threshold for Spot Instances,
+	// meaning you want to consider all instance types that match your attributes,
+	// include one of these parameters and specify a high value, such as 999999.
 	MaxSpotPriceAsPercentageOfOptimalOnDemandPrice *int64 `type:"integer"`
 
 	// The minimum and maximum amount of memory per vCPU, in GiB.
@@ -137021,9 +137646,6 @@ type InstanceRequirementsRequest struct {
 	//
 	// The parameter accepts an integer, which Amazon EC2 interprets as a percentage.
 	//
-	// To indicate no price protection threshold, specify a high value, such as
-	// 999999.
-	//
 	// If you set TargetCapacityUnitType to vcpu or memory-mib, the price protection
 	// threshold is applied based on the per-vCPU or per-memory price instead of
 	// the per-instance price.
@@ -137032,8 +137654,11 @@ type InstanceRequirementsRequest struct {
 	// and GetInstanceTypesFromInstanceRequirements (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_GetInstanceTypesFromInstanceRequirements.html).
 	//
 	// Only one of SpotMaxPricePercentageOverLowestPrice or MaxSpotPriceAsPercentageOfOptimalOnDemandPrice
-	// can be specified. If you don't specify either, then SpotMaxPricePercentageOverLowestPrice
-	// is used and the value for that parameter defaults to 100.
+	// can be specified. If you don't specify either, Amazon EC2 will automatically
+	// apply optimal price protection to consistently select from a wide range of
+	// instance types. To indicate no price protection threshold for Spot Instances,
+	// meaning you want to consider all instance types that match your attributes,
+	// include one of these parameters and specify a high value, such as 999999.
 	//
 	// Default: 100
 	SpotMaxPricePercentageOverLowestPrice *int64 `type:"integer"`
@@ -137876,7 +138501,7 @@ type InstanceTopology struct {
 	InstanceType *string `locationName:"instanceType" type:"string"`
 
 	// The network nodes. The nodes are hashed based on your account. Instances
-	// from different accounts running under the same droplet will return a different
+	// from different accounts running under the same server will return a different
 	// hashed list of strings.
 	NetworkNodes []*string `locationName:"networkNodeSet" locationNameList:"item" type:"list"`
 
@@ -137989,11 +138614,17 @@ type InstanceTypeInfo struct {
 	// in the Amazon EC2 User Guide.
 	InstanceType *string `locationName:"instanceType" type:"string" enum:"InstanceType"`
 
+	// Describes the media accelerator settings for the instance type.
+	MediaAcceleratorInfo *MediaAcceleratorInfo `locationName:"mediaAcceleratorInfo" type:"structure"`
+
 	// Describes the memory for the instance type.
 	MemoryInfo *MemoryInfo `locationName:"memoryInfo" type:"structure"`
 
 	// Describes the network settings for the instance type.
 	NetworkInfo *NetworkInfo `locationName:"networkInfo" type:"structure"`
+
+	// Describes the Neuron accelerator settings for the instance type.
+	NeuronInfo *NeuronInfo `locationName:"neuronInfo" type:"structure"`
 
 	// Indicates whether Nitro Enclaves is supported.
 	NitroEnclavesSupport *string `locationName:"nitroEnclavesSupport" type:"string" enum:"NitroEnclavesSupport"`
@@ -138135,6 +138766,12 @@ func (s *InstanceTypeInfo) SetInstanceType(v string) *InstanceTypeInfo {
 	return s
 }
 
+// SetMediaAcceleratorInfo sets the MediaAcceleratorInfo field's value.
+func (s *InstanceTypeInfo) SetMediaAcceleratorInfo(v *MediaAcceleratorInfo) *InstanceTypeInfo {
+	s.MediaAcceleratorInfo = v
+	return s
+}
+
 // SetMemoryInfo sets the MemoryInfo field's value.
 func (s *InstanceTypeInfo) SetMemoryInfo(v *MemoryInfo) *InstanceTypeInfo {
 	s.MemoryInfo = v
@@ -138144,6 +138781,12 @@ func (s *InstanceTypeInfo) SetMemoryInfo(v *MemoryInfo) *InstanceTypeInfo {
 // SetNetworkInfo sets the NetworkInfo field's value.
 func (s *InstanceTypeInfo) SetNetworkInfo(v *NetworkInfo) *InstanceTypeInfo {
 	s.NetworkInfo = v
+	return s
+}
+
+// SetNeuronInfo sets the NeuronInfo field's value.
+func (s *InstanceTypeInfo) SetNeuronInfo(v *NeuronInfo) *InstanceTypeInfo {
+	s.NeuronInfo = v
 	return s
 }
 
@@ -138492,14 +139135,12 @@ func (s *InternetGatewayAttachment) SetVpcId(v string) *InternetGatewayAttachmen
 	return s
 }
 
-// Describes a set of permissions for a security group rule.
+// Describes the permissions for a security group rule.
 type IpPermission struct {
 	_ struct{} `type:"structure"`
 
 	// If the protocol is TCP or UDP, this is the start of the port range. If the
-	// protocol is ICMP or ICMPv6, this is the type number. A value of -1 indicates
-	// all ICMP/ICMPv6 types. If you specify all ICMP/ICMPv6 types, you must specify
-	// all ICMP/ICMPv6 codes.
+	// protocol is ICMP or ICMPv6, this is the ICMP type or -1 (all ICMP types).
 	FromPort *int64 `locationName:"fromPort" type:"integer"`
 
 	// The IP protocol name (tcp, udp, icmp, icmpv6) or number (see Protocol Numbers
@@ -138512,19 +139153,19 @@ type IpPermission struct {
 	// if you omit the port range, traffic for all types and codes is allowed.
 	IpProtocol *string `locationName:"ipProtocol" type:"string"`
 
-	// The IPv4 ranges.
+	// The IPv4 address ranges.
 	IpRanges []*IpRange `locationName:"ipRanges" locationNameList:"item" type:"list"`
 
-	// The IPv6 ranges.
+	// The IPv6 address ranges.
 	Ipv6Ranges []*Ipv6Range `locationName:"ipv6Ranges" locationNameList:"item" type:"list"`
 
 	// The prefix list IDs.
 	PrefixListIds []*PrefixListId `locationName:"prefixListIds" locationNameList:"item" type:"list"`
 
 	// If the protocol is TCP or UDP, this is the end of the port range. If the
-	// protocol is ICMP or ICMPv6, this is the code. A value of -1 indicates all
-	// ICMP/ICMPv6 codes. If you specify all ICMP/ICMPv6 types, you must specify
-	// all ICMP/ICMPv6 codes.
+	// protocol is ICMP or ICMPv6, this is the ICMP code or -1 (all ICMP codes).
+	// If the start port is -1 (all ICMP types), then the end port must be -1 (all
+	// ICMP codes).
 	ToPort *int64 `locationName:"toPort" type:"integer"`
 
 	// The security group and Amazon Web Services account ID pairs.
@@ -138591,11 +139232,11 @@ func (s *IpPermission) SetUserIdGroupPairs(v []*UserIdGroupPair) *IpPermission {
 	return s
 }
 
-// Describes an IPv4 range.
+// Describes an IPv4 address range.
 type IpRange struct {
 	_ struct{} `type:"structure"`
 
-	// The IPv4 CIDR range. You can either specify a CIDR range or a source security
+	// The IPv4 address range. You can either specify a CIDR block or a source security
 	// group, not both. To specify a single IPv4 address, use the /32 prefix length.
 	CidrIp *string `locationName:"cidrIp" type:"string"`
 
@@ -141199,11 +141840,11 @@ func (s *Ipv6PrefixSpecificationResponse) SetIpv6Prefix(v string) *Ipv6PrefixSpe
 	return s
 }
 
-// Describes an IPv6 range.
+// Describes an IPv6 address range.
 type Ipv6Range struct {
 	_ struct{} `type:"structure"`
 
-	// The IPv6 CIDR range. You can either specify a CIDR range or a source security
+	// The IPv6 address range. You can either specify a CIDR block or a source security
 	// group, not both. To specify a single IPv6 address, use the /128 prefix length.
 	CidrIpv6 *string `locationName:"cidrIpv6" type:"string"`
 
@@ -142337,8 +142978,8 @@ type LaunchTemplateEbsBlockDeviceRequest struct {
 	//    * standard: 1 - 1024 GiB
 	VolumeSize *int64 `type:"integer"`
 
-	// The volume type. For more information, see Amazon EBS volume types (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html)
-	// in the Amazon Elastic Compute Cloud User Guide.
+	// The volume type. For more information, see Amazon EBS volume types (https://docs.aws.amazon.com/ebs/latest/userguide/ebs-volume-types.html)
+	// in the Amazon EBS User Guide.
 	VolumeType *string `type:"string" enum:"VolumeType"`
 }
 
@@ -143197,10 +143838,10 @@ type LaunchTemplateInstanceNetworkInterfaceSpecification struct {
 	// Indicates whether to associate a public IPv4 address with eth0 for a new
 	// network interface.
 	//
-	// Starting on February 1, 2024, Amazon Web Services will charge for all public
-	// IPv4 addresses, including public IPv4 addresses associated with running instances
-	// and Elastic IP addresses. For more information, see the Public IPv4 Address
-	// tab on the Amazon VPC pricing page (http://aws.amazon.com/vpc/pricing/).
+	// Amazon Web Services charges for all public IPv4 addresses, including public
+	// IPv4 addresses associated with running instances and Elastic IP addresses.
+	// For more information, see the Public IPv4 Address tab on the Amazon VPC pricing
+	// page (http://aws.amazon.com/vpc/pricing/).
 	AssociatePublicIpAddress *bool `locationName:"associatePublicIpAddress" type:"boolean"`
 
 	// A security group connection tracking specification that enables you to set
@@ -143438,10 +144079,10 @@ type LaunchTemplateInstanceNetworkInterfaceSpecificationRequest struct {
 
 	// Associates a public IPv4 address with eth0 for a new network interface.
 	//
-	// Starting on February 1, 2024, Amazon Web Services will charge for all public
-	// IPv4 addresses, including public IPv4 addresses associated with running instances
-	// and Elastic IP addresses. For more information, see the Public IPv4 Address
-	// tab on the Amazon VPC pricing page (http://aws.amazon.com/vpc/pricing/).
+	// Amazon Web Services charges for all public IPv4 addresses, including public
+	// IPv4 addresses associated with running instances and Elastic IP addresses.
+	// For more information, see the Public IPv4 Address tab on the Amazon VPC pricing
+	// page (http://aws.amazon.com/vpc/pricing/).
 	AssociatePublicIpAddress *bool `type:"boolean"`
 
 	// A security group connection tracking specification that enables you to set
@@ -143789,6 +144430,12 @@ type LaunchTemplateOverrides struct {
 	SubnetId *string `locationName:"subnetId" type:"string"`
 
 	// The number of units provided by the specified instance type.
+	//
+	// When specifying weights, the price used in the lowest-price and price-capacity-optimized
+	// allocation strategies is per unit hour (where the instance price is divided
+	// by the specified weight). However, if all the specified weights are above
+	// the requested TargetCapacity, resulting in only 1 instance being launched,
+	// the price used is per instance hour.
 	WeightedCapacity *float64 `locationName:"weightedCapacity" type:"double"`
 }
 
@@ -146188,6 +146835,48 @@ func (s *LockedSnapshotsInfo) SetSnapshotId(v string) *LockedSnapshotsInfo {
 	return s
 }
 
+// Information about the EC2 Mac Dedicated Host.
+type MacHost struct {
+	_ struct{} `type:"structure"`
+
+	// The EC2 Mac Dedicated Host ID.
+	HostId *string `locationName:"hostId" type:"string"`
+
+	// The latest macOS versions that the EC2 Mac Dedicated Host can launch without
+	// being upgraded.
+	MacOSLatestSupportedVersions []*string `locationName:"macOSLatestSupportedVersionSet" locationNameList:"item" type:"list"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MacHost) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MacHost) GoString() string {
+	return s.String()
+}
+
+// SetHostId sets the HostId field's value.
+func (s *MacHost) SetHostId(v string) *MacHost {
+	s.HostId = &v
+	return s
+}
+
+// SetMacOSLatestSupportedVersions sets the MacOSLatestSupportedVersions field's value.
+func (s *MacHost) SetMacOSLatestSupportedVersions(v []*string) *MacHost {
+	s.MacOSLatestSupportedVersions = v
+	return s
+}
+
 // Details for Site-to-Site VPN tunnel endpoint maintenance events.
 type MaintenanceDetails struct {
 	_ struct{} `type:"structure"`
@@ -146348,6 +147037,139 @@ func (s *ManagedPrefixList) SetTags(v []*Tag) *ManagedPrefixList {
 // SetVersion sets the Version field's value.
 func (s *ManagedPrefixList) SetVersion(v int64) *ManagedPrefixList {
 	s.Version = &v
+	return s
+}
+
+// Describes the media accelerators for the instance type.
+type MediaAcceleratorInfo struct {
+	_ struct{} `type:"structure"`
+
+	// Describes the media accelerators for the instance type.
+	Accelerators []*MediaDeviceInfo `locationName:"accelerators" locationNameList:"item" type:"list"`
+
+	// The total size of the memory for the media accelerators for the instance
+	// type, in MiB.
+	TotalMediaMemoryInMiB *int64 `locationName:"totalMediaMemoryInMiB" type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MediaAcceleratorInfo) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MediaAcceleratorInfo) GoString() string {
+	return s.String()
+}
+
+// SetAccelerators sets the Accelerators field's value.
+func (s *MediaAcceleratorInfo) SetAccelerators(v []*MediaDeviceInfo) *MediaAcceleratorInfo {
+	s.Accelerators = v
+	return s
+}
+
+// SetTotalMediaMemoryInMiB sets the TotalMediaMemoryInMiB field's value.
+func (s *MediaAcceleratorInfo) SetTotalMediaMemoryInMiB(v int64) *MediaAcceleratorInfo {
+	s.TotalMediaMemoryInMiB = &v
+	return s
+}
+
+// Describes the media accelerators for the instance type.
+type MediaDeviceInfo struct {
+	_ struct{} `type:"structure"`
+
+	// The number of media accelerators for the instance type.
+	Count *int64 `locationName:"count" type:"integer"`
+
+	// The manufacturer of the media accelerator.
+	Manufacturer *string `locationName:"manufacturer" type:"string"`
+
+	// Describes the memory available to the media accelerator.
+	MemoryInfo *MediaDeviceMemoryInfo `locationName:"memoryInfo" type:"structure"`
+
+	// The name of the media accelerator.
+	Name *string `locationName:"name" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MediaDeviceInfo) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MediaDeviceInfo) GoString() string {
+	return s.String()
+}
+
+// SetCount sets the Count field's value.
+func (s *MediaDeviceInfo) SetCount(v int64) *MediaDeviceInfo {
+	s.Count = &v
+	return s
+}
+
+// SetManufacturer sets the Manufacturer field's value.
+func (s *MediaDeviceInfo) SetManufacturer(v string) *MediaDeviceInfo {
+	s.Manufacturer = &v
+	return s
+}
+
+// SetMemoryInfo sets the MemoryInfo field's value.
+func (s *MediaDeviceInfo) SetMemoryInfo(v *MediaDeviceMemoryInfo) *MediaDeviceInfo {
+	s.MemoryInfo = v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *MediaDeviceInfo) SetName(v string) *MediaDeviceInfo {
+	s.Name = &v
+	return s
+}
+
+// Describes the memory available to the media accelerator.
+type MediaDeviceMemoryInfo struct {
+	_ struct{} `type:"structure"`
+
+	// The size of the memory available to each media accelerator, in MiB.
+	SizeInMiB *int64 `locationName:"sizeInMiB" type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MediaDeviceMemoryInfo) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s MediaDeviceMemoryInfo) GoString() string {
+	return s.String()
+}
+
+// SetSizeInMiB sets the SizeInMiB field's value.
+func (s *MediaDeviceMemoryInfo) SetSizeInMiB(v int64) *MediaDeviceMemoryInfo {
+	s.SizeInMiB = &v
 	return s
 }
 
@@ -149261,6 +150083,122 @@ func (s *ModifyInstanceMaintenanceOptionsOutput) SetInstanceId(v string) *Modify
 	return s
 }
 
+type ModifyInstanceMetadataDefaultsInput struct {
+	_ struct{} `type:"structure"`
+
+	// Checks whether you have the required permissions for the action, without
+	// actually making the request, and provides an error response. If you have
+	// the required permissions, the error response is DryRunOperation. Otherwise,
+	// it is UnauthorizedOperation.
+	DryRun *bool `type:"boolean"`
+
+	// Enables or disables the IMDS endpoint on an instance. When disabled, the
+	// instance metadata can't be accessed.
+	HttpEndpoint *string `type:"string" enum:"DefaultInstanceMetadataEndpointState"`
+
+	// The maximum number of hops that the metadata token can travel.
+	//
+	// Minimum: 1
+	//
+	// Maximum: 64
+	HttpPutResponseHopLimit *int64 `type:"integer"`
+
+	// Indicates whether IMDSv2 is required.
+	//
+	//    * optional – IMDSv2 is optional, which means that you can use either
+	//    IMDSv2 or IMDSv1.
+	//
+	//    * required – IMDSv2 is required, which means that IMDSv1 is disabled,
+	//    and you must use IMDSv2.
+	HttpTokens *string `type:"string" enum:"MetadataDefaultHttpTokensState"`
+
+	// Enables or disables access to an instance's tags from the instance metadata.
+	// For more information, see Work with instance tags using the instance metadata
+	// (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html#work-with-tags-in-IMDS)
+	// in the Amazon EC2 User Guide.
+	InstanceMetadataTags *string `type:"string" enum:"DefaultInstanceMetadataTagsState"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ModifyInstanceMetadataDefaultsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ModifyInstanceMetadataDefaultsInput) GoString() string {
+	return s.String()
+}
+
+// SetDryRun sets the DryRun field's value.
+func (s *ModifyInstanceMetadataDefaultsInput) SetDryRun(v bool) *ModifyInstanceMetadataDefaultsInput {
+	s.DryRun = &v
+	return s
+}
+
+// SetHttpEndpoint sets the HttpEndpoint field's value.
+func (s *ModifyInstanceMetadataDefaultsInput) SetHttpEndpoint(v string) *ModifyInstanceMetadataDefaultsInput {
+	s.HttpEndpoint = &v
+	return s
+}
+
+// SetHttpPutResponseHopLimit sets the HttpPutResponseHopLimit field's value.
+func (s *ModifyInstanceMetadataDefaultsInput) SetHttpPutResponseHopLimit(v int64) *ModifyInstanceMetadataDefaultsInput {
+	s.HttpPutResponseHopLimit = &v
+	return s
+}
+
+// SetHttpTokens sets the HttpTokens field's value.
+func (s *ModifyInstanceMetadataDefaultsInput) SetHttpTokens(v string) *ModifyInstanceMetadataDefaultsInput {
+	s.HttpTokens = &v
+	return s
+}
+
+// SetInstanceMetadataTags sets the InstanceMetadataTags field's value.
+func (s *ModifyInstanceMetadataDefaultsInput) SetInstanceMetadataTags(v string) *ModifyInstanceMetadataDefaultsInput {
+	s.InstanceMetadataTags = &v
+	return s
+}
+
+type ModifyInstanceMetadataDefaultsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// If the request succeeds, the response returns true. If the request fails,
+	// no response is returned, and instead an error message is returned.
+	Return *bool `locationName:"return" type:"boolean"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ModifyInstanceMetadataDefaultsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s ModifyInstanceMetadataDefaultsOutput) GoString() string {
+	return s.String()
+}
+
+// SetReturn sets the Return field's value.
+func (s *ModifyInstanceMetadataDefaultsOutput) SetReturn(v bool) *ModifyInstanceMetadataDefaultsOutput {
+	s.Return = &v
+	return s
+}
+
 type ModifyInstanceMetadataOptionsInput struct {
 	_ struct{} `type:"structure"`
 
@@ -149300,8 +150238,20 @@ type ModifyInstanceMetadataOptionsInput struct {
 	//    IAM role credentials always returns IMDSv2 credentials; IMDSv1 credentials
 	//    are not available.
 	//
-	// Default: If the value of ImdsSupport for the Amazon Machine Image (AMI) for
-	// your instance is v2.0, the default is required.
+	// Default:
+	//
+	//    * If the value of ImdsSupport for the Amazon Machine Image (AMI) for your
+	//    instance is v2.0 and the account level default is set to no-preference,
+	//    the default is required.
+	//
+	//    * If the value of ImdsSupport for the Amazon Machine Image (AMI) for your
+	//    instance is v2.0, but the account level default is set to V1 or V2, the
+	//    default is optional.
+	//
+	// The default value can also be affected by other combinations of parameters.
+	// For more information, see Order of precedence for instance metadata options
+	// (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/configuring-instance-metadata-options.html#instance-metadata-options-order-of-precedence)
+	// in the Amazon EC2 User Guide.
 	HttpTokens *string `type:"string" enum:"HttpTokensState"`
 
 	// The ID of the instance.
@@ -149313,8 +150263,6 @@ type ModifyInstanceMetadataOptionsInput struct {
 	// Set to disabled to turn off access to instance tags from the instance metadata.
 	// For more information, see Work with instance tags using the instance metadata
 	// (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html#work-with-tags-in-IMDS).
-	//
-	// Default: disabled
 	InstanceMetadataTags *string `type:"string" enum:"InstanceMetadataTagsState"`
 }
 
@@ -149434,7 +150382,9 @@ func (s *ModifyInstanceMetadataOptionsOutput) SetInstanceMetadataOptions(v *Inst
 type ModifyInstancePlacementInput struct {
 	_ struct{} `type:"structure"`
 
-	// The affinity setting for the instance.
+	// The affinity setting for the instance. For more information, see Host affinity
+	// (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/how-dedicated-hosts-work.html#dedicated-hosts-affinity)
+	// in the Amazon EC2 User Guide.
 	Affinity *string `locationName:"affinity" type:"string" enum:"Affinity"`
 
 	// The Group Id of a placement group. You must specify the Placement Group Group
@@ -151611,10 +152561,10 @@ type ModifySubnetAttributeInput struct {
 	// Specify true to indicate that network interfaces attached to instances created
 	// in the specified subnet should be assigned a public IPv4 address.
 	//
-	// Starting on February 1, 2024, Amazon Web Services will charge for all public
-	// IPv4 addresses, including public IPv4 addresses associated with running instances
-	// and Elastic IP addresses. For more information, see the Public IPv4 Address
-	// tab on the Amazon VPC pricing page (http://aws.amazon.com/vpc/pricing/).
+	// Amazon Web Services charges for all public IPv4 addresses, including public
+	// IPv4 addresses associated with running instances and Elastic IP addresses.
+	// For more information, see the Public IPv4 Address tab on the Amazon VPC pricing
+	// page (http://aws.amazon.com/vpc/pricing/).
 	MapPublicIpOnLaunch *AttributeBooleanValue `type:"structure"`
 
 	// The type of hostname to assign to instances in the subnet at launch. For
@@ -152324,18 +153274,16 @@ type ModifyTransitGatewayOptions struct {
 	// Removes CIDR blocks for the transit gateway.
 	RemoveTransitGatewayCidrBlocks []*string `locationNameList:"item" type:"list"`
 
-	// Enables you to reference a security group across VPCs attached to a transit
-	// gateway (TGW). Use this option to simplify security group management and
-	// control of instance-to-instance traffic across VPCs that are connected by
-	// transit gateway. You can also use this option to migrate from VPC peering
-	// (which was the only option that supported security group referencing) to
-	// transit gateways (which now also support security group referencing). This
-	// option is disabled by default and there are no additional costs to use this
-	// feature.
 	//
-	// For important information about this feature, see Create a transit gateway
-	// (https://docs.aws.amazon.com/vpc/latest/tgw/tgw-transit-gateways.html#create-tgw)
-	// in the Amazon Web Services Transit Gateway Guide.
+	// This parameter is in preview and may not be available for your account.
+	//
+	// Enables you to reference a security group across VPCs attached to a transit
+	// gateway. Use this option to simplify security group management and control
+	// of instance-to-instance traffic across VPCs that are connected by transit
+	// gateway. You can also use this option to migrate from VPC peering (which
+	// was the only option that supported security group referencing) to transit
+	// gateways (which now also support security group referencing). This option
+	// is disabled by default and there are no additional costs to use this feature.
 	SecurityGroupReferencingSupport *string `type:"string" enum:"SecurityGroupReferencingSupportValue"`
 
 	// Enable or disable Equal Cost Multipath Protocol support.
@@ -152710,18 +153658,16 @@ type ModifyTransitGatewayVpcAttachmentRequestOptions struct {
 	// Enable or disable IPv6 support. The default is enable.
 	Ipv6Support *string `type:"string" enum:"Ipv6SupportValue"`
 
-	// Enables you to reference a security group across VPCs attached to a transit
-	// gateway (TGW). Use this option to simplify security group management and
-	// control of instance-to-instance traffic across VPCs that are connected by
-	// transit gateway. You can also use this option to migrate from VPC peering
-	// (which was the only option that supported security group referencing) to
-	// transit gateways (which now also support security group referencing). This
-	// option is disabled by default and there are no additional costs to use this
-	// feature.
 	//
-	// For important information about this feature, see Create a transit gateway
-	// attachment to a VPC (https://docs.aws.amazon.com/vpc/latest/tgw/tgw-vpc-attachments.html#create-vpc-attachment)
-	// in the Amazon Web Services Transit Gateway Guide.
+	// This parameter is in preview and may not be available for your account.
+	//
+	// Enables you to reference a security group across VPCs attached to a transit
+	// gateway. Use this option to simplify security group management and control
+	// of instance-to-instance traffic across VPCs that are connected by transit
+	// gateway. You can also use this option to migrate from VPC peering (which
+	// was the only option that supported security group referencing) to transit
+	// gateways (which now also support security group referencing). This option
+	// is disabled by default and there are no additional costs to use this feature.
 	SecurityGroupReferencingSupport *string `type:"string" enum:"SecurityGroupReferencingSupportValue"`
 }
 
@@ -154051,8 +154997,8 @@ type ModifyVolumeInput struct {
 	// Specifies whether to enable Amazon EBS Multi-Attach. If you enable Multi-Attach,
 	// you can attach the volume to up to 16 Nitro-based instances (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html#ec2-nitro-instances)
 	// in the same Availability Zone. This parameter is supported with io1 and io2
-	// volumes only. For more information, see Amazon EBS Multi-Attach (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-volumes-multi.html)
-	// in the Amazon Elastic Compute Cloud User Guide.
+	// volumes only. For more information, see Amazon EBS Multi-Attach (https://docs.aws.amazon.com/ebs/latest/userguide/ebs-volumes-multi.html)
+	// in the Amazon EBS User Guide.
 	MultiAttachEnabled *bool `type:"boolean"`
 
 	// The target size of the volume, in GiB. The target volume size must be greater
@@ -154088,8 +155034,8 @@ type ModifyVolumeInput struct {
 	VolumeId *string `type:"string" required:"true"`
 
 	// The target EBS volume type of the volume. For more information, see Amazon
-	// EBS volume types (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html)
-	// in the Amazon Elastic Compute Cloud User Guide.
+	// EBS volume types (https://docs.aws.amazon.com/ebs/latest/userguide/ebs-volume-types.html)
+	// in the Amazon EBS User Guide.
 	//
 	// Default: The existing type is retained.
 	VolumeType *string `type:"string" enum:"VolumeType"`
@@ -158597,6 +159543,180 @@ func (s *NetworkInterfacePrivateIpAddress) SetPrivateIpAddress(v string) *Networ
 	return s
 }
 
+// Describes the cores available to the neuron accelerator.
+type NeuronDeviceCoreInfo struct {
+	_ struct{} `type:"structure"`
+
+	// The number of cores available to the neuron accelerator.
+	Count *int64 `locationName:"count" type:"integer"`
+
+	// The version of the neuron accelerator.
+	Version *int64 `locationName:"version" type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s NeuronDeviceCoreInfo) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s NeuronDeviceCoreInfo) GoString() string {
+	return s.String()
+}
+
+// SetCount sets the Count field's value.
+func (s *NeuronDeviceCoreInfo) SetCount(v int64) *NeuronDeviceCoreInfo {
+	s.Count = &v
+	return s
+}
+
+// SetVersion sets the Version field's value.
+func (s *NeuronDeviceCoreInfo) SetVersion(v int64) *NeuronDeviceCoreInfo {
+	s.Version = &v
+	return s
+}
+
+// Describes the neuron accelerators for the instance type.
+type NeuronDeviceInfo struct {
+	_ struct{} `type:"structure"`
+
+	// Describes the cores available to each neuron accelerator.
+	CoreInfo *NeuronDeviceCoreInfo `locationName:"coreInfo" type:"structure"`
+
+	// The number of neuron accelerators for the instance type.
+	Count *int64 `locationName:"count" type:"integer"`
+
+	// Describes the memory available to each neuron accelerator.
+	MemoryInfo *NeuronDeviceMemoryInfo `locationName:"memoryInfo" type:"structure"`
+
+	// The name of the neuron accelerator.
+	Name *string `locationName:"name" type:"string"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s NeuronDeviceInfo) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s NeuronDeviceInfo) GoString() string {
+	return s.String()
+}
+
+// SetCoreInfo sets the CoreInfo field's value.
+func (s *NeuronDeviceInfo) SetCoreInfo(v *NeuronDeviceCoreInfo) *NeuronDeviceInfo {
+	s.CoreInfo = v
+	return s
+}
+
+// SetCount sets the Count field's value.
+func (s *NeuronDeviceInfo) SetCount(v int64) *NeuronDeviceInfo {
+	s.Count = &v
+	return s
+}
+
+// SetMemoryInfo sets the MemoryInfo field's value.
+func (s *NeuronDeviceInfo) SetMemoryInfo(v *NeuronDeviceMemoryInfo) *NeuronDeviceInfo {
+	s.MemoryInfo = v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *NeuronDeviceInfo) SetName(v string) *NeuronDeviceInfo {
+	s.Name = &v
+	return s
+}
+
+// Describes the memory available to the neuron accelerator.
+type NeuronDeviceMemoryInfo struct {
+	_ struct{} `type:"structure"`
+
+	// The size of the memory available to the neuron accelerator, in MiB.
+	SizeInMiB *int64 `locationName:"sizeInMiB" type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s NeuronDeviceMemoryInfo) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s NeuronDeviceMemoryInfo) GoString() string {
+	return s.String()
+}
+
+// SetSizeInMiB sets the SizeInMiB field's value.
+func (s *NeuronDeviceMemoryInfo) SetSizeInMiB(v int64) *NeuronDeviceMemoryInfo {
+	s.SizeInMiB = &v
+	return s
+}
+
+// Describes the neuron accelerators for the instance type.
+type NeuronInfo struct {
+	_ struct{} `type:"structure"`
+
+	// Describes the neuron accelerators for the instance type.
+	NeuronDevices []*NeuronDeviceInfo `locationName:"neuronDevices" locationNameList:"item" type:"list"`
+
+	// The total size of the memory for the neuron accelerators for the instance
+	// type, in MiB.
+	TotalNeuronDeviceMemoryInMiB *int64 `locationName:"totalNeuronDeviceMemoryInMiB" type:"integer"`
+}
+
+// String returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s NeuronInfo) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation.
+//
+// API parameter values that are decorated as "sensitive" in the API will not
+// be included in the string output. The member name will be present, but the
+// value will be replaced with "sensitive".
+func (s NeuronInfo) GoString() string {
+	return s.String()
+}
+
+// SetNeuronDevices sets the NeuronDevices field's value.
+func (s *NeuronInfo) SetNeuronDevices(v []*NeuronDeviceInfo) *NeuronInfo {
+	s.NeuronDevices = v
+	return s
+}
+
+// SetTotalNeuronDeviceMemoryInMiB sets the TotalNeuronDeviceMemoryInMiB field's value.
+func (s *NeuronInfo) SetTotalNeuronDeviceMemoryInMiB(v int64) *NeuronInfo {
+	s.TotalNeuronDeviceMemoryInMiB = &v
+	return s
+}
+
 type NewDhcpConfiguration struct {
 	_ struct{} `type:"structure"`
 
@@ -161387,9 +162507,10 @@ type ProvisionByoipCidrInput struct {
 	_ struct{} `type:"structure"`
 
 	// The public IPv4 or IPv6 address range, in CIDR notation. The most specific
-	// IPv4 prefix that you can specify is /24. The most specific IPv6 prefix you
-	// can specify is /56. The address range cannot overlap with another address
-	// range that you've brought to this or another Region.
+	// IPv4 prefix that you can specify is /24. The most specific IPv6 address range
+	// that you can bring is /48 for CIDRs that are publicly advertisable and /56
+	// for CIDRs that are not publicly advertisable. The address range cannot overlap
+	// with another address range that you've brought to this or another Region.
 	//
 	// Cidr is a required field
 	Cidr *string `type:"string" required:"true"`
@@ -163168,8 +164289,8 @@ type RegisterImageInput struct {
 	// If you create an AMI on an Outpost, then all backing snapshots must be on
 	// the same Outpost or in the Region of that Outpost. AMIs on an Outpost that
 	// include local snapshots can be used to launch instances on the same Outpost
-	// only. For more information, Amazon EBS local snapshots on Outposts (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/snapshots-outposts.html#ami)
-	// in the Amazon EC2 User Guide.
+	// only. For more information, Amazon EBS local snapshots on Outposts (https://docs.aws.amazon.com/ebs/latest/userguide/snapshots-outposts.html#ami)
+	// in the Amazon EBS User Guide.
 	BlockDeviceMappings []*BlockDeviceMapping `locationName:"BlockDeviceMapping" locationNameList:"BlockDeviceMapping" type:"list"`
 
 	// The boot mode of the AMI. A value of uefi-preferred indicates that the AMI
@@ -163242,6 +164363,14 @@ type RegisterImageInput struct {
 	// This option is supported only for HVM AMIs. Specifying this option with a
 	// PV AMI can make instances launched from the AMI unreachable.
 	SriovNetSupport *string `locationName:"sriovNetSupport" type:"string"`
+
+	// The tags to apply to the AMI.
+	//
+	// To tag the AMI, the value for ResourceType must be image. If you specify
+	// another value for ResourceType, the request fails.
+	//
+	// To tag an AMI after it has been registered, see CreateTags (https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateTags.html).
+	TagSpecifications []*TagSpecification `locationName:"TagSpecification" locationNameList:"item" type:"list"`
 
 	// Set to v2.0 to enable Trusted Platform Module (TPM) support. For more information,
 	// see NitroTPM (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/nitrotpm.html)
@@ -163374,6 +164503,12 @@ func (s *RegisterImageInput) SetRootDeviceName(v string) *RegisterImageInput {
 // SetSriovNetSupport sets the SriovNetSupport field's value.
 func (s *RegisterImageInput) SetSriovNetSupport(v string) *RegisterImageInput {
 	s.SriovNetSupport = &v
+	return s
+}
+
+// SetTagSpecifications sets the TagSpecifications field's value.
+func (s *RegisterImageInput) SetTagSpecifications(v []*TagSpecification) *RegisterImageInput {
+	s.TagSpecifications = v
 	return s
 }
 
@@ -169478,8 +170613,8 @@ type RestoreSnapshotFromRecycleBinOutput struct {
 	Encrypted *bool `locationName:"encrypted" type:"boolean"`
 
 	// The ARN of the Outpost on which the snapshot is stored. For more information,
-	// see Amazon EBS local snapshots on Outposts (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/snapshots-outposts.html)
-	// in the Amazon Elastic Compute Cloud User Guide.
+	// see Amazon EBS local snapshots on Outposts (https://docs.aws.amazon.com/ebs/latest/userguide/snapshots-outposts.html)
+	// in the Amazon EBS User Guide.
 	OutpostArn *string `locationName:"outpostArn" type:"string"`
 
 	// The ID of the Amazon Web Services account that owns the EBS snapshot.
@@ -170045,8 +171180,7 @@ type RevokeSecurityGroupIngressInput struct {
 	DryRun *bool `locationName:"dryRun" type:"boolean"`
 
 	// If the protocol is TCP or UDP, this is the start of the port range. If the
-	// protocol is ICMP, this is the type number. A value of -1 indicates all ICMP
-	// types.
+	// protocol is ICMP, this is the ICMP type or -1 (all ICMP types).
 	FromPort *int64 `type:"integer"`
 
 	// The ID of the security group.
@@ -170079,7 +171213,7 @@ type RevokeSecurityGroupIngressInput struct {
 	SourceSecurityGroupOwnerId *string `type:"string"`
 
 	// If the protocol is TCP or UDP, this is the end of the port range. If the
-	// protocol is ICMP, this is the code. A value of -1 indicates all ICMP codes.
+	// protocol is ICMP, this is the ICMP code or -1 (all ICMP codes).
 	ToPort *int64 `type:"integer"`
 }
 
@@ -172530,10 +173664,10 @@ type ScheduledInstancesNetworkInterface struct {
 	// one. You cannot specify more than one network interface in the request. If
 	// launching into a default subnet, the default value is true.
 	//
-	// Starting on February 1, 2024, Amazon Web Services will charge for all public
-	// IPv4 addresses, including public IPv4 addresses associated with running instances
-	// and Elastic IP addresses. For more information, see the Public IPv4 Address
-	// tab on the Amazon VPC pricing page (http://aws.amazon.com/vpc/pricing/).
+	// Amazon Web Services charges for all public IPv4 addresses, including public
+	// IPv4 addresses associated with running instances and Elastic IP addresses.
+	// For more information, see the Public IPv4 Address tab on the Amazon VPC pricing
+	// page (http://aws.amazon.com/vpc/pricing/).
 	AssociatePublicIpAddress *bool `type:"boolean"`
 
 	// Indicates whether to delete the interface when the instance is terminated.
@@ -173082,7 +174216,8 @@ type SearchTransitGatewayRoutesInput struct {
 	// Filters is a required field
 	Filters []*Filter `locationName:"Filter" locationNameList:"Filter" type:"list" required:"true"`
 
-	// The maximum number of routes to return.
+	// The maximum number of routes to return. If a value is not provided, the default
+	// is 1000.
 	MaxResults *int64 `min:"5" type:"integer"`
 
 	// The ID of the transit gateway route table.
@@ -173415,15 +174550,15 @@ type SecurityGroupReference struct {
 	// The ID of the VPC with the referencing security group.
 	ReferencingVpcId *string `locationName:"referencingVpcId" type:"string"`
 
-	// The ID of the transit gateway (if applicable). For more information about
-	// security group referencing for transit gateways, see Create a transit gateway
-	// attachment to a VPC (https://docs.aws.amazon.com/tgw/tgw-vpc-attachments.html#create-vpc-attachment)
-	// in the Amazon Web Services Transit Gateway Guide.
+	//
+	// This parameter is in preview and may not be available for your account.
+	//
+	// The ID of the transit gateway (if applicable).
 	TransitGatewayId *string `locationName:"transitGatewayId" type:"string"`
 
 	// The ID of the VPC peering connection (if applicable). For more information
 	// about security group referencing for peering connections, see Update your
-	// security groups to reference peer security groups (https://docs.aws.amazon.com/peering/vpc-peering-security-groups.html)
+	// security groups to reference peer security groups (https://docs.aws.amazon.com/vpc/latest/peering/vpc-peering-security-groups.html)
 	// in the VPC Peering Guide.
 	VpcPeeringConnectionId *string `locationName:"vpcPeeringConnectionId" type:"string"`
 }
@@ -173484,9 +174619,7 @@ type SecurityGroupRule struct {
 	Description *string `locationName:"description" type:"string"`
 
 	// If the protocol is TCP or UDP, this is the start of the port range. If the
-	// protocol is ICMP or ICMPv6, this is the type number. A value of -1 indicates
-	// all ICMP/ICMPv6 types. If you specify all ICMP/ICMPv6 types, you must specify
-	// all ICMP/ICMPv6 codes.
+	// protocol is ICMP or ICMPv6, this is the ICMP type or -1 (all ICMP types).
 	FromPort *int64 `locationName:"fromPort" type:"integer"`
 
 	// The ID of the security group.
@@ -173517,9 +174650,9 @@ type SecurityGroupRule struct {
 	Tags []*Tag `locationName:"tagSet" locationNameList:"item" type:"list"`
 
 	// If the protocol is TCP or UDP, this is the end of the port range. If the
-	// protocol is ICMP or ICMPv6, this is the type number. A value of -1 indicates
-	// all ICMP/ICMPv6 codes. If you specify all ICMP/ICMPv6 types, you must specify
-	// all ICMP/ICMPv6 codes.
+	// protocol is ICMP or ICMPv6, this is the ICMP code or -1 (all ICMP codes).
+	// If the start port is -1 (all ICMP types), then the end port must be -1 (all
+	// ICMP codes).
 	ToPort *int64 `locationName:"toPort" type:"integer"`
 }
 
@@ -173694,9 +174827,7 @@ type SecurityGroupRuleRequest struct {
 	Description *string `type:"string"`
 
 	// If the protocol is TCP or UDP, this is the start of the port range. If the
-	// protocol is ICMP or ICMPv6, this is the type number. A value of -1 indicates
-	// all ICMP/ICMPv6 types. If you specify all ICMP/ICMPv6 types, you must specify
-	// all ICMP/ICMPv6 codes.
+	// protocol is ICMP or ICMPv6, this is the ICMP type or -1 (all ICMP types).
 	FromPort *int64 `type:"integer"`
 
 	// The IP protocol name (tcp, udp, icmp, icmpv6) or number (see Protocol Numbers
@@ -173712,9 +174843,9 @@ type SecurityGroupRuleRequest struct {
 	ReferencedGroupId *string `type:"string"`
 
 	// If the protocol is TCP or UDP, this is the end of the port range. If the
-	// protocol is ICMP or ICMPv6, this is the code. A value of -1 indicates all
-	// ICMP/ICMPv6 codes. If you specify all ICMP/ICMPv6 types, you must specify
-	// all ICMP/ICMPv6 codes.
+	// protocol is ICMP or ICMPv6, this is the ICMP code or -1 (all ICMP codes).
+	// If the start port is -1 (all ICMP types), then the end port must be -1 (all
+	// ICMP codes).
 	ToPort *int64 `type:"integer"`
 }
 
@@ -174403,8 +175534,8 @@ type Snapshot struct {
 	KmsKeyId *string `locationName:"kmsKeyId" type:"string"`
 
 	// The ARN of the Outpost on which the snapshot is stored. For more information,
-	// see Amazon EBS local snapshots on Outposts (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/snapshots-outposts.html)
-	// in the Amazon Elastic Compute Cloud User Guide.
+	// see Amazon EBS local snapshots on Outposts (https://docs.aws.amazon.com/ebs/latest/userguide/snapshots-outposts.html)
+	// in the Amazon EBS User Guide.
 	OutpostArn *string `locationName:"outpostArn" type:"string"`
 
 	// The Amazon Web Services owner alias, from an Amazon-maintained list (amazon).
@@ -174782,8 +175913,8 @@ type SnapshotInfo struct {
 	Encrypted *bool `locationName:"encrypted" type:"boolean"`
 
 	// The ARN of the Outpost on which the snapshot is stored. For more information,
-	// see Amazon EBS local snapshots on Outposts (https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/snapshots-outposts.html)
-	// in the Amazon Elastic Compute Cloud User Guide.
+	// see Amazon EBS local snapshots on Outposts (https://docs.aws.amazon.com/ebs/latest/userguide/snapshots-outposts.html)
+	// in the Amazon EBS User Guide.
 	OutpostArn *string `locationName:"outpostArn" type:"string"`
 
 	// Account id used when creating this snapshot.
@@ -175820,6 +176951,10 @@ type SpotFleetRequestConfigData struct {
 	// The launch specifications for the Spot Fleet request. If you specify LaunchSpecifications,
 	// you can't specify LaunchTemplateConfigs. If you include On-Demand capacity
 	// in your request, you must use LaunchTemplateConfigs.
+	//
+	// If an AMI specified in a launch specification is deregistered or disabled,
+	// no new instances can be launched from the AMI. For fleets of type maintain,
+	// the target capacity will not be maintained.
 	LaunchSpecifications []*SpotFleetLaunchSpecification `locationName:"launchSpecifications" locationNameList:"item" type:"list"`
 
 	// The launch template and overrides. If you specify LaunchTemplateConfigs,
@@ -177202,11 +178337,11 @@ func (s *SpotPrice) SetTimestamp(v time.Time) *SpotPrice {
 type StaleIpPermission struct {
 	_ struct{} `type:"structure"`
 
-	// The start of the port range for the TCP and UDP protocols, or an ICMP type
-	// number. A value of -1 indicates all ICMP types.
+	// If the protocol is TCP or UDP, this is the start of the port range. If the
+	// protocol is ICMP or ICMPv6, this is the ICMP type or -1 (all ICMP types).
 	FromPort *int64 `locationName:"fromPort" type:"integer"`
 
-	// The IP protocol name (for tcp, udp, and icmp) or number (see Protocol Numbers)
+	// The IP protocol name (tcp, udp, icmp, icmpv6) or number (see Protocol Numbers)
 	// (http://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml).
 	IpProtocol *string `locationName:"ipProtocol" type:"string"`
 
@@ -177216,8 +178351,8 @@ type StaleIpPermission struct {
 	// The prefix list IDs. Not applicable for stale security group rules.
 	PrefixListIds []*string `locationName:"prefixListIds" locationNameList:"item" type:"list"`
 
-	// The end of the port range for the TCP and UDP protocols, or an ICMP type
-	// number. A value of -1 indicates all ICMP types.
+	// If the protocol is TCP or UDP, this is the end of the port range. If the
+	// protocol is ICMP or ICMPv6, this is the ICMP code or -1 (all ICMP codes).
 	ToPort *int64 `locationName:"toPort" type:"integer"`
 
 	// The security group pairs. Returns the ID of the referenced security group
@@ -178183,10 +179318,10 @@ type Subnet struct {
 	// Indicates whether instances launched in this subnet receive a public IPv4
 	// address.
 	//
-	// Starting on February 1, 2024, Amazon Web Services will charge for all public
-	// IPv4 addresses, including public IPv4 addresses associated with running instances
-	// and Elastic IP addresses. For more information, see the Public IPv4 Address
-	// tab on the Amazon VPC pricing page (http://aws.amazon.com/vpc/pricing/).
+	// Amazon Web Services charges for all public IPv4 addresses, including public
+	// IPv4 addresses associated with running instances and Elastic IP addresses.
+	// For more information, see the Public IPv4 Address tab on the Amazon VPC pricing
+	// page (http://aws.amazon.com/vpc/pricing/).
 	MapPublicIpOnLaunch *bool `locationName:"mapPublicIpOnLaunch" type:"boolean"`
 
 	// The Amazon Resource Name (ARN) of the Outpost.
@@ -181706,18 +182841,16 @@ type TransitGatewayOptions struct {
 	// The ID of the default propagation route table.
 	PropagationDefaultRouteTableId *string `locationName:"propagationDefaultRouteTableId" type:"string"`
 
-	// Enables you to reference a security group across VPCs attached to a transit
-	// gateway (TGW). Use this option to simplify security group management and
-	// control of instance-to-instance traffic across VPCs that are connected by
-	// transit gateway. You can also use this option to migrate from VPC peering
-	// (which was the only option that supported security group referencing) to
-	// transit gateways (which now also support security group referencing). This
-	// option is disabled by default and there are no additional costs to use this
-	// feature.
 	//
-	// For important information about this feature, see Create a transit gateway
-	// (https://docs.aws.amazon.com/vpc/latest/tgw/tgw-transit-gateways.html#create-tgw)
-	// in the Amazon Web Services Transit Gateway Guide.
+	// This parameter is in preview and may not be available for your account.
+	//
+	// Enables you to reference a security group across VPCs attached to a transit
+	// gateway. Use this option to simplify security group management and control
+	// of instance-to-instance traffic across VPCs that are connected by transit
+	// gateway. You can also use this option to migrate from VPC peering (which
+	// was the only option that supported security group referencing) to transit
+	// gateways (which now also support security group referencing). This option
+	// is disabled by default and there are no additional costs to use this feature.
 	SecurityGroupReferencingSupport *string `locationName:"securityGroupReferencingSupport" type:"string" enum:"SecurityGroupReferencingSupportValue"`
 
 	// The transit gateway CIDR blocks.
@@ -182486,18 +183619,16 @@ type TransitGatewayRequestOptions struct {
 	// Indicates whether multicast is enabled on the transit gateway
 	MulticastSupport *string `type:"string" enum:"MulticastSupportValue"`
 
-	// Enables you to reference a security group across VPCs attached to a transit
-	// gateway (TGW). Use this option to simplify security group management and
-	// control of instance-to-instance traffic across VPCs that are connected by
-	// transit gateway. You can also use this option to migrate from VPC peering
-	// (which was the only option that supported security group referencing) to
-	// transit gateways (which now also support security group referencing). This
-	// option is disabled by default and there are no additional costs to use this
-	// feature.
 	//
-	// For important information about this feature, see Create a transit gateway
-	// (https://docs.aws.amazon.com/vpc/latest/tgw/tgw-transit-gateways.html#create-tgw)
-	// in the Amazon Web Services Transit Gateway Guide.
+	// This parameter is in preview and may not be available for your account.
+	//
+	// Enables you to reference a security group across VPCs attached to a transit
+	// gateway. Use this option to simplify security group management and control
+	// of instance-to-instance traffic across VPCs that are connected by transit
+	// gateway. You can also use this option to migrate from VPC peering (which
+	// was the only option that supported security group referencing) to transit
+	// gateways (which now also support security group referencing). This option
+	// is disabled by default and there are no additional costs to use this feature.
 	SecurityGroupReferencingSupport *string `type:"string" enum:"SecurityGroupReferencingSupportValue"`
 
 	// One or more IPv4 or IPv6 CIDR blocks for the transit gateway. Must be a size
@@ -183253,9 +184384,16 @@ type TransitGatewayVpcAttachmentOptions struct {
 	// Indicates whether IPv6 support is disabled.
 	Ipv6Support *string `locationName:"ipv6Support" type:"string" enum:"Ipv6SupportValue"`
 
-	// For important information about this feature, see Create a transit gateway
-	// attachment to a VPC (https://docs.aws.amazon.com/vpc/latest/tgw/tgw-vpc-attachments.html#create-vpc-attachment)
-	// in the Amazon Web Services Transit Gateway Guide.
+	//
+	// This parameter is in preview and may not be available for your account.
+	//
+	// Enables you to reference a security group across VPCs attached to a transit
+	// gateway. Use this option to simplify security group management and control
+	// of instance-to-instance traffic across VPCs that are connected by transit
+	// gateway. You can also use this option to migrate from VPC peering (which
+	// was the only option that supported security group referencing) to transit
+	// gateways (which now also support security group referencing). This option
+	// is disabled by default and there are no additional costs to use this feature.
 	SecurityGroupReferencingSupport *string `locationName:"securityGroupReferencingSupport" type:"string" enum:"SecurityGroupReferencingSupportValue"`
 }
 
@@ -190742,6 +191880,46 @@ func DatafeedSubscriptionState_Values() []string {
 }
 
 const (
+	// DefaultInstanceMetadataEndpointStateDisabled is a DefaultInstanceMetadataEndpointState enum value
+	DefaultInstanceMetadataEndpointStateDisabled = "disabled"
+
+	// DefaultInstanceMetadataEndpointStateEnabled is a DefaultInstanceMetadataEndpointState enum value
+	DefaultInstanceMetadataEndpointStateEnabled = "enabled"
+
+	// DefaultInstanceMetadataEndpointStateNoPreference is a DefaultInstanceMetadataEndpointState enum value
+	DefaultInstanceMetadataEndpointStateNoPreference = "no-preference"
+)
+
+// DefaultInstanceMetadataEndpointState_Values returns all elements of the DefaultInstanceMetadataEndpointState enum
+func DefaultInstanceMetadataEndpointState_Values() []string {
+	return []string{
+		DefaultInstanceMetadataEndpointStateDisabled,
+		DefaultInstanceMetadataEndpointStateEnabled,
+		DefaultInstanceMetadataEndpointStateNoPreference,
+	}
+}
+
+const (
+	// DefaultInstanceMetadataTagsStateDisabled is a DefaultInstanceMetadataTagsState enum value
+	DefaultInstanceMetadataTagsStateDisabled = "disabled"
+
+	// DefaultInstanceMetadataTagsStateEnabled is a DefaultInstanceMetadataTagsState enum value
+	DefaultInstanceMetadataTagsStateEnabled = "enabled"
+
+	// DefaultInstanceMetadataTagsStateNoPreference is a DefaultInstanceMetadataTagsState enum value
+	DefaultInstanceMetadataTagsStateNoPreference = "no-preference"
+)
+
+// DefaultInstanceMetadataTagsState_Values returns all elements of the DefaultInstanceMetadataTagsState enum
+func DefaultInstanceMetadataTagsState_Values() []string {
+	return []string{
+		DefaultInstanceMetadataTagsStateDisabled,
+		DefaultInstanceMetadataTagsStateEnabled,
+		DefaultInstanceMetadataTagsStateNoPreference,
+	}
+}
+
+const (
 	// DefaultRouteTableAssociationValueEnable is a DefaultRouteTableAssociationValue enum value
 	DefaultRouteTableAssociationValueEnable = "enable"
 
@@ -196634,6 +197812,26 @@ func MembershipType_Values() []string {
 	return []string{
 		MembershipTypeStatic,
 		MembershipTypeIgmp,
+	}
+}
+
+const (
+	// MetadataDefaultHttpTokensStateOptional is a MetadataDefaultHttpTokensState enum value
+	MetadataDefaultHttpTokensStateOptional = "optional"
+
+	// MetadataDefaultHttpTokensStateRequired is a MetadataDefaultHttpTokensState enum value
+	MetadataDefaultHttpTokensStateRequired = "required"
+
+	// MetadataDefaultHttpTokensStateNoPreference is a MetadataDefaultHttpTokensState enum value
+	MetadataDefaultHttpTokensStateNoPreference = "no-preference"
+)
+
+// MetadataDefaultHttpTokensState_Values returns all elements of the MetadataDefaultHttpTokensState enum
+func MetadataDefaultHttpTokensState_Values() []string {
+	return []string{
+		MetadataDefaultHttpTokensStateOptional,
+		MetadataDefaultHttpTokensStateRequired,
+		MetadataDefaultHttpTokensStateNoPreference,
 	}
 }
 

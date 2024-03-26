@@ -245,11 +245,10 @@ func (t *imageType) Manifest(bp *blueprint.Blueprint,
 	containerSources := make([]container.SourceSpec, len(bp.Containers))
 	for idx, cont := range bp.Containers {
 		containerSources[idx] = container.SourceSpec{
-			Source:              cont.Source,
-			Name:                cont.Name,
-			TLSVerify:           cont.TLSVerify,
-			ContainersTransport: cont.ContainersTransport,
-			StoragePath:         cont.StoragePath,
+			Source:    cont.Source,
+			Name:      cont.Name,
+			TLSVerify: cont.TLSVerify,
+			Local:     cont.LocalStorage,
 		}
 	}
 
@@ -263,7 +262,14 @@ func (t *imageType) Manifest(bp *blueprint.Blueprint,
 		return nil, nil, err
 	}
 	mf := manifest.New()
-	mf.Distro = manifest.DISTRO_EL9
+	switch t.arch.distro.releaseVersion {
+	case "9":
+		mf.Distro = manifest.DISTRO_EL9
+	case "10":
+		mf.Distro = manifest.DISTRO_EL10
+	default:
+		return nil, nil, fmt.Errorf("unsupported distro release version %s", t.arch.distro.releaseVersion)
+	}
 	_, err = img.InstantiateManifest(&mf, repos, t.arch.distro.runner, rng)
 	if err != nil {
 		return nil, nil, err
@@ -294,14 +300,6 @@ func (t *imageType) checkOptions(bp *blueprint.Blueprint, options distro.ImageOp
 	// we do not support embedding containers on ostree-derived images, only on commits themselves
 	if len(bp.Containers) > 0 && t.rpmOstree && (t.name != "edge-commit" && t.name != "edge-container") {
 		return warnings, fmt.Errorf("embedding containers is not supported for %s on %s", t.name, t.arch.distro.name)
-	}
-
-	if len(bp.Containers) > 0 {
-		for _, container := range bp.Containers {
-			if err := container.Validate(); err != nil {
-				return nil, err
-			}
-		}
 	}
 
 	if options.OSTree != nil {
@@ -355,7 +353,7 @@ func (t *imageType) checkOptions(bp *blueprint.Blueprint, options distro.ImageOp
 				}
 			}
 		} else if t.name == "edge-installer" {
-			allowed := []string{"User", "Group", "FIPS"}
+			allowed := []string{"User", "Group", "FIPS", "Installer", "Timezone", "Locale"}
 			if err := customizations.CheckAllowed(allowed...); err != nil {
 				return warnings, fmt.Errorf(distro.UnsupportedCustomizationError, t.name, strings.Join(allowed, ", "))
 			}
@@ -452,6 +450,13 @@ func (t *imageType) checkOptions(bp *blueprint.Blueprint, options distro.ImageOp
 		w := fmt.Sprintln(common.FIPSEnabledImageWarning)
 		log.Print(w)
 		warnings = append(warnings, w)
+	}
+
+	if customizations.GetInstaller() != nil {
+		// only supported by the Anaconda installer
+		if slices.Index([]string{"image-installer", "edge-installer", "live-installer"}, t.name) == -1 {
+			return warnings, fmt.Errorf("installer customizations are not supported for %q", t.name)
+		}
 	}
 
 	return warnings, nil

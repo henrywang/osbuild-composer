@@ -23,12 +23,14 @@ type AnacondaLiveInstaller struct {
 
 	ExtraBasePackages rpmmd.PackageSet
 
-	ISOLabelTempl string
-	Product       string
-	Variant       string
-	OSName        string
-	OSVersion     string
-	Release       string
+	ISOLabel     string
+	ISOLabelTmpl string
+	Product      string
+	Variant      string
+	OSName       string
+	OSVersion    string
+	Release      string
+	Preview      bool
 
 	Filename string
 
@@ -56,6 +58,7 @@ func (img *AnacondaLiveInstaller) InstantiateManifest(m *manifest.Manifest,
 		"kernel",
 		img.Product,
 		img.OSVersion,
+		img.Preview,
 	)
 
 	livePipeline.ExtraPackages = img.ExtraBasePackages.Include
@@ -66,8 +69,14 @@ func (img *AnacondaLiveInstaller) InstantiateManifest(m *manifest.Manifest,
 
 	livePipeline.Checkpoint()
 
-	// TODO: replace isoLabelTmpl with more high-level properties
-	isoLabel := fmt.Sprintf(img.ISOLabelTempl, img.Platform.GetArch())
+	var isoLabel string
+
+	if len(img.ISOLabel) > 0 {
+		isoLabel = img.ISOLabel
+	} else {
+		// TODO: replace isoLabelTmpl with more high-level properties
+		isoLabel = fmt.Sprintf(img.ISOLabelTmpl, img.Platform.GetArch())
+	}
 
 	rootfsImagePipeline := manifest.NewISORootfsImg(buildPipeline, livePipeline)
 	rootfsImagePipeline.Size = 8 * common.GibiByte
