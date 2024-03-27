@@ -103,6 +103,7 @@ var (
 		rpmOstree:        true,
 		bootISO:          true,
 		image:            edgeInstallerImage,
+		isoLabel:         distroISOLabelFunc,
 		buildPipelines:   []string{"build"},
 		payloadPipelines: []string{"anaconda-tree", "rootfs-image", "efiboot-tree", "bootiso-tree", "bootiso"},
 		exports:          []string{"bootiso"},
@@ -131,6 +132,7 @@ var (
 		bootable:            true,
 		bootISO:             true,
 		image:               edgeSimplifiedInstallerImage,
+		isoLabel:            distroISOLabelFunc,
 		buildPipelines:      []string{"build"},
 		payloadPipelines:    []string{"ostree-deployment", "image", "xz", "coi-tree", "efiboot-tree", "bootiso-tree", "bootiso"},
 		exports:             []string{"bootiso"},
@@ -181,7 +183,7 @@ var (
 
 	minimalrawImgType = imageType{
 		name:        "minimal-raw",
-		filename:    "raw.img.xz",
+		filename:    "disk.raw.xz",
 		compression: "xz",
 		mimeType:    "application/xz",
 		packageSets: map[string]packageSetFunc{
@@ -589,7 +591,7 @@ func edgeCommitPackageSet(t *imageType) rpmmd.PackageSet {
 		ps = ps.Append(aarch64EdgeCommitPackageSet(t))
 	}
 
-	if !common.VersionLessThan(t.arch.distro.osVersion, "9.2") || !t.arch.distro.isRHEL() {
+	if common.VersionGreaterThanOrEqual(t.arch.distro.osVersion, "9.2") || !t.arch.distro.isRHEL() {
 		ps.Include = append(ps.Include, "ignition", "ignition-edge", "ssh-key-dir")
 	}
 

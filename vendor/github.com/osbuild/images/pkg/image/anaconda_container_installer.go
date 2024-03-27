@@ -10,6 +10,7 @@ import (
 	"github.com/osbuild/images/pkg/container"
 	"github.com/osbuild/images/pkg/customizations/users"
 	"github.com/osbuild/images/pkg/manifest"
+	"github.com/osbuild/images/pkg/osbuild"
 	"github.com/osbuild/images/pkg/platform"
 	"github.com/osbuild/images/pkg/rpmmd"
 	"github.com/osbuild/images/pkg/runner"
@@ -24,13 +25,14 @@ type AnacondaContainerInstaller struct {
 
 	SquashfsCompression string
 
-	ISOLabelTempl string
-	Product       string
-	Variant       string
-	OSName        string
-	Ref           string
-	OSVersion     string
-	Release       string
+	ISOLabel  string
+	Product   string
+	Variant   string
+	OSName    string
+	Ref       string
+	OSVersion string
+	Release   string
+	Preview   bool
 
 	ContainerSource container.SourceSpec
 
@@ -65,6 +67,7 @@ func (img *AnacondaContainerInstaller) InstantiateManifest(m *manifest.Manifest,
 		"kernel",
 		img.Product,
 		img.OSVersion,
+		img.Preview,
 	)
 
 	// This is only built with ELN for now
@@ -88,17 +91,16 @@ func (img *AnacondaContainerInstaller) InstantiateManifest(m *manifest.Manifest,
 	}
 	anacondaPipeline.AdditionalDrivers = img.AdditionalDrivers
 
-	// TODO: replace isoLabelTmpl with more high-level properties
-	isoLabel := fmt.Sprintf(img.ISOLabelTempl, img.Platform.GetArch())
-
 	rootfsImagePipeline := manifest.NewISORootfsImg(buildPipeline, anacondaPipeline)
 	rootfsImagePipeline.Size = 4 * common.GibiByte
 
 	bootTreePipeline := manifest.NewEFIBootTree(buildPipeline, img.Product, img.OSVersion)
 	bootTreePipeline.Platform = img.Platform
 	bootTreePipeline.UEFIVendor = img.Platform.GetUEFIVendor()
-	bootTreePipeline.ISOLabel = isoLabel
-	bootTreePipeline.KernelOpts = []string{fmt.Sprintf("inst.stage2=hd:LABEL=%s", isoLabel), fmt.Sprintf("inst.ks=hd:LABEL=%s:%s", isoLabel, kspath)}
+	bootTreePipeline.ISOLabel = img.ISOLabel
+
+	kspath := osbuild.KickstartPathOSBuild
+	bootTreePipeline.KernelOpts = []string{fmt.Sprintf("inst.stage2=hd:LABEL=%s", img.ISOLabel), fmt.Sprintf("inst.ks=hd:LABEL=%s:%s", img.ISOLabel, kspath)}
 	if img.FIPS {
 		bootTreePipeline.KernelOpts = append(bootTreePipeline.KernelOpts, "fips=1")
 	}
@@ -125,7 +127,7 @@ func (img *AnacondaContainerInstaller) InstantiateManifest(m *manifest.Manifest,
 		isoTreePipeline.KernelOpts = append(isoTreePipeline.KernelOpts, "fips=1")
 	}
 
-	isoPipeline := manifest.NewISO(buildPipeline, isoTreePipeline, isoLabel)
+	isoPipeline := manifest.NewISO(buildPipeline, isoTreePipeline, img.ISOLabel)
 	isoPipeline.SetFilename(img.Filename)
 	isoPipeline.ISOLinux = isoLinuxEnabled
 	artifact := isoPipeline.Export()

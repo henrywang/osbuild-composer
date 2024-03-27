@@ -25,6 +25,8 @@ type imageFunc func(workload workload.Workload, t *imageType, bp *blueprint.Blue
 
 type packageSetFunc func(t *imageType) rpmmd.PackageSet
 
+type isoLabelFunc func(t *imageType) string
+
 type imageType struct {
 	arch               *architecture
 	platform           platform.Platform
@@ -43,6 +45,7 @@ type imageType struct {
 	payloadPipelines   []string
 	exports            []string
 	image              imageFunc
+	isoLabel           isoLabelFunc
 
 	// bootISO: installable ISO
 	bootISO bool
@@ -77,6 +80,18 @@ func (t *imageType) OSTreeRef() string {
 		return fmt.Sprintf(d.ostreeRefTmpl, t.arch.Name())
 	}
 	return ""
+}
+
+func (t *imageType) ISOLabel() (string, error) {
+	if !t.bootISO {
+		return "", fmt.Errorf("image type %q is not an ISO", t.name)
+	}
+
+	if t.isoLabel != nil {
+		return t.isoLabel(t), nil
+	}
+
+	return "", nil
 }
 
 func (t *imageType) Size(size uint64) uint64 {
@@ -224,11 +239,10 @@ func (t *imageType) Manifest(bp *blueprint.Blueprint,
 	containerSources := make([]container.SourceSpec, len(bp.Containers))
 	for idx, cont := range bp.Containers {
 		containerSources[idx] = container.SourceSpec{
-			Source:              cont.Source,
-			Name:                cont.Name,
-			TLSVerify:           cont.TLSVerify,
-			ContainersTransport: cont.ContainersTransport,
-			StoragePath:         cont.StoragePath,
+			Source:    cont.Source,
+			Name:      cont.Name,
+			TLSVerify: cont.TLSVerify,
+			Local:     cont.LocalStorage,
 		}
 	}
 
@@ -260,14 +274,6 @@ func (t *imageType) checkOptions(bp *blueprint.Blueprint, options distro.ImageOp
 	// we do not support embedding containers on ostree-derived images, only on commits themselves
 	if len(bp.Containers) > 0 && t.rpmOstree && (t.name != "iot-commit" && t.name != "iot-container") {
 		return nil, fmt.Errorf("embedding containers is not supported for %s on %s", t.name, t.arch.distro.name)
-	}
-
-	if len(bp.Containers) > 0 {
-		for _, container := range bp.Containers {
-			if err := container.Validate(); err != nil {
-				return nil, err
-			}
-		}
 	}
 
 	if options.OSTree != nil {
@@ -333,12 +339,13 @@ func (t *imageType) checkOptions(bp *blueprint.Blueprint, options distro.ImageOp
 				}
 			}
 		} else if t.name == "iot-installer" || t.name == "image-installer" {
-			allowed := []string{"User", "Group", "FIPS"}
+			// "Installer" is actually not allowed for image-installer right now, but this is checked at the end
+			allowed := []string{"User", "Group", "FIPS", "Installer", "Timezone", "Locale"}
 			if err := customizations.CheckAllowed(allowed...); err != nil {
 				return nil, fmt.Errorf(distro.UnsupportedCustomizationError, t.name, strings.Join(allowed, ", "))
 			}
 		} else if t.name == "live-installer" {
-			allowed := []string{}
+			allowed := []string{"Installer"}
 			if err := customizations.CheckAllowed(allowed...); err != nil {
 				return nil, fmt.Errorf(distro.NoCustomizationsAllowedError, t.name)
 			}
@@ -401,6 +408,13 @@ func (t *imageType) checkOptions(bp *blueprint.Blueprint, options distro.ImageOp
 	if customizations.GetFIPS() && !common.IsBuildHostFIPSEnabled() {
 		w := fmt.Sprintln(common.FIPSEnabledImageWarning)
 		return []string{w}, nil
+	}
+
+	if customizations.GetInstaller() != nil {
+		// only supported by the Anaconda installer
+		if slices.Index([]string{"iot-installer"}, t.name) == -1 {
+			return nil, fmt.Errorf("installer customizations are not supported for %q", t.name)
+		}
 	}
 
 	return nil, nil

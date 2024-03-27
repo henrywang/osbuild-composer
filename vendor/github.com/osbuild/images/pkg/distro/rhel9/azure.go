@@ -30,25 +30,6 @@ var (
 		basePartitionTables: defaultBasePartitionTables,
 	}
 
-	// Azure BYOS image type
-	azureByosImgType = imageType{
-		name:     "vhd",
-		filename: "disk.vhd",
-		mimeType: "application/x-vhd",
-		packageSets: map[string]packageSetFunc{
-			osPkgsKey: azurePackageSet,
-		},
-		defaultImageConfig:  defaultAzureByosImageConfig.InheritFrom(defaultAzureImageConfig),
-		kernelOptions:       defaultAzureKernelOptions,
-		bootable:            true,
-		defaultSize:         4 * common.GibiByte,
-		image:               diskImage,
-		buildPipelines:      []string{"build"},
-		payloadPipelines:    []string{"os", "image", "vpc"},
-		exports:             []string{"vpc"},
-		basePartitionTables: defaultBasePartitionTables,
-	}
-
 	// Azure RHUI image type
 	azureRhuiImgType = imageType{
 		name:        "azure-rhui",
@@ -69,6 +50,27 @@ var (
 		basePartitionTables: azureRhuiBasePartitionTables,
 	}
 )
+
+// Azure BYOS image type
+func azureByosImgType(rd distribution) imageType {
+	return imageType{
+		name:     "vhd",
+		filename: "disk.vhd",
+		mimeType: "application/x-vhd",
+		packageSets: map[string]packageSetFunc{
+			osPkgsKey: azurePackageSet,
+		},
+		defaultImageConfig:  defaultAzureByosImageConfig(rd).InheritFrom(defaultAzureImageConfig),
+		kernelOptions:       defaultAzureKernelOptions,
+		bootable:            true,
+		defaultSize:         4 * common.GibiByte,
+		image:               diskImage,
+		buildPipelines:      []string{"build"},
+		payloadPipelines:    []string{"os", "image", "vpc"},
+		exports:             []string{"vpc"},
+		basePartitionTables: defaultBasePartitionTables,
+	}
+}
 
 func azureSapRhuiImgType(rd distribution) imageType {
 	return imageType{
@@ -414,8 +416,10 @@ func azureRhuiBasePartitionTables(t *imageType) (disk.PartitionTable, bool) {
 	}
 }
 
-var defaultAzureKernelOptions = "ro console=tty1 console=ttyS0 earlyprintk=ttyS0 rootdelay=300"
+// use loglevel=3 as described in the RHEL documentation and used in existing RHEL images built by MSFT
+var defaultAzureKernelOptions = "ro loglevel=3 console=tty1 console=ttyS0 earlyprintk=ttyS0 rootdelay=300"
 
+// based on https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/9/html/deploying_rhel_9_on_microsoft_azure/assembly_deploying-a-rhel-image-as-a-virtual-machine-on-microsoft-azure_cloud-content-azure#making-configuration-changes_configure-the-image-azure
 var defaultAzureImageConfig = &distro.ImageConfig{
 	Timezone: common.ToPtr("Etc/UTC"),
 	Locale:   common.ToPtr("en_US.UTF-8"),
@@ -457,6 +461,12 @@ var defaultAzureImageConfig = &distro.ImageConfig{
 			},
 		},
 		{
+			Filename: "blacklist-intel-cstate.conf",
+			Commands: osbuild.ModprobeConfigCmdList{
+				osbuild.NewModprobeConfigCmdBlacklist("intel_cstate"),
+			},
+		},
+		{
 			Filename: "blacklist-floppy.conf",
 			Commands: osbuild.ModprobeConfigCmdList{
 				osbuild.NewModprobeConfigCmdBlacklist("floppy"),
@@ -467,6 +477,12 @@ var defaultAzureImageConfig = &distro.ImageConfig{
 			Commands: osbuild.ModprobeConfigCmdList{
 				osbuild.NewModprobeConfigCmdBlacklist("nouveau"),
 				osbuild.NewModprobeConfigCmdBlacklist("lbm-nouveau"),
+			},
+		},
+		{
+			Filename: "blacklist-skylake-edac.conf",
+			Commands: osbuild.ModprobeConfigCmdList{
+				osbuild.NewModprobeConfigCmdBlacklist("skx_edac"),
 			},
 		},
 	},
@@ -515,10 +531,13 @@ var defaultAzureImageConfig = &distro.ImageConfig{
 		},
 	},
 	Grub2Config: &osbuild.GRUB2Config{
-		TerminalInput:  []string{"serial", "console"},
-		TerminalOutput: []string{"serial", "console"},
-		Serial:         "serial --speed=115200 --unit=0 --word=8 --parity=no --stop=1",
-		Timeout:        10,
+		DisableRecovery: common.ToPtr(true),
+		DisableSubmenu:  common.ToPtr(true),
+		Distributor:     "$(sed 's, release .*$,,g' /etc/system-release)",
+		Terminal:        []string{"serial", "console"},
+		Serial:          "serial --speed=115200 --unit=0 --word=8 --parity=no --stop=1",
+		Timeout:         10,
+		TimeoutStyle:    osbuild.GRUB2ConfigTimeoutStyleCountdown,
 	},
 	UdevRules: &osbuild.UdevRulesStageOptions{
 		Filename: "/etc/udev/rules.d/68-azure-sriov-nm-unmanaged.rules",
@@ -555,35 +574,20 @@ var defaultAzureImageConfig = &distro.ImageConfig{
 }
 
 // Diff of the default Image Config compare to the `defaultAzureImageConfig`
-var defaultAzureByosImageConfig = &distro.ImageConfig{
-	GPGKeyFiles: []string{
-		"/etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release",
-	},
-	RHSMConfig: map[subscription.RHSMStatus]*osbuild.RHSMStageOptions{
-		subscription.RHSMConfigNoSubscription: {
-			SubMan: &osbuild.RHSMStageOptionsSubMan{
-				Rhsmcertd: &osbuild.SubManConfigRHSMCERTDSection{
-					AutoRegistration: common.ToPtr(true),
-				},
-				// Don't disable RHSM redhat.repo management on the GCE
-				// image, which is BYOS and does not use RHUI for content.
-				// Otherwise subscribing the system manually after booting
-				// it would result in empty redhat.repo. Without RHUI, such
-				// system would have no way to get Red Hat content, but
-				// enable the repo management manually, which would be very
-				// confusing.
+// The configuration for non-RHUI images does not touch the RHSM configuration at all.
+// https://issues.redhat.com/browse/COMPOSER-2157
+func defaultAzureByosImageConfig(rd distribution) *distro.ImageConfig {
+	ic := &distro.ImageConfig{}
+	// NOTE RHEL 10 content is currently unsigned - remove this when GPG keys get added to the repos
+	if rd.Releasever() == "9" {
+		ic = &distro.ImageConfig{
+			GPGKeyFiles: []string{
+				"/etc/pki/rpm-gpg/RPM-GPG-KEY-redhat-release",
 			},
-		},
-		subscription.RHSMConfigWithSubscription: {
-			SubMan: &osbuild.RHSMStageOptionsSubMan{
-				Rhsmcertd: &osbuild.SubManConfigRHSMCERTDSection{
-					AutoRegistration: common.ToPtr(true),
-				},
-				// do not disable the redhat.repo management if the user
-				// explicitly request the system to be subscribed
-			},
-		},
-	},
+		}
+	}
+	return ic
+
 }
 
 // Diff of the default Image Config compare to the `defaultAzureImageConfig`
