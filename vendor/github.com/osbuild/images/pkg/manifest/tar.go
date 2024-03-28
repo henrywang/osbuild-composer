@@ -12,6 +12,7 @@ type Tar struct {
 
 	Format   osbuild.TarArchiveFormat
 	RootNode osbuild.TarRootNode
+	Paths    []string
 	ACLs     *bool
 	SELinux  *bool
 	Xattrs   *bool
@@ -36,7 +37,12 @@ func NewTar(buildPipeline Build, inputPipeline Pipeline, pipelinename string) *T
 		inputPipeline: inputPipeline,
 		filename:      "image.tar",
 	}
-	buildPipeline.addDependent(p)
+	// See similar logic in qcow2 to run on the host
+	if buildPipeline != nil {
+		buildPipeline.addDependent(p)
+	} else {
+		inputPipeline.Manifest().addPipeline(p)
+	}
 	return p
 }
 
@@ -50,6 +56,7 @@ func (p *Tar) serialize() osbuild.Pipeline {
 		SELinux:  p.SELinux,
 		Xattrs:   p.Xattrs,
 		RootNode: p.RootNode,
+		Paths:    p.Paths,
 	}
 	tarStage := osbuild.NewTarStage(tarOptions, p.inputPipeline.Name())
 	pipeline.AddStage(tarStage)

@@ -71,6 +71,7 @@ func osCustomizations(
 
 	osc.EnabledServices = imageConfig.EnabledServices
 	osc.DisabledServices = imageConfig.DisabledServices
+	osc.MaskedServices = imageConfig.MaskedServices
 	if imageConfig.DefaultTarget != nil {
 		osc.DefaultTarget = *imageConfig.DefaultTarget
 	}
@@ -331,14 +332,23 @@ func imageInstallerImage(workload workload.Workload,
 	img.AdditionalDracutModules = []string{"prefixdevname", "prefixdevname-tools"}
 	img.AdditionalAnacondaModules = []string{"org.fedoraproject.Anaconda.Modules.Users"}
 
+	if instCust := customizations.GetInstaller(); instCust != nil {
+		img.NoPasswd = instCust.SudoNopasswd
+		img.UnattendedKickstart = instCust.Unattended
+	}
+
 	img.SquashfsCompression = "xz"
 
 	// put the kickstart file in the root of the iso
 	img.ISORootKickstart = true
 
-	d := t.arch.distro
+	var err error
+	img.ISOLabel, err = t.ISOLabel()
+	if err != nil {
+		return nil, err
+	}
 
-	img.ISOLabelTempl = d.isolabelTmpl
+	d := t.arch.distro
 	img.Product = d.product
 	img.OSName = "redhat"
 	img.OSVersion = d.osVersion
@@ -437,6 +447,16 @@ func edgeInstallerImage(workload workload.Workload,
 	img.Users = users.UsersFromBP(customizations.GetUsers())
 	img.Groups = users.GroupsFromBP(customizations.GetGroups())
 
+	img.Language, img.Keyboard = customizations.GetPrimaryLocale()
+	// ignore ntp servers - we don't currently support setting these in the
+	// kickstart though kickstart does support setting them
+	img.Timezone, _ = customizations.GetTimezoneSettings()
+
+	if instCust := customizations.GetInstaller(); instCust != nil {
+		img.NoPasswd = instCust.SudoNopasswd
+		img.UnattendedKickstart = instCust.Unattended
+	}
+
 	img.SquashfsCompression = "xz"
 	img.AdditionalDracutModules = []string{"prefixdevname", "prefixdevname-tools"}
 
@@ -445,7 +465,11 @@ func edgeInstallerImage(workload workload.Workload,
 		img.AdditionalAnacondaModules = []string{"org.fedoraproject.Anaconda.Modules.Users"}
 	}
 
-	img.ISOLabelTempl = d.isolabelTmpl
+	img.ISOLabel, err = t.ISOLabel()
+	if err != nil {
+		return nil, err
+	}
+
 	img.Product = d.product
 	img.Variant = "edge"
 	img.OSName = "rhel"
@@ -569,8 +593,12 @@ func edgeSimplifiedInstallerImage(workload workload.Workload,
 		}
 	}
 
+	img.ISOLabel, err = t.ISOLabel()
+	if err != nil {
+		return nil, err
+	}
+
 	d := t.arch.distro
-	img.ISOLabelTempl = d.isolabelTmpl
 	img.Product = d.product
 	img.Variant = "edge"
 	img.OSName = "redhat"

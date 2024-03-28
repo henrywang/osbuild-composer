@@ -9,6 +9,7 @@ import (
 	"github.com/osbuild/images/pkg/artifact"
 	"github.com/osbuild/images/pkg/customizations/users"
 	"github.com/osbuild/images/pkg/manifest"
+	"github.com/osbuild/images/pkg/osbuild"
 	"github.com/osbuild/images/pkg/ostree"
 	"github.com/osbuild/images/pkg/platform"
 	"github.com/osbuild/images/pkg/rpmmd"
@@ -22,15 +23,27 @@ type AnacondaOSTreeInstaller struct {
 	Users             []users.User
 	Groups            []users.Group
 
+	Language *string
+	Keyboard *string
+	Timezone *string
+
+	// Create a sudoers drop-in file for each user or group to enable the
+	// NOPASSWD option
+	NoPasswd []string
+
+	// Add kickstart options to make the installation fully unattended
+	UnattendedKickstart bool
+
 	SquashfsCompression string
 
-	ISOLabelTempl string
-	Product       string
-	Variant       string
-	OSName        string
-	OSVersion     string
-	Release       string
-	Remote        string
+	ISOLabel  string
+	Product   string
+	Variant   string
+	OSName    string
+	OSVersion string
+	Release   string
+	Preview   bool
+	Remote    string
 
 	Commit ostree.SourceSpec
 
@@ -64,6 +77,7 @@ func (img *AnacondaOSTreeInstaller) InstantiateManifest(m *manifest.Manifest,
 		"kernel",
 		img.Product,
 		img.OSVersion,
+		img.Preview,
 	)
 	anacondaPipeline.ExtraPackages = img.ExtraBasePackages.Include
 	anacondaPipeline.ExcludePackages = img.ExtraBasePackages.Exclude
@@ -83,17 +97,16 @@ func (img *AnacondaOSTreeInstaller) InstantiateManifest(m *manifest.Manifest,
 	}
 	anacondaPipeline.AdditionalDrivers = img.AdditionalDrivers
 
-	// TODO: replace isoLabelTmpl with more high-level properties
-	isoLabel := fmt.Sprintf(img.ISOLabelTempl, img.Platform.GetArch())
-
 	rootfsImagePipeline := manifest.NewISORootfsImg(buildPipeline, anacondaPipeline)
 	rootfsImagePipeline.Size = 4 * common.GibiByte
 
 	bootTreePipeline := manifest.NewEFIBootTree(buildPipeline, img.Product, img.OSVersion)
 	bootTreePipeline.Platform = img.Platform
 	bootTreePipeline.UEFIVendor = img.Platform.GetUEFIVendor()
-	bootTreePipeline.ISOLabel = isoLabel
-	bootTreePipeline.KernelOpts = []string{fmt.Sprintf("inst.stage2=hd:LABEL=%s", isoLabel), fmt.Sprintf("inst.ks=hd:LABEL=%s:%s", isoLabel, kspath)}
+	bootTreePipeline.ISOLabel = img.ISOLabel
+
+	kspath := osbuild.KickstartPathOSBuild
+	bootTreePipeline.KernelOpts = []string{fmt.Sprintf("inst.stage2=hd:LABEL=%s", img.ISOLabel), fmt.Sprintf("inst.ks=hd:LABEL=%s:%s", img.ISOLabel, kspath)}
 	if img.FIPS {
 		bootTreePipeline.KernelOpts = append(bootTreePipeline.KernelOpts, "fips=1")
 	}
@@ -108,8 +121,12 @@ func (img *AnacondaOSTreeInstaller) InstantiateManifest(m *manifest.Manifest,
 	isoTreePipeline.Remote = img.Remote
 	isoTreePipeline.Users = img.Users
 	isoTreePipeline.Groups = img.Groups
-
+	isoTreePipeline.NoPasswd = img.NoPasswd
+	isoTreePipeline.UnattendedKickstart = img.UnattendedKickstart
 	isoTreePipeline.SquashfsCompression = img.SquashfsCompression
+	isoTreePipeline.Language = img.Language
+	isoTreePipeline.Keyboard = img.Keyboard
+	isoTreePipeline.Timezone = img.Timezone
 
 	// For ostree installers, always put the kickstart file in the root of the ISO
 	isoTreePipeline.KSPath = kspath
@@ -121,7 +138,7 @@ func (img *AnacondaOSTreeInstaller) InstantiateManifest(m *manifest.Manifest,
 		isoTreePipeline.KernelOpts = append(isoTreePipeline.KernelOpts, "fips=1")
 	}
 
-	isoPipeline := manifest.NewISO(buildPipeline, isoTreePipeline, isoLabel)
+	isoPipeline := manifest.NewISO(buildPipeline, isoTreePipeline, img.ISOLabel)
 	isoPipeline.SetFilename(img.Filename)
 	isoPipeline.ISOLinux = isoLinuxEnabled
 	artifact := isoPipeline.Export()
