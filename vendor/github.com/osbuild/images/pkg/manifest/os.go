@@ -77,6 +77,7 @@ type OSCustomizations struct {
 	Timezone         string
 	EnabledServices  []string
 	DisabledServices []string
+	MaskedServices   []string
 	DefaultTarget    string
 
 	// SELinux policy, when set it enables the labeling of the tree with the
@@ -152,6 +153,12 @@ type OS struct {
 	// OSTreeParent source spec (optional). If nil the new commit (if
 	// applicable) will have no parent
 	OSTreeParent *ostree.SourceSpec
+
+	// Enabling Bootupd runs bootupctl generate-update-metadata in the tree to
+	// transform /usr/lib/ostree-boot into a bootupd-compatible update
+	// payload. Only works with ostree-based images.
+	Bootupd bool
+
 	// Partition table, if nil the tree cannot be put on a partitioned disk
 	PartitionTable *disk.PartitionTable
 
@@ -291,6 +298,7 @@ func (p *OS) getBuildPackages(distro Distro) []string {
 			switch distro {
 			case DISTRO_EL8:
 				packages = append(packages, "python3-pytoml")
+			case DISTRO_EL10:
 			default:
 				packages = append(packages, "python3-toml")
 			}
@@ -399,21 +407,14 @@ func (p *OS) serialize() osbuild.Pipeline {
 	}
 
 	if len(p.containerSpecs) > 0 {
-		images := osbuild.NewContainersInputForSources(p.containerSpecs)
-
 		var storagePath string
-
 		if containerStore := p.OSCustomizations.ContainersStorage; containerStore != nil {
 			storagePath = *containerStore
-			storageConf := "/etc/containers/storage.conf"
-
-			containerStoreOpts := osbuild.NewContainerStorageOptions(storageConf, storagePath)
-			pipeline.AddStage(osbuild.NewContainersStorageConfStage(containerStoreOpts))
 		}
 
-		manifests := osbuild.NewFilesInputForManifestLists(p.containerSpecs)
-		skopeo := osbuild.NewSkopeoStageWithContainersStorage(storagePath, images, manifests)
-		pipeline.AddStage(skopeo)
+		for _, stage := range osbuild.GenContainerStorageStages(storagePath, p.containerSpecs) {
+			pipeline.AddStage(stage)
+		}
 	}
 
 	pipeline.AddStage(osbuild.NewLocaleStage(&osbuild.LocaleStageOptions{Language: p.Language}))
@@ -605,7 +606,6 @@ func (p *OS) serialize() osbuild.Pipeline {
 				Kernel:     []string{p.kernelVer},
 				AddModules: []string{"fips"},
 			}))
-			p.Files = append(p.Files, osbuild.GenFIPSFiles()...)
 		}
 
 		if !p.KernelOptionsBootloader {
@@ -701,8 +701,10 @@ func (p *OS) serialize() osbuild.Pipeline {
 
 	enabledServices := []string{}
 	disabledServices := []string{}
+	maskedServices := []string{}
 	enabledServices = append(enabledServices, p.EnabledServices...)
 	disabledServices = append(disabledServices, p.DisabledServices...)
+	maskedServices = append(maskedServices, p.MaskedServices...)
 	if p.Environment != nil {
 		enabledServices = append(enabledServices, p.Environment.GetServices()...)
 	}
@@ -711,10 +713,12 @@ func (p *OS) serialize() osbuild.Pipeline {
 		disabledServices = append(disabledServices, p.Workload.GetDisabledServices()...)
 	}
 	if len(enabledServices) != 0 ||
-		len(disabledServices) != 0 || p.DefaultTarget != "" {
+		len(disabledServices) != 0 ||
+		len(maskedServices) != 0 || p.DefaultTarget != "" {
 		pipeline.AddStage(osbuild.NewSystemdStage(&osbuild.SystemdStageOptions{
 			EnabledServices:  enabledServices,
 			DisabledServices: disabledServices,
+			MaskedServices:   maskedServices,
 			DefaultTarget:    p.DefaultTarget,
 		}))
 	}
@@ -727,6 +731,7 @@ func (p *OS) serialize() osbuild.Pipeline {
 	}
 
 	if p.FIPS {
+		p.Files = append(p.Files, osbuild.GenFIPSFiles()...)
 		for _, stage := range osbuild.GenFIPSStages() {
 			pipeline.AddStage(stage)
 		}
@@ -768,6 +773,13 @@ func (p *OS) serialize() osbuild.Pipeline {
 				"wheel", "docker",
 			},
 		}))
+		if p.Bootupd {
+			pipeline.AddStage(osbuild.NewBootupdGenMetadataStage())
+		}
+	} else {
+		if p.Bootupd {
+			panic("bootupd is only compatible with ostree-based images, this is a programming error")
+		}
 	}
 
 	return pipeline
