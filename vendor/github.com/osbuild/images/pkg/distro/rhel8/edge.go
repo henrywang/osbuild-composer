@@ -105,6 +105,7 @@ func edgeInstallerImgType(rd distribution) imageType {
 		rpmOstree:        true,
 		bootISO:          true,
 		image:            edgeInstallerImage,
+		isoLabel:         distroISOLabelFunc,
 		buildPipelines:   []string{"build"},
 		payloadPipelines: []string{"anaconda-tree", "rootfs-image", "efiboot-tree", "bootiso-tree", "bootiso"},
 		exports:          []string{"bootiso"},
@@ -136,6 +137,7 @@ func edgeSimplifiedInstallerImgType(rd distribution) imageType {
 		bootable:            true,
 		bootISO:             true,
 		image:               edgeSimplifiedInstallerImage,
+		isoLabel:            distroISOLabelFunc,
 		buildPipelines:      []string{"build"},
 		payloadPipelines:    []string{"ostree-deployment", "image", "xz", "coi-tree", "efiboot-tree", "bootiso-tree", "bootiso"},
 		exports:             []string{"bootiso"},
@@ -147,7 +149,7 @@ func edgeSimplifiedInstallerImgType(rd distribution) imageType {
 func minimalRawImgType(rd distribution) imageType {
 	it := imageType{
 		name:        "minimal-raw",
-		filename:    "raw.img.xz",
+		filename:    "disk.raw.xz",
 		compression: "xz",
 		mimeType:    "application/xz",
 		packageSets: map[string]packageSetFunc{
