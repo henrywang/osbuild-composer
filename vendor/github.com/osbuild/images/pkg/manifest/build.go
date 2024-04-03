@@ -1,6 +1,8 @@
 package manifest
 
 import (
+	"fmt"
+
 	"github.com/osbuild/images/pkg/container"
 	"github.com/osbuild/images/pkg/osbuild"
 	"github.com/osbuild/images/pkg/ostree"
@@ -225,14 +227,15 @@ func (p *BuildrootFromContainer) serialize() osbuild.Pipeline {
 	if len(p.containerSpecs) == 0 {
 		panic("serialization not started")
 	}
+	if len(p.containerSpecs) != 1 {
+		panic(fmt.Sprintf("BuildrootFromContainer expectes exactly one container input, got: %v", p.containerSpecs))
+	}
+
 	pipeline := p.Base.serialize()
 	pipeline.Runner = p.runner.String()
 
-	inputs := osbuild.NewContainersInputForSources(p.containerSpecs)
-	options := &osbuild.ContainerDeployOptions{
-		Exclude: []string{"/sysroot"},
-	}
-	stage, err := osbuild.NewContainerDeployStage(inputs, options)
+	image := osbuild.NewContainersInputForSingleSource(p.containerSpecs[0])
+	stage, err := osbuild.NewContainerDeployStage(image, &osbuild.ContainerDeployOptions{})
 	if err != nil {
 		panic(err)
 	}
@@ -240,6 +243,7 @@ func (p *BuildrootFromContainer) serialize() osbuild.Pipeline {
 	pipeline.AddStage(osbuild.NewSELinuxStage(
 		&osbuild.SELinuxStageOptions{
 			FileContexts: "etc/selinux/targeted/contexts/files/file_contexts",
+			ExcludePaths: []string{"/sysroot"},
 			Labels:       p.getSELinuxLabels(),
 		},
 	))
