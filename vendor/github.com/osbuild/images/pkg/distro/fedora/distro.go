@@ -86,10 +86,12 @@ var (
 			osPkgsKey:        minimalrpmPackageSet,
 			installerPkgsKey: imageInstallerPackageSet,
 		},
-		bootable:         true,
-		bootISO:          true,
-		rpmOstree:        false,
-		image:            imageInstallerImage,
+		bootable:  true,
+		bootISO:   true,
+		rpmOstree: false,
+		image:     imageInstallerImage,
+		// We don't know the variant of the OS pipeline being installed
+		isoLabel:         getISOLabelFunc("Unknown"),
 		buildPipelines:   []string{"build"},
 		payloadPipelines: []string{"anaconda-tree", "rootfs-image", "efiboot-tree", "os", "bootiso-tree", "bootiso"},
 		exports:          []string{"bootiso"},
@@ -107,6 +109,7 @@ var (
 		bootISO:          true,
 		rpmOstree:        false,
 		image:            liveInstallerImage,
+		isoLabel:         getISOLabelFunc("Workstation"),
 		buildPipelines:   []string{"build"},
 		payloadPipelines: []string{"anaconda-tree", "rootfs-image", "efiboot-tree", "bootiso-tree", "bootiso"},
 		exports:          []string{"bootiso"},
@@ -183,6 +186,7 @@ var (
 		rpmOstree:        true,
 		bootISO:          true,
 		image:            iotInstallerImage,
+		isoLabel:         getISOLabelFunc("IoT"),
 		buildPipelines:   []string{"build"},
 		payloadPipelines: []string{"anaconda-tree", "rootfs-image", "efiboot-tree", "bootiso-tree", "bootiso"},
 		exports:          []string{"bootiso"},
@@ -203,6 +207,7 @@ var (
 		bootable:            true,
 		bootISO:             true,
 		image:               iotSimplifiedInstallerImage,
+		isoLabel:            getISOLabelFunc("IoT"),
 		buildPipelines:      []string{"build"},
 		payloadPipelines:    []string{"ostree-deployment", "image", "xz", "coi-tree", "efiboot-tree", "bootiso-tree", "bootiso"},
 		exports:             []string{"bootiso"},
@@ -366,7 +371,7 @@ var (
 
 	minimalrawImgType = imageType{
 		name:        "minimal-raw",
-		filename:    "raw.img.xz",
+		filename:    "disk.raw.xz",
 		compression: "xz",
 		mimeType:    "application/xz",
 		packageSets: map[string]packageSetFunc{
@@ -377,6 +382,10 @@ var (
 			// NOTE: temporary workaround for a bug in initial-setup that
 			// requires a kickstart file in the root directory.
 			Files: []*fsnode.File{initialSetupKickstart()},
+			Grub2Config: &osbuild.GRUB2Config{
+				// Overwrite the default Grub2 timeout value.
+				Timeout: 5,
+			},
 		},
 		rpmOstree:           false,
 		kernelOptions:       defaultKernelOptions,
@@ -397,7 +406,6 @@ type distribution struct {
 	releaseVersion     string
 	modulePlatformID   string
 	ostreeRefTmpl      string
-	isolabelTmpl       string
 	runner             runner.Runner
 	arches             map[string]distro.Arch
 	defaultImageConfig *distro.ImageConfig
@@ -409,6 +417,15 @@ var defaultDistroImageConfig = &distro.ImageConfig{
 	Locale:   common.ToPtr("en_US"),
 }
 
+func getISOLabelFunc(variant string) isoLabelFunc {
+	const ISO_LABEL = "%s-%s-%s-%s"
+
+	return func(t *imageType) string {
+		return fmt.Sprintf(ISO_LABEL, t.Arch().Distro().Product(), t.Arch().Distro().OsVersion(), variant, t.Arch().Name())
+	}
+
+}
+
 func getDistro(version int) distribution {
 	return distribution{
 		name:               fmt.Sprintf("fedora-%d", version),
@@ -417,7 +434,6 @@ func getDistro(version int) distribution {
 		releaseVersion:     strconv.Itoa(version),
 		modulePlatformID:   fmt.Sprintf("platform:f%d", version),
 		ostreeRefTmpl:      fmt.Sprintf("fedora/%d/%%s/iot", version),
-		isolabelTmpl:       fmt.Sprintf("Fedora-%d-BaseOS-%%s", version),
 		runner:             &runner.Fedora{Version: uint64(version)},
 		defaultImageConfig: defaultDistroImageConfig,
 	}
@@ -429,6 +445,14 @@ func (d *distribution) Name() string {
 
 func (d *distribution) Releasever() string {
 	return d.releaseVersion
+}
+
+func (d *distribution) OsVersion() string {
+	return d.releaseVersion
+}
+
+func (d *distribution) Product() string {
+	return d.product
 }
 
 func (d *distribution) ModulePlatformID() string {
@@ -818,58 +842,56 @@ func newDistro(version int) distro.Distro {
 		minimalrawImgType,
 	)
 
-	if !common.VersionLessThan(rd.Releasever(), "38") {
-		// iot simplified installer was introduced in F38
-		x86_64.addImageTypes(
-			&platform.X86{
-				BasePlatform: platform.BasePlatform{
-					ImageFormat: platform.FORMAT_RAW,
-					FirmwarePackages: []string{
-						"grub2-efi-x64",
-						"grub2-efi-x64-cdboot",
-						"grub2-tools",
-						"grub2-tools-minimal",
-						"efibootmgr",
-						"shim-x64",
-						"brcmfmac-firmware",
-						"iwlwifi-dvm-firmware",
-						"iwlwifi-mvm-firmware",
-						"realtek-firmware",
-						"microcode_ctl",
-					},
+	// iot simplified installer was introduced in F38
+	x86_64.addImageTypes(
+		&platform.X86{
+			BasePlatform: platform.BasePlatform{
+				ImageFormat: platform.FORMAT_RAW,
+				FirmwarePackages: []string{
+					"grub2-efi-x64",
+					"grub2-efi-x64-cdboot",
+					"grub2-tools",
+					"grub2-tools-minimal",
+					"efibootmgr",
+					"shim-x64",
+					"brcmfmac-firmware",
+					"iwlwifi-dvm-firmware",
+					"iwlwifi-mvm-firmware",
+					"realtek-firmware",
+					"microcode_ctl",
 				},
-				BIOS:       false,
-				UEFIVendor: "fedora",
 			},
-			iotSimplifiedInstallerImgType,
-		)
+			BIOS:       false,
+			UEFIVendor: "fedora",
+		},
+		iotSimplifiedInstallerImgType,
+	)
 
-		aarch64.addImageTypes(
-			&platform.Aarch64{
-				BasePlatform: platform.BasePlatform{
-					FirmwarePackages: []string{
-						"arm-image-installer",
-						"bcm283x-firmware",
-						"grub2-efi-aa64",
-						"grub2-efi-aa64-cdboot",
-						"grub2-tools",
-						"grub2-tools-minimal",
-						"efibootmgr",
-						"shim-aa64",
-						"brcmfmac-firmware",
-						"iwlwifi-dvm-firmware",
-						"iwlwifi-mvm-firmware",
-						"realtek-firmware",
-						"uboot-images-armv8",
-					},
+	aarch64.addImageTypes(
+		&platform.Aarch64{
+			BasePlatform: platform.BasePlatform{
+				FirmwarePackages: []string{
+					"arm-image-installer",
+					"bcm283x-firmware",
+					"grub2-efi-aa64",
+					"grub2-efi-aa64-cdboot",
+					"grub2-tools",
+					"grub2-tools-minimal",
+					"efibootmgr",
+					"shim-aa64",
+					"brcmfmac-firmware",
+					"iwlwifi-dvm-firmware",
+					"iwlwifi-mvm-firmware",
+					"realtek-firmware",
+					"uboot-images-armv8",
 				},
-				UEFIVendor: "fedora",
 			},
-			iotSimplifiedInstallerImgType,
-		)
-	}
+			UEFIVendor: "fedora",
+		},
+		iotSimplifiedInstallerImgType,
+	)
 
-	if !common.VersionLessThan(rd.Releasever(), "39") {
+	if common.VersionGreaterThanOrEqual(rd.Releasever(), "39") {
 		// bootc was introduced in F39
 		x86_64.addImageTypes(
 			&platform.X86{
