@@ -3,6 +3,7 @@ package rhel9
 import (
 	"fmt"
 
+	"github.com/osbuild/images/internal/common"
 	"github.com/osbuild/images/pkg/arch"
 	"github.com/osbuild/images/pkg/rpmmd"
 )
@@ -38,6 +39,7 @@ var (
 		bootISO:          true,
 		bootable:         true,
 		image:            imageInstallerImage,
+		isoLabel:         distroISOLabelFunc,
 		buildPipelines:   []string{"build"},
 		payloadPipelines: []string{"anaconda-tree", "rootfs-image", "efiboot-tree", "os", "bootiso-tree", "bootiso"},
 		exports:          []string{"bootiso"},
@@ -48,7 +50,6 @@ func bareMetalPackageSet(t *imageType) rpmmd.PackageSet {
 	ps := rpmmd.PackageSet{
 		Include: []string{
 			"@core",
-			"authselect-compat",
 			"chrony",
 			"cockpit-system",
 			"cockpit-ws",
@@ -89,6 +90,10 @@ func bareMetalPackageSet(t *imageType) rpmmd.PackageSet {
 			"dracut-config-rescue",
 		},
 	}.Append(distroBuildPackageSet(t))
+
+	if common.VersionLessThan(t.arch.distro.osVersion, "10.0") {
+		ps.Include = append(ps.Include, "authselect-compat")
+	}
 
 	// Ensure to not pull in subscription-manager on non-RHEL distro
 	if t.arch.distro.isRHEL() {
