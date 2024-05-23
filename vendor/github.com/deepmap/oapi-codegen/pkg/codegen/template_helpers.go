@@ -20,22 +20,30 @@ import (
 	"strings"
 	"text/template"
 
-	"github.com/labstack/echo/v4"
+	"github.com/deepmap/oapi-codegen/pkg/util"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 )
 
 const (
 	// These allow the case statements to be sorted later:
-	prefixMostSpecific, prefixLessSpecific, prefixLeastSpecific = "3", "6", "9"
-	responseTypeSuffix                                          = "Response"
+	prefixLeastSpecific = "9"
+
+	defaultClientTypeName = "Client"
 )
 
 var (
-	contentTypesJSON = []string{echo.MIMEApplicationJSON, "text/x-json"}
-	contentTypesYAML = []string{"application/yaml", "application/x-yaml", "text/yaml", "text/x-yaml"}
-	contentTypesXML  = []string{echo.MIMEApplicationXML, echo.MIMETextXML}
+	contentTypesJSON    = []string{"application/json", "text/x-json", "application/problem+json"}
+	contentTypesHalJSON = []string{"application/hal+json"}
+	contentTypesYAML    = []string{"application/yaml", "application/x-yaml", "text/yaml", "text/x-yaml"}
+	contentTypesXML     = []string{"application/xml", "text/xml", "application/problems+xml"}
+
+	responseTypeSuffix = "Response"
+
+	titleCaser = cases.Title(language.English)
 )
 
-// This function takes an array of Parameter definition, and generates a valid
+// genParamArgs takes an array of Parameter definition, and generates a valid
 // Go parameter declaration from them, eg:
 // ", foo int, bar string, baz float32". The preceding comma is there to save
 // a lot of work in the template engine.
@@ -51,7 +59,7 @@ func genParamArgs(params []ParameterDefinition) string {
 	return ", " + strings.Join(parts, ", ")
 }
 
-// This function is much like the one above, except it only produces the
+// genParamTypes is much like the one above, except it only produces the
 // types of the parameters for a type declaration. It would produce this
 // from the same input as above:
 // ", int, string, float32".
@@ -135,6 +143,13 @@ func genResponseUnmarshal(op *OperationDefinition) string {
 
 		// If we made it this far then we need to handle unmarshaling for each content-type:
 		sortedContentKeys := SortedContentKeys(responseRef.Value.Content)
+		jsonCount := 0
+		for _, contentTypeName := range sortedContentKeys {
+			if StringInArray(contentTypeName, contentTypesJSON) || util.IsMediaTypeJson(contentTypeName) {
+				jsonCount++
+			}
+		}
+
 		for _, contentTypeName := range sortedContentKeys {
 
 			// We get "interface{}" when using "anyOf" or "oneOf" (which doesn't work with Go types):
@@ -147,11 +162,9 @@ func genResponseUnmarshal(op *OperationDefinition) string {
 			switch {
 
 			// JSON:
-			case StringInArray(contentTypeName, contentTypesJSON):
+			case StringInArray(contentTypeName, contentTypesJSON) || util.IsMediaTypeJson(contentTypeName):
 				if typeDefinition.ContentTypeName == contentTypeName {
-					var caseAction string
-
-					caseAction = fmt.Sprintf("var dest %s\n"+
+					caseAction := fmt.Sprintf("var dest %s\n"+
 						"if err := json.Unmarshal(bodyBytes, &dest); err != nil { \n"+
 						" return nil, err \n"+
 						"}\n"+
@@ -159,15 +172,19 @@ func genResponseUnmarshal(op *OperationDefinition) string {
 						typeDefinition.Schema.TypeDecl(),
 						typeDefinition.TypeName)
 
-					caseKey, caseClause := buildUnmarshalCase(typeDefinition, caseAction, "json")
-					handledCaseClauses[caseKey] = caseClause
+					if jsonCount > 1 {
+						caseKey, caseClause := buildUnmarshalCaseStrict(typeDefinition, caseAction, contentTypeName)
+						handledCaseClauses[caseKey] = caseClause
+					} else {
+						caseKey, caseClause := buildUnmarshalCase(typeDefinition, caseAction, "json")
+						handledCaseClauses[caseKey] = caseClause
+					}
 				}
 
 			// YAML:
 			case StringInArray(contentTypeName, contentTypesYAML):
 				if typeDefinition.ContentTypeName == contentTypeName {
-					var caseAction string
-					caseAction = fmt.Sprintf("var dest %s\n"+
+					caseAction := fmt.Sprintf("var dest %s\n"+
 						"if err := yaml.Unmarshal(bodyBytes, &dest); err != nil { \n"+
 						" return nil, err \n"+
 						"}\n"+
@@ -181,8 +198,7 @@ func genResponseUnmarshal(op *OperationDefinition) string {
 			// XML:
 			case StringInArray(contentTypeName, contentTypesXML):
 				if typeDefinition.ContentTypeName == contentTypeName {
-					var caseAction string
-					caseAction = fmt.Sprintf("var dest %s\n"+
+					caseAction := fmt.Sprintf("var dest %s\n"+
 						"if err := xml.Unmarshal(bodyBytes, &dest); err != nil { \n"+
 						" return nil, err \n"+
 						"}\n"+
@@ -224,11 +240,18 @@ func genResponseUnmarshal(op *OperationDefinition) string {
 	return buffer.String()
 }
 
-// buildUnmarshalCase builds an unmarshalling case clause for different content-types:
+// buildUnmarshalCase builds an unmarshaling case clause for different content-types:
 func buildUnmarshalCase(typeDefinition ResponseTypeDefinition, caseAction string, contentType string) (caseKey string, caseClause string) {
 	caseKey = fmt.Sprintf("%s.%s.%s", prefixLeastSpecific, contentType, typeDefinition.ResponseName)
 	caseClauseKey := getConditionOfResponseName("rsp.StatusCode", typeDefinition.ResponseName)
-	caseClause = fmt.Sprintf("case strings.Contains(rsp.Header.Get(\"%s\"), \"%s\") && %s:\n%s\n", echo.HeaderContentType, contentType, caseClauseKey, caseAction)
+	caseClause = fmt.Sprintf("case strings.Contains(rsp.Header.Get(\"%s\"), \"%s\") && %s:\n%s\n", "Content-Type", contentType, caseClauseKey, caseAction)
+	return caseKey, caseClause
+}
+
+func buildUnmarshalCaseStrict(typeDefinition ResponseTypeDefinition, caseAction string, contentType string) (caseKey string, caseClause string) {
+	caseKey = fmt.Sprintf("%s.%s.%s", prefixLeastSpecific, contentType, typeDefinition.ResponseName)
+	caseClauseKey := getConditionOfResponseName("rsp.StatusCode", typeDefinition.ResponseName)
+	caseClause = fmt.Sprintf("case rsp.Header.Get(\"%s\") == \"%s\" && %s:\n%s\n", "Content-Type", contentType, caseClauseKey, caseAction)
 	return caseKey, caseClause
 }
 
@@ -259,7 +282,11 @@ func getConditionOfResponseName(statusCodeVar, responseName string) string {
 
 // This outputs a string array
 func toStringArray(sarr []string) string {
-	return `[]string{"` + strings.Join(sarr, `","`) + `"}`
+	s := strings.Join(sarr, `","`)
+	if len(s) > 0 {
+		s = `"` + s + `"`
+	}
+	return `[]string{` + s + `}`
 }
 
 func stripNewLines(s string) string {
@@ -267,17 +294,22 @@ func stripNewLines(s string) string {
 	return r.Replace(s)
 }
 
-// This function map is passed to the template engine, and we can call each
+// TemplateFunctions is passed to the template engine, and we can call each
 // function here by keyName from the template code.
 var TemplateFunctions = template.FuncMap{
 	"genParamArgs":               genParamArgs,
 	"genParamTypes":              genParamTypes,
 	"genParamNames":              genParamNames,
 	"genParamFmtString":          ReplacePathParamsWithStr,
+	"swaggerUriToIrisUri":        SwaggerUriToIrisUri,
 	"swaggerUriToEchoUri":        SwaggerUriToEchoUri,
+	"swaggerUriToFiberUri":       SwaggerUriToFiberUri,
 	"swaggerUriToChiUri":         SwaggerUriToChiUri,
+	"swaggerUriToGinUri":         SwaggerUriToGinUri,
+	"swaggerUriToGorillaUri":     SwaggerUriToGorillaUri,
 	"lcFirst":                    LowercaseFirstCharacter,
 	"ucFirst":                    UppercaseFirstCharacter,
+	"ucFirstWithPkgName":         UppercaseFirstCharacterWithPkgName,
 	"camelCase":                  ToCamelCase,
 	"genResponsePayload":         genResponsePayload,
 	"genResponseTypeName":        genResponseTypeName,
@@ -285,7 +317,8 @@ var TemplateFunctions = template.FuncMap{
 	"getResponseTypeDefinitions": getResponseTypeDefinitions,
 	"toStringArray":              toStringArray,
 	"lower":                      strings.ToLower,
-	"title":                      strings.Title,
+	"title":                      titleCaser.String,
 	"stripNewLines":              stripNewLines,
 	"sanitizeGoIdentity":         SanitizeGoIdentity,
+	"toGoComment":                StringWithTypeNameToGoComment,
 }
